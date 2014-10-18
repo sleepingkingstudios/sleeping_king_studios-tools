@@ -1,6 +1,7 @@
 # sleeping_king_studios-tools.gemspec
 
-require File.expand_path "lib/sleeping_king_studios/tools/version"
+$: << './lib'
+require 'sleeping_king_studios/tools/version'
 
 Gem::Specification.new do |gem|
   gem.name        = 'sleeping_king_studios-tools'
@@ -19,6 +20,7 @@ classes without polluting the global namespace.
   gem.require_path = 'lib'
   gem.files        = Dir["lib/**/*.rb", "LICENSE", "*.md"]
 
+  gem.add_development_dependency 'rake',  '~> 10.3', '>= 0.10.3.2'
   gem.add_development_dependency 'pry',   '~> 0.10', '>= 0.10.1'
   gem.add_development_dependency 'rspec', '~> 3.1',  '>= 3.1.0'
 end # gemspec

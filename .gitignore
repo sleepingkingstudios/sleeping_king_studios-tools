@@ -3,6 +3,12 @@
 /.ruby-gemset
 /.ruby-version
 
+# Ignore compiled gems.
+/*.gem
+
+# Ignore gems snapshot.
+/Gemfile.lock
+
 # Ignore bundler config.
 /.bundle
 
