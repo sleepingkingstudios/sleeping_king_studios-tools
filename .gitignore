@@ -1,0 +1,11 @@
+# Ignore local configuration files.
+/.rspec
+/.ruby-gemset
+/.ruby-version
+
+# Ignore bundler config.
+/.bundle
+
+# Ignore generated documentation.
+/doc
+.yardoc
