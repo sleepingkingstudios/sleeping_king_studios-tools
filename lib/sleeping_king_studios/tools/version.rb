@@ -4,6 +4,9 @@ require 'sleeping_king_studios/tools/semantic_version'
 
 module SleepingKingStudios
   module Tools
+    # SleepingKingStudios::Tools uses semantic versioning.
+    #
+    # @see http://semver.org
     module Version
       extend SleepingKingStudios::Tools::SemanticVersion
 

@@ -16,7 +16,7 @@ RSpec.describe SleepingKingStudios::Tools::SemanticVersion do
 
     context 'with a missing Major version' do
       it 'raises an error' do
-        expect { instance.to_gem_version }.to raise_error SleepingKingStudios::Tools::SemanticVersion::MissingVersionError,
+        expect { instance.to_gem_version }.to raise_error SleepingKingStudios::Tools::SemanticVersion::InvalidVersionError,
           'undefined constant for major version'
       end # it
     end # context
@@ -27,7 +27,7 @@ RSpec.describe SleepingKingStudios::Tools::SemanticVersion do
       end # before each
 
       it 'raises an error' do
-        expect { instance.to_gem_version }.to raise_error SleepingKingStudios::Tools::SemanticVersion::MissingVersionError,
+        expect { instance.to_gem_version }.to raise_error SleepingKingStudios::Tools::SemanticVersion::InvalidVersionError,
           'undefined constant for minor version'
       end # it
     end # context
@@ -39,7 +39,7 @@ RSpec.describe SleepingKingStudios::Tools::SemanticVersion do
       end # before each
 
       it 'raises an error' do
-        expect { instance.to_gem_version }.to raise_error SleepingKingStudios::Tools::SemanticVersion::MissingVersionError,
+        expect { instance.to_gem_version }.to raise_error SleepingKingStudios::Tools::SemanticVersion::InvalidVersionError,
           'undefined constant for patch version'
       end # it
     end # context
@@ -92,7 +92,7 @@ RSpec.describe SleepingKingStudios::Tools::SemanticVersion do
 
     context 'with a missing Major version' do
       it 'raises an error' do
-        expect { instance.to_version }.to raise_error SleepingKingStudios::Tools::SemanticVersion::MissingVersionError,
+        expect { instance.to_version }.to raise_error SleepingKingStudios::Tools::SemanticVersion::InvalidVersionError,
           'undefined constant for major version'
       end # it
     end # context
@@ -103,7 +103,7 @@ RSpec.describe SleepingKingStudios::Tools::SemanticVersion do
       end # before each
 
       it 'raises an error' do
-        expect { instance.to_version }.to raise_error SleepingKingStudios::Tools::SemanticVersion::MissingVersionError,
+        expect { instance.to_version }.to raise_error SleepingKingStudios::Tools::SemanticVersion::InvalidVersionError,
           'undefined constant for minor version'
       end # it
     end # context
@@ -115,7 +115,7 @@ RSpec.describe SleepingKingStudios::Tools::SemanticVersion do
       end # before each
 
       it 'raises an error' do
-        expect { instance.to_version }.to raise_error SleepingKingStudios::Tools::SemanticVersion::MissingVersionError,
+        expect { instance.to_version }.to raise_error SleepingKingStudios::Tools::SemanticVersion::InvalidVersionError,
           'undefined constant for patch version'
       end # it
     end # context
