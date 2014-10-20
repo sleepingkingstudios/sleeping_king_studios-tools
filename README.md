@@ -12,13 +12,35 @@ Hi, I'm Rob Smith, a Ruby Engineer and the developer of this library. I use thes
 
 ## Tools
 
+### Array Tools
+
+    require 'sleeping_king_studios/tools/array_tools'
+
+Tools for working with arrays and lists.
+
+#### `#humanize_list`
+
+Accepts a list of values and returns a human-readable string of the values, with the format based on the number of items.
+
+    # With One Item
+    ArrayTools.humanize_list(['spam'])
+    #=> 'spam'
+
+    With Two Items
+    # ArrayTools.humanize_list(['spam', 'eggs'])
+    #=> 'spam and eggs'
+
+    # With Three Or More Items
+    ArrayTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'])
+    #=> 'spam, eggs, bacon, and spam'
+
 ### Object Tools
 
     require 'sleeping_king_studios/tools/object_tools'
 
 Low-level tools for working with objects.
 
-#### `::apply`
+#### `#apply`
 
 Takes a proc or lambda and invokes it with the given object as receiver, with any additional arguments or block provided.
 
@@ -28,7 +50,7 @@ Takes a proc or lambda and invokes it with the given object as receiver, with an
     ObjectTools.apply my_object, my_proc
     #=> Writes 'A mock object says "Greetings, programs!"' to STDOUT.
 
-#### `::eigenclass`, `::metaclass`
+#### `#eigenclass`, `#metaclass`
 
 Returns the object's eigenclass.
 
@@ -41,9 +63,12 @@ Returns the object's eigenclass.
 
 Tools for working with strings.
 
-#### '::pluralize'
+#### '#pluralize'
 
+Returns the singular or the plural value, depending on the provided item count.
 
+    StringTools.pluralize 4, 'light', 'lights'
+    #=> 'lights'
 
 ## Additional Features
 
