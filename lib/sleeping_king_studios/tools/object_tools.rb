@@ -1,10 +1,10 @@
-# lib/sleeping_king_studios/tools/method_tools.rb
+# lib/sleeping_king_studios/tools/object_tools.rb
 
 require 'sleeping_king_studios/tools'
 
 module SleepingKingStudios::Tools
-  # Tools for working with methods, procs and lambdas.
-  module MethodTools
+  # Low-level tools for working with objects.
+  module ObjectTools
     class << self
       # Takes a proc or lambda and invokes it with the given object as
       # receiver, with any additional arguments or block provided.

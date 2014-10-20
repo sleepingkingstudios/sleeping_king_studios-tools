@@ -1,8 +1,8 @@
-# spec/sleeping_king_studios/tools/method_tools_spec.rb
+# spec/sleeping_king_studios/tools/object_tools_spec.rb
 
-require 'sleeping_king_studios/tools/method_tools'
+require 'sleeping_king_studios/tools/object_tools'
 
-RSpec.describe SleepingKingStudios::Tools::MethodTools do
+RSpec.describe SleepingKingStudios::Tools::ObjectTools do
   describe '::apply' do
     let(:base) { double('base object', :instance_method => nil) }
 
