@@ -20,7 +20,7 @@ module SleepingKingStudios::Tools
       # @return The result of calling the proc or lambda with the given
       #   receiver and any additional arguments or block.
       def apply base, proc, *args, &block
-        temporary_method_name = :__sleeping_king_studios_tools_method_tools_temporary_method_for_applying_proc__
+        temporary_method_name = :__sleeping_king_studios_tools_object_tools_temporary_method_for_applying_proc__
 
         metaclass = class << base; self; end
         metaclass.send :define_method, temporary_method_name, &proc
@@ -31,6 +31,16 @@ module SleepingKingStudios::Tools
 
         value
       end # class method apply
+
+      # Returns the object's eigenclass.
+      #
+      # @param [Object] object The object for which an eigenclass is required.
+      #
+      # @return [Class] The object's eigenclass.
+      def eigenclass object
+        class << object; self; end
+      end # class method eigenclass
+      alias_method :metaclass, :eigenclass
     end # class << self
   end # module
 end # module

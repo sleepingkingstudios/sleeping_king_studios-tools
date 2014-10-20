@@ -12,11 +12,11 @@ Hi, I'm Rob Smith, a Ruby Engineer and the developer of this library. I use thes
 
 ## Tools
 
-### Method Tools
+### Object Tools
 
-    require 'sleeping_king_studios/tools/method_tools'
+    require 'sleeping_king_studios/tools/object_tools'
 
-Tools for working with methods, procs and lambdas.
+Low-level tools for working with objects.
 
 #### `::apply`
 
@@ -25,8 +25,15 @@ Takes a proc or lambda and invokes it with the given object as receiver, with an
     my_object = double('object', :to_s => 'A mock object')
     my_proc   = ->() { puts %{#{self.to_s} says "Greetings, programs!"} }
 
-    ModuleTools.apply my_object, my_proc
+    ObjectTools.apply my_object, my_proc
     #=> Writes 'A mock object says "Greetings, programs!"' to STDOUT.
+
+#### `::eigenclass`, `::metaclass`
+
+Returns the object's eigenclass.
+
+    ObjectTools.eigenclass my_object
+    #=> Shortcut for class << self; self; end.
 
 ## Additional Features
 

@@ -47,4 +47,28 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       end # it
     end # describe
   end # describe
+
+  describe '::eigenclass' do
+    let(:object) { Object.new }
+
+    it { expect(described_class).to respond_to(:eigenclass).with(1).argument }
+
+    it "returns the object's metaclass" do
+      metaclass = class << object; self; end
+
+      expect(described_class.eigenclass(object)).to be == metaclass
+    end # it
+  end # describe
+
+  describe '::metaclass' do
+    let(:object) { Object.new }
+
+    it { expect(described_class).to respond_to(:metaclass).with(1).argument }
+
+    it "returns the object's metaclass" do
+      metaclass = class << object; self; end
+
+      expect(described_class.metaclass(object)).to be == metaclass
+    end # it
+  end # describe
 end # describe
