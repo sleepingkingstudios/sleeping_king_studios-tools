@@ -35,6 +35,16 @@ Returns the object's eigenclass.
     ObjectTools.eigenclass my_object
     #=> Shortcut for class << self; self; end.
 
+### String Tools
+
+    require 'sleeping_king_studios/tools/string_tools'
+
+Tools for working with strings.
+
+#### '::pluralize'
+
+
+
 ## Additional Features
 
 ### Semantic Version
