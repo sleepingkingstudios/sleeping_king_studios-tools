@@ -3,8 +3,12 @@
 require 'sleeping_king_studios/tools/object_tools'
 
 RSpec.describe SleepingKingStudios::Tools::ObjectTools do
+  let(:instance) { Object.new.extend described_class }
+
   describe '::apply' do
     let(:base) { double('base object', :instance_method => nil) }
+
+    it { expect(instance).to respond_to(:apply).with(2).arguments }
 
     it { expect(described_class).to respond_to(:apply).with(2).arguments }
 
@@ -51,6 +55,8 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
   describe '::eigenclass' do
     let(:object) { Object.new }
 
+    it { expect(instance).to respond_to(:eigenclass).with(1).argument }
+
     it { expect(described_class).to respond_to(:eigenclass).with(1).argument }
 
     it "returns the object's metaclass" do
@@ -62,6 +68,8 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
   describe '::metaclass' do
     let(:object) { Object.new }
+
+    it { expect(instance).to respond_to(:metaclass).with(1).argument }
 
     it { expect(described_class).to respond_to(:metaclass).with(1).argument }
 

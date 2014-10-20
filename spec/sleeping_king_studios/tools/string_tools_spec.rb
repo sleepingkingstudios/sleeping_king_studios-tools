@@ -3,9 +3,13 @@
 require 'sleeping_king_studios/tools/string_tools'
 
 RSpec.describe SleepingKingStudios::Tools::StringTools do
+  let(:instance) { Object.new.extend described_class }
+
   describe '::pluralize' do
     let(:single) { 'cow' }
     let(:plural) { 'kine' }
+
+    it { expect(instance).to respond_to(:pluralize).with(3).arguments }
 
     it { expect(described_class).to respond_to(:pluralize).with(3).arguments }
 
