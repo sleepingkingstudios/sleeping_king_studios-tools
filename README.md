@@ -18,6 +18,16 @@ Hi, I'm Rob Smith, a Ruby Engineer and the developer of this library. I use thes
 
 Tools for working with arrays and lists.
 
+#### `#count_values`
+
+Counts the number of times each value appears in the array, or if a block is given, calls the block with each item and counts the number of times each result appears.
+
+    ArrayTools.count_values([1, 1, 1, 2, 2, 3])
+    #=> { 1 => 3, 2 => 2, 3 => 1 }
+
+    ArrayTools.count_values([1, 1, 1, 2, 2, 3]) { |i| i ** 2 }
+    #=> { 1 => 3, 4 => 2, 9 => 1 }
+
 #### `#humanize_list`
 
 Accepts a list of values and returns a human-readable string of the values, with the format based on the number of items.
@@ -87,6 +97,9 @@ Module mixin for using semantic versioning (see http://semver.org) with helper m
       PRERELEASE = 'beta'
       BUILD = 1
     end # module
+
+    GEM_VERSION = Version.to_gem_version
+    #=> '3.1.4.beta.1'
 
     VERSION = Version.to_version
     #=> '3.1.4-beta+1'

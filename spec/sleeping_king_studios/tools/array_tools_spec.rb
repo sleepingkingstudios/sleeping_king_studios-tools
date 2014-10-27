@@ -5,6 +5,56 @@ require 'sleeping_king_studios/tools/array_tools'
 RSpec.describe SleepingKingStudios::Tools::ArrayTools do
   let(:instance) { Object.new.extend described_class }
 
+  describe '#count_values' do
+    it { expect(instance).to respond_to(:count_values).with(1).argument }
+
+    it { expect(described_class).to respond_to(:count_values).with(1).argument }
+
+    describe 'with an empty array' do
+      it 'returns an empty hash' do
+        expect(described_class.count_values []).to be == {}
+      end # it
+    end # describe
+
+    describe 'with an array with one value' do
+      let(:values) { %w(spam) }
+
+      it 'returns the count of each value' do
+        expect(described_class.count_values values).to be == { 'spam' => 1 }
+      end # it
+
+      describe 'with a block' do
+        let(:values) do
+          struct = Struct.new(:value)
+          super().map { |value| struct.new(value) }
+        end # let
+
+        it 'returns the count of each value' do
+          expect(described_class.count_values values, &:value).to be == { 'spam' => 1 }
+        end # it
+      end # describe
+    end # describe
+
+    describe 'with an array with many values' do
+      let(:values) { %w(spam bacon eggs spam) }
+
+      it 'returns the count of each value' do
+        expect(described_class.count_values values).to be == { 'spam' => 2, 'bacon' => 1, 'eggs' => 1 }
+      end # it
+
+      describe 'with a block' do
+        let(:values) do
+          struct = Struct.new(:value)
+          super().map { |value| struct.new(value) }
+        end # let
+
+        it 'returns the count of each value' do
+          expect(described_class.count_values values, &:value).to be == { 'spam' => 2, 'bacon' => 1, 'eggs' => 1 }
+        end # it
+      end # describe
+    end # describe
+  end # describe
+
   describe '#humanize_list' do
     it { expect(instance).to respond_to(:humanize_list).with(1).argument }
 
