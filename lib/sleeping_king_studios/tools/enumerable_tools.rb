@@ -1,14 +1,14 @@
-# lib/sleeping_king_studios/tools/array_tools.rb
+# lib/sleeping_king_studios/tools/enumerable_tools.rb
 
 require 'sleeping_king_studios/tools'
 
 module SleepingKingStudios::Tools
-  # Tools for working with arrays and lists.
-  module ArrayTools
+  # Tools for working with enumerable objects, such as arrays and hashes.
+  module EnumerableTools
     extend self
 
     # @overload count_values(values)
-    #   Counts the number of times each value appears in the array.
+    #   Counts the number of times each value appears in the enumerable object.
     #
     #   @example
     #     ArrayTools.count_values([1, 1, 1, 2, 2, 3])
@@ -17,7 +17,7 @@ module SleepingKingStudios::Tools
     #   @param [Array<Object>] values The values to count.
     #
     #   @return [Hash{Object, Integer}] The number of times each value appears
-    #     in the array.
+    #     in the enumerable object.
     #
     # @overload count_values(values, &block)
     #   Calls the block with each item and counts the number of times each
@@ -29,8 +29,8 @@ module SleepingKingStudios::Tools
     #
     #   @param [Array<Object>] values The values to count.
     #
-    #   @return [Hash{Object, Integer}] The number of times each result appears
-    #     in the array.
+    #   @return [Hash{Object, Integer}] The number of times each result
+    #     appears.
     #
     #   @yield item An item in the array to be converted to a countable result.
     def count_values values, &block

@@ -12,36 +12,39 @@ Hi, I'm Rob Smith, a Ruby Engineer and the developer of this library. I use thes
 
 ## Tools
 
-### Array Tools
+### Enumerable Tools
 
-    require 'sleeping_king_studios/tools/array_tools'
+    require 'sleeping_king_studios/tools/enumerable_tools'
 
-Tools for working with arrays and lists.
+Tools for working with enumerable objects, such as arrays and hashes.
 
 #### `#count_values`
 
-Counts the number of times each value appears in the array, or if a block is given, calls the block with each item and counts the number of times each result appears.
+Counts the number of times each value appears in the enumerable object, or if a block is given, calls the block with each item and counts the number of times each result appears.
 
-    ArrayTools.count_values([1, 1, 1, 2, 2, 3])
+    EnumerableTools.count_values([1, 1, 1, 2, 2, 3])
     #=> { 1 => 3, 2 => 2, 3 => 1 }
 
-    ArrayTools.count_values([1, 1, 1, 2, 2, 3]) { |i| i ** 2 }
+    EnumerableTools.count_values([1, 1, 1, 2, 2, 3]) { |i| i ** 2 }
     #=> { 1 => 3, 4 => 2, 9 => 1 }
+
+    EnumerableTools.count_values([1, 1, 1, 2, 2, 3], &:even?)
+    #=> { false => 4, true => 2 }
 
 #### `#humanize_list`
 
 Accepts a list of values and returns a human-readable string of the values, with the format based on the number of items.
 
     # With One Item
-    ArrayTools.humanize_list(['spam'])
+    EnumerableTools.humanize_list(['spam'])
     #=> 'spam'
 
-    With Two Items
-    # ArrayTools.humanize_list(['spam', 'eggs'])
+    # With Two Items
+    EnumerableTools.humanize_list(['spam', 'eggs'])
     #=> 'spam and eggs'
 
     # With Three Or More Items
-    ArrayTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'])
+    EnumerableTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'])
     #=> 'spam, eggs, bacon, and spam'
 
 ### Object Tools
