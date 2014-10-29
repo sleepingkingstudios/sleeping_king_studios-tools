@@ -32,7 +32,32 @@ module SleepingKingStudios::Tools
     #
     # @return [Integer] The number of digits.
     def count_digits integer, base: 10
-      integer.abs.to_s(base).split('').count
+      digits(integer.abs, :base => base).count
     end # method count_digits
+
+    # Decomposes the given integer into its digits when represented in the
+    # given base.
+    #
+    # @example With a number in base 10.
+    #   IntegerTools.digits(15926)
+    #   #=> ['1', '5', '9', '2', '6']
+    #
+    # @example With a binary number.
+    #   IntegerTools.digits(189, :base => 2)
+    #   #=> ['1', '0', '1', '1', '1', '1', '0', '1']
+    #
+    # @example With a hexadecimal number.
+    #   IntegerTools.digits(16724838)
+    #   #=> ['f', 'f', '3', '3', '6', '6']
+    #
+    # @param [Integer] The integer to decompose.
+    # @param [Integer] base The numeric base to represent the integer in.
+    #   Defaults to 10.
+    #
+    # @return [Array<String>] The digits of the decomposed integer,
+    #   represented as a bigendian array of strings.
+    def digits integer, base: 10
+      integer.to_s(base).split('')
+    end # method digits
   end # module
 end # module

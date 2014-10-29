@@ -71,6 +71,22 @@ Returns the number of digits in the given integer when represented in the specif
     IntegerTools.count_digits(16724838, :base => 16)
     #=> 6
 
+#### `#digits`
+
+Decomposes the given integer into its digits when represented in the given base.
+
+    # With a number in base 10.
+    IntegerTools.digits(15926)
+    #=> ['1', '5', '9', '2', '6']
+
+    # With a binary number.
+    IntegerTools.digits(189, :base => 2)
+    #=> ['1', '0', '1', '1', '1', '1', '0', '1']
+
+    # With a hexadecimal number.
+    IntegerTools.digits(16724838)
+    #=> ['f', 'f', '3', '3', '6', '6']
+
 ### Object Tools
 
     require 'sleeping_king_studios/tools/object_tools'
