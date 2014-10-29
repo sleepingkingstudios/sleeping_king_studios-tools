@@ -47,6 +47,30 @@ Accepts a list of values and returns a human-readable string of the values, with
     EnumerableTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'])
     #=> 'spam, eggs, bacon, and spam'
 
+### Integer Tools
+
+Tools for working with integers and fixnums.
+
+#### `#count_digits`
+
+Returns the number of digits in the given integer when represented in the specified base. Ignores minus sign for negative numbers.
+
+    # With a positive number.
+    IntegerTools.count_digits(31)
+    #=> 2
+
+    # With a negative number.
+    IntegerTools.count_digits(-141)
+    #=> 3
+
+    # With a binary number.
+    IntegerTools.count_digits(189, :base => 2)
+    #=> 8
+
+    # With a hexadecimal number.
+    IntegerTools.count_digits(16724838, :base => 16)
+    #=> 6
+
 ### Object Tools
 
     require 'sleeping_king_studios/tools/object_tools'
