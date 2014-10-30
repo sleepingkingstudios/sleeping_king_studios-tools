@@ -87,6 +87,13 @@ Decomposes the given integer into its digits when represented in the given base.
     IntegerTools.digits(16724838)
     #=> ['f', 'f', '3', '3', '6', '6']
 
+#### `#romanize`
+
+Represents an integer between 1 and 4999 (inclusive) as a Roman numeral.
+
+    IntegerTools.romanize(499)
+    #=> 'CDXCIX'
+
 ### Object Tools
 
     require 'sleeping_king_studios/tools/object_tools'
