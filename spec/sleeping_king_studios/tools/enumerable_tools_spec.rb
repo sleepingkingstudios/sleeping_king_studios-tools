@@ -82,6 +82,12 @@ RSpec.describe SleepingKingStudios::Tools::EnumerableTools do
       it 'returns the items joined by "and"' do
         expect(described_class.humanize_list values).to be == values.join(' and ')
       end # it
+
+      describe 'with :last_separator => " or "' do
+        it 'returns the items joined by "and"' do
+          expect(described_class.humanize_list values, :last_separator => ' or ').to be == values.join(' or ')
+        end # it
+      end # describe
     end # describe
 
     describe 'with an array with three items' do
@@ -91,6 +97,20 @@ RSpec.describe SleepingKingStudios::Tools::EnumerableTools do
         expected = "#{values[0...-1].join(', ')}, and #{values.last}"
         expect(described_class.humanize_list values).to be == expected
       end # it
+
+      describe 'with :separator => ";"' do
+        it 'returns the items joined by semicolons and the last value preceded by "and"' do
+          expected = "#{values[0...-1].join('; ')}; and #{values.last}"
+          expect(described_class.humanize_list values, :separator => "; ").to be == expected
+        end # it
+      end # describe
+
+      describe 'with :last_separator => " or "' do
+        it 'returns the items joined by commas and the last value preceded by "or"' do
+          expected = "#{values[0...-1].join(', ')}, or #{values.last}"
+          expect(described_class.humanize_list values, :last_separator => ', or ').to be == expected
+        end # it
+      end # describe
     end # describe
   end # describe
 end # describe

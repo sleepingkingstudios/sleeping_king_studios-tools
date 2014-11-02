@@ -59,20 +59,41 @@ module SleepingKingStudios::Tools
     #   ArrayTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'])
     #   #=> 'spam, eggs, bacon, and spam'
     #
+    # @example With Three Or More Items And Options
+    #   ArrayTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'], :last_separator => ' or ')
+    #   #=> 'spam, eggs, bacon, or spam'
+    #
     # @param [Array<String>] values The list of values to format. Will be
     #   coerced to strings using #to_s.
+    # @param [Hash] options Optional configuration hash.
+    # @option options [String] :last_separator The value to use to separate
+    #   the final pair of values. Defaults to " and " (note the leading and
+    #   trailing spaces). Will be combined with the :separator for lists of
+    #   length 3 or greater.
+    # @option options [String] :separator The value to use to separate pairs
+    #   of values before the last in lists of length 3 or greater. Defaults to
+    #   ", " (note the trailing space).
     #
     # @return [String] The formatted string.
-    def humanize_list values
+    def humanize_list values, options = {}
+      separator = options.fetch(:separator, ', ')
+      last_separator = options.fetch(:last_separator, ' and ')
+
       case values.count
       when 0
         ''
       when 1
         values.first.to_s
       when 2
-        "#{values.first} and #{values.last}"
+        "#{values[0]}#{last_separator}#{values[1]}"
       else
-        "#{values[0...-1].join(', ')}, and #{values.last}"
+        if last_separator =~ /\A,?\s*/
+          last_separator = last_separator.sub /\A,?\s*/, separator
+        else
+          last_separator = "#{separator}#{last_separator}"
+        end # if-else
+
+        "#{values[0...-1].join(separator)}#{last_separator}#{values.last}"
       end # case
     end # method humanize_list
   end # module
