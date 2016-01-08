@@ -20,17 +20,21 @@ module SleepingKingStudios::Tools
     #
     # @return The result of calling the proc or lambda with the given
     #   receiver and any additional arguments or block.
-    def apply base, proc, *args, &block
+    def apply base, proc, *args, **kwargs, &block
       temporary_method_name = :__sleeping_king_studios_tools_object_tools_temporary_method_for_applying_proc__
 
       metaclass = class << base; self; end
       metaclass.send :define_method, temporary_method_name, &proc
 
-      value = base.send temporary_method_name, *args, &block
-
-      metaclass.send :remove_method, temporary_method_name
-
-      value
+      begin
+        if kwargs.empty?
+          base.send temporary_method_name, *args, &block
+        else
+          base.send temporary_method_name, *args, **kwargs, &block
+        end # if-else
+      ensure
+        metaclass.send :remove_method, temporary_method_name if temporary_method_name && defined?(temporary_method_name)
+      end
     end # method apply
 
     # Returns the object's eigenclass.
