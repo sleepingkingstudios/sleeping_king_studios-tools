@@ -2,6 +2,10 @@
 
 ## Pre-release Versions
 
+### 0.1.3
+
+Properly support both keywords and optional arguments in ObjectTools#apply.
+
 ### 0.1.2
 
 Fix loading order issues when loading SemanticVersion in isolation.
