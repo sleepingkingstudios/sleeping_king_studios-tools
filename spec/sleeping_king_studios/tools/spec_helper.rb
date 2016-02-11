@@ -1,7 +1,7 @@
 # spec/sleeping_king_studios/tools/spec_helper.rb
 
-require 'pry'
 require 'rspec'
+require 'byebug'
 
 # Require Factories, Custom Matchers, &c
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each { |f| require f }

@@ -15,3 +15,6 @@
 # Ignore generated documentation.
 /doc
 .yardoc
+
+# Ignore temporary files.
+.byebug_history
