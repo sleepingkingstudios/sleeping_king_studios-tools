@@ -2,6 +2,10 @@
 
 ## Pre-release Versions
 
+### 0.2.0
+
+Split EnumerableTools into ArrayTools and HashTools.
+
 ### 0.1.3
 
 Properly support both keywords and optional arguments in ObjectTools#apply.

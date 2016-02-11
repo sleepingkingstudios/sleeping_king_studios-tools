@@ -1,8 +1,8 @@
-# spec/sleeping_king_studios/tools/enumerable_tools_spec.rb
+# spec/sleeping_king_studios/tools/array_tools_spec.rb
 
-require 'sleeping_king_studios/tools/enumerable_tools'
+require 'sleeping_king_studios/tools/array_tools'
 
-RSpec.describe SleepingKingStudios::Tools::EnumerableTools do
+RSpec.describe SleepingKingStudios::Tools::ArrayTools do
   let(:instance) { Object.new.extend described_class }
 
   describe '#count_values' do

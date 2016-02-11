@@ -10,6 +10,8 @@ module SleepingKingStudios
     module Version
       extend SleepingKingStudios::Tools::SemanticVersion
 
+      private
+
       MAJOR = 0
       MINOR = 1
       PATCH = 3

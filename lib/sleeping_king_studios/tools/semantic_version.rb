@@ -20,9 +20,6 @@ module SleepingKingStudios
     #
     # @see http://semver.org
     module SemanticVersion
-      # @api private
-      FETCH_DEFAULT = Object.new.freeze
-
       # Error class for handling missing constants in a version definition.
       class InvalidVersionError < StandardError; end
 
@@ -96,6 +93,8 @@ module SleepingKingStudios
       end # method to_version
 
       private
+
+      FETCH_DEFAULT = Object.new.freeze
 
       def const_fetch name, default = FETCH_DEFAULT
         if self.const_defined?(name)
