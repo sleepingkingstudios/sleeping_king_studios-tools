@@ -1,6 +1,7 @@
-# spec/sleeping_king_studios/tools/spec_helper.rb
+# spec/spec_helper.rb
 
 require 'rspec'
+require 'rspec/sleeping_king_studios/all'
 require 'byebug'
 
 # Require Factories, Custom Matchers, &c

@@ -23,4 +23,6 @@ classes without polluting the global namespace.
   gem.add_development_dependency 'rake',   '~> 10.5'
   gem.add_development_dependency 'rspec',  '~> 3.4'
   gem.add_development_dependency 'byebug', '~> 8.2',  '>= 8.2.2'
+
+  gem.add_development_dependency 'rspec-sleeping_king_studios', '~> 2.1', '>= 2.1.1'
 end # gemspec
