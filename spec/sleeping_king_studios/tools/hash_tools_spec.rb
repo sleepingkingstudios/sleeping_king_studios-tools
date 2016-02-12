@@ -1,5 +1,7 @@
 # spec/sleeping_king_studios/tools/hash_tools_spec.rb
 
+require 'spec_helper'
+
 require 'sleeping_king_studios/tools/hash_tools'
 
 RSpec.describe SleepingKingStudios::Tools::HashTools do
