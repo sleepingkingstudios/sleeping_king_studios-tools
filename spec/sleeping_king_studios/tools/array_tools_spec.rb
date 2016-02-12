@@ -3,6 +3,8 @@
 require 'sleeping_king_studios/tools/array_tools'
 
 RSpec.describe SleepingKingStudios::Tools::ArrayTools do
+  include Spec::Examples::ArrayExamples
+
   let(:instance) { Object.new.extend described_class }
 
   describe '#count_values' do
@@ -53,6 +55,14 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
         end # it
       end # describe
     end # describe
+  end # describe
+
+  describe '#deep_dup' do
+    it { expect(instance).to respond_to(:deep_dup).with(1).argument }
+
+    it { expect(described_class).to respond_to(:deep_dup).with(1).argument }
+
+    include_examples 'should create a deep copy of an array'
   end # describe
 
   describe '#humanize_list' do
