@@ -1,8 +1,13 @@
 # spec/sleeping_king_studios/tools/object_tools_spec.rb
 
+require 'spec_helper'
+
 require 'sleeping_king_studios/tools/object_tools'
 
 RSpec.describe SleepingKingStudios::Tools::ObjectTools do
+  include Spec::Examples::ArrayExamples
+  include Spec::Examples::HashExamples
+
   let(:instance) { Object.new.extend described_class }
 
   describe '#apply' do
@@ -292,6 +297,152 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       end # it
 
       include_examples 'should not change the objects on the method'
+    end # describe
+  end # describe
+
+  describe '#deep_dup' do
+    it { expect(instance).to respond_to(:deep_dup).with(1).argument }
+
+    it { expect(described_class).to respond_to(:deep_dup).with(1).argument }
+
+    include_examples 'should create a deep copy of an array'
+
+    include_examples 'should create a deep copy of a hash'
+
+    describe 'with false' do
+      it { expect(instance.deep_dup false).to be false }
+    end # describe
+
+    describe 'with a float' do
+      it { expect(instance.deep_dup 1.0).to be == 1.0 }
+    end # describe
+
+    describe 'with an integer' do
+      it { expect(instance.deep_dup 42).to be == 42 }
+    end # describe
+
+    describe 'with nil' do
+      it { expect(instance.deep_dup nil).to be nil }
+    end # describe
+
+    describe 'with an object' do
+      let(:object) { Object.new }
+
+      it 'should delegate to Object#dup' do
+        expected = double 'copy'
+
+        expect(object).to receive(:dup).and_return(expected)
+
+        expect(instance.deep_dup object).to be == expected
+      end # it
+
+      context 'with a defined #deep_dup method' do
+        before(:example) do
+          instance.eigenclass(object).send :define_method, :deep_dup do; end
+        end # before example
+
+        it 'should delegate to Object#deep_dup' do
+          expected = double 'copy'
+
+          expect(object).not_to receive(:dup)
+          expect(object).to receive(:deep_dup).and_return(expected)
+
+          expect(instance.deep_dup object).to be == expected
+        end # it
+      end # context
+    end # describe
+
+    describe 'with a string' do
+      it { expect(instance.deep_dup 'foo').to be == 'foo' }
+
+      it 'should return a copy' do
+        orig = 'foo'
+        copy = instance.deep_dup orig
+
+        expect { copy << 'bar' }.not_to change { orig }
+      end # it
+    end # describe
+
+    describe 'with a struct' do
+      let(:struct_class) { Struct.new(:prop) }
+      let(:struct)       { struct_class.new('foo') }
+
+      it { expect(instance.deep_dup struct).to be_a struct_class }
+
+      it { expect(instance.deep_dup(struct).prop).to be == struct.prop }
+    end # describe
+
+    describe 'with a symbol' do
+      it { expect(instance.deep_dup :foo).to be :foo }
+    end # describe
+
+    describe 'with true' do
+      it { expect(instance.deep_dup true).to be true }
+    end # describe
+
+    describe 'with a complex data structure' do
+      let(:hsh) do
+        { :posts => [
+            { :riddle => 'What lies beyond the furthest reaches of the sky?',
+              :answer => 'That which will lead the lost child back to her mother\'s arms. Exile.',
+              :tags   => ['House Eraclea', 'Exile', 'the Guild']
+            }, # end hash
+            { :riddle => 'The waves that flow and dye the land gold.',
+              :answer => 'The blessed breath that nurtures life. A land of wheat.',
+              :tags   => ['House Dagobert', 'Anatoray', 'Disith']
+            }, # end hash
+            { :riddle => 'The path the angels descend upon.',
+              :answer => 'The path of great winds. The Grand Stream.',
+              :tags   => ['House Bassianus', 'the Grand Stream']
+            }, # end hash
+            { :riddle => 'What lies within the furthest depths of one\'s memory?',
+              :answer => 'The place where all are born and where all will return. A blue star.',
+              :tags   => ['House Hamilton', 'Earth']
+            }  # end hash
+          ] # end array
+        } # end hash
+      end # let
+      let(:cpy) { instance.deep_dup hsh }
+
+      it { expect(cpy).to be == hsh }
+
+      it 'should return a copy of the data structure' do
+        expect { cpy[:author] = {} }.not_to change { hsh }
+
+        expect { cpy[:posts]  = [] }.not_to change { hsh }
+      end # it
+
+      it 'should return a copy of the posts array' do
+        posts = cpy[:posts]
+
+        expect { posts << {} }.not_to change { hsh }
+      end # it
+
+      it 'should return a copy of the posts array items' do
+        posts = cpy[:posts]
+        post  = cpy[:posts].first
+
+        expect { post[:episode] = 3 }.not_to change { hsh }
+
+        riddle = 'Why do hot dogs come in packages of ten, and hot dog buns come in packages of eight?'
+        expect { post[:riddle ] = riddle }.not_to change { hsh }
+      end # it
+
+      it 'should return a copy of the post tags array' do
+        posts = cpy[:posts]
+        post  = cpy[:posts].first
+        tags  = post[:tags]
+
+        expect { tags << 'Lavie Head' }.not_to change { hsh }
+      end # it
+
+      it 'should return a copy of the post tags array items' do
+        posts = cpy[:posts]
+        post  = cpy[:posts].first
+        tags  = post[:tags]
+
+        expect { tags.last << ' Wars' }.not_to change { hsh }
+      end # it
     end # describe
   end # describe
 

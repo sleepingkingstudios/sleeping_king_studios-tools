@@ -5,7 +5,7 @@ require 'rspec/sleeping_king_studios/all'
 require 'byebug'
 
 # Require Factories, Custom Matchers, &c
-Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each { |f| require f }
+Dir[File.join File.dirname(__FILE__), *%w(support ** *.rb)].each { |f| require f }
 
 RSpec.configure do |config|
   # Limit a spec run to individual examples or groups you care about by tagging

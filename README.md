@@ -20,7 +20,7 @@ Tools for working with array-like enumerable objects.
 
 #### `#count_values`
 
-Counts the number of times each value appears in the enumerable object, or if a block is given, calls the block with each item and counts the number of times each result appears.
+Counts the number of times each value appears in the array, or if a block is given, calls the block with each item and counts the number of times each result appears.
 
     ArrayTools.count_values([1, 1, 1, 2, 2, 3])
     #=> { 1 => 3, 2 => 2, 3 => 1 }
@@ -30,6 +30,23 @@ Counts the number of times each value appears in the enumerable object, or if a 
 
     ArrayTools.count_values([1, 1, 1, 2, 2, 3], &:even?)
     #=> { false => 4, true => 2 }
+
+#### `#deep_dup`
+
+Creates a deep copy of the object by returning a new Array with deep copies of each array item. See also ObjectTools#deep_dup[#label-Object+Tools].
+
+    ary = ['one', 'two', 'three']
+    cpy = ArrayTools.deep_dup ary
+
+    cpy << 'four'
+    #=> ['one', 'two', 'three', 'four']
+    ary
+    #=> ['one', 'two', 'three']
+
+    cpy.first.sub!(/on/, 'vu'); cpy
+    #=> ['vun', 'two', 'three', 'four']
+    ary
+    #=> ['one', 'two', 'three']
 
 #### `#humanize_list`
 
@@ -46,6 +63,27 @@ Accepts a list of values and returns a human-readable string of the values, with
     # With Three Or More Items
     ArrayTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'])
     #=> 'spam, eggs, bacon, and spam'
+
+### Hash Tools
+
+Tools for working with array-like enumerable objects.
+
+#### `#deep_dup`
+
+Creates a deep copy of the object by returning a new Hash with deep copies of each key and value. See also ObjectTools#deep_dup[#label-Object+Tools].
+
+    hsh = { :one => 'one', :two => 'two', :three => 'three' }
+    cpy = HashTools.deep_dup hsh
+
+    cpy.update :four => 'four'
+    #=> { :one => 'one', :two => 'two', :three => 'three', :four => 'four' }
+    hsh
+    #=> { :one => 'one', :two => 'two', :three => 'three' }
+
+    cpy[:one].sub!(/on/, 'vu'); cpy
+    #=> { :one => 'vun', :two => 'two', :three => 'three', :four => 'four' }
+    hsh
+    #=> { :one => 'one', :two => 'two', :three => 'three' }
 
 ### Integer Tools
 
@@ -109,6 +147,40 @@ Takes a proc or lambda and invokes it with the given object as receiver, with an
 
     ObjectTools.apply my_object, my_proc
     #=> Writes 'A mock object says "Greetings, programs!"' to STDOUT.
+
+#### `#deep_dup`
+
+Creates a deep copy of the object. If the object is an Array, returns a new Array with deep copies of each array item (see ArrayTools#deep_dup[#label-Array+Tools]). If the object is a Hash, returns a new Hash with deep copies of each hash key and value (see HashTools#deep_dup[#label-Hash+Tools]). Otherwise, returns Object#dup.
+
+    data = {
+      :songs = [
+        {
+          :name   => 'Welcome to the Jungle',
+          :artist => "Guns N' Roses",
+          :album  => 'Appetite for Destruction'
+        }, # end hash
+        {
+          :name   => 'Hells Bells',
+          :artist => 'AC/DC',
+          :album  => 'Back in Black'
+        }, # end hash
+        {
+          :name   => "Knockin' on Heaven's Door",
+          :artist => 'Bob Dylan',
+          :album  => 'Pat Garrett & Billy The Kid'
+        } # end hash
+      ] # end array
+    } # end hash
+
+    copy = ObjectTools.deep_dup data
+
+    copy[:songs] << { :name => 'Sympathy for the Devil', :artist => 'The Rolling Stones', :album => 'Beggars Banquet' }
+    data[:songs].count
+    #=> 3
+
+    copy[:songs][1][:name] = 'Shoot to Thrill'
+    data[:songs][1]
+    #=> { :name => 'Hells Bells', :artist => 'AC/DC', :album => 'Back in Black' }
 
 #### `#eigenclass`, `#metaclass`
 

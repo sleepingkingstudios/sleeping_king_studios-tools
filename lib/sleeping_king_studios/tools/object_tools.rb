@@ -37,6 +37,27 @@ module SleepingKingStudios::Tools
       end
     end # method apply
 
+    # Creates a deep copy of the object. If the object is an Array, returns a
+    # new Array with deep copies of each array item. If the object is a Hash,
+    # returns a new Hash with deep copies of each hash key and value. Otherwise,
+    # returns Object#dup.
+    #
+    # @param [Object] obj The object to copy.
+    #
+    # @return The copy of the object.
+    def deep_dup obj
+      case obj
+      when FalseClass, Fixnum, Float, NilClass, Symbol, TrueClass
+        obj
+      when Array
+        ArrayTools.deep_dup obj
+      when Hash
+        HashTools.deep_dup obj
+      else
+        obj.respond_to?(:deep_dup) ? obj.deep_dup : obj.dup
+      end # case
+    end # method deep_dup
+
     # Returns the object's eigenclass.
     #
     # @param [Object] object The object for which an eigenclass is required.
@@ -48,3 +69,6 @@ module SleepingKingStudios::Tools
     alias_method :metaclass, :eigenclass
   end # module
 end # module
+
+require 'sleeping_king_studios/tools/array_tools'
+require 'sleeping_king_studios/tools/hash_tools'

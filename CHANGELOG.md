@@ -6,6 +6,8 @@
 
 Split EnumerableTools into ArrayTools and HashTools.
 
+Implement ArrayTools#deep_dup, HashTools#deep_dup and ObjectTools#deep_dup.
+
 ### 0.1.3
 
 Properly support both keywords and optional arguments in ObjectTools#apply.

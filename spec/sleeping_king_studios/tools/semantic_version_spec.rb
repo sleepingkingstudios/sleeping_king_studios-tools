@@ -1,5 +1,7 @@
 # spec/sleeping_king_studios/tools/semantic_version_spec.rb
 
+require 'spec_helper'
+
 require 'sleeping_king_studios/tools/semantic_version'
 
 RSpec.describe SleepingKingStudios::Tools::SemanticVersion do

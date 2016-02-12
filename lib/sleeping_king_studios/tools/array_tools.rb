@@ -1,6 +1,7 @@
 # lib/sleeping_king_studios/tools/array_tools.rb
 
 require 'sleeping_king_studios/tools'
+require 'sleeping_king_studios/tools/object_tools'
 
 module SleepingKingStudios::Tools
   # Tools for working with array-like enumerable objects.
@@ -39,6 +40,16 @@ module SleepingKingStudios::Tools
         hsh[value] = hsh.fetch(value, 0) + 1
       end # each
     end # method count_values
+
+    # Creates a deep copy of the object by returning a new Array with deep
+    # copies of each array item.
+    #
+    # @param [Array<Object>] ary The array to copy.
+    #
+    # @return [Array] The copy of the array.
+    def deep_dup ary
+      ary.map { |obj| ObjectTools.deep_dup obj }
+    end # method deep_dup
 
     # Accepts a list of values and returns a human-readable string of the
     # values, with the format based on the number of items.
