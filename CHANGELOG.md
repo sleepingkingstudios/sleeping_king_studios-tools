@@ -2,6 +2,10 @@
 
 ## Pre-release Versions
 
+### 0.3.0
+
+Implement ArrayTools#splice.
+
 ### 0.2.0
 
 Split EnumerableTools into ArrayTools and HashTools.

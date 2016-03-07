@@ -14,6 +14,12 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
     it { expect(described_class).to respond_to(:count_values).with(1).argument }
 
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.count_values nil }.to raise_error ArgumentError, /argument must be an array/
+      end # it
+    end # describe
+
     describe 'with an empty array' do
       it 'returns an empty hash' do
         expect(described_class.count_values []).to be == {}
@@ -64,6 +70,12 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
     it { expect(described_class).to respond_to(:deep_dup).with(1).argument }
 
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.deep_dup nil }.to raise_error ArgumentError, /argument must be an array/
+      end # it
+    end # describe
+
     include_examples 'should create a deep copy of an array'
   end # describe
 
@@ -71,6 +83,12 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
     it { expect(instance).to respond_to(:humanize_list).with(1).argument }
 
     it { expect(described_class).to respond_to(:humanize_list).with(1).argument }
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.humanize_list nil }.to raise_error ArgumentError, /argument must be an array/
+      end # it
+    end # describe
 
     describe 'with an array with zero items' do
       let(:values) { [] }
@@ -122,6 +140,131 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
           expected = "#{values[0...-1].join(', ')}, or #{values.last}"
           expect(described_class.humanize_list values, :last_separator => ', or ').to be == expected
         end # it
+      end # describe
+    end # describe
+  end # describe
+
+  describe '#splice' do
+    shared_examples 'should splice the array' do
+      let(:normalized) { start < 0 ? start + values.count : start }
+      let!(:deleted)   { values[normalized...normalized+delete_count] }
+      let!(:remaining) { values.dup.tap { |ary| ary[normalized...normalized+delete_count] = insert } }
+
+      describe 'with no deleted or inserted items' do
+        it 'should return an empty array' do
+          expect(perform_action).to be == []
+        end # it
+
+        it 'should not change the array' do
+          expect { perform_action }.not_to change { values }
+        end # it
+      end # describe
+
+      describe 'with deleted items' do
+        let(:delete_count) { 2 }
+
+        it 'should return the deleted items' do
+          expect(perform_action).to be == deleted
+        end # it
+
+        it 'should delete the items from the array' do
+          perform_action
+
+          expect(values).to be == remaining
+        end # it
+      end # describe
+
+      describe 'with inserted items' do
+        let(:insert) { %w(zweihänder) }
+
+        it 'should return the deleted items' do
+          expect(perform_action).to be == deleted
+        end # it
+
+        it 'should insert the items into the array' do
+          perform_action
+
+          expect(values).to be == remaining
+        end # it
+      end # describe
+
+      describe 'with inserted and deleted items' do
+        let(:delete_count) { 2 }
+        let(:insert)       { %w(zweihänder) }
+
+        it 'should return the deleted items' do
+          expect(perform_action).to be == deleted
+        end # it
+
+        it 'should delete the items from and insert the items into the array' do
+          perform_action
+
+          expect(values).to be == remaining
+        end # it
+      end # describe
+
+      describe 'with more deleted items than items in the array' do
+        let(:delete_count) { 1 + values.count }
+
+        it 'should return the deleted items' do
+          expect(perform_action).to be == deleted
+        end # it
+
+        it 'should delete the items from the array' do
+          perform_action
+
+          expect(values).to be == remaining
+        end # it
+      end # describe
+    end # shared_examples
+
+    def perform_action
+      described_class.splice values, start, delete_count, *insert
+    end # method perform_action
+
+    it { expect(instance).to respond_to(:splice).with(3).arguments.and_unlimited_arguments }
+
+    it { expect(described_class).to respond_to(:splice).with(3).arguments.and_unlimited_arguments }
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.splice nil, 0, 0 }.to raise_error ArgumentError, /argument must be an array/
+      end # it
+    end # describe
+
+    describe 'with an array with many items' do
+      let(:values)       { %w(katana wakizashi tachi daito shoto) }
+      let(:delete_count) { 0 }
+      let(:insert)       { [] }
+
+      describe 'with a start value of 0' do
+        let(:start) { 0 }
+
+        include_examples 'should splice the array'
+      end # describe
+
+      describe 'with a start value of -1' do
+        let(:start) { -1 }
+
+        include_examples 'should splice the array'
+      end # describe
+
+      describe 'with a positive start value' do
+        let(:start) { 2 }
+
+        include_examples 'should splice the array'
+      end # describe
+
+      describe 'with a negative start value' do
+        let(:start) { -3 }
+
+        include_examples 'should splice the array'
+      end # describe
+
+      describe 'with a start value at the end of the array' do
+        let(:start) { values.count }
+
+        include_examples 'should splice the array'
       end # describe
     end # describe
   end # describe
