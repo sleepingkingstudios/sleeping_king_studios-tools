@@ -8,19 +8,21 @@ module SleepingKingStudios::Tools
   module ArrayTools
     extend self
 
-    # @overload count_values(values)
+    # @overload count_values(ary)
     #   Counts the number of times each value appears in the enumerable object.
     #
     #   @example
     #     ArrayTools.count_values([1, 1, 1, 2, 2, 3])
     #     #=> { 1 => 3, 2 => 2, 3 => 1 }
     #
-    #   @param [Array<Object>] values The values to count.
+    #   @param [Array<Object>] ary The values to count.
+    #
+    #   @raise ArgumentError If the first argument is not an Array-like object.
     #
     #   @return [Hash{Object, Integer}] The number of times each value appears
     #     in the enumerable object.
     #
-    # @overload count_values(values, &block)
+    # @overload count_values(ary, &block)
     #   Calls the block with each item and counts the number of times each
     #   result appears.
     #
@@ -28,15 +30,20 @@ module SleepingKingStudios::Tools
     #     ArrayTools.count_values([1, 1, 1, 2, 2, 3]) { |i| i ** 2 }
     #     #=> { 1 => 3, 4 => 2, 9 => 1 }
     #
-    #   @param [Array<Object>] values The values to count.
+    #   @param [Array<Object>] ary The values to count.
+    #
+    #   @raise ArgumentError If the first argument is not an Array-like object.
     #
     #   @return [Hash{Object, Integer}] The number of times each result
     #     appears.
     #
     #   @yield item An item in the array to be converted to a countable result.
-    def count_values values, &block
-      values.each.with_object({}) do |item, hsh|
+    def count_values ary, &block
+      require_array! ary
+
+      ary.each.with_object({}) do |item, hsh|
         value = block_given? ? block.call(item) : item
+
         hsh[value] = hsh.fetch(value, 0) + 1
       end # each
     end # method count_values
@@ -48,6 +55,8 @@ module SleepingKingStudios::Tools
     #
     # @return [Array] The copy of the array.
     def deep_dup ary
+      require_array! ary
+
       ary.map { |obj| ObjectTools.deep_dup obj }
     end # method deep_dup
 
@@ -74,7 +83,7 @@ module SleepingKingStudios::Tools
     #   ArrayTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'], :last_separator => ' or ')
     #   #=> 'spam, eggs, bacon, or spam'
     #
-    # @param [Array<String>] values The list of values to format. Will be
+    # @param [Array<String>] ary The list of values to format. Will be
     #   coerced to strings using #to_s.
     # @param [Hash] options Optional configuration hash.
     # @option options [String] :last_separator The value to use to separate
@@ -85,18 +94,22 @@ module SleepingKingStudios::Tools
     #   of values before the last in lists of length 3 or greater. Defaults to
     #   ", " (note the trailing space).
     #
+    # @raise ArgumentError If the first argument is not an Array-like object.
+    #
     # @return [String] The formatted string.
-    def humanize_list values, options = {}
+    def humanize_list ary, options = {}
+      require_array! ary
+
       separator = options.fetch(:separator, ', ')
       last_separator = options.fetch(:last_separator, ' and ')
 
-      case values.count
+      case ary.count
       when 0
         ''
       when 1
-        values.first.to_s
+        ary.first.to_s
       when 2
-        "#{values[0]}#{last_separator}#{values[1]}"
+        "#{ary[0]}#{last_separator}#{ary[1]}"
       else
         if last_separator =~ /\A,?\s*/
           last_separator = last_separator.sub /\A,?\s*/, separator
@@ -104,8 +117,64 @@ module SleepingKingStudios::Tools
           last_separator = "#{separator}#{last_separator}"
         end # if-else
 
-        "#{values[0...-1].join(separator)}#{last_separator}#{values.last}"
+        "#{ary[0...-1].join(separator)}#{last_separator}#{ary.last}"
       end # case
     end # method humanize_list
+
+    # Accepts an array, a start value, a number of items to delete, and zero or
+    # more items to insert at that index. Deletes the specified number of items,
+    # then inserts the given items at the index and returns the array of deleted
+    # items.
+    #
+    # @example Deleting items from an Array
+    #   values = %w(katana wakizashi tachi daito shoto)
+    #   ArrayTools.splice values, 1, 2
+    #   #=> ['wakizashi', 'tachi']
+    #   values
+    #   #=> ['katana', 'daito', 'shoto']
+    #
+    # @example Inserting items into an Array
+    #   values = %w(longsword broadsword claymore)
+    #   ArrayTools.splice values, 1, 0, 'zweihänder'
+    #   #=> []
+    #   values
+    #   #=> ['longsword', 'zweihänder', 'broadsword', 'claymore']
+    #
+    # @example Inserting and deleting items
+    #   values = %w(shortbow longbow crossbow)
+    #   ArrayTools.splice values, 2, 1, 'arbalest', 'chu-ko-nu'
+    #   #=> ['crossbow']
+    #   values
+    #   #=> ['shortbow', 'longbow', 'arbalest', 'chu-ko-nu']
+    #
+    # @param [Array<Object>] ary The array to splice.
+    # @param [Integer] start The starting index to delete or insert values from
+    #   or into. If negative, counts backward from the end of the array.
+    # @param [Integer] delete_count The number of items to delete.
+    # @param [Array<Object>] insert The items to insert, if any.
+    #
+    # @raise ArgumentError If the first argument is not an Array-like object.
+    #
+    # @return [Array<Object>] The deleted items, or an empty array if no items
+    #   were deleted.
+    def splice ary, start, delete_count, *insert
+      require_array! ary
+
+      start   = start < 0 ? start + ary.count : start
+      range   = start...(start + delete_count)
+      deleted = ary[range]
+
+      ary[range] = insert
+
+      deleted
+    end # method splice
+
+    private
+
+    def require_array! value
+      methods = %i([] count each)
+
+      raise ArgumentError.new('argument must be an array') unless methods.reduce(true) { |memo, method_name| memo && value.respond_to?(method_name) }
+    end # method require_array
   end # module
 end # module

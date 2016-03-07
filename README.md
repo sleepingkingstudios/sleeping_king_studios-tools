@@ -64,6 +64,31 @@ Accepts a list of values and returns a human-readable string of the values, with
     ArrayTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'])
     #=> 'spam, eggs, bacon, and spam'
 
+#### `#splice`
+
+Accepts an array, a start value, a number of items to delete, and zero or more items to insert at that index. Deletes the specified number of items, then inserts the given items at the index and returns the array of deleted items.
+
+    # Deleting items from an Array
+    values = %w(katana wakizashi tachi daito shoto)
+    ArrayTools.splice values, 1, 2
+    #=> ['wakizashi', 'tachi']
+    values
+    #=> ['katana', 'daito', 'shoto']
+
+    # Inserting items into an Array
+    values = %w(longsword broadsword claymore)
+    ArrayTools.splice values, 1, 0, 'zweihänder'
+    #=> []
+    values
+    #=> ['longsword', 'zweihänder', 'broadsword', 'claymore']
+
+    # Inserting and deleting items
+    values = %w(shortbow longbow crossbow)
+    ArrayTools.splice values, 2, 1, 'arbalest', 'chu-ko-nu'
+    #=> ['crossbow']
+    values
+    #=> ['shortbow', 'longbow', 'arbalest', 'chu-ko-nu']
+
 ### Hash Tools
 
 Tools for working with array-like enumerable objects.
