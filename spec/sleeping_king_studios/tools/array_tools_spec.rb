@@ -9,6 +9,69 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
   let(:instance) { Object.new.extend described_class }
 
+  describe '#bisect' do
+    it { expect(instance).to respond_to(:bisect).with(1).arguments.and_a_block }
+
+    it { expect(described_class).to respond_to(:bisect).with(1).argument.and_a_block }
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.bisect nil }.to raise_error ArgumentError, /argument must be an array/
+      end # it
+    end # describe
+
+    describe 'with an empty array' do
+      it 'should raise an error' do
+        expect { described_class.bisect [] }.to raise_error ArgumentError, /no block given/
+      end # it
+
+      describe 'with a block' do
+        it 'should return two empty arrays' do
+          expect(described_class.bisect([]) { |item| item }).to be == [[], []]
+        end # it
+      end # describe
+    end # describe
+
+    describe 'with an array with many items' do
+      let(:ary) { [*0...10] }
+
+      it 'should raise an error' do
+        expect { described_class.bisect ary }.to raise_error ArgumentError, /no block given/
+      end # it
+
+      describe 'with a block matching no array items' do
+        it 'should return an empty array and a copy of the original array' do
+          selected, rejected = described_class.bisect(ary) { |item| item < 0 }
+
+          expect(selected).to be == []
+          expect(rejected).to be == ary
+
+          expect { rejected << 10 }.not_to change { ary }
+        end # it
+      end # describe
+
+      describe 'with a block matching some array items' do
+        it 'should return an array containing the matching items and an array containing the non-matching items' do
+          selected, rejected = described_class.bisect(ary) { |item| item.even? }
+
+          expect(selected).to be == ary.select { |item| item.even? }
+          expect(rejected).to be == ary.reject { |item| item.even? }
+        end # it
+      end # described_class
+
+      describe 'with a block matching all array items' do
+        it 'should return a copy of the original array and an empty array' do
+          selected, rejected = described_class.bisect(ary) { |item| item >= 0 }
+
+          expect(selected).to be == ary
+          expect(rejected).to be == []
+
+          expect { selected << 10 }.not_to change { ary }
+        end # it
+      end # describe
+    end # describe
+  end # describe
+
   describe '#count_values' do
     it { expect(instance).to respond_to(:count_values).with(1).argument }
 

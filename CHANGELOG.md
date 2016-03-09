@@ -4,7 +4,7 @@
 
 ### 0.3.0
 
-Implement ArrayTools#splice.
+Implement ArrayTools#bisect and ArrayTools#splice.
 
 ### 0.2.0
 

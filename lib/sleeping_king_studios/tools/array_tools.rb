@@ -8,6 +8,42 @@ module SleepingKingStudios::Tools
   module ArrayTools
     extend self
 
+    # Separates the array into two arrays, the first containing all items in the
+    # original array that matches the provided block, and the second containing
+    # all items in the original array that do not match the provided block.
+    #
+    # @example
+    #   selected, rejected = ArrayTools.bisect([*0...10]) { |item| item.even? }
+    #   selected
+    #   #=> [0, 2, 4, 6, 8]
+    #   rejected
+    #   #=> [1, 3, 5, 7, 9]
+    #
+    # @param [Array<Object>] ary The array to bisect.
+    #
+    # @yieldparam item [Object] An item in the array to matched.
+    #
+    # @yieldreturn [Boolean] True if the item matches the criteria, otherwise
+    #   false.
+    #
+    # @raise ArgumentError If the first argument is not an Array-like object or
+    #   if no block is given.
+    #
+    # @return [Array<Array<Object>>] An array containing two arrays.
+    def bisect ary, &block
+      require_array! ary
+
+      raise ArgumentError.new('no block given') unless block_given?
+
+      selected, rejected = [], []
+
+      ary.each do |item|
+        (yield(item) ? selected : rejected) << item
+      end # each
+
+      [selected, rejected]
+    end # method bisect
+
     # @overload count_values(ary)
     #   Counts the number of times each value appears in the enumerable object.
     #
@@ -32,12 +68,12 @@ module SleepingKingStudios::Tools
     #
     #   @param [Array<Object>] ary The values to count.
     #
+    #   @yieldparam item [Object] An item in the array to matched.
+    #
     #   @raise ArgumentError If the first argument is not an Array-like object.
     #
     #   @return [Hash{Object, Integer}] The number of times each result
     #     appears.
-    #
-    #   @yield item An item in the array to be converted to a countable result.
     def count_values ary, &block
       require_array! ary
 

@@ -18,6 +18,17 @@ Hi, I'm Rob Smith, a Ruby Engineer and the developer of this library. I use thes
 
 Tools for working with array-like enumerable objects.
 
+#### `#bisect`
+
+Separates the array into two arrays, the first containing all items in the original array that matches the provided block, and the second containing all items in the original array that do not match the provided block.
+
+    original = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    selected, rejected = ArrayTools.bisect(original) { |item| item.even? }
+    selected
+    #=> [0, 2, 4, 6, 8]
+    rejected
+    #=> [1, 3, 5, 7, 9]
+
 #### `#count_values`
 
 Counts the number of times each value appears in the array, or if a block is given, calls the block with each item and counts the number of times each result appears.
