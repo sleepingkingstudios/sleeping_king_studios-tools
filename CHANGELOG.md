@@ -6,6 +6,10 @@
 
 Add an optional block argument to ArrayTools#humanize_list.
 
+#### Delegator
+
+Implement #delegate, #wrap_delegate.
+
 #### Identity Methods
 
 Implement a set of methods to classify objects by type: ArrayTools#array?, HashTools#hash?, IntegerTools#integer?, ObjectTools#object?, and StringTools#string?.

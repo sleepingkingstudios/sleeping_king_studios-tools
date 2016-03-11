@@ -523,7 +523,46 @@ Returns true if the object is a String.
 
 Converts a mixed-case string expression to a lowercase, underscore separated string, as per ActiveSupport::Inflector#underscore.
 
-## Additional Features
+## Features
+
+### Delegator
+
+    require 'sleeping_king_studios/tools/delegator'
+
+Module for extending classes with basic delegation.
+
+    # Delegate to an object
+    class MyModule
+      extend SleepingKingStudios::Tools::Delegator
+
+      delegate :my_method, :to => MyService
+    end class
+
+    # Delegate to a method
+    class MyModule
+      extend SleepingKingStudios::Tools::Delegator
+
+      def my_service
+        MyService.new
+      end method my_service
+
+      delegate :my_method, :to => :my_service
+    end class
+
+    # Delegate to an instance variable
+    class MyModule
+      extend SleepingKingStudios::Tools::Delegator
+
+      def initialize
+        @my_service = MyService.new
+      end constructor
+
+      delegate :my_method, :to => :@my_service
+    end class
+
+#### `::delegate`
+
+Expects one or more method names and a delegation target, which can be an object literal, or the name of an method or instance variable as a String or Symbol. Defines a wrapper method to delegate implementation of the specified method or methods to an object, to the object the another specified method, or to the object at the specified instance variable.
 
 ### Semantic Version
 
