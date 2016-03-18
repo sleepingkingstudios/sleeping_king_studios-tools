@@ -70,22 +70,45 @@ RSpec.describe SleepingKingStudios::Tools::Delegator do
     end # shared_examples
 
     let(:delegate) { double('delegate', :first_method => nil, :second_method => nil, :third_method => nil) }
+    let(:options)  { {} }
 
-    it { expect(described_class).to respond_to(:delegate).with(1).arguments.and_unlimited_arguments.and_keywords(:to) }
+    it { expect(described_class).to respond_to(:delegate).with(1).arguments.and_unlimited_arguments.and_keywords(:allow_nil, :to) }
 
-    it 'should raise an error' do
-      expect { described_class.delegate }.to raise_error ArgumentError, 'must specify a delegate'
-    end # it
+    describe 'with an undefined delegate' do
+      it 'should raise an error' do
+        expect { described_class.delegate }.to raise_error ArgumentError, 'must specify a delegate'
+      end # it
+    end # describe
+
+    describe 'with a nil delegate' do
+      describe 'with one method name' do
+        let(:delegate) { nil }
+
+        it 'should raise an error' do
+          expect { described_class.delegate :first_method, :to => delegate }.to raise_error ArgumentError, 'must specify a delegate'
+        end # it
+
+        describe 'with :allow_nil => true' do
+          let(:options) { super().merge :allow_nil => true }
+
+          before(:each) { described_class.delegate :first_method, :to => delegate, **options }
+
+          it 'should return nil' do
+            expect(instance.first_method).to be nil
+          end # it
+        end # describe
+      end # describe
+    end # describe
 
     describe 'with an object delegate' do
       describe 'with one method name' do
-        before(:each) { described_class.delegate :first_method, :to => delegate }
+        before(:each) { described_class.delegate :first_method, :to => delegate, **options }
 
         include_examples 'should delegate method', :first_method
       end # describe
 
       describe 'with many method names' do
-        before(:each) { described_class.delegate :first_method, :second_method, :third_method, :to => delegate }
+        before(:each) { described_class.delegate :first_method, :second_method, :third_method, :to => delegate, **options }
 
         include_examples 'should delegate method', :first_method
 
@@ -107,7 +130,7 @@ RSpec.describe SleepingKingStudios::Tools::Delegator do
       end # shared_context
 
       describe 'with one method name' do
-        before(:each) { described_class.delegate :first_method, :to => :delegate_method }
+        before(:each) { described_class.delegate :first_method, :to => :delegate_method, **options }
 
         it 'should raise an error' do
           expect {
@@ -117,11 +140,29 @@ RSpec.describe SleepingKingStudios::Tools::Delegator do
 
         wrap_context 'with a defined delegate method' do
           include_examples 'should delegate method', :first_method
+
+          context 'with a nil delegate' do
+            let(:delegate) { nil }
+
+            it 'should raise an error' do
+              expect {
+                instance.first_method
+              }.to raise_error NoMethodError, /undefined method `first_method'/
+            end # it
+
+            describe 'with :allow_nil => true' do
+              let(:options) { super().merge :allow_nil => true }
+
+              it 'should return nil' do
+                expect(instance.first_method).to be nil
+              end # it
+            end # describe
+          end # context
         end # it
       end # describe
 
       describe 'with many method names' do
-        before(:each) { described_class.delegate :first_method, :second_method, :third_method, :to => :delegate_method }
+        before(:each) { described_class.delegate :first_method, :second_method, :third_method, :to => :delegate_method, **options }
 
         it 'should raise an error' do
           expect {
@@ -145,7 +186,7 @@ RSpec.describe SleepingKingStudios::Tools::Delegator do
       end # shared_context
 
       describe 'with one method name' do
-        before(:each) { described_class.delegate :first_method, :to => :@delegate_variable }
+        before(:each) { described_class.delegate :first_method, :to => :@delegate_variable, **options }
 
         it 'should raise an error' do
           expect {
@@ -155,11 +196,29 @@ RSpec.describe SleepingKingStudios::Tools::Delegator do
 
         wrap_context 'with a delegate at the instance variable' do
           include_examples 'should delegate method', :first_method
+
+          context 'with a nil delegate' do
+            let(:delegate) { nil }
+
+            it 'should raise an error' do
+              expect {
+                instance.first_method
+              }.to raise_error NoMethodError, /undefined method `first_method'/
+            end # it
+
+            describe 'with :allow_nil => true' do
+              let(:options) { super().merge :allow_nil => true }
+
+              it 'should return nil' do
+                expect(instance.first_method).to be nil
+              end # it
+            end # describe
+          end # context
         end # it
       end # describe
 
       describe 'with many method names' do
-        before(:each) { described_class.delegate :first_method, :second_method, :third_method, :to => :@delegate_variable }
+        before(:each) { described_class.delegate :first_method, :second_method, :third_method, :to => :@delegate_variable, **options }
 
         wrap_context 'with a delegate at the instance variable' do
           include_examples 'should delegate method', :first_method

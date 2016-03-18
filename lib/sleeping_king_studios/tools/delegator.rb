@@ -3,7 +3,8 @@
 require 'sleeping_king_studios/tools'
 
 module SleepingKingStudios::Tools
-  # Module for extending classes with basic delegation.
+  # Module for extending classes with basic delegation. Supports passing
+  # arguments, keywords, and blocks to the delegated method.
   #
   # @example
   #   class MyModule
@@ -56,44 +57,48 @@ module SleepingKingStudios::Tools
     #   does start with an `@`, the generated method will get the instance
     #   variable of that name and call `method_name` on the result.
     # @raise ArgumentError if no delegate is specified.
-    def delegate *method_names, to: nil
-      raise ArgumentError.new('must specify a delegate') if to.nil?
+    def delegate *method_names, to: nil, allow_nil: false
+      raise ArgumentError.new('must specify a delegate') if to.nil? && !allow_nil
 
       method_names.each do |method_name|
-        delegate_method method_name, to
+        delegate_method method_name, to, { :allow_nil => !!allow_nil }
       end # each
     end # method delegate
 
     private
 
-    def delegate_method method_name, target
+    def delegate_method method_name, target, options = {}
       if target.is_a?(String) || target.is_a?(Symbol)
         target = target.intern
 
         if target.to_s =~ /\A@/
           define_method method_name do |*args, **kwargs, &block|
-            if kwargs.empty?
-              instance_variable_get(target).send(method_name, *args, &block)
-            else
-              instance_variable_get(target).send(method_name, *args, **kwargs, &block)
-            end # it-else
+            target = instance_variable_get(target)
+
+            return nil if target.nil? && options[:allow_nil]
+
+            kwargs.empty? ?
+              target.send(method_name, *args, &block) :
+              target.send(method_name, *args, **kwargs, &block)
           end # define_method
         else
           define_method method_name do |*args, **kwargs, &block|
-            if kwargs.empty?
-              send(target).send(method_name, *args, &block)
-            else
-              send(target).send(method_name, *args, **kwargs, &block)
-            end # it-else
+            target = send(target)
+
+            return nil if target.nil? && options[:allow_nil]
+
+            kwargs.empty? ?
+              target.send(method_name, *args, &block) :
+              target.send(method_name, *args, **kwargs, &block)
           end # define_method
         end # if-else
       else
         define_method method_name do |*args, **kwargs, &block|
-          if kwargs.empty?
-            target.send(method_name, *args, &block)
-          else
+          return nil if target.nil? && options[:allow_nil]
+
+          kwargs.empty? ?
+            target.send(method_name, *args, &block) :
             target.send(method_name, *args, **kwargs, &block)
-          end # it-else
         end # define_method
       end # if
     end # method delegate_method
