@@ -230,4 +230,210 @@ RSpec.describe SleepingKingStudios::Tools::Delegator do
       end # describe
     end # describe
   end # describe
+
+  describe '#wrap_delegate' do
+    shared_context 'with a delegate with a custom class' do
+      let(:delegate_superclass) do
+        Class.new do
+          attr_reader :first_method, :second_method, :third_method
+        end # class
+      end # let
+      let(:delegate_class) do
+        Class.new(delegate_superclass) do
+          attr_reader :fourth_method, :fifth_method, :sixth_method
+        end # class
+      end # let
+      let(:method_names) { delegate_class.instance_methods - Object.instance_methods }
+      let(:delegate)     { delegate_class.new }
+    end # shared_context
+
+    shared_examples 'should not delegate the skipped methods to the target' do
+      it 'should not delegate the skipped methods to the target' do
+        aggregate_failures 'should not define the delegated methods' do
+          skipped_methods.each do |method_name|
+            expect(instance).not_to respond_to(method_name)
+          end # each
+        end # aggregate_failures
+      end # it
+    end # shared_examples
+
+    shared_examples 'should delegate the specified methods to the target' do
+      it 'should delegate the specified methods to the target' do
+        aggregate_failures 'should define the delegated methods' do
+          delegated_methods.each do |method_name|
+            expect(instance).to respond_to(method_name)
+
+            expect(delegate).to receive(:send).with(method_name)
+
+            instance.send(method_name)
+          end # each
+        end # aggregate_failures
+      end # it
+    end # shared_examples
+
+    shared_examples 'should delegate to the target' do
+      let(:skipped_methods) { defined?(super()) ? super() : [] }
+
+      describe 'with no options' do
+        let(:delegated_methods) { method_names }
+
+        before(:example) { described_class.wrap_delegate target, **options }
+
+        include_examples 'should not delegate the skipped methods to the target'
+
+        include_examples 'should delegate the specified methods to the target'
+      end # describe
+
+      describe 'with :except => methods' do
+        let(:skipped_methods)   { super() + method_names[0...method_names.count/2] }
+        let(:delegated_methods) { method_names - skipped_methods }
+        let(:options)           { super().merge :except => skipped_methods }
+
+        before(:example) { described_class.wrap_delegate target, **options }
+
+        include_examples 'should not delegate the skipped methods to the target'
+
+        include_examples 'should delegate the specified methods to the target'
+      end # describe
+
+      describe 'with :only => methods' do
+        let(:delegated_methods) { method_names[0...method_names.count/2] }
+        let(:skipped_methods)   { super() + (method_names - delegated_methods) }
+        let(:options)           { super().merge :only => delegated_methods }
+
+        before(:example) { described_class.wrap_delegate target, **options }
+
+        include_examples 'should not delegate the skipped methods to the target'
+
+        include_examples 'should delegate the specified methods to the target'
+      end # describe
+    end # shared_examples
+
+    let(:options) { {} }
+
+    it { expect(described_class).to respond_to(:wrap_delegate).with(1).arguments.and_keywords(:klass, :except, :only) }
+
+    describe 'with a nil delegate' do
+      let(:target) { nil }
+
+      it 'should raise an error' do
+        expect {
+          described_class.wrap_delegate target, **options
+        }.to raise_error ArgumentError, 'must specify a delegate'
+      end # it
+
+      describe 'with :klass => NilClass' do
+        let(:options) { super().merge :klass => NilClass }
+
+        it 'should raise an error' do
+          expect {
+            described_class.wrap_delegate target, **options
+          }.to raise_error ArgumentError, 'must specify a delegate'
+        end # it
+      end # describe
+
+      describe 'with :klass => unrelated class' do
+        let(:options) { super().merge :klass => String }
+
+        it 'should raise an error' do
+          expect {
+            described_class.wrap_delegate target, **options
+          }.to raise_error ArgumentError, 'expected delegate to be a String'
+        end # it
+      end # describe
+    end # describe
+
+    describe 'with an object delegate' do
+      include_context 'with a delegate with a custom class'
+
+      let(:target) { delegate }
+
+      include_examples 'should delegate to the target'
+
+      describe 'with :klass => delegate_class' do
+        let(:options) { super().merge :klass => delegate_class }
+
+        include_examples 'should delegate to the target'
+      end # describe
+
+      describe 'with :klass => delegate_superclass' do
+        let(:options)         { super().merge :klass => delegate_superclass }
+        let(:method_names)    { delegate_superclass.instance_methods - Object.instance_methods }
+        let(:skipped_methods) { delegate_class.instance_methods - delegate_superclass.instance_methods }
+
+        include_examples 'should delegate to the target'
+      end # describe
+
+      describe 'with :klass => unrelated class' do
+        let(:options) { super().merge :klass => String }
+
+        it 'should raise an error' do
+          expect {
+            described_class.wrap_delegate target, **options
+          }.to raise_error ArgumentError, 'expected delegate to be a String'
+        end # it
+      end # describe
+    end # describe
+
+    describe 'with a method name delegate' do
+      include_context 'with a delegate with a custom class'
+
+      let(:target) { :delegate_method }
+      let(:described_class) do
+        delegate_object = delegate
+
+        super().tap do |klass|
+          klass.send(:define_method, :delegate_method, ->() { delegate_object })
+        end # tap
+      end # let
+
+      it 'should raise an error' do
+        expect {
+          described_class.wrap_delegate target, **options
+        }.to raise_error ArgumentError, 'must specify a delegate class'
+      end # it
+
+      describe 'with :klass => delegate_class' do
+        let(:options) { super().merge :klass => delegate_class }
+
+        include_examples 'should delegate to the target'
+      end # describe
+
+      describe 'with :klass => delegate_superclass' do
+        let(:options)         { super().merge :klass => delegate_superclass }
+        let(:method_names)    { delegate_superclass.instance_methods - Object.instance_methods }
+        let(:skipped_methods) { delegate_class.instance_methods - delegate_superclass.instance_methods }
+
+        include_examples 'should delegate to the target'
+      end # describe
+    end # describe
+
+    describe 'with an instance variable delegate' do
+      include_context 'with a delegate with a custom class'
+
+      let(:target) { :@delegate_variable }
+
+      before(:each) { instance.instance_variable_set(:@delegate_variable, delegate) }
+
+      it 'should raise an error' do
+        expect {
+          described_class.wrap_delegate target, **options
+        }.to raise_error ArgumentError, 'must specify a delegate class'
+      end # it
+
+      describe 'with :klass => delegate_class' do
+        let(:options) { super().merge :klass => delegate_class }
+
+        include_examples 'should delegate to the target'
+      end # describe
+
+      describe 'with :klass => delegate_superclass' do
+        let(:options)         { super().merge :klass => delegate_superclass }
+        let(:method_names)    { delegate_superclass.instance_methods - Object.instance_methods }
+        let(:skipped_methods) { delegate_class.instance_methods - delegate_superclass.instance_methods }
+
+        include_examples 'should delegate to the target'
+      end # describe
+    end # describe
+  end # describe
 end # describe
