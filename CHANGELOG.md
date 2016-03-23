@@ -6,6 +6,10 @@
 
 Implement ArrayTools#bisect and ArrayTools#splice.
 
+#### StringTools
+
+Implement #underscore.
+
 ### 0.2.0
 
 Split EnumerableTools into ArrayTools and HashTools.
