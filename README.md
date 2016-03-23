@@ -238,6 +238,10 @@ Returns the singular or the plural value, depending on the provided item count.
     StringTools.pluralize 4, 'light', 'lights'
     #=> 'lights'
 
+#### '#underscore'
+
+Converts a mixed-case string expression to a lowercase, underscore separated string, as per ActiveSupport::Inflector#underscore.
+
 ## Additional Features
 
 ### Semantic Version
