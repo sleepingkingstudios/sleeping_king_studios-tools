@@ -13,8 +13,9 @@ module SleepingKingStudios
       private
 
       MAJOR = 0
-      MINOR = 2
+      MINOR = 3
       PATCH = 0
+      PRERELEASE = 'alpha'
     end # module
 
     VERSION = Version.to_gem_version
