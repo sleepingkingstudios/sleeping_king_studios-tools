@@ -12,11 +12,11 @@ module SleepingKingStudios
 
       private
 
-      MAJOR = 0
-      MINOR = 3
-      PATCH = 0
-      PRERELEASE = 'rc'
-      BUILD = 0
+      MAJOR      = 0
+      MINOR      = 3
+      PATCH      = 0
+      PRERELEASE = nil
+      BUILD      = nil
     end # module
 
     VERSION = Version.to_gem_version
