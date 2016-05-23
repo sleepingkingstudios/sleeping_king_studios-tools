@@ -67,6 +67,28 @@ module SleepingKingStudios::Tools
       class << object; self; end
     end # method eigenclass
     alias_method :metaclass, :eigenclass
+
+    # As #send, but returns nil if the object does not respond to the method.
+    #
+    # @param [Object] object The receiver of the message.
+    # @param [String, Symbol] method_name The name of the method to call.
+    # @param [Array] args The arguments to the message.
+    #
+    # @see active_support/core_ext/object/try.rb
+    def try object, method_name, *args
+      if object.nil?
+        return object.respond_to?(method_name) ?
+          object.send(method_name, *args) :
+          nil
+      end # if
+
+      # Delegate to ActiveSupport::CoreExt::Object#try.
+      return object.try(method_name, *args) if object.respond_to?(:try)
+
+      object.send method_name, *args
+    rescue NoMethodError => exception
+      nil
+    end # method try
   end # module
 end # module
 

@@ -473,4 +473,81 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       expect(described_class.metaclass(object)).to be == metaclass
     end # it
   end # describe
+
+  describe '#try' do
+    let(:object) { Object.new }
+
+    it { expect(instance).to respond_to(:try).with(2).arguments.and_unlimited_arguments }
+
+    it { expect(described_class).to respond_to(:try).with(2).arguments.and_unlimited_arguments }
+
+    describe 'with nil' do
+      let(:object) { nil }
+
+      describe 'with a method name that the object responds to' do
+        it { expect(described_class.try object, :nil?).to be true }
+      end # describe
+
+      describe 'with a method name that the object does not respond to' do
+        it { expect(described_class.try object, :foo).to be nil }
+      end # describe
+    end # describe
+
+    describe 'with an object that responds to :try' do
+      let(:object) { double('object', :nil? => false, :try => nil) }
+
+      describe 'with a method name that the object responds to' do
+        it 'should delegate to object#try' do
+          expect(object).to receive(:try) do |method_name, *args|
+            "tried :#{method_name} with #{args.count} arguments"
+          end # expect
+
+          expected = 'tried :nil? with 3 arguments'
+          received = described_class.try object, :nil?, 'ichi', 'ni', 'san'
+
+          expect(received).to be == expected
+        end # it
+      end # describe
+
+      describe 'with a method name that the object does not respond to' do
+        it 'should delegate to object#try' do
+          expect(object).to receive(:try) do |method_name, *args|
+            "tried :#{method_name} with #{args.count} arguments"
+          end # expect
+
+          expected = 'tried :foo with 3 arguments'
+          received = described_class.try object, :foo, 'ichi', 'ni', 'san'
+
+          expect(received).to be == expected
+        end # it
+      end # describe
+    end # describe
+
+    describe 'with an object that does not respond to :try' do
+      let(:object) do
+        Class.new do
+          def foo *args; end
+        end.new # class
+      end # let
+
+      describe 'with a method name that the object responds to' do
+        it 'should call the method' do
+          expect(object).to receive(:foo) do |*args|
+            "called :foo with #{args.count} arguments"
+          end # expect
+
+          expected = 'called :foo with 3 arguments'
+          received = described_class.try object, :foo, 'ichi', 'ni', 'san'
+
+          expect(received).to be == expected
+        end # it
+      end # describe
+
+      describe 'with a method name that the object responds to' do
+        it { expect(described_class.try object, :bar).to be nil }
+      end # describe
+    end # describe
+
+    pending
+  end # describe
 end # describe
