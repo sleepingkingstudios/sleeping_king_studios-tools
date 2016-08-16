@@ -12,6 +12,21 @@ Hi, I'm Rob Smith, a Ruby Engineer and the developer of this library. I use thes
 
 ## Tools
 
+### Toolbelt
+
+The tools can be accessed in a convenient form using the Toolbelt class.
+
+    tools = ::SleepingKingStudios::Tools::Toolbelt.new
+
+    tools.array.humanize_list 'one', 'two', 'three'
+    #=> calls ArrayTools#humanize_list
+
+    tools.core.deprecate 'my_method'
+    #=> calls CoreTools#deprecate
+
+    tools.string.underscore 'MyModuleName'
+    #=> calls StringTools#underscore
+
 ### Array Tools
 
     require 'sleeping_king_studios/tools/array_tools'
@@ -99,6 +114,26 @@ Accepts an array, a start value, a number of items to delete, and zero or more i
     #=> ['crossbow']
     values
     #=> ['shortbow', 'longbow', 'arbalest', 'chu-ko-nu']
+
+### Core Tools
+
+Tools for working with an application or working environment.
+
+#### '#deprecate'
+
+Prints a deprecation warning.
+
+    CoreTools.deprecate 'ObjectTools#old_method'
+    #=> prints to stderr:
+
+    [WARNING] ObjectTools#old_method is deprecated.
+      called from /path/to/file.rb:4: in something_or_other
+
+    CoreTools.deprecate 'ObjectTools#old_method', '0.1.0', :format => '%s was deprecated in version %s.'
+    #=> prints to stderr:
+
+    ObjectTools#old_method was deprecated in version 0.1.0.
+      called from /path/to/file.rb:4: in something_or_other
 
 ### Hash Tools
 
@@ -241,26 +276,6 @@ Returns the singular or the plural value, depending on the provided item count.
 #### '#underscore'
 
 Converts a mixed-case string expression to a lowercase, underscore separated string, as per ActiveSupport::Inflector#underscore.
-
-### Core Tools
-
-Tools for working with an application or working environment.
-
-#### '#deprecate'
-
-Prints a deprecation warning.
-
-    CoreTools.deprecate 'ObjectTools#old_method'
-    #=> prints to stderr:
-
-    [WARNING] ObjectTools#old_method is deprecated.
-      called from /path/to/file.rb:4: in something_or_other
-
-    CoreTools.deprecate 'ObjectTools#old_method', '0.1.0', :format => '%s was deprecated in version %s.'
-    #=> prints to stderr:
-
-    ObjectTools#old_method was deprecated in version 0.1.0.
-      called from /path/to/file.rb:4: in something_or_other
 
 ## Additional Features
 
