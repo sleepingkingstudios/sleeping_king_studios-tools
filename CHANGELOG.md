@@ -8,7 +8,11 @@
 
 Implement CoreTools#deprecate.
 
-## Current Version
+#### IntegerTools
+
+Implement #pluralize.
+
+## Current Release
 
 ### 0.3.0
 
@@ -18,7 +22,7 @@ Implement ArrayTools#bisect and ArrayTools#splice.
 
 Implement #underscore.
 
-## Previous Versions
+## Previous Releases
 
 ### 0.2.0
 
