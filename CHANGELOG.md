@@ -2,6 +2,14 @@
 
 ## Pre-release Versions
 
+### 0.4.0
+
+#### CoreTools
+
+Implement CoreTools#deprecate.
+
+## Current Version
+
 ### 0.3.0
 
 Implement ArrayTools#bisect and ArrayTools#splice.
@@ -9,6 +17,8 @@ Implement ArrayTools#bisect and ArrayTools#splice.
 #### StringTools
 
 Implement #underscore.
+
+## Previous Versions
 
 ### 0.2.0
 

@@ -8,7 +8,7 @@ module SleepingKingStudios::Tools
   class Toolbelt < BasicObject
     namespace = ::SleepingKingStudios::Tools
 
-    %w(array hash integer object string).each do |name|
+    %w(array core hash integer object string).each do |name|
       define_method(name) do
         begin
           namespace.const_get("#{name.capitalize}Tools")
