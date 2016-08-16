@@ -242,6 +242,26 @@ Returns the singular or the plural value, depending on the provided item count.
 
 Converts a mixed-case string expression to a lowercase, underscore separated string, as per ActiveSupport::Inflector#underscore.
 
+### Core Tools
+
+Tools for working with an application or working environment.
+
+#### '#deprecate'
+
+Prints a deprecation warning.
+
+    CoreTools.deprecate 'ObjectTools#old_method'
+    #=> prints to stderr:
+
+    [WARNING] ObjectTools#old_method is deprecated.
+      called from /path/to/file.rb:4: in something_or_other
+
+    CoreTools.deprecate 'ObjectTools#old_method', '0.1.0', :format => '%s was deprecated in version %s.'
+    #=> prints to stderr:
+
+    ObjectTools#old_method was deprecated in version 0.1.0.
+      called from /path/to/file.rb:4: in something_or_other
+
 ## Additional Features
 
 ### Semantic Version

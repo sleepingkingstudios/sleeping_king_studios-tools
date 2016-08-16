@@ -543,11 +543,9 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         end # it
       end # describe
 
-      describe 'with a method name that the object responds to' do
+      describe 'with a method name that the object does not respond to' do
         it { expect(described_class.try object, :bar).to be nil }
       end # describe
     end # describe
-
-    pending
   end # describe
 end # describe
