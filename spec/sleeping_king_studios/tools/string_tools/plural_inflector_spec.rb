@@ -65,42 +65,56 @@ RSpec.describe SleepingKingStudios::Tools::StringTools::PluralInflector do
 
     describe 'with a word with basic pluralization' do
       it { expect(instance.pluralize 'word').to be == 'words' }
+
+      it { expect(instance.pluralize 'words').to be == 'words' }
     end # describe
 
     describe 'with a word ending in "ch"' do
       it { expect(instance.pluralize 'torch').to be == 'torches' }
-    end # describe
 
-    describe 'with a word ending in "s"' do
-      it { expect(instance.pluralize 'cactus').to be == 'cactuses' }
+      it { expect(instance.pluralize 'torches').to be == 'torches' }
     end # describe
 
     describe 'with a word ending in "sh"' do
       it { expect(instance.pluralize 'fish').to be == 'fishes' }
+
+      it { expect(instance.pluralize 'fishes').to be == 'fishes' }
     end # describe
 
     describe 'with a word ending in "x"' do
       it { expect(instance.pluralize 'box').to be == 'boxes' }
+
+      it { expect(instance.pluralize 'boxes').to be == 'boxes' }
     end # describe
 
     describe 'with a word ending in "z"' do
       it { expect(instance.pluralize 'buzz').to be == 'buzzes' }
+
+      it { expect(instance.pluralize 'buzzes').to be == 'buzzes' }
     end # describe
 
     describe 'with a word ending in a consonant followed by "o"' do
       it { expect(instance.pluralize 'antihero').to be == 'antiheroes' }
+
+      it { expect(instance.pluralize 'antiheroes').to be == 'antiheroes' }
     end # describe
 
     describe 'with a word ending in a consonant followed by "y"' do
       it { expect(instance.pluralize 'winery').to be == 'wineries' }
+
+      it { expect(instance.pluralize 'wineries').to be == 'wineries' }
     end # describe
 
     describe 'with "child"' do
       it { expect(instance.pluralize 'child').to be == 'children' }
+
+      it { expect(instance.pluralize 'children').to be == 'children' }
     end # describe
 
     describe 'with "person"' do
       it { expect(instance.pluralize 'person').to be == 'people' }
+
+      it { expect(instance.pluralize 'people').to be == 'people' }
     end # it
 
     describe 'with "data"' do
@@ -120,42 +134,56 @@ RSpec.describe SleepingKingStudios::Tools::StringTools::PluralInflector do
     end # describe
 
     describe 'with a word with basic pluralization' do
+      it { expect(instance.singularize 'word').to be == 'word' }
+
       it { expect(instance.singularize 'words').to be == 'word' }
     end # describe
 
     describe 'with a word ending in "ches"' do
+      it { expect(instance.singularize 'torch').to be == 'torch' }
+
       it { expect(instance.singularize 'torches').to be == 'torch' }
     end # describe
 
-    describe 'with a word ending in "ses"' do
-      it { expect(instance.singularize 'cactuses').to be == 'cactus' }
-    end # describe
-
     describe 'with a word ending in "shes"' do
+      it { expect(instance.singularize 'fish').to be == 'fish' }
+
       it { expect(instance.singularize 'fishes').to be == 'fish' }
     end # describe
 
     describe 'with a word ending in "xes"' do
+      it { expect(instance.singularize 'box').to be == 'box' }
+
       it { expect(instance.singularize 'boxes').to be == 'box' }
     end # describe
 
     describe 'with a word ending in "zes"' do
+      it { expect(instance.singularize 'buzz').to be == 'buzz' }
+
       it { expect(instance.singularize 'buzzes').to be == 'buzz' }
     end # describe
 
     describe 'with a word ending in a consonant followed by "ies"' do
+      it { expect(instance.singularize 'winery').to be == 'winery' }
+
       it { expect(instance.singularize 'wineries').to be == 'winery' }
     end # describe
 
     describe 'with a word ending in a consonant followed by "oes"' do
+      it { expect(instance.singularize 'antihero').to be == 'antihero' }
+
       it { expect(instance.singularize 'antiheroes').to be == 'antihero' }
     end # describe
 
     describe 'with "children"' do
+      it { expect(instance.singularize 'child').to be == 'child' }
+
       it { expect(instance.singularize 'children').to be == 'child' }
     end # describe
 
     describe 'with "people"' do
+      it { expect(instance.singularize 'person').to be == 'person' }
+
       it { expect(instance.singularize 'people').to be == 'person' }
     end # it
 

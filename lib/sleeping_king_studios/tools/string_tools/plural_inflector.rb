@@ -77,6 +77,8 @@ module SleepingKingStudios::Tools::StringTools
         return str if word == normalized
       end # each
 
+      return str if inverse_irregular_words.key?(normalized)
+
       return irregular_words[normalized] if irregular_words.key?(normalized)
 
       plural_rules.each do |match, replace|
@@ -148,7 +150,8 @@ module SleepingKingStudios::Tools::StringTools
       @plural_rules = []
 
       define_plural_rule(/$/, 's')
-      define_plural_rule(/([sxz]|[cs]h)$/i, '\1es')
+      define_plural_rule(/s$/, 's')
+      define_plural_rule(/([xz]|[cs]h)$/i, '\1es')
       define_plural_rule(/([^aeiouy]o)$/i, '\1es')
       define_plural_rule(/([^aeiouy])y$/i, '\1ies')
 
