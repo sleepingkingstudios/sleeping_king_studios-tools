@@ -196,6 +196,13 @@ Decomposes the given integer into its digits when represented in the given base.
     IntegerTools.digits(16724838)
     #=> ['f', 'f', '3', '3', '6', '6']
 
+#### '#pluralize'
+
+Returns the singular or the plural value, depending on the provided item count.
+
+    StringTools.pluralize 4, 'light', 'lights'
+    #=> 'lights'
+
 #### `#romanize`
 
 Represents an integer between 1 and 4999 (inclusive) as a Roman numeral.

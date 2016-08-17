@@ -28,6 +28,9 @@
   - Arrays are immutable if the array is frozen and all items are immutable.
   - Hashes are immutable if the hash is frozen and all keys and values are immutable.
   - All other objects are only immutable if the object is frozen.
+- ObjectTools#freeze - delegates to specific toolset implementation
+  - Arrays freeze the collection and each item
+  - Hashes freeze the collection and each key and value
 - ObjectTools#deprecation_warning
 
 #### Toolkit
