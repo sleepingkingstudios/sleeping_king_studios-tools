@@ -196,7 +196,7 @@ Decomposes the given integer into its digits when represented in the given base.
     IntegerTools.digits(16724838)
     #=> ['f', 'f', '3', '3', '6', '6']
 
-#### '#pluralize'
+#### `#pluralize`
 
 Returns the singular or the plural value, depending on the provided item count.
 
@@ -273,14 +273,48 @@ Returns the object's eigenclass.
 
 Tools for working with strings.
 
-#### '#pluralize'
+#### `#pluralize`
 
-Returns the singular or the plural value, depending on the provided item count.
+Takes a word in singular form and returns the plural form, based on the defined rules and known irregular/uncountable words.
 
-    StringTools.pluralize 4, 'light', 'lights'
+First, checks if the word is known to be uncountable (see #define_uncountable_word). Then, checks if the word is known to be irregular (see #define_irregular_word). Finally, iterates through the defined plural rules from most recently defined to first defined (see #define_plural_rule).
+
+    StringTools.pluralize 'light'
     #=> 'lights'
 
-#### '#underscore'
+**Important Note:** The defined rules and exceptions are deliberately basic. Each application is responsible for defining its own pluralization rules using this framework.
+
+Additional rules can be defined using the following methods:
+
+    # Define a plural rule.
+    StringTools.define_plural_rule(/lf$/, 'lves')
+    StringTools.pluralize 'elf'
+    #=> 'elves'
+
+    # Define an irregular word.
+    StringTools.define_irregular_word('goose', 'geese')
+    StringTools.pluralize 'goose'
+    #=> 'geese'
+
+    # Define an uncountable word.
+    StringTools.define_uncountable_word('series')
+    StringTools.pluralize 'series'
+    # => 'series'
+
+#### `#singularize`
+
+Takes a word in plural form and returns the singular form, based on the defined rules and known irregular/uncountable words.
+
+    StringTools.singularize 'lights'
+    #=> 'light'
+
+`StringTools#singularize` uses the same rules for irregular and uncountable words as `#pluralize`. Additional rules can be defined using the following method:
+
+    StringTools.define_singular_rule(/lves$/, 'lf')
+    StringTools.singularize 'elves'
+    #=> 'elf'
+
+#### `#underscore`
 
 Converts a mixed-case string expression to a lowercase, underscore separated string, as per ActiveSupport::Inflector#underscore.
 

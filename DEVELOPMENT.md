@@ -10,8 +10,11 @@
   - IntegerTools#integer? - true if object is integer
   - ObjectTools#object? - true if object is object-like (not BasicObject!)
   - StringTools#string? - true if object is string
+  - s/is/is or claims to be a/ - see http://guides.rubyonrails.org/active_support_core_extensions.html#acts-like-questionmark-duck
 
 ## Future Tasks
+
+- Remove 'extend self' from Tools modules.
 
 ### Features
 
@@ -31,7 +34,6 @@
 - ObjectTools#freeze - delegates to specific toolset implementation
   - Arrays freeze the collection and each item
   - Hashes freeze the collection and each key and value
-- ObjectTools#deprecation_warning
 
 #### Toolkit
 
@@ -48,7 +50,11 @@
     MyClass::ROLES.admin # 'admin'
     MyClass::ROLES.all { 'USER' => 'user', 'ADMIN' => 'admin' }
   end
+- ImmutableConstantEnumerator
+  - Values cannot be added or removed after initial block
+  - Freezes individual values
+  - Equivalent to ConstantEnumerator.new do ... end.immutable!
 
 ### Maintenance
 
-- Deprecate StringTools#pluralize(int, str, str) implementation ~ move to IntegerTools#pluralize. For XTools, first argument must be an instance of X!
+- Remove deprecated StringTools#pluralize(int, str, str) implementation.

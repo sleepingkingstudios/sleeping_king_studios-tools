@@ -7,24 +7,148 @@ require 'sleeping_king_studios/tools/string_tools'
 RSpec.describe SleepingKingStudios::Tools::StringTools do
   let(:instance) { Object.new.extend described_class }
 
+  describe '#define_irregular_word' do
+    it { expect(instance).to respond_to(:define_irregular_word).with(2).arguments }
+
+    it { expect(described_class).to respond_to(:define_irregular_word).with(2).arguments }
+
+    it 'should delegate to an inflector' do
+      inflector = double('inflector', :define_irregular_word => nil)
+
+      allow(instance).to receive(:plural_inflector).and_return(inflector)
+
+      expect(inflector).to receive(:define_irregular_word).with('goose', 'geese')
+
+      instance.define_irregular_word 'goose', 'geese'
+    end # it
+  end # describe
+
+  describe '#define_plural_rule' do
+    it { expect(instance).to respond_to(:define_plural_rule).with(2).arguments }
+
+    it { expect(described_class).to respond_to(:define_plural_rule).with(2).arguments }
+
+    it 'should delegate to an inflector' do
+      inflector = double('inflector', :define_plural_rule => nil)
+
+      allow(instance).to receive(:plural_inflector).and_return(inflector)
+
+      expect(inflector).to receive(:define_plural_rule).with(/lf$/, 'lves')
+
+      instance.define_plural_rule(/lf$/, 'lves')
+    end # it
+  end # describe
+
+  describe '#define_singular_rule' do
+    it { expect(instance).to respond_to(:define_singular_rule).with(2).arguments }
+
+    it { expect(described_class).to respond_to(:define_singular_rule).with(2).arguments }
+
+    it 'should delegate to an inflector' do
+      inflector = double('inflector', :define_singular_rule => nil)
+
+      allow(instance).to receive(:plural_inflector).and_return(inflector)
+
+      expect(inflector).to receive(:define_singular_rule).with(/lves$/, 'lf')
+
+      instance.define_singular_rule(/lves$/, 'lf')
+    end # it
+  end # describe
+
+  describe '#define_uncountable_word' do
+    it { expect(instance).to respond_to(:define_uncountable_word).with(1).argument }
+
+    it { expect(described_class).to respond_to(:define_uncountable_word).with(1).argument }
+
+    it 'should delegate to an inflector' do
+      inflector = double('inflector', :define_uncountable_word => nil)
+
+      allow(instance).to receive(:plural_inflector).and_return(inflector)
+
+      expect(inflector).to receive(:define_uncountable_word).with('data')
+
+      instance.define_uncountable_word 'data'
+    end # it
+  end # describe
+
   describe '#pluralize' do
-    let(:single) { 'cow' }
-    let(:plural) { 'kine' }
+    it { expect(instance).to respond_to(:pluralize).with(1).argument }
 
-    it { expect(instance).to respond_to(:pluralize).with(3).arguments }
+    it { expect(described_class).to respond_to(:pluralize).with(1).argument }
 
-    it { expect(described_class).to respond_to(:pluralize).with(3).arguments }
+    it { expect(described_class.pluralize 'thing').to be == 'things' }
 
-    describe 'with zero items' do
-      it { expect(described_class.pluralize 0, single, plural).to be == plural }
+    it 'should delegate to an inflector' do
+      inflector = double('inflector', :pluralize => nil)
+
+      allow(instance).to receive(:plural_inflector).and_return(inflector)
+
+      expect(inflector).to receive(:pluralize).and_return('words')
+
+      expect(instance.pluralize 'word').to be == 'words'
+    end # it
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.pluralize nil }.to raise_error ArgumentError, /argument must be a string/
+      end # it
     end # describe
 
-    describe 'with one item' do
-      it { expect(described_class.pluralize 1, single, plural).to be == single }
-    end # describe
+    describe 'with an integer and two objects' do
+      let(:single) { 'cow' }
+      let(:plural) { 'kine' }
 
-    describe 'with many items' do
-      it { expect(described_class.pluralize 3, single, plural).to be == plural }
+      it { expect(instance).to respond_to(:pluralize).with(3).arguments }
+
+      it { expect(described_class).to respond_to(:pluralize).with(3).arguments }
+
+      it 'should print a deprecation warning' do
+        tools = ::SleepingKingStudios::Tools::CoreTools
+
+        expect(tools).to receive(:deprecate) do |object, message:|
+          expect(object).to be == 'StringTools#pluralize with 3 arguments'
+
+          expect(message).to include 'Use IntegerTools#pluralize'
+        end # receive
+
+        described_class.pluralize 0, single, plural
+      end # it
+
+      describe 'with zero items' do
+        it { expect(described_class.pluralize 0, single, plural).to be == plural }
+      end # describe
+
+      describe 'with one item' do
+        it { expect(described_class.pluralize 1, single, plural).to be == single }
+      end # describe
+
+      describe 'with many items' do
+        it { expect(described_class.pluralize 3, single, plural).to be == plural }
+      end # describe
+    end # describe
+  end # describe
+
+  describe '#singularize' do
+    it { expect(instance).to respond_to(:singularize).with(1).argument }
+
+    it { expect(described_class).to respond_to(:singularize).with(1).argument }
+
+    it { expect(described_class.singularize 'things').to be == 'thing' }
+
+    it 'should delegate to an inflector' do
+      inflector = double('inflector', :singularize => nil)
+
+      allow(instance).to receive(:plural_inflector).and_return(inflector)
+
+      expect(inflector).to receive(:singularize).and_return('word')
+
+      expect(instance.singularize 'words').to be == 'word'
+    end # it
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.singularize nil }.to raise_error ArgumentError, /argument must be a string/
+      end # it
     end # describe
   end # describe
 
