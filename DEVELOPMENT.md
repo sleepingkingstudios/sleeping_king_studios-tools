@@ -1,6 +1,6 @@
 # Development Notes
 
-## Version 0.4.0
+## Version 0.5.0
 
 ### Features
 
@@ -11,6 +11,7 @@
   - ObjectTools#object? - true if object is object-like (not BasicObject!)
   - StringTools#string? - true if object is string
   - s/is/is or claims to be a/ - see http://guides.rubyonrails.org/active_support_core_extensions.html#acts-like-questionmark-duck
+- StringTools#humanize_list - accept a block. If block given, yield each item and join the results.
 
 ## Future Tasks
 
@@ -20,7 +21,6 @@
 
 #### Tools
 
-- StringTools#humanize_list - accept a block. If block given, yield each item and join the results.
 - ObjectTools#pretty - returns user-friendly string representation. :multiline option? Delegates to specific toolset implementations.
 - RegexpTools#matching_string - generates a string that matches the regular expression. Does not support advanced Regexp features.
 - RegexpTools#nonmatching_strings - generates a set of strings that do not match the regular expression.

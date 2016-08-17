@@ -81,6 +81,12 @@ RSpec.describe SleepingKingStudios::Tools::StringTools::PluralInflector do
       it { expect(instance.pluralize 'fishes').to be == 'fishes' }
     end # describe
 
+    describe 'with a word ending in "ss"' do
+      it { expect(instance.pluralize 'truss').to be == 'trusses' }
+
+      it { expect(instance.pluralize 'trusses').to be == 'trusses' }
+    end # describe
+
     describe 'with a word ending in "x"' do
       it { expect(instance.pluralize 'box').to be == 'boxes' }
 
@@ -149,6 +155,12 @@ RSpec.describe SleepingKingStudios::Tools::StringTools::PluralInflector do
       it { expect(instance.singularize 'fish').to be == 'fish' }
 
       it { expect(instance.singularize 'fishes').to be == 'fish' }
+    end # describe
+
+    describe 'with a word ending in "sses"' do
+      it { expect(instance.singularize 'truss').to be == 'truss' }
+
+      it { expect(instance.singularize 'trusses').to be == 'truss' }
     end # describe
 
     describe 'with a word ending in "xes"' do

@@ -151,7 +151,7 @@ module SleepingKingStudios::Tools::StringTools
 
       define_plural_rule(/$/, 's')
       define_plural_rule(/s$/, 's')
-      define_plural_rule(/([xz]|[cs]h)$/i, '\1es')
+      define_plural_rule(/(ss|[xz]|[cs]h)$/i, '\1es')
       define_plural_rule(/([^aeiouy]o)$/i, '\1es')
       define_plural_rule(/([^aeiouy])y$/i, '\1ies')
 
@@ -164,7 +164,8 @@ module SleepingKingStudios::Tools::StringTools
       @singular_rules = []
 
       define_singular_rule(/s$/i, '')
-      define_singular_rule(/([sxz]|[cs]h)es$/, '\1')
+      define_singular_rule(/ss$/i, 'ss')
+      define_singular_rule(/(ss|[sxz]|[cs]h)es$/, '\1')
       define_singular_rule(/([^aeiouy]o)es$/, '\1')
       define_singular_rule(/([^aeiouy])ies$/i, '\1y')
 
