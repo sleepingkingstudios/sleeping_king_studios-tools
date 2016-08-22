@@ -169,6 +169,17 @@ Creates a deep copy of the object by returning a new Hash with deep copies of ea
     hsh
     #=> { :one => 'one', :two => 'two', :three => 'three' }
 
+#### `#hash?`
+
+Returns true if the object is or appears to be a Hash.
+
+    ArrayTools.array?(nil)
+    #=> false
+    ArrayTools.array?([])
+    #=> false
+    ArrayTools.array?({})
+    #=> true
+
 ### Integer Tools
 
 Tools for working with integers and fixnums.

@@ -8,6 +8,10 @@
 
 Implement #array?.
 
+#### HashTools
+
+Implement #hash?.
+
 ## Current Release
 
 ### 0.4.0
