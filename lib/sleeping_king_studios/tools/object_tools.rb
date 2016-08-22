@@ -68,6 +68,17 @@ module SleepingKingStudios::Tools
     end # method eigenclass
     alias_method :metaclass, :eigenclass
 
+    # Returns true if the object is an Object. This should return true only for
+    # objects that have an alternate inheritance chain from BasicObject, such as
+    # a Proxy.
+    #
+    # @param obj [Object] The object to test.
+    #
+    # @return [Boolean] True if the object is an Object, otherwise false.
+    def object? obj
+      Object === obj
+    end # method object?
+
     # As #send, but returns nil if the object does not respond to the method.
     #
     # @param [Object] object The receiver of the message.

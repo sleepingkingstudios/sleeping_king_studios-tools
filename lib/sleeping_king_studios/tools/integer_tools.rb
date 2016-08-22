@@ -66,6 +66,15 @@ module SleepingKingStudios::Tools
       integer.to_s(base).split('')
     end # method digits
 
+    # Returns true if the object is an Integer.
+    #
+    # @param int [Object] The object to test.
+    #
+    # @return [Boolean] True if the object is an Integer, otherwise false.
+    def integer? int
+      Integer === int
+    end # method integer?
+
     # Returns the singular or the plural value, depending on the provided
     # item count.
     #

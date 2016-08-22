@@ -9,6 +9,44 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
   let(:instance) { Object.new.extend described_class }
 
+  describe '#array?' do
+    it { expect(instance).to respond_to(:array?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:array?).with(1).argument }
+
+    describe 'with nil' do
+      it { expect(described_class.array? nil).to be false }
+    end # describe
+
+    describe 'with an object' do
+      it { expect(described_class.array? Object.new).to be false }
+    end # describe
+
+    describe 'with a string' do
+      it { expect(described_class.array? 'greetings,programs').to be false }
+    end # describe
+
+    describe 'with an integer' do
+      it { expect(described_class.array? 42).to be false }
+    end # describe
+
+    describe 'with an empty array' do
+      it { expect(described_class.array? []).to be true }
+    end # describe
+
+    describe 'with a non-empty array' do
+      it { expect(described_class.array? %w(ichi ni san)).to be true }
+    end # describe
+
+    describe 'with an empty hash' do
+      it { expect(described_class.array?({})).to be false }
+    end # describe
+
+    describe 'with a non-empty hash' do
+      it { expect(described_class.array?({ :greetings => 'programs' })).to be false }
+    end # describe
+  end # describe
+
   describe '#bisect' do
     it { expect(instance).to respond_to(:bisect).with(1).arguments.and_a_block }
 

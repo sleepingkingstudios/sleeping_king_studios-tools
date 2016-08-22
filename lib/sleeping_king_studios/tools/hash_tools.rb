@@ -19,5 +19,20 @@ module SleepingKingStudios::Tools
         copy[ObjectTools.deep_dup key] = ObjectTools.deep_dup(value)
       end # each
     end # method deep_dup
+
+    # Returns true if the object is or appears to be a Hash.
+    #
+    # @param hsh [Object] The object to test.
+    #
+    # @return [Boolean] True if the object is a Hash, otherwise false.
+    def hash? hsh
+      return true if Hash === hsh
+
+      [:[], :count, :each, :each_pair].each do |method_name|
+        return false unless hsh.respond_to?(method_name)
+      end # each
+
+      true
+    end # method hash?
   end # module
 end # module

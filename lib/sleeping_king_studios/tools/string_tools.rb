@@ -76,6 +76,15 @@ module SleepingKingStudios::Tools
       plural_inflector.singularize str
     end # method singularize
 
+    # Returns true if the object is a String.
+    #
+    # @param str [Object] The object to test.
+    #
+    # @return [Boolean] True if the object is a String, otherwise false.
+    def string? str
+      String === str
+    end # method string?
+
     # Converts a mixed-case string expression to a lowercase, underscore
     # separated string.
     #
@@ -102,7 +111,9 @@ module SleepingKingStudios::Tools
     end # method plural_inflector
 
     def require_string! value
-      raise ArgumentError.new('argument must be a string') unless value.is_a?(String)
+      return if string?(value)
+
+      raise ArgumentError, 'argument must be a string', caller[1..-1]
     end # method require_array
   end # module
 end # module

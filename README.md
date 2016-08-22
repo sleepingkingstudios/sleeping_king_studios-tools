@@ -35,6 +35,17 @@ The tools can be accessed in a convenient form using the Toolbelt class.
 
 Tools for working with array-like enumerable objects.
 
+#### `#array?`
+
+Returns true if the object is or appears to be an Array.
+
+    ArrayTools.array?(nil)
+    #=> false
+    ArrayTools.array?([])
+    #=> true
+    ArrayTools.array?({})
+    #=> false
+
 #### `#bisect`
 
 Separates the array into two arrays, the first containing all items in the original array that matches the provided block, and the second containing all items in the original array that do not match the provided block.
@@ -158,6 +169,17 @@ Creates a deep copy of the object by returning a new Hash with deep copies of ea
     hsh
     #=> { :one => 'one', :two => 'two', :three => 'three' }
 
+#### `#hash?`
+
+Returns true if the object is or appears to be a Hash.
+
+    HashTools.hash?(nil)
+    #=> false
+    HashTools.hash?([])
+    #=> false
+    HashTools.hash?({})
+    #=> true
+
 ### Integer Tools
 
 Tools for working with integers and fixnums.
@@ -197,6 +219,19 @@ Decomposes the given integer into its digits when represented in the given base.
     # With a hexadecimal number.
     IntegerTools.digits(16724838)
     #=> ['f', 'f', '3', '3', '6', '6']
+
+#### `#integer?`
+
+Returns true if the object is an Integer.
+
+    IntegerTools.integer?(nil)
+    #=> false
+    IntegerTools.integer?([])
+    #=> false
+    IntegerTools.integer?({})
+    #=> false
+    IntegerTools.integer?(1)
+    #=> true
 
 #### `#pluralize`
 
@@ -269,6 +304,30 @@ Returns the object's eigenclass.
     ObjectTools.eigenclass my_object
     #=> Shortcut for class << self; self; end.
 
+#### `#object?`
+
+Returns true if the object is an Object.
+
+    ObjectTools.object?(nil)
+    #=> true
+    ObjectTools.object?([])
+    #=> true
+    ObjectTools.object?({})
+    #=> true
+    ObjectTools.object?(1)
+    #=> true
+    ObjectTools.object?(BasicObject.new)
+    #=> false
+
+#### `#try`
+
+As #send, but returns nil if the object does not respond to the method.
+
+    ObjectTools.try(%w(ichi ni san), :count)
+    #=> 3
+    ObjectTools.try(nil, :count)
+    #=> nil
+
 ### String Tools
 
     require 'sleeping_king_studios/tools/string_tools'
@@ -315,6 +374,19 @@ Takes a word in plural form and returns the singular form, based on the defined 
     StringTools.define_singular_rule(/lves$/, 'lf')
     StringTools.singularize 'elves'
     #=> 'elf'
+
+#### `#string?`
+
+Returns true if the object is a String.
+
+    StringTools.string?(nil)
+    #=> false
+    StringTools.string?([])
+    #=> false
+    StringTools.string?('Greetings, programs!')
+    #=> true
+    StringTools.string?(:greetings_starfighter)
+    #=> false
 
 #### `#underscore`
 
