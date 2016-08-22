@@ -16,6 +16,10 @@ Implement #hash?.
 
 Implement #integer?.
 
+#### ObjectTools
+
+Implement #object?
+
 ## Current Release
 
 ### 0.4.0

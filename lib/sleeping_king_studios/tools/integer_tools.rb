@@ -73,7 +73,7 @@ module SleepingKingStudios::Tools
     # @return [Boolean] True if the object is an Integer, otherwise false.
     def integer? int
       Integer === int
-    end # method array?
+    end # method integer?
 
     # Returns the singular or the plural value, depending on the provided
     # item count.

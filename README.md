@@ -304,6 +304,30 @@ Returns the object's eigenclass.
     ObjectTools.eigenclass my_object
     #=> Shortcut for class << self; self; end.
 
+#### `#object?`
+
+Returns true if the object is an Object.
+
+    ObjectTools.object?(nil)
+    #=> true
+    ObjectTools.object?([])
+    #=> true
+    ObjectTools.object?({})
+    #=> true
+    ObjectTools.object?(1)
+    #=> true
+    ObjectTools.object?(BasicObject.new)
+    #=> false
+
+#### `#try`
+
+As #send, but returns nil if the object does not respond to the method.
+
+    ObjectTools.try(%w(ichi ni san), :count)
+    #=> 3
+    ObjectTools.try(nil, :count)
+    #=> nil
+
 ### String Tools
 
     require 'sleeping_king_studios/tools/string_tools'

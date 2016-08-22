@@ -33,6 +33,6 @@ module SleepingKingStudios::Tools
       end # each
 
       true
-    end # method array?
+    end # method hash?
   end # module
 end # module
