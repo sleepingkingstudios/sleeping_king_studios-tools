@@ -1,6 +1,18 @@
 # Development Notes
 
-## Version 0.5.0
+## Version 0.5.0 - The Cold Update
+
+- ObjectTools#immutable? - delegates to specific toolset implementations.
+  - Values of `nil`, `false`, and `true` are always immutable, as are instances of `Numeric` and `Symbol`.
+  - Arrays are immutable if the array is frozen and all items are immutable.
+  - Hashes are immutable if the hash is frozen and all keys and values are immutable.
+  - All other objects are only immutable if the object is frozen.
+- ObjectTools#freeze - delegates to specific toolset implementation
+  - Arrays freeze the collection and each item
+  - Hashes freeze the collection and each key and value
+- ObjectTools#frozen_copy
+
+## Version 0.6.0 - The Identity Update
 
 ### Features
 
@@ -26,14 +38,6 @@
 - RegexpTools#nonmatching_strings - generates a set of strings that do not match the regular expression.
 - Identity Methods
   - RegexpTools#regexp? - true if object is regular expression, otherwise false.
-- ObjectTools#immutable? - delegates to specific toolset implementations.
-  - Values of `nil`, `false`, and `true` are always immutable, as are instances of `Numeric` and `Symbol`.
-  - Arrays are immutable if the array is frozen and all items are immutable.
-  - Hashes are immutable if the hash is frozen and all keys and values are immutable.
-  - All other objects are only immutable if the object is frozen.
-- ObjectTools#freeze - delegates to specific toolset implementation
-  - Arrays freeze the collection and each item
-  - Hashes freeze the collection and each key and value
 
 #### Toolkit
 

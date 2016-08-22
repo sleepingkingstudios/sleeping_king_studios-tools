@@ -1,6 +1,5 @@
 # lib/sleeping_king_studios/tools/toolbelt.rb
 
-require 'sleeping_king_studios/tools/toolbelt'
 require 'sleeping_king_studios/tools/all'
 
 module SleepingKingStudios::Tools
