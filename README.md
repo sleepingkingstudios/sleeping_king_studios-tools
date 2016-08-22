@@ -35,6 +35,17 @@ The tools can be accessed in a convenient form using the Toolbelt class.
 
 Tools for working with array-like enumerable objects.
 
+#### `#array?`
+
+Returns true if the object is or appears to be an Array.
+
+    ArrayTools.array?(nil)
+    #=> false
+    ArrayTools.array?([])
+    #=> true
+    ArrayTools.array?({})
+    #=> false
+
 #### `#bisect`
 
 Separates the array into two arrays, the first containing all items in the original array that matches the provided block, and the second containing all items in the original array that do not match the provided block.

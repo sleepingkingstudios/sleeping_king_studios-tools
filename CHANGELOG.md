@@ -2,6 +2,14 @@
 
 ## Pre-release Versions
 
+### 0.5.0
+
+#### ArrayTools
+
+Implement #array?.
+
+## Current Release
+
 ### 0.4.0
 
 #### CoreTools
@@ -15,8 +23,6 @@ Implement #pluralize.
 #### StringTools
 
 Implement #pluralize and #singularize. The previous behavior of #pluralize is deprecated; use IntegerTools#pluralize.
-
-## Current Release
 
 ### 0.3.0
 

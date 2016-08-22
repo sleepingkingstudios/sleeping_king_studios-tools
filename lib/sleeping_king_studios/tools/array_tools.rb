@@ -8,6 +8,23 @@ module SleepingKingStudios::Tools
   module ArrayTools
     extend self
 
+    # Returns true if the object is or appears to be an Array.
+    #
+    # @param ary [Object] The object to test.
+    #
+    # @return [Boolean] True if the object is an Array, otherwise false.
+    def array? ary
+      return true if Array === ary
+
+      [:[], :count, :each].each do |method_name|
+        return false unless ary.respond_to?(method_name)
+      end # each
+
+      return false if ary.respond_to?(:each_pair)
+
+      true
+    end # method array?
+
     # Separates the array into two arrays, the first containing all items in the
     # original array that matches the provided block, and the second containing
     # all items in the original array that do not match the provided block.
@@ -208,9 +225,9 @@ module SleepingKingStudios::Tools
     private
 
     def require_array! value
-      methods = %i([] count each)
+      return if array?(value)
 
-      raise ArgumentError.new('argument must be an array') unless methods.reduce(true) { |memo, method_name| memo && value.respond_to?(method_name) }
+      raise ArgumentError, 'argument must be an array', caller[1..-1]
     end # method require_array
   end # module
 end # module
