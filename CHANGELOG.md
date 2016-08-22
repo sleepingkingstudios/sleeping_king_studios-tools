@@ -12,6 +12,10 @@ Implement #array?.
 
 Implement #hash?.
 
+#### IntegerTools
+
+Implement #integer?.
+
 ## Current Release
 
 ### 0.4.0

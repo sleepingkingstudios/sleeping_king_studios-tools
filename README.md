@@ -173,11 +173,11 @@ Creates a deep copy of the object by returning a new Hash with deep copies of ea
 
 Returns true if the object is or appears to be a Hash.
 
-    ArrayTools.array?(nil)
+    HashTools.hash?(nil)
     #=> false
-    ArrayTools.array?([])
+    HashTools.hash?([])
     #=> false
-    ArrayTools.array?({})
+    HashTools.hash?({})
     #=> true
 
 ### Integer Tools
@@ -219,6 +219,19 @@ Decomposes the given integer into its digits when represented in the given base.
     # With a hexadecimal number.
     IntegerTools.digits(16724838)
     #=> ['f', 'f', '3', '3', '6', '6']
+
+#### `#integer?`
+
+Returns true if the object is an Integer.
+
+    IntegerTools.integer?(nil)
+    #=> false
+    IntegerTools.integer?([])
+    #=> false
+    IntegerTools.integer?({})
+    #=> false
+    IntegerTools.integer?(1)
+    #=> true
 
 #### `#pluralize`
 

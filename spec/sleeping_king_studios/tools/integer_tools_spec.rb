@@ -107,6 +107,48 @@ RSpec.describe SleepingKingStudios::Tools::IntegerTools do
     end # describe
   end # describe
 
+  describe '#integer?' do
+    it { expect(instance).to respond_to(:integer?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:integer?).with(1).argument }
+
+    describe 'with nil' do
+      it { expect(described_class.integer? nil).to be false }
+    end # describe
+
+    describe 'with an object' do
+      it { expect(described_class.integer? Object.new).to be false }
+    end # describe
+
+    describe 'with a string' do
+      it { expect(described_class.integer? 'greetings,programs').to be false }
+    end # describe
+
+    describe 'with an integer' do
+      it { expect(described_class.integer? 42).to be true }
+    end # describe
+
+    describe 'with a large integer' do
+      it { expect(described_class.integer? 2 ** 72).to be true }
+    end # describe
+
+    describe 'with an empty array' do
+      it { expect(described_class.integer? []).to be false }
+    end # describe
+
+    describe 'with a non-empty array' do
+      it { expect(described_class.integer? %w(ichi ni san)).to be false }
+    end # describe
+
+    describe 'with an empty hash' do
+      it { expect(described_class.integer?({})).to be false }
+    end # describe
+
+    describe 'with a non-empty hash' do
+      it { expect(described_class.integer?({ :greetings => 'programs' })).to be false }
+    end # describe
+  end # describe
+
   describe '#pluralize' do
     let(:single) { 'cow' }
     let(:plural) { 'kine' }
