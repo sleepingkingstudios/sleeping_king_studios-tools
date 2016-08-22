@@ -4,21 +4,9 @@
 
 ### 0.5.0
 
-#### ArrayTools
+#### Identity Methods
 
-Implement #array?.
-
-#### HashTools
-
-Implement #hash?.
-
-#### IntegerTools
-
-Implement #integer?.
-
-#### ObjectTools
-
-Implement #object?
+Implement a set of methods to classify objects by type: ArrayTools#array?, HashTools#hash?, IntegerTools#integer?, ObjectTools#object?, and StringTools#string?.
 
 ## Current Release
 

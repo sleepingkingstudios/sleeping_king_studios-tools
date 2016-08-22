@@ -152,6 +152,48 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     end # describe
   end # describe
 
+  describe '#string?' do
+    it { expect(instance).to respond_to(:string?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:string?).with(1).argument }
+
+    describe 'with nil' do
+      it { expect(described_class.string? nil).to be false }
+    end # describe
+
+    describe 'with an object' do
+      it { expect(described_class.string? Object.new).to be false }
+    end # describe
+
+    describe 'with a string' do
+      it { expect(described_class.string? 'greetings,programs').to be true }
+    end # describe
+
+    describe 'with a symbol' do
+      it { expect(described_class.string? :greetings_starfighter).to be false }
+    end # describe
+
+    describe 'with an integer' do
+      it { expect(described_class.string? 42).to be false }
+    end # describe
+
+    describe 'with an empty array' do
+      it { expect(described_class.string? []).to be false }
+    end # describe
+
+    describe 'with a non-empty array' do
+      it { expect(described_class.string? %w(ichi ni san)).to be false }
+    end # describe
+
+    describe 'with an empty hash' do
+      it { expect(described_class.string?({})).to be false }
+    end # describe
+
+    describe 'with a non-empty hash' do
+      it { expect(described_class.string?({ :greetings => 'programs' })).to be false }
+    end # describe
+  end # describe
+
   describe '#underscore' do
     it { expect(instance).to respond_to(:underscore).with(1).argument }
 

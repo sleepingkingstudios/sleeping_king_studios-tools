@@ -375,6 +375,19 @@ Takes a word in plural form and returns the singular form, based on the defined 
     StringTools.singularize 'elves'
     #=> 'elf'
 
+#### `#string?`
+
+Returns true if the object is a String.
+
+    StringTools.string?(nil)
+    #=> false
+    StringTools.string?([])
+    #=> false
+    StringTools.string?('Greetings, programs!')
+    #=> true
+    StringTools.string?(:greetings_starfighter)
+    #=> false
+
 #### `#underscore`
 
 Converts a mixed-case string expression to a lowercase, underscore separated string, as per ActiveSupport::Inflector#underscore.
