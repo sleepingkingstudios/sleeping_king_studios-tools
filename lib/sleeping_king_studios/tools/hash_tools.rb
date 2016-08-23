@@ -52,5 +52,16 @@ module SleepingKingStudios::Tools
 
       true
     end # method immutable
+
+    # Returns true if the hash is mutable.
+    #
+    # @param hsh [Array] The hash to test.
+    #
+    # @return [Boolean] True if the hash is mutable, otherwise false.
+    #
+    # @see #immutable?
+    def mutable? hsh
+      !immutable?(hsh)
+    end # method mutable?
   end # module
 end # module

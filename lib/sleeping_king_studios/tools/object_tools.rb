@@ -90,6 +90,17 @@ module SleepingKingStudios::Tools
       end # case
     end # method immutable?
 
+    # Returns true if the object is mutable.
+    #
+    # @param obj [Object] The object to test.
+    #
+    # @return [Boolean] True if the object is mutable, otherwise false.
+    #
+    # @see #immutable?
+    def mutable? obj
+      !immutable?(obj)
+    end # method mutable?
+
     # Returns true if the object is an Object. This should return true only for
     # objects that have an alternate inheritance chain from BasicObject, such as
     # a Proxy.

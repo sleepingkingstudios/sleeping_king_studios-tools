@@ -10,7 +10,7 @@ Implement a set of methods to classify objects by type: ArrayTools#array?, HashT
 
 #### Mutability Methods
 
-Implement ObjectTools#immutable?, ArrayTools#immutable?, HashTools#immutable?, which indicate whether or not a given object is mutable.
+Implement #immutable? and #mutable? for ObjectTools, ArrayTools, and HashTools, which indicate whether or not a given object is mutable.
 
 ## Current Release
 

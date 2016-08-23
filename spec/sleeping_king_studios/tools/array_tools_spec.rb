@@ -268,6 +268,20 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
     include_examples 'should test if the array is immutable'
   end # describe
 
+  describe '#mutable?' do
+    let(:ary) { [] }
+
+    it { expect(instance).to respond_to(:mutable?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:mutable?).with(1).argument }
+
+    it 'should return the inverse of immutable' do
+      expect(instance).to receive(:immutable?).with(ary).and_return(false)
+
+      expect(instance.mutable? ary).to be true
+    end # it
+  end # describe
+
   describe '#splice' do
     shared_examples 'should splice the array' do
       let(:normalized) { start < 0 ? start + values.count : start }

@@ -71,4 +71,18 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
 
     include_examples 'should test if the hash is immutable'
   end # describe
+
+  describe '#mutable?' do
+    let(:hsh) { {} }
+
+    it { expect(instance).to respond_to(:mutable?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:mutable?).with(1).argument }
+
+    it 'should return the inverse of immutable' do
+      expect(instance).to receive(:immutable?).with(hsh).and_return(false)
+
+      expect(instance.mutable? hsh).to be true
+    end # it
+  end # describe
 end # describe

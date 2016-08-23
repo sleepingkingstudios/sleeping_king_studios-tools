@@ -518,6 +518,20 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     end # it
   end # describe
 
+  describe '#mutable?' do
+    let(:object) { Object.new }
+
+    it { expect(instance).to respond_to(:mutable?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:mutable?).with(1).argument }
+
+    it 'should return the inverse of immutable' do
+      expect(instance).to receive(:immutable?).with(object).and_return(false)
+
+      expect(instance.mutable? object).to be true
+    end # it
+  end # describe
+
   describe '#object?' do
     it { expect(instance).to respond_to(:object?).with(1).argument }
 

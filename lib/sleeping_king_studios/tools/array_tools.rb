@@ -197,6 +197,17 @@ module SleepingKingStudios::Tools
       true
     end # method immutable?
 
+    # Returns true if the array is mutable.
+    #
+    # @param ary [Array] The array to test.
+    #
+    # @return [Boolean] True if the array is mutable, otherwise false.
+    #
+    # @see #immutable?
+    def mutable? ary
+      !immutable?(ary)
+    end # method mutable?
+
     # Accepts an array, a start value, a number of items to delete, and zero or
     # more items to insert at that index. Deletes the specified number of items,
     # then inserts the given items at the index and returns the array of deleted

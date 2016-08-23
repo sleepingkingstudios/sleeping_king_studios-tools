@@ -122,6 +122,10 @@ Returns true if the array is immutable, i.e. the array is frozen and each array 
     ArrayTools.immutable?(['ichi'.freeze, 'ni'.freeze, 'san'.freeze].freeze)
     #=> true
 
+#### `#mutable?`
+
+Returns true if the array is mutable (see `#immutable?`, above).
+
 #### `#splice`
 
 Accepts an array, a start value, a number of items to delete, and zero or more items to insert at that index. Deletes the specified number of items, then inserts the given items at the index and returns the array of deleted items.
@@ -211,6 +215,10 @@ Returns true if the hash is immutable, i.e. if the hash is frozen and each hash 
 
     HashTools.immutable?({ :id => 0, :title => 'The Ramayana'.freeze }.freeze)
     #=> true
+
+#### `#mutable?`
+
+Returns true if the hash is mutable (see `#immutable?`, above).
 
 ### Integer Tools
 
@@ -360,6 +368,10 @@ Returns true if the object is immutable. Values of nil, false, and true are alwa
 
     ObjectTools.immutable?([1, 2, 3].freeze)
     #=> false
+
+#### `#mutable?`
+
+Returns true if the object is mutable (see `#immutable?`, above).
 
 #### `#object?`
 
