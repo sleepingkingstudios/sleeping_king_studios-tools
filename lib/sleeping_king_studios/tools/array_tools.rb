@@ -179,6 +179,24 @@ module SleepingKingStudios::Tools
       end # case
     end # method humanize_list
 
+    # Returns true if the array is immutable, i.e. the array is frozen and each
+    # array item is immutable.
+    #
+    # @param ary [Array] The array to test.
+    #
+    # @return [Boolean] True if the array is immutable, otherwise false.
+    #
+    # @see ObjectTools#immutable?
+    def immutable? ary
+      require_array! ary
+
+      return false unless ary.frozen?
+
+      ary.each { |item| return false unless ObjectTools.immutable?(item) }
+
+      true
+    end # method immutable?
+
     # Accepts an array, a start value, a number of items to delete, and zero or
     # more items to insert at that index. Deletes the specified number of items,
     # then inserts the given items at the index and returns the array of deleted

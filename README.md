@@ -103,6 +103,25 @@ Accepts a list of values and returns a human-readable string of the values, with
     ArrayTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'])
     #=> 'spam, eggs, bacon, and spam'
 
+#### `#immutable?`
+
+Returns true if the array is immutable, i.e. the array is frozen and each array item is immutable.
+
+    ArrayTools.immutable?([1, 2, 3])
+    #=> false
+
+    ArrayTools.immutable?([1, 2, 3].freeze)
+    #=> true
+
+    ArrayTools.immutable?(['ichi', 'ni', 'san'])
+    #=> false
+
+    ArrayTools.immutable?(['ichi', 'ni', 'san'].freeze)
+    #=> false
+
+    ArrayTools.immutable?(['ichi'.freeze, 'ni'.freeze, 'san'.freeze].freeze)
+    #=> true
+
 #### `#splice`
 
 Accepts an array, a start value, a number of items to delete, and zero or more items to insert at that index. Deletes the specified number of items, then inserts the given items at the index and returns the array of deleted items.
@@ -178,6 +197,19 @@ Returns true if the object is or appears to be a Hash.
     HashTools.hash?([])
     #=> false
     HashTools.hash?({})
+    #=> true
+
+#### `#immutable?`
+
+Returns true if the hash is immutable, i.e. if the hash is frozen and each hash key and hash value are immutable.
+
+    HashTools.immutable?({ :id => 0, :title => 'The Ramayana' })
+    #=> false
+
+    HashTools.immutable?({ :id => 0, :title => 'The Ramayana' }.freeze)
+    #=> false
+
+    HashTools.immutable?({ :id => 0, :title => 'The Ramayana'.freeze }.freeze)
     #=> true
 
 ### Integer Tools
@@ -303,6 +335,31 @@ Returns the object's eigenclass.
 
     ObjectTools.eigenclass my_object
     #=> Shortcut for class << self; self; end.
+
+#### `#immutable?`
+
+Returns true if the object is immutable. Values of nil, false, and true are always immutable, as are instances of Numeric and Symbol. Arrays are immutable if the array is frozen and each array item is immutable. Hashes are immutable if the hash is frozen and each hash key and hash value are immutable. Otherwise, objects are immutable if they are frozen.
+
+    ObjectTools.immutable?(nil)
+    #=> true
+
+    ObjectTools.immutable?(false)
+    #=> true
+
+    ObjectTools.immutable?(0)
+    #=> true
+
+    ObjectTools.immutable?(:hello)
+    #=> true
+
+    ObjectTools.immutable?("Greetings, programs!")
+    #=> false
+
+    ObjectTools.immutable?([1, 2, 3])
+    #=> false
+
+    ObjectTools.immutable?([1, 2, 3].freeze)
+    #=> false
 
 #### `#object?`
 

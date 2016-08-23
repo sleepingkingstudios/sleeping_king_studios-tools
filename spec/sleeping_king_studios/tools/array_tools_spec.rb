@@ -5,6 +5,8 @@ require 'spec_helper'
 require 'sleeping_king_studios/tools/array_tools'
 
 RSpec.describe SleepingKingStudios::Tools::ArrayTools do
+  extend RSpec::SleepingKingStudios::Concerns::WrapExamples
+
   include Spec::Examples::ArrayExamples
 
   let(:instance) { Object.new.extend described_class }
@@ -250,6 +252,20 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
         end # it
       end # describe
     end # describe
+  end # describe
+
+  describe '#immutable?' do
+    it { expect(instance).to respond_to(:immutable?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:immutable?).with(1).argument }
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.immutable? nil }.to raise_error ArgumentError, /argument must be an array/
+      end # it
+    end # describe
+
+    include_examples 'should test if the array is immutable'
   end # describe
 
   describe '#splice' do

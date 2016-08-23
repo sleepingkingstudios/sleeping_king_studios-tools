@@ -8,6 +8,10 @@
 
 Implement a set of methods to classify objects by type: ArrayTools#array?, HashTools#hash?, IntegerTools#integer?, ObjectTools#object?, and StringTools#string?.
 
+#### Mutability Methods
+
+Implement ObjectTools#immutable?, ArrayTools#immutable?, HashTools#immutable?, which indicate whether or not a given object is mutable.
+
 ## Current Release
 
 ### 0.4.0

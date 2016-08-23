@@ -5,6 +5,8 @@ require 'spec_helper'
 require 'sleeping_king_studios/tools/object_tools'
 
 RSpec.describe SleepingKingStudios::Tools::ObjectTools do
+  extend RSpec::SleepingKingStudios::Concerns::WrapExamples
+
   include Spec::Examples::ArrayExamples
   include Spec::Examples::HashExamples
 
@@ -458,6 +460,48 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
       expect(described_class.eigenclass(object)).to be == metaclass
     end # it
+  end # describe
+
+  describe '#immutable?' do
+    it { expect(instance).to respond_to(:immutable?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:immutable?).with(1).argument }
+
+    include_examples 'should test if the array is immutable'
+
+    include_examples 'should test if the hash is immutable'
+
+    describe 'with nil' do
+      it { expect(described_class.immutable? nil).to be true }
+    end # describe
+
+    describe 'with false' do
+      it { expect(described_class.immutable? false).to be true }
+    end # describe
+
+    describe 'with true' do
+      it { expect(described_class.immutable? true).to be true }
+    end # describe
+
+    describe 'with an Integer' do
+      it { expect(described_class.immutable? 0).to be true }
+    end # describe
+
+    describe 'with a Float' do
+      it { expect(described_class.immutable? 0.0).to be true }
+    end # describe
+
+    describe 'with a Symbol' do
+      it { expect(described_class.immutable? :symbol).to be true }
+    end # describe
+
+    describe 'with an Object' do
+      it { expect(described_class.immutable? Object.new).to be false }
+    end # describe
+
+    describe 'with a frozen Object' do
+      it { expect(described_class.immutable? Object.new.freeze).to be true }
+    end # describe
   end # describe
 
   describe '#metaclass' do

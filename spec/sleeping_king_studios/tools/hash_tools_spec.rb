@@ -5,6 +5,8 @@ require 'spec_helper'
 require 'sleeping_king_studios/tools/hash_tools'
 
 RSpec.describe SleepingKingStudios::Tools::HashTools do
+  extend RSpec::SleepingKingStudios::Concerns::WrapExamples
+
   include Spec::Examples::HashExamples
 
   let(:instance) { Object.new.extend described_class }
@@ -60,5 +62,13 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
     describe 'with a non-empty hash' do
       it { expect(described_class.hash?({ :greetings => 'programs' })).to be true }
     end # describe
+  end # describe
+
+  describe '#immutable?' do
+    it { expect(instance).to respond_to(:immutable?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:immutable?).with(1).argument }
+
+    include_examples 'should test if the hash is immutable'
   end # describe
 end # describe

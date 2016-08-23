@@ -6,6 +6,22 @@ module Spec::Examples
   module HashExamples
     extend RSpec::SleepingKingStudios::Concerns::SharedExampleGroup
 
+    shared_context 'when the hash is frozen' do
+      let(:hsh) { super().freeze }
+    end # shared_context
+
+    shared_context 'when the hash keys are frozen' do
+      before(:example) do
+        hsh.each { |key, _| key.freeze }
+      end # before example
+    end # shared_context
+
+    shared_context 'when the hash values are frozen' do
+      before(:example) do
+        hsh.each { |_, value| value.freeze }
+      end # before example
+    end # shared_context
+
     shared_examples 'should create a deep copy of a hash' do
       describe 'with a hash with mutable keys' do
         let(:key_class) { Struct.new :value }
@@ -135,6 +151,102 @@ module Spec::Examples
 
           expect { child['one'] << '.0' }.not_to change { hsh }
         end # it
+      end # describe
+    end # shared_examples
+
+    shared_examples 'should test if the hash is immutable' do
+      describe 'with a hash with mutable keys' do
+        let(:key_class) { Struct.new :value }
+        let(:hsh)       { { key_class.new('foo') => 'foo', key_class.new('bar') => 'bar', key_class.new('baz') => 'baz' } }
+
+        it { expect(instance.immutable? hsh).to be false }
+
+        wrap_context 'when the hash is frozen' do
+          it { expect(instance.immutable? hsh).to be false }
+
+          wrap_context 'when the hash keys are frozen' do
+            it { expect(instance.immutable? hsh).to be false }
+          end # wrap_context
+
+          wrap_context 'when the hash values are frozen' do
+            it { expect(instance.immutable? hsh).to be false }
+          end # wrap_context
+
+          context 'when the hash keys and values are frozen' do
+            include_context 'when the hash keys are frozen'
+            include_context 'when the hash values are frozen'
+
+            it { expect(instance.immutable? hsh).to be true }
+          end # context
+        end # wrap_context
+      end # describe
+
+      describe 'with a hash with string keys' do
+        let(:hsh) { { 'foo' => 'foo', 'bar' => 'bar', 'baz' => 'baz' } }
+
+        it { expect(instance.immutable? hsh).to be false }
+
+        wrap_context 'when the hash is frozen' do
+          it { expect(instance.immutable? hsh).to be false }
+
+          wrap_context 'when the hash values are frozen' do
+            it { expect(instance.immutable? hsh).to be true }
+          end # wrap_context
+        end # wrap_context
+      end # describe
+
+      describe 'with a hash with symbol keys' do
+        let(:hsh) { { :foo => 'foo', :bar => 'bar', :baz => 'baz' } }
+
+        it { expect(instance.immutable? hsh).to be false }
+
+        wrap_context 'when the hash is frozen' do
+          it { expect(instance.immutable? hsh).to be false }
+
+          wrap_context 'when the hash values are frozen' do
+            it { expect(instance.immutable? hsh).to be true }
+          end # wrap_context
+        end # wrap_context
+      end # describe
+
+      describe 'with a hash with hash values' do
+        let(:hsh) do
+          {
+            :english => {
+              'one'   => '1',
+              'two'   => '2',
+              'three' => '3'
+            }, # end hash
+            :japanese => {
+              'yon'  => '4',
+              'go'   => '5',
+              'roku' => '6'
+            }, # end hash
+            :spanish => {
+              'siete' => '7',
+              'ocho'  => '8',
+              'nueve' => '9'
+            } # end hash
+          } # end hash
+        end # let
+
+        it { expect(instance.immutable? hsh).to be false }
+
+        wrap_context 'when the hash is frozen' do
+          it { expect(instance.immutable? hsh).to be false }
+
+          wrap_context 'when the hash values are frozen' do
+            it { expect(instance.immutable? hsh).to be false }
+
+            context 'when the hash child values are frozen' do
+              before(:example) do
+                hsh.each { |_, child| child.each { |_, value| value.freeze } }
+              end # before example
+
+              it { expect(instance.immutable? hsh).to be true }
+            end # context
+          end # wrap_context
+        end # wrap_context
       end # describe
     end # shared_examples
   end # module

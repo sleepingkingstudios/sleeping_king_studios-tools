@@ -68,6 +68,28 @@ module SleepingKingStudios::Tools
     end # method eigenclass
     alias_method :metaclass, :eigenclass
 
+    # Returns true if the object is immutable. Values of nil, false, and true
+    # are always immutable, as are instances of Numeric and Symbol. Arrays are
+    # immutable if the array is frozen and each array item is immutable. Hashes
+    # are immutable if the hash is frozen and each hash key and hash value are
+    # immutable. Otherwise, objects are immutable if they are frozen.
+    #
+    # @param obj [Object] The object to test.
+    #
+    # @return [Boolean] True if the object is immutable, otherwise false.
+    def immutable? obj
+      case obj
+      when NilClass, FalseClass, TrueClass, Numeric, Symbol
+        true
+      when ->(_) { ArrayTools.array?(obj) }
+        ArrayTools.immutable? obj
+      when ->(_) { HashTools.hash?(obj) }
+        HashTools.immutable? obj
+      else
+        obj.frozen?
+      end # case
+    end # method immutable?
+
     # Returns true if the object is an Object. This should return true only for
     # objects that have an alternate inheritance chain from BasicObject, such as
     # a Proxy.

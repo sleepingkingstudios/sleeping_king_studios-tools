@@ -36,5 +36,21 @@ module SleepingKingStudios::Tools
 
       true
     end # method hash?
+
+    # Returns true if the hash is immutable, i.e. if the hash is frozen and each
+    # hash key and hash value are immutable.
+    #
+    # @param hsh [Hash] The hash to test.
+    #
+    # @return [Boolean] True if the hash is immutable, otherwise false.
+    def immutable? hsh
+      return false unless hsh.frozen?
+
+      hsh.each do |key, value|
+        return false unless ObjectTools.immutable?(key) && ObjectTools.immutable?(value)
+      end # each
+
+      true
+    end # method immutable
   end # module
 end # module
