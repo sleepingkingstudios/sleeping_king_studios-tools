@@ -8,6 +8,8 @@ module SleepingKingStudios::Tools
   module HashTools
     extend self
 
+    HASH_METHODS = [:[], :count, :each, :each_key, :each_pair].freeze
+
     # Creates a deep copy of the object by returning a new Hash with deep
     # copies of each key and value.
     #
@@ -28,7 +30,7 @@ module SleepingKingStudios::Tools
     def hash? hsh
       return true if Hash === hsh
 
-      [:[], :count, :each, :each_pair].each do |method_name|
+      HASH_METHODS.each do |method_name|
         return false unless hsh.respond_to?(method_name)
       end # each
 

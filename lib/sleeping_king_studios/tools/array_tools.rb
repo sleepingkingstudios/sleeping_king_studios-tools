@@ -8,6 +8,9 @@ module SleepingKingStudios::Tools
   module ArrayTools
     extend self
 
+    ARRAY_METHODS = [:[], :count, :each].freeze
+    OTHER_METHODS = [:each_key, :each_pair].freeze
+
     # Returns true if the object is or appears to be an Array.
     #
     # @param ary [Object] The object to test.
@@ -16,11 +19,13 @@ module SleepingKingStudios::Tools
     def array? ary
       return true if Array === ary
 
-      [:[], :count, :each].each do |method_name|
+      ARRAY_METHODS.each do |method_name|
         return false unless ary.respond_to?(method_name)
       end # each
 
-      return false if ary.respond_to?(:each_pair)
+      OTHER_METHODS.each do |method_name|
+        return false if ary.respond_to?(method_name)
+      end # each
 
       true
     end # method array?

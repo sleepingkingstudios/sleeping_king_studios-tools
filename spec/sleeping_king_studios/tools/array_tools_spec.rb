@@ -22,6 +22,13 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       it { expect(described_class.array? Object.new).to be false }
     end # describe
 
+    describe 'with a struct' do
+      let(:struct_class) { Struct.new(:title) }
+      let(:struct)       { struct_class.new 'The Art of War' }
+
+      it { expect(described_class.array? struct).to be false }
+    end # describe
+
     describe 'with a string' do
       it { expect(described_class.array? 'greetings,programs').to be false }
     end # describe

@@ -30,6 +30,13 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
       it { expect(described_class.hash? Object.new).to be false }
     end # describe
 
+    describe 'with a struct' do
+      let(:struct_class) { Struct.new(:title) }
+      let(:struct)       { struct_class.new 'The Art of War' }
+
+      it { expect(described_class.hash? struct).to be false }
+    end # describe
+
     describe 'with a string' do
       it { expect(described_class.hash? 'greetings,programs').to be false }
     end # describe

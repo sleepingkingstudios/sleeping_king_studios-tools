@@ -49,9 +49,9 @@ module SleepingKingStudios::Tools
       case obj
       when FalseClass, Fixnum, Float, NilClass, Symbol, TrueClass
         obj
-      when Array
+      when ->(_) { ArrayTools.array?(obj) }
         ArrayTools.deep_dup obj
-      when Hash
+      when ->(_) { HashTools.hash?(obj) }
         HashTools.deep_dup obj
       else
         obj.respond_to?(:deep_dup) ? obj.deep_dup : obj.dup
