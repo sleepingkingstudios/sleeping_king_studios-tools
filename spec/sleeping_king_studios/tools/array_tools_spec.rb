@@ -5,6 +5,8 @@ require 'spec_helper'
 require 'sleeping_king_studios/tools/array_tools'
 
 RSpec.describe SleepingKingStudios::Tools::ArrayTools do
+  extend RSpec::SleepingKingStudios::Concerns::WrapExamples
+
   include Spec::Examples::ArrayExamples
 
   let(:instance) { Object.new.extend described_class }
@@ -20,6 +22,13 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
     describe 'with an object' do
       it { expect(described_class.array? Object.new).to be false }
+    end # describe
+
+    describe 'with a struct' do
+      let(:struct_class) { Struct.new(:title) }
+      let(:struct)       { struct_class.new 'The Art of War' }
+
+      it { expect(described_class.array? struct).to be false }
     end # describe
 
     describe 'with a string' do
@@ -180,6 +189,20 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
     include_examples 'should create a deep copy of an array'
   end # describe
 
+  describe '#deep_freeze' do
+    it { expect(instance).to respond_to(:deep_freeze).with(1).argument }
+
+    it { expect(described_class).to respond_to(:deep_freeze).with(1).argument }
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.deep_freeze nil }.to raise_error ArgumentError, /argument must be an array/
+      end # it
+    end # describe
+
+    include_examples 'should perform a deep freeze of the array'
+  end # describe
+
   describe '#humanize_list' do
     it { expect(instance).to respond_to(:humanize_list).with(1).argument }
 
@@ -243,6 +266,34 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
         end # it
       end # describe
     end # describe
+  end # describe
+
+  describe '#immutable?' do
+    it { expect(instance).to respond_to(:immutable?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:immutable?).with(1).argument }
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.immutable? nil }.to raise_error ArgumentError, /argument must be an array/
+      end # it
+    end # describe
+
+    include_examples 'should test if the array is immutable'
+  end # describe
+
+  describe '#mutable?' do
+    let(:ary) { [] }
+
+    it { expect(instance).to respond_to(:mutable?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:mutable?).with(1).argument }
+
+    it 'should return the inverse of immutable' do
+      expect(instance).to receive(:immutable?).with(ary).and_return(false)
+
+      expect(instance.mutable? ary).to be true
+    end # it
   end # describe
 
   describe '#splice' do

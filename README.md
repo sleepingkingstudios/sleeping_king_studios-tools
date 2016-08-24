@@ -87,6 +87,18 @@ Creates a deep copy of the object by returning a new Array with deep copies of e
     ary
     #=> ['one', 'two', 'three']
 
+#### `#deep_freeze`
+
+Freezes the array and performs a deep freeze on each array item. See also ObjectTools#deep_freeze[#label-Object+Tools].
+
+    ary = ['one', 'two', 'three']
+    ArrayTools.deep_freeze ary
+
+    ary.frozen?
+    #=> true
+    ary.first.frozen?
+    #=> true
+
 #### `#humanize_list`
 
 Accepts a list of values and returns a human-readable string of the values, with the format based on the number of items.
@@ -102,6 +114,29 @@ Accepts a list of values and returns a human-readable string of the values, with
     # With Three Or More Items
     ArrayTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'])
     #=> 'spam, eggs, bacon, and spam'
+
+#### `#immutable?`
+
+Returns true if the array is immutable, i.e. the array is frozen and each array item is immutable.
+
+    ArrayTools.immutable?([1, 2, 3])
+    #=> false
+
+    ArrayTools.immutable?([1, 2, 3].freeze)
+    #=> true
+
+    ArrayTools.immutable?(['ichi', 'ni', 'san'])
+    #=> false
+
+    ArrayTools.immutable?(['ichi', 'ni', 'san'].freeze)
+    #=> false
+
+    ArrayTools.immutable?(['ichi'.freeze, 'ni'.freeze, 'san'.freeze].freeze)
+    #=> true
+
+#### `#mutable?`
+
+Returns true if the array is mutable (see `#immutable?`, above).
 
 #### `#splice`
 
@@ -169,6 +204,18 @@ Creates a deep copy of the object by returning a new Hash with deep copies of ea
     hsh
     #=> { :one => 'one', :two => 'two', :three => 'three' }
 
+#### `#deep_freeze`
+
+Freezes the hash and performs a deep freeze on each hash key and value.
+
+    hsh = { :one => 'one', :two => 'two', :three => 'three' }
+    HashTools.deep_freeze hsh
+
+    hsh.frozen?
+    #=> true
+    hsh[:one].frozen?
+    #=> true
+
 #### `#hash?`
 
 Returns true if the object is or appears to be a Hash.
@@ -179,6 +226,23 @@ Returns true if the object is or appears to be a Hash.
     #=> false
     HashTools.hash?({})
     #=> true
+
+#### `#immutable?`
+
+Returns true if the hash is immutable, i.e. if the hash is frozen and each hash key and hash value are immutable.
+
+    HashTools.immutable?({ :id => 0, :title => 'The Ramayana' })
+    #=> false
+
+    HashTools.immutable?({ :id => 0, :title => 'The Ramayana' }.freeze)
+    #=> false
+
+    HashTools.immutable?({ :id => 0, :title => 'The Ramayana'.freeze }.freeze)
+    #=> true
+
+#### `#mutable?`
+
+Returns true if the hash is mutable (see `#immutable?`, above).
 
 ### Integer Tools
 
@@ -297,12 +361,75 @@ Creates a deep copy of the object. If the object is an Array, returns a new Arra
     data[:songs][1]
     #=> { :name => 'Hells Bells', :artist => 'AC/DC', :album => 'Back in Black' }
 
+#### `#deep_freeze`
+
+Performs a deep freeze of the object. If the object is an Array, freezes the array and performs a deep freeze on each array item (see ArrayTools#deep_dup[#label-Array+Tools]). If the object is a hash, freezes the hash and performs a deep freeze on each hash key and value (see HashTools#deep_dup[#label-Hash+Tools]). Otherwise, calls Object#freeze unless the object is already immutable.
+
+    data = {
+      :songs = [
+        {
+          :name   => 'Welcome to the Jungle',
+          :artist => "Guns N' Roses",
+          :album  => 'Appetite for Destruction'
+        }, # end hash
+        {
+          :name   => 'Hells Bells',
+          :artist => 'AC/DC',
+          :album  => 'Back in Black'
+        }, # end hash
+        {
+          :name   => "Knockin' on Heaven's Door",
+          :artist => 'Bob Dylan',
+          :album  => 'Pat Garrett & Billy The Kid'
+        } # end hash
+      ] # end array
+    } # end hash
+    ObjectTools.deep_freeze(data)
+
+    data.frozen?
+    #=> true
+    data[:songs].frozen?
+    #=> true
+    data[:songs][0].frozen?
+    #=> true
+    data[:songs][0].name.frozen?
+    #=> true
+
 #### `#eigenclass`, `#metaclass`
 
 Returns the object's eigenclass.
 
     ObjectTools.eigenclass my_object
     #=> Shortcut for class << self; self; end.
+
+#### `#immutable?`
+
+Returns true if the object is immutable. Values of nil, false, and true are always immutable, as are instances of Numeric and Symbol. Arrays are immutable if the array is frozen and each array item is immutable. Hashes are immutable if the hash is frozen and each hash key and hash value are immutable. Otherwise, objects are immutable if they are frozen.
+
+    ObjectTools.immutable?(nil)
+    #=> true
+
+    ObjectTools.immutable?(false)
+    #=> true
+
+    ObjectTools.immutable?(0)
+    #=> true
+
+    ObjectTools.immutable?(:hello)
+    #=> true
+
+    ObjectTools.immutable?("Greetings, programs!")
+    #=> false
+
+    ObjectTools.immutable?([1, 2, 3])
+    #=> false
+
+    ObjectTools.immutable?([1, 2, 3].freeze)
+    #=> false
+
+#### `#mutable?`
+
+Returns true if the object is mutable (see `#immutable?`, above).
 
 #### `#object?`
 

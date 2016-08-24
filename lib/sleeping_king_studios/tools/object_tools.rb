@@ -49,14 +49,33 @@ module SleepingKingStudios::Tools
       case obj
       when FalseClass, Fixnum, Float, NilClass, Symbol, TrueClass
         obj
-      when Array
+      when ->(_) { ArrayTools.array?(obj) }
         ArrayTools.deep_dup obj
-      when Hash
+      when ->(_) { HashTools.hash?(obj) }
         HashTools.deep_dup obj
       else
         obj.respond_to?(:deep_dup) ? obj.deep_dup : obj.dup
       end # case
     end # method deep_dup
+
+    # Performs a deep freeze of the object. If the object is an Array, freezes
+    # the array and performs a deep freeze on each array item. If the object is
+    # a hash, freezes the hash and performs a deep freeze on each hash key and
+    # value. Otherwise, calls Object#freeze.
+    #
+    # @param [Object] obj The object to freeze.
+    def deep_freeze obj
+      case obj
+      when FalseClass, Fixnum, Float, NilClass, Symbol, TrueClass
+        # Object is inherently immutable; do nothing here.
+      when ->(_) { ArrayTools.array?(obj) }
+        ArrayTools.deep_freeze(obj)
+      when ->(_) { HashTools.hash?(obj) }
+        HashTools.deep_freeze obj
+      else
+        obj.respond_to?(:deep_freeze) ? obj.deep_freeze : obj.freeze
+      end # case
+    end # method deep_freeze
 
     # Returns the object's eigenclass.
     #
@@ -67,6 +86,39 @@ module SleepingKingStudios::Tools
       class << object; self; end
     end # method eigenclass
     alias_method :metaclass, :eigenclass
+
+    # Returns true if the object is immutable. Values of nil, false, and true
+    # are always immutable, as are instances of Numeric and Symbol. Arrays are
+    # immutable if the array is frozen and each array item is immutable. Hashes
+    # are immutable if the hash is frozen and each hash key and hash value are
+    # immutable. Otherwise, objects are immutable if they are frozen.
+    #
+    # @param obj [Object] The object to test.
+    #
+    # @return [Boolean] True if the object is immutable, otherwise false.
+    def immutable? obj
+      case obj
+      when NilClass, FalseClass, TrueClass, Numeric, Symbol
+        true
+      when ->(_) { ArrayTools.array?(obj) }
+        ArrayTools.immutable? obj
+      when ->(_) { HashTools.hash?(obj) }
+        HashTools.immutable? obj
+      else
+        obj.frozen?
+      end # case
+    end # method immutable?
+
+    # Returns true if the object is mutable.
+    #
+    # @param obj [Object] The object to test.
+    #
+    # @return [Boolean] True if the object is mutable, otherwise false.
+    #
+    # @see #immutable?
+    def mutable? obj
+      !immutable?(obj)
+    end # method mutable?
 
     # Returns true if the object is an Object. This should return true only for
     # objects that have an alternate inheritance chain from BasicObject, such as

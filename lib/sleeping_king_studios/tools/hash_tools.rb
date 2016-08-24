@@ -8,6 +8,8 @@ module SleepingKingStudios::Tools
   module HashTools
     extend self
 
+    HASH_METHODS = [:[], :count, :each, :each_key, :each_pair].freeze
+
     # Creates a deep copy of the object by returning a new Hash with deep
     # copies of each key and value.
     #
@@ -20,6 +22,19 @@ module SleepingKingStudios::Tools
       end # each
     end # method deep_dup
 
+    # Freezes the hash and performs a deep freeze on each hash key and
+    # value.
+    #
+    # @param [Hash] hsh The object to freeze.
+    def deep_freeze hsh
+      hsh.freeze
+
+      hsh.each do |key, value|
+        ObjectTools.deep_freeze key
+        ObjectTools.deep_freeze value
+      end # each
+    end # method deep_freeze
+
     # Returns true if the object is or appears to be a Hash.
     #
     # @param hsh [Object] The object to test.
@@ -28,11 +43,38 @@ module SleepingKingStudios::Tools
     def hash? hsh
       return true if Hash === hsh
 
-      [:[], :count, :each, :each_pair].each do |method_name|
+      HASH_METHODS.each do |method_name|
         return false unless hsh.respond_to?(method_name)
       end # each
 
       true
     end # method hash?
+
+    # Returns true if the hash is immutable, i.e. if the hash is frozen and each
+    # hash key and hash value are immutable.
+    #
+    # @param hsh [Hash] The hash to test.
+    #
+    # @return [Boolean] True if the hash is immutable, otherwise false.
+    def immutable? hsh
+      return false unless hsh.frozen?
+
+      hsh.each do |key, value|
+        return false unless ObjectTools.immutable?(key) && ObjectTools.immutable?(value)
+      end # each
+
+      true
+    end # method immutable
+
+    # Returns true if the hash is mutable.
+    #
+    # @param hsh [Array] The hash to test.
+    #
+    # @return [Boolean] True if the hash is mutable, otherwise false.
+    #
+    # @see #immutable?
+    def mutable? hsh
+      !immutable?(hsh)
+    end # method mutable?
   end # module
 end # module

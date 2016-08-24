@@ -5,6 +5,8 @@ require 'spec_helper'
 require 'sleeping_king_studios/tools/hash_tools'
 
 RSpec.describe SleepingKingStudios::Tools::HashTools do
+  extend RSpec::SleepingKingStudios::Concerns::WrapExamples
+
   include Spec::Examples::HashExamples
 
   let(:instance) { Object.new.extend described_class }
@@ -15,6 +17,14 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
     it { expect(described_class).to respond_to(:deep_dup).with(1).argument }
 
     include_examples 'should create a deep copy of a hash'
+  end # describe
+
+  describe '#deep_freeze' do
+    it { expect(instance).to respond_to(:deep_freeze).with(1).argument }
+
+    it { expect(described_class).to respond_to(:deep_freeze).with(1).argument }
+
+    include_examples 'should perform a deep freeze of the hash'
   end # describe
 
   describe '#hash?' do
@@ -28,6 +38,13 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
 
     describe 'with an object' do
       it { expect(described_class.hash? Object.new).to be false }
+    end # describe
+
+    describe 'with a struct' do
+      let(:struct_class) { Struct.new(:title) }
+      let(:struct)       { struct_class.new 'The Art of War' }
+
+      it { expect(described_class.hash? struct).to be false }
     end # describe
 
     describe 'with a string' do
@@ -53,5 +70,27 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
     describe 'with a non-empty hash' do
       it { expect(described_class.hash?({ :greetings => 'programs' })).to be true }
     end # describe
+  end # describe
+
+  describe '#immutable?' do
+    it { expect(instance).to respond_to(:immutable?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:immutable?).with(1).argument }
+
+    include_examples 'should test if the hash is immutable'
+  end # describe
+
+  describe '#mutable?' do
+    let(:hsh) { {} }
+
+    it { expect(instance).to respond_to(:mutable?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:mutable?).with(1).argument }
+
+    it 'should return the inverse of immutable' do
+      expect(instance).to receive(:immutable?).with(hsh).and_return(false)
+
+      expect(instance.mutable? hsh).to be true
+    end # it
   end # describe
 end # describe

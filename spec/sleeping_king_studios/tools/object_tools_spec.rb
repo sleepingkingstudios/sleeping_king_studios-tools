@@ -5,6 +5,8 @@ require 'spec_helper'
 require 'sleeping_king_studios/tools/object_tools'
 
 RSpec.describe SleepingKingStudios::Tools::ObjectTools do
+  extend RSpec::SleepingKingStudios::Concerns::WrapExamples
+
   include Spec::Examples::ArrayExamples
   include Spec::Examples::HashExamples
 
@@ -446,6 +448,49 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     end # describe
   end # describe
 
+  describe '#deep_freeze' do
+    it { expect(instance).to respond_to(:deep_freeze).with(1).argument }
+
+    it { expect(described_class).to respond_to(:deep_freeze).with(1).argument }
+
+    include_examples 'should perform a deep freeze of the array'
+
+    include_examples 'should perform a deep freeze of the hash'
+
+    describe 'with an immutable object' do
+      let(:objects) { [nil, false, true, 1.0, 42, :symbol] }
+
+      it 'should not raise an error' do
+        objects.each do |object|
+          expect { instance.deep_freeze object }.not_to raise_error
+        end # each
+      end # it
+    end # describe
+
+    describe 'with an object' do
+      let(:object) { Object.new }
+
+      it 'should freeze the object' do
+        expect { instance.deep_freeze object }.
+          to change(object, :frozen?).
+          to be true
+      end # it
+
+      context 'with a defined #deep_dup method' do
+        before(:example) do
+          instance.eigenclass(object).send :define_method, :deep_freeze do; end
+        end # before example
+
+        it 'should delegate to Object#deep_dup' do
+          expect(object).not_to receive(:freeze)
+          expect(object).to receive(:deep_freeze)
+
+          instance.deep_freeze object
+        end # it
+      end # context
+    end # describe
+  end # describe
+
   describe '#eigenclass' do
     let(:object) { Object.new }
 
@@ -460,6 +505,48 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     end # it
   end # describe
 
+  describe '#immutable?' do
+    it { expect(instance).to respond_to(:immutable?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:immutable?).with(1).argument }
+
+    include_examples 'should test if the array is immutable'
+
+    include_examples 'should test if the hash is immutable'
+
+    describe 'with nil' do
+      it { expect(described_class.immutable? nil).to be true }
+    end # describe
+
+    describe 'with false' do
+      it { expect(described_class.immutable? false).to be true }
+    end # describe
+
+    describe 'with true' do
+      it { expect(described_class.immutable? true).to be true }
+    end # describe
+
+    describe 'with an Integer' do
+      it { expect(described_class.immutable? 0).to be true }
+    end # describe
+
+    describe 'with a Float' do
+      it { expect(described_class.immutable? 0.0).to be true }
+    end # describe
+
+    describe 'with a Symbol' do
+      it { expect(described_class.immutable? :symbol).to be true }
+    end # describe
+
+    describe 'with an Object' do
+      it { expect(described_class.immutable? Object.new).to be false }
+    end # describe
+
+    describe 'with a frozen Object' do
+      it { expect(described_class.immutable? Object.new.freeze).to be true }
+    end # describe
+  end # describe
+
   describe '#metaclass' do
     let(:object) { Object.new }
 
@@ -471,6 +558,20 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       metaclass = class << object; self; end
 
       expect(described_class.metaclass(object)).to be == metaclass
+    end # it
+  end # describe
+
+  describe '#mutable?' do
+    let(:object) { Object.new }
+
+    it { expect(instance).to respond_to(:mutable?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:mutable?).with(1).argument }
+
+    it 'should return the inverse of immutable' do
+      expect(instance).to receive(:immutable?).with(object).and_return(false)
+
+      expect(instance.mutable? object).to be true
     end # it
   end # describe
 

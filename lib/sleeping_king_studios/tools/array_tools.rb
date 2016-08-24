@@ -8,6 +8,9 @@ module SleepingKingStudios::Tools
   module ArrayTools
     extend self
 
+    ARRAY_METHODS = [:[], :count, :each].freeze
+    OTHER_METHODS = [:each_key, :each_pair].freeze
+
     # Returns true if the object is or appears to be an Array.
     #
     # @param ary [Object] The object to test.
@@ -16,11 +19,13 @@ module SleepingKingStudios::Tools
     def array? ary
       return true if Array === ary
 
-      [:[], :count, :each].each do |method_name|
+      ARRAY_METHODS.each do |method_name|
         return false unless ary.respond_to?(method_name)
       end # each
 
-      return false if ary.respond_to?(:each_pair)
+      OTHER_METHODS.each do |method_name|
+        return false if ary.respond_to?(method_name)
+      end # each
 
       true
     end # method array?
@@ -113,6 +118,17 @@ module SleepingKingStudios::Tools
       ary.map { |obj| ObjectTools.deep_dup obj }
     end # method deep_dup
 
+    # Freezes the array and performs a deep freeze on each array item.
+    #
+    # @param [Array] ary The object to freeze.
+    def deep_freeze ary
+      require_array! ary
+
+      ary.freeze
+
+      ary.each { |obj| ObjectTools.deep_freeze obj }
+    end # method deep_freeze
+
     # Accepts a list of values and returns a human-readable string of the
     # values, with the format based on the number of items.
     #
@@ -173,6 +189,35 @@ module SleepingKingStudios::Tools
         "#{ary[0...-1].join(separator)}#{last_separator}#{ary.last}"
       end # case
     end # method humanize_list
+
+    # Returns true if the array is immutable, i.e. the array is frozen and each
+    # array item is immutable.
+    #
+    # @param ary [Array] The array to test.
+    #
+    # @return [Boolean] True if the array is immutable, otherwise false.
+    #
+    # @see ObjectTools#immutable?
+    def immutable? ary
+      require_array! ary
+
+      return false unless ary.frozen?
+
+      ary.each { |item| return false unless ObjectTools.immutable?(item) }
+
+      true
+    end # method immutable?
+
+    # Returns true if the array is mutable.
+    #
+    # @param ary [Array] The array to test.
+    #
+    # @return [Boolean] True if the array is mutable, otherwise false.
+    #
+    # @see #immutable?
+    def mutable? ary
+      !immutable?(ary)
+    end # method mutable?
 
     # Accepts an array, a start value, a number of items to delete, and zero or
     # more items to insert at that index. Deletes the specified number of items,
