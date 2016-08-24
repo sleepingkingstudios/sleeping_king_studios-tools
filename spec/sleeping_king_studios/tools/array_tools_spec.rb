@@ -189,6 +189,20 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
     include_examples 'should create a deep copy of an array'
   end # describe
 
+  describe '#deep_freeze' do
+    it { expect(instance).to respond_to(:deep_freeze).with(1).argument }
+
+    it { expect(described_class).to respond_to(:deep_freeze).with(1).argument }
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.deep_freeze nil }.to raise_error ArgumentError, /argument must be an array/
+      end # it
+    end # describe
+
+    include_examples 'should perform a deep freeze of the array'
+  end # describe
+
   describe '#humanize_list' do
     it { expect(instance).to respond_to(:humanize_list).with(1).argument }
 

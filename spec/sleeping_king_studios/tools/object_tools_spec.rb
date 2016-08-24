@@ -448,6 +448,49 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     end # describe
   end # describe
 
+  describe '#deep_freeze' do
+    it { expect(instance).to respond_to(:deep_freeze).with(1).argument }
+
+    it { expect(described_class).to respond_to(:deep_freeze).with(1).argument }
+
+    include_examples 'should perform a deep freeze of the array'
+
+    include_examples 'should perform a deep freeze of the hash'
+
+    describe 'with an immutable object' do
+      let(:objects) { [nil, false, true, 1.0, 42, :symbol] }
+
+      it 'should not raise an error' do
+        objects.each do |object|
+          expect { instance.deep_freeze object }.not_to raise_error
+        end # each
+      end # it
+    end # describe
+
+    describe 'with an object' do
+      let(:object) { Object.new }
+
+      it 'should freeze the object' do
+        expect { instance.deep_freeze object }.
+          to change(object, :frozen?).
+          to be true
+      end # it
+
+      context 'with a defined #deep_dup method' do
+        before(:example) do
+          instance.eigenclass(object).send :define_method, :deep_freeze do; end
+        end # before example
+
+        it 'should delegate to Object#deep_dup' do
+          expect(object).not_to receive(:freeze)
+          expect(object).to receive(:deep_freeze)
+
+          instance.deep_freeze object
+        end # it
+      end # context
+    end # describe
+  end # describe
+
   describe '#eigenclass' do
     let(:object) { Object.new }
 

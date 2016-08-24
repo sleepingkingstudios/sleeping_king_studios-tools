@@ -154,6 +154,87 @@ module Spec::Examples
       end # describe
     end # shared_examples
 
+    shared_examples 'should perform a deep freeze of the hash' do
+      describe 'with a hash with mutable keys' do
+        let(:key_class) { Struct.new :value }
+        let(:hsh)       { { key_class.new('foo') => 'foo', key_class.new('bar') => 'bar', key_class.new('baz') => 'baz' } }
+
+        it 'should freeze the hash, keys, and values' do
+          expect { instance.deep_freeze hsh }.
+            to change(hsh, :frozen?).
+            to be true
+
+          hsh.each do |key, value|
+            expect(key.frozen?).to be true
+            expect(value.frozen?).to be true
+          end # each
+        end # it
+      end # describe
+
+      describe 'with a hash with string keys' do
+        let(:hsh) { { 'foo' => 'foo', 'bar' => 'bar', 'baz' => 'baz' } }
+
+        it 'should freeze the hash, keys, and values' do
+          expect { instance.deep_freeze hsh }.
+            to change(hsh, :frozen?).
+            to be true
+
+          hsh.each do |key, value|
+            expect(key.frozen?).to be true
+            expect(value.frozen?).to be true
+          end # each
+        end # it
+      end # describe
+
+      describe 'with a hash with symbol keys' do
+        let(:hsh) { { :foo => 'foo', :bar => 'bar', :baz => 'baz' } }
+
+        it 'should freeze the hash and values' do
+          expect { instance.deep_freeze hsh }.
+            to change(hsh, :frozen?).
+            to be true
+
+          hsh.each { |_, value| expect(value.frozen?).to be true }
+        end # it
+      end # describe
+
+      describe 'with a hash with hash values' do
+        let(:hsh) do
+          {
+            :english => {
+              'one'   => '1',
+              'two'   => '2',
+              'three' => '3'
+            }, # end hash
+            :japanese => {
+              'yon'  => '4',
+              'go'   => '5',
+              'roku' => '6'
+            }, # end hash
+            :spanish => {
+              'siete' => '7',
+              'ocho'  => '8',
+              'nueve' => '9'
+            } # end hash
+          } # end hash
+        end # let
+
+        it 'should freeze the hash and child hashes' do
+          expect { instance.deep_freeze hsh }.
+            to change(hsh, :frozen?).
+            to be true
+
+          hsh.each do |_, child|
+            expect(child.frozen?).to be true
+
+            child.each do |_, value|
+              expect(value.frozen?).to be true
+            end # each
+          end # each
+        end # it
+      end # describe
+    end # shared_examples
+
     shared_examples 'should test if the hash is immutable' do
       describe 'with a hash with mutable keys' do
         let(:key_class) { Struct.new :value }

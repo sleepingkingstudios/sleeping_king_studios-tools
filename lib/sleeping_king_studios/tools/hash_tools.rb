@@ -22,6 +22,19 @@ module SleepingKingStudios::Tools
       end # each
     end # method deep_dup
 
+    # Freezes the hash and performs a deep freeze on each hash key and
+    # value.
+    #
+    # @param [Hash] hsh The object to freeze.
+    def deep_freeze hsh
+      hsh.freeze
+
+      hsh.each do |key, value|
+        ObjectTools.deep_freeze key
+        ObjectTools.deep_freeze value
+      end # each
+    end # method deep_freeze
+
     # Returns true if the object is or appears to be a Hash.
     #
     # @param hsh [Object] The object to test.

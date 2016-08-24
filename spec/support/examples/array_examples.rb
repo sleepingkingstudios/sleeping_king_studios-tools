@@ -72,6 +72,64 @@ module Spec::Examples
       end # describe
     end # shared_examples
 
+    shared_examples 'should perform a deep freeze of the array' do
+      describe 'with an array of arrays' do
+        let(:ary) { [%w(ichi ni san), %w(yon go roku), %w(hachi nana kyuu)] }
+
+        it 'should freeze the array and items' do
+          expect { instance.deep_freeze ary }.
+            to change(ary, :frozen?).
+            to be true
+
+          ary.each do |child|
+            expect(child.frozen?).to be true
+
+            child.each do |item|
+              expect(item.frozen?).to be true
+            end # each
+          end # each
+        end # it
+      end # describe
+
+      describe 'with an array of integers' do
+        let(:ary) { [1, 2, 3] }
+
+        it 'should freeze the array' do
+          expect { instance.deep_freeze ary }.
+            to change(ary, :frozen?).
+            to be true
+        end # it
+      end # describe
+
+      describe 'with an array of strings' do
+        let(:ary) { %w(ichi ni san) }
+
+        it 'should freeze the array and items' do
+          expect { instance.deep_freeze ary }.
+            to change(ary, :frozen?).
+            to be true
+
+          ary.each do |item|
+            expect(item.frozen?).to be true
+          end # each
+        end # it
+      end # describe
+
+      describe 'with a heterogenous array' do
+        let(:ary) { ['0', 1.0, :'2', 3, 4..5] }
+
+        it 'should freeze the array and items' do
+          expect { instance.deep_freeze ary }.
+            to change(ary, :frozen?).
+            to be true
+
+          ary.each do |item|
+            expect(item.frozen?).to be true
+          end # each
+        end # it
+      end # describe
+    end # shared_examples
+
     shared_examples 'should test if the array is immutable' do
       describe 'with an array of arrays' do
         let(:ary) { [%w(ichi ni san), %w(yon go roku), %w(hachi nana kyuu)] }

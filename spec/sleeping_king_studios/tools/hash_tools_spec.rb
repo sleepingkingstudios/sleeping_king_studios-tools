@@ -19,6 +19,14 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
     include_examples 'should create a deep copy of a hash'
   end # describe
 
+  describe '#deep_freeze' do
+    it { expect(instance).to respond_to(:deep_freeze).with(1).argument }
+
+    it { expect(described_class).to respond_to(:deep_freeze).with(1).argument }
+
+    include_examples 'should perform a deep freeze of the hash'
+  end # describe
+
   describe '#hash?' do
     it { expect(instance).to respond_to(:hash?).with(1).argument }
 

@@ -12,6 +12,8 @@ Implement a set of methods to classify objects by type: ArrayTools#array?, HashT
 
 Implement #immutable? and #mutable? for ObjectTools, ArrayTools, and HashTools, which indicate whether or not a given object is mutable.
 
+Implement #deep_freeze for ObjectTools, ArrayTools, and HashTools which recursively freezes the object and any children (array items, hash keys, and hash values).
+
 ## Current Release
 
 ### 0.4.0

@@ -58,6 +58,25 @@ module SleepingKingStudios::Tools
       end # case
     end # method deep_dup
 
+    # Performs a deep freeze of the object. If the object is an Array, freezes
+    # the array and performs a deep freeze on each array item. If the object is
+    # a hash, freezes the hash and performs a deep freeze on each hash key and
+    # value. Otherwise, calls Object#freeze.
+    #
+    # @param [Object] obj The object to freeze.
+    def deep_freeze obj
+      case obj
+      when FalseClass, Fixnum, Float, NilClass, Symbol, TrueClass
+        # Object is inherently immutable; do nothing here.
+      when ->(_) { ArrayTools.array?(obj) }
+        ArrayTools.deep_freeze(obj)
+      when ->(_) { HashTools.hash?(obj) }
+        HashTools.deep_freeze obj
+      else
+        obj.respond_to?(:deep_freeze) ? obj.deep_freeze : obj.freeze
+      end # case
+    end # method deep_freeze
+
     # Returns the object's eigenclass.
     #
     # @param [Object] object The object for which an eigenclass is required.

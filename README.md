@@ -87,6 +87,18 @@ Creates a deep copy of the object by returning a new Array with deep copies of e
     ary
     #=> ['one', 'two', 'three']
 
+#### `#deep_freeze`
+
+Freezes the array and performs a deep freeze on each array item. See also ObjectTools#deep_freeze[#label-Object+Tools].
+
+    ary = ['one', 'two', 'three']
+    ArrayTools.deep_freeze ary
+
+    ary.frozen?
+    #=> true
+    ary.first.frozen?
+    #=> true
+
 #### `#humanize_list`
 
 Accepts a list of values and returns a human-readable string of the values, with the format based on the number of items.
@@ -191,6 +203,18 @@ Creates a deep copy of the object by returning a new Hash with deep copies of ea
     #=> { :one => 'vun', :two => 'two', :three => 'three', :four => 'four' }
     hsh
     #=> { :one => 'one', :two => 'two', :three => 'three' }
+
+#### `#deep_freeze`
+
+Freezes the hash and performs a deep freeze on each hash key and value.
+
+    hsh = { :one => 'one', :two => 'two', :three => 'three' }
+    HashTools.deep_freeze hsh
+
+    hsh.frozen?
+    #=> true
+    hsh[:one].frozen?
+    #=> true
 
 #### `#hash?`
 
@@ -336,6 +360,40 @@ Creates a deep copy of the object. If the object is an Array, returns a new Arra
     copy[:songs][1][:name] = 'Shoot to Thrill'
     data[:songs][1]
     #=> { :name => 'Hells Bells', :artist => 'AC/DC', :album => 'Back in Black' }
+
+#### `#deep_freeze`
+
+Performs a deep freeze of the object. If the object is an Array, freezes the array and performs a deep freeze on each array item (see ArrayTools#deep_dup[#label-Array+Tools]). If the object is a hash, freezes the hash and performs a deep freeze on each hash key and value (see HashTools#deep_dup[#label-Hash+Tools]). Otherwise, calls Object#freeze unless the object is already immutable.
+
+    data = {
+      :songs = [
+        {
+          :name   => 'Welcome to the Jungle',
+          :artist => "Guns N' Roses",
+          :album  => 'Appetite for Destruction'
+        }, # end hash
+        {
+          :name   => 'Hells Bells',
+          :artist => 'AC/DC',
+          :album  => 'Back in Black'
+        }, # end hash
+        {
+          :name   => "Knockin' on Heaven's Door",
+          :artist => 'Bob Dylan',
+          :album  => 'Pat Garrett & Billy The Kid'
+        } # end hash
+      ] # end array
+    } # end hash
+    ObjectTools.deep_freeze(data)
+
+    data.frozen?
+    #=> true
+    data[:songs].frozen?
+    #=> true
+    data[:songs][0].frozen?
+    #=> true
+    data[:songs][0].name.frozen?
+    #=> true
 
 #### `#eigenclass`, `#metaclass`
 

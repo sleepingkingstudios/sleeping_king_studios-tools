@@ -118,6 +118,17 @@ module SleepingKingStudios::Tools
       ary.map { |obj| ObjectTools.deep_dup obj }
     end # method deep_dup
 
+    # Freezes the array and performs a deep freeze on each array item.
+    #
+    # @param [Array] ary The object to freeze.
+    def deep_freeze ary
+      require_array! ary
+
+      ary.freeze
+
+      ary.each { |obj| ObjectTools.deep_freeze obj }
+    end # method deep_freeze
+
     # Accepts a list of values and returns a human-readable string of the
     # values, with the format based on the number of items.
     #
