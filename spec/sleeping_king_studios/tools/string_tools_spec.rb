@@ -7,6 +7,54 @@ require 'sleeping_king_studios/tools/string_tools'
 RSpec.describe SleepingKingStudios::Tools::StringTools do
   let(:instance) { Object.new.extend described_class }
 
+  describe '#camelize' do
+    it { expect(instance).to respond_to(:camelize).with(1).argument }
+
+    it { expect(described_class).to respond_to(:camelize).with(1).argument }
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.camelize nil }.to raise_error ArgumentError, /argument must be a string/
+      end # it
+    end # describe
+
+    describe 'with an empty string' do
+      it { expect(described_class.camelize '').to be == '' }
+    end # describe
+
+    describe 'with a lowercase string' do
+      it { expect(described_class.camelize 'valhalla').to be == 'Valhalla' }
+    end # describe
+
+    describe 'with a capitalized string' do
+      it { expect(described_class.camelize 'Bifrost').to be == 'Bifrost' }
+    end # describe
+
+    describe 'with an uppercase string' do
+      it { expect(described_class.camelize 'ASGARD').to be == 'ASGARD' }
+    end # describe
+
+    describe 'with a mixed-case string' do
+      it { expect(described_class.camelize 'FenrisWolf').to be == 'FenrisWolf' }
+    end # describe
+
+    describe 'with an underscore-separated string' do
+      it { expect(described_class.camelize 'frost_giant').to be == 'FrostGiant' }
+    end # describe
+
+    describe 'with an underscore-separated string with digits' do
+      it { expect(described_class.camelize '9_worlds').to be == '9Worlds' }
+    end # describe
+
+    describe 'with an underscore-separated string with consecutive capitals' do
+      it { expect(described_class.camelize 'ygg_drasil').to be == 'YggDrasil' }
+    end # describe
+
+    describe 'with a string with hyphens' do
+      it { expect(described_class.camelize 'muspelheimr-and-niflheimr').to be == 'MuspelheimrAndNiflheimr' }
+    end # describe
+  end # describe
+
   describe '#define_irregular_word' do
     it { expect(instance).to respond_to(:define_irregular_word).with(2).arguments }
 

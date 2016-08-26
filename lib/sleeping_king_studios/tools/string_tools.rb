@@ -10,6 +10,21 @@ module SleepingKingStudios::Tools
 
     autoload :PluralInflector, 'sleeping_king_studios/tools/string_tools/plural_inflector'
 
+    # Converts a lowercase, underscore-separated string to CamelCase.
+    #
+    # @param str [String] The string to convert.
+    #
+    # @return [String] The converted string.
+    #
+    # @see ActiveSupport::Inflector#camelize.
+    def camelize str
+      require_string! str
+
+      str = str.dup
+      str.gsub!(/(\b|[_-])([a-z])/) { |match| $2.upcase }
+      str
+    end # method camelize
+
     # (see PluralInflector#define_irregular_word)
     def define_irregular_word singular, plural
       plural_inflector.define_irregular_word singular, plural

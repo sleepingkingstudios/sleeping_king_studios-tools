@@ -475,6 +475,16 @@ As #send, but returns nil if the object does not respond to the method.
 
 Tools for working with strings.
 
+#### `#camelize`
+
+Converts a lowercase, underscore separated string to a mixed-case string expression, as per ActiveSupport::Inflector#camelize.
+
+    StringTools#camelize 'valhalla'
+    #=> 'Valhalla'
+
+    StringTools#camelize 'muspelheimr_and_niflheimr'
+    #=> 'MuspelheimrAndNiflheimr'
+
 #### `#pluralize`
 
 Takes a word in singular form and returns the plural form, based on the defined rules and known irregular/uncountable words.
@@ -532,6 +542,12 @@ Returns true if the object is a String.
 #### `#underscore`
 
 Converts a mixed-case string expression to a lowercase, underscore separated string, as per ActiveSupport::Inflector#underscore.
+
+    StringTools#underscore 'Bifrost'
+    #=> 'bifrost'
+
+    StringTools#underscore 'FenrisWolf'
+    #=> 'fenris_wolf'
 
 ## Toolbox
 
