@@ -115,6 +115,10 @@ Accepts a list of values and returns a human-readable string of the values, with
     ArrayTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'])
     #=> 'spam, eggs, bacon, and spam'
 
+    # With A Block
+    ArrayTools.humanize_list(['bronze', 'silver', 'gold'], { |str| str.capitalize })
+    #=> 'Bronze, Silver, and Gold'
+
 #### `#immutable?`
 
 Returns true if the array is immutable, i.e. the array is frozen and each array item is immutable.
