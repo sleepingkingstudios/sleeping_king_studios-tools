@@ -1,11 +1,11 @@
-# spec/sleeping_king_studios/tools/delegator_spec.rb
+# spec/sleeping_king_studios/tools/toolbox/delegator_spec.rb
 
 require 'spec_helper'
 
-require 'sleeping_king_studios/tools/delegator'
+require 'sleeping_king_studios/tools/toolbox/delegator'
 
-RSpec.describe SleepingKingStudios::Tools::Delegator do
-  let(:concern)         { SleepingKingStudios::Tools::Delegator }
+RSpec.describe SleepingKingStudios::Tools::Toolbox::Delegator do
+  let(:concern)         { SleepingKingStudios::Tools::Toolbox::Delegator }
   let(:described_class) { Class.new.extend(concern) }
   let(:instance)        { described_class.new }
 

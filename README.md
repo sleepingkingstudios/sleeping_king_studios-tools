@@ -523,11 +523,21 @@ Returns true if the object is a String.
 
 Converts a mixed-case string expression to a lowercase, underscore separated string, as per ActiveSupport::Inflector#underscore.
 
-## Features
+## Toolbox
+
+Common objects or patterns that are useful across projects but are larger than or do not fit the functional paradigm of the tools.* pattern.
 
 ### Delegator
 
     require 'sleeping_king_studios/tools/delegator'
+
+    require 'sleeping_king_studios/tools/toolbox/delegator'
+
+    class MyClass
+      extend SleepingKingStudios::Tools::Delegator
+
+      delegate :my_method, :to => MyService
+    end # class
 
 Module for extending classes with basic delegation.
 

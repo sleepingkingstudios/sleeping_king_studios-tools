@@ -1,13 +1,13 @@
-# lib/sleeping_king_studios/tools/delegator.rb
+# lib/sleeping_king_studios/tools/toolbox/delegator.rb
 
-require 'sleeping_king_studios/tools'
+require 'sleeping_king_studios/tools/toolbox'
 
-module SleepingKingStudios::Tools
+module SleepingKingStudios::Tools::Toolbox
   # Module for extending classes with basic delegation. Supports passing
   # arguments, keywords, and blocks to the delegated method.
   #
   # @example
-  #   class MyModule
+  #   class MyClass
   #     extend SleepingKingStudios::Tools::Delegator
   #
   #     delegate :my_method, :to => MyService

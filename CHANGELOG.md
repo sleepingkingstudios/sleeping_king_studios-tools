@@ -6,9 +6,9 @@
 
 Add an optional block argument to ArrayTools#humanize_list.
 
-#### Delegator
+#### Toolbox
 
-Implement #delegate, #wrap_delegate.
+Implement Delegator#delegate, Delegator#wrap_delegate.
 
 #### Identity Methods
 
