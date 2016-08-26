@@ -4,6 +4,8 @@
 
 ### 0.5.0
 
+Implement CoreTools#require_each.
+
 Add an optional block argument to ArrayTools#humanize_list.
 
 #### Toolbox

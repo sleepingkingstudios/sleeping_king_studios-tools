@@ -32,5 +32,18 @@ module SleepingKingStudios::Tools
 
       Kernel.warn str
     end # method deprecate
+
+    # Expands each file pattern and requires each file.
+    def require_each *file_patterns
+      file_patterns.each do |file_pattern|
+        if file_pattern.include?('*')
+          Dir[file_pattern].each do |file_name|
+            Kernel.require file_name
+          end # each
+        else
+          Kernel.require file_pattern
+        end # unless
+      end # each
+    end # method require_each
   end # module
 end # module
