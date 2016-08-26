@@ -17,10 +17,18 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Delegator do
       it { expect(instance).to respond_to(method_name) }
 
       describe 'with no arguments' do
-        it 'should delegate the method' do
-          expect(delegate).to receive(method_name).with(no_args)
+        let(:result) { Object.new }
 
-          instance.send(method_name)
+        it 'should delegate the method and return the result' do
+          expect(delegate).
+            to receive(method_name).
+            with(no_args).
+            exactly(3).times.
+            and_return(result)
+
+          3.times do
+            expect(instance.send(method_name)).to be result
+          end # times
         end # it
       end # describe
 
