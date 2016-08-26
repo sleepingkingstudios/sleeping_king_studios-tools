@@ -171,7 +171,7 @@ Accepts an array, a start value, a number of items to delete, and zero or more i
 
 Tools for working with an application or working environment.
 
-#### '#deprecate'
+#### `#deprecate`
 
 Prints a deprecation warning.
 
@@ -186,6 +186,16 @@ Prints a deprecation warning.
 
     ObjectTools#old_method was deprecated in version 0.1.0.
       called from /path/to/file.rb:4: in something_or_other
+
+#### `#require_each`
+
+Takes a file pattern or a list of file names and requires each file.
+
+    CoreTools.require_each '/path/to/one', '/path/to/two', '/path/to/three'
+    #=> Requires each file.
+
+    CoreTools.require_each '/path/to/directory/**/*.rb'
+    #=> Requires each file matching the pattern.
 
 ### Hash Tools
 
