@@ -21,6 +21,14 @@ module SleepingKingStudios::Tools
     # @return The result of calling the proc or lambda with the given
     #   receiver and any additional arguments or block.
     def apply base, proc, *args, **kwargs, &block
+      unless block_given?
+        if kwargs.empty?
+          return base.instance_exec *args, &proc
+        else
+          return base.instance_exec *args, **kwargs, &proc
+        end # if-else
+      end # unless
+
       temporary_method_name = :__sleeping_king_studios_tools_object_tools_temporary_method_for_applying_proc__
 
       metaclass = class << base; self; end

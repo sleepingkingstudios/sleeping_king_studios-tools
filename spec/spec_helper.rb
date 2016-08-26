@@ -8,6 +8,9 @@ require 'byebug'
 Dir[File.join File.dirname(__FILE__), *%w(support ** *.rb)].each { |f| require f }
 
 RSpec.configure do |config|
+  config.extend RSpec::SleepingKingStudios::Concerns::FocusExamples
+  config.extend RSpec::SleepingKingStudios::Concerns::WrapExamples
+
   # Limit a spec run to individual examples or groups you care about by tagging
   # them with `:focus` metadata.
   config.filter_run :focus
