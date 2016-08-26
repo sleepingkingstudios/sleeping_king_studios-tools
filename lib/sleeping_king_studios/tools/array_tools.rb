@@ -166,8 +166,10 @@ module SleepingKingStudios::Tools
     # @raise ArgumentError If the first argument is not an Array-like object.
     #
     # @return [String] The formatted string.
-    def humanize_list ary, options = {}
+    def humanize_list ary, options = {}, &block
       require_array! ary
+
+      ary = ary.map(&block) if block_given?
 
       separator = options.fetch(:separator, ', ')
       last_separator = options.fetch(:last_separator, ' and ')
