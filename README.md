@@ -601,12 +601,12 @@ Expects a delegation target and optionally a class or module (to determine which
 
 ### Semantic Version
 
-    require 'sleeping_king_studios/tools/semantic_version'
+    require 'sleeping_king_studios/tools/toolbox/semantic_version'
 
 Module mixin for using semantic versioning (see http://semver.org) with helper methods for generating strict and gem-compatible version strings.
 
     module Version
-      extend SleepingKingStudios::Tools::SemanticVersion
+      extend SleepingKingStudios::Tools::Toolbox::SemanticVersion
 
       MAJOR = 3
       MINOR = 1

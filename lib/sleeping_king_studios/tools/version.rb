@@ -1,6 +1,6 @@
 # lib/sleeping_king_studios/tools/version.rb
 
-require 'sleeping_king_studios/tools/semantic_version'
+require 'sleeping_king_studios/tools/toolbox/semantic_version'
 
 module SleepingKingStudios
   module Tools
@@ -8,7 +8,7 @@ module SleepingKingStudios
     #
     # @see http://semver.org
     module Version
-      extend SleepingKingStudios::Tools::SemanticVersion
+      extend SleepingKingStudios::Tools::Toolbox::SemanticVersion
 
       private
 

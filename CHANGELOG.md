@@ -10,6 +10,8 @@ Add an optional block argument to ArrayTools#humanize_list.
 
 Implement Delegator#delegate, Delegator#wrap_delegate.
 
+Refactor SemanticVersion to the Toolbox namespace. Accessing SemanticVersion as Tools::SemanticVersion is now deprecated, use Tools::Toolbox::SemanticVersion.
+
 #### Identity Methods
 
 Implement a set of methods to classify objects by type: ArrayTools#array?, HashTools#hash?, IntegerTools#integer?, ObjectTools#object?, and StringTools#string?.
