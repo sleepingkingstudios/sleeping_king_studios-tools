@@ -4,19 +4,18 @@
 
 ### 0.5.0
 
-Implement CoreTools#require_each.
-
-Add an optional block argument to ArrayTools#humanize_list.
+- Implement CoreTools#require_each.
+- Implement StringTools#camelize.
+- Add an optional block argument to ArrayTools#humanize_list.
 
 #### Toolbox
 
-Implement Delegator#delegate, Delegator#wrap_delegate.
-
-Refactor SemanticVersion to the Toolbox namespace. Accessing SemanticVersion as Tools::SemanticVersion is now deprecated, use Tools::Toolbox::SemanticVersion.
+- Implement Delegator#delegate, Delegator#wrap_delegate.
+- Refactor SemanticVersion to the Toolbox namespace. Accessing SemanticVersion as Tools::SemanticVersion is now deprecated, use Tools::Toolbox::SemanticVersion.
 
 #### Identity Methods
 
-Implement a set of methods to classify objects by type: ArrayTools#array?, HashTools#hash?, IntegerTools#integer?, ObjectTools#object?, and StringTools#string?.
+- Implement a set of methods to classify objects by type: ArrayTools#array?, HashTools#hash?, IntegerTools#integer?, ObjectTools#object?, and StringTools#string?.
 
 #### Mutability Methods
 
