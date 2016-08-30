@@ -147,33 +147,27 @@ module SleepingKingStudios::Tools::Toolbox
         target = target.intern
 
         if target.to_s =~ /\A@/
-          define_method method_name do |*args, **kwargs, &block|
+          define_method method_name do |*args, &block|
             receiver = instance_variable_get(target)
 
             return nil if receiver.nil? && options[:allow_nil]
 
-            kwargs.empty? ?
-              receiver.send(method_name, *args, &block) :
-              receiver.send(method_name, *args, **kwargs, &block)
+            receiver.send(method_name, *args, &block)
           end # define_method
         else
-          define_method method_name do |*args, **kwargs, &block|
+          define_method method_name do |*args, &block|
             receiver = send(target)
 
             return nil if receiver.nil? && options[:allow_nil]
 
-            kwargs.empty? ?
-              receiver.send(method_name, *args, &block) :
-              receiver.send(method_name, *args, **kwargs, &block)
+            receiver.send(method_name, *args, &block)
           end # define_method
         end # if-else
       else
-        define_method method_name do |*args, **kwargs, &block|
+        define_method method_name do |*args, &block|
           return nil if target.nil? && options[:allow_nil]
 
-          kwargs.empty? ?
-            target.send(method_name, *args, &block) :
-            target.send(method_name, *args, **kwargs, &block)
+          target.send(method_name, *args, &block)
         end # define_method
       end # if
     end # method delegate_method

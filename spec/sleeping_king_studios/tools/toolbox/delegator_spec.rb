@@ -32,6 +32,26 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Delegator do
         end # it
       end # describe
 
+      describe 'with an empty hash argument' do
+        let(:args) { [{}] }
+
+        it 'should delegate the method' do
+          expect(delegate).to receive(method_name).with(*args)
+
+          instance.send(method_name, *args)
+        end # it
+      end # describe
+
+      describe 'with a non-empty hash argument' do
+        let(:args) { [{ :greetings => :programs }] }
+
+        it 'should delegate the method' do
+          expect(delegate).to receive(method_name).with(*args)
+
+          instance.send(method_name, *args)
+        end # it
+      end # describe
+
       describe 'with many arguments' do
         it 'should delegate the method' do
           expect(delegate).to receive(method_name).with(*args)
