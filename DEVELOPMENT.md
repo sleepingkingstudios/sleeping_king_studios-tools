@@ -1,13 +1,5 @@
 # Development Notes
 
-## Version 0.5.0 - The Cold Update
-
-- ObjectTools#freeze - delegates to specific toolset implementation
-  - Arrays freeze the collection and each item
-  - Hashes freeze the collection and each key and value
-- ObjectTools#frozen_copy
-- StringTools#humanize_list - accept a block. If block given, yield each item and join the results.
-
 ## Future Tasks
 
 - Remove 'extend self' from Tools modules.
@@ -15,6 +7,11 @@
 ### Features
 
 #### Tools
+
+- StringTools#chain |
+
+  tools.chain(str, :underscore, :pluralize)
+  #=> shorthand for tools.pluralize(tools.underscore str)
 
 - ObjectTools#pretty - returns user-friendly string representation. :multiline option? Delegates to specific toolset implementations.
 - RegexpTools#matching_string - generates a string that matches the regular expression. Does not support advanced Regexp features.
