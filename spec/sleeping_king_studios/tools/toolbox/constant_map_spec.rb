@@ -101,7 +101,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
   describe '#freeze' do
     shared_examples 'should freeze the constant map' do
       it 'should freeze the constant map' do
-        instance.freeze
+        expect(instance.freeze).to be instance
 
         expect { instance.send :remove_const, :GUEST }.
           to raise_error RuntimeError

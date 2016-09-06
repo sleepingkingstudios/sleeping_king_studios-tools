@@ -34,6 +34,8 @@ module SleepingKingStudios::Tools::Toolbox
       constants.each do |const_name|
         object_tools.deep_freeze const_get(const_name)
       end # each
+
+      self
     end # method freeze
 
     private
