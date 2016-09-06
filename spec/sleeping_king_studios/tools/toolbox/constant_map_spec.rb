@@ -98,6 +98,37 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
     end # wrap_context
   end # describe
 
+  describe '#freeze' do
+    shared_examples 'should freeze the constant map' do
+      it 'should freeze the constant map' do
+        instance.freeze
+
+        expect { instance.send :remove_const, :GUEST }.
+          to raise_error RuntimeError
+
+        expect { instance.const_set :GUEST, 'intruder' }.
+          to raise_error RuntimeError
+      end # it
+    end # method shared_examples
+
+    it { expect(instance).to respond_to(:freeze).with(0).arguments }
+
+    include_examples 'should freeze the constant map'
+
+    wrap_context 'when many constants are defined' do
+      include_examples 'should freeze the constant map'
+
+      it 'should freeze the constant values' do
+        instance.freeze
+
+        const_value = instance::GUEST
+
+        expect { const_value[0..-1] = 'intruder' }.
+          to raise_error RuntimeError
+      end # it
+    end # method wrap_context
+  end # describe
+
   describe '#method_missing' do
     it { expect { instance.guest }.to raise_error NoMethodError }
 
