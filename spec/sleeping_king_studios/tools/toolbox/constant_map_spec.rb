@@ -142,6 +142,14 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
 
         expect(instance.method(:guest)).to be_a Method
       end # it
+
+      context 'when the map is frozen' do
+        before(:example) { instance.freeze }
+
+        it { expect { instance.intruder }.to raise_error NoMethodError }
+
+        it { expect(instance.guest).to be == constants[:GUEST] }
+      end # context
     end # wrap_context
   end # describe
 

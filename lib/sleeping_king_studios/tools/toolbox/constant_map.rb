@@ -29,22 +29,30 @@ module SleepingKingStudios::Tools::Toolbox
     end # method each
 
     def freeze
-      super
-
       constants.each do |const_name|
+        reader_name = const_name.downcase
+
+        define_reader(const_name, reader_name) unless methods.include?(reader_name)
+
         object_tools.deep_freeze const_get(const_name)
       end # each
 
-      self
+      super
     end # method freeze
 
     private
+
+    def define_reader const_name, reader_name = nil
+      reader_name ||= const_name.downcase
+
+      define_singleton_method reader_name, ->() { const_get const_name }
+    end # method define_reader
 
     def method_missing symbol, *args, &block
       const_name = string_tools.underscore(symbol.to_s).upcase.intern
 
       if constants.include?(const_name)
-        define_singleton_method symbol, ->() { const_get const_name }
+        define_reader(const_name, symbol)
 
         return send(symbol, *args, &block)
       end # if
