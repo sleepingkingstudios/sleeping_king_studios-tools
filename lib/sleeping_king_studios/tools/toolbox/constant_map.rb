@@ -28,6 +28,14 @@ module SleepingKingStudios::Tools::Toolbox
       all.each(&block)
     end # method each
 
+    def freeze
+      super
+
+      constants.each do |const_name|
+        object_tools.deep_freeze const_get(const_name)
+      end # each
+    end # method freeze
+
     private
 
     def method_missing symbol, *args, &block
@@ -42,6 +50,10 @@ module SleepingKingStudios::Tools::Toolbox
       super
     end # method method_missing
 
+    def object_tools
+      ::SleepingKingStudios::Tools::ObjectTools
+    end # method object_tools
+
     def respond_to_missing? symbol, include_all = false
       const_name = string_tools.underscore(symbol.to_s).upcase.intern
 
@@ -49,7 +61,7 @@ module SleepingKingStudios::Tools::Toolbox
     end # method respond_to_missing?
 
     def string_tools
-      @tools ||= ::SleepingKingStudios::Tools::StringTools
+      ::SleepingKingStudios::Tools::StringTools
     end # method string_tools
   end # module
 end # module
