@@ -13,6 +13,11 @@
   tools.chain(str, :underscore, :pluralize)
   #=> shorthand for tools.pluralize(tools.underscore str)
 
+- StringTools#map_lines |
+
+  tools.map_lines("10\n20 GOTO 10") { |str| "  #{str}" }
+  #=> "  10\n  20 GOTO 10"
+
 - ObjectTools#pretty - returns user-friendly string representation. :multiline option? Delegates to specific toolset implementations.
 - RegexpTools#matching_string - generates a string that matches the regular expression. Does not support advanced Regexp features.
 - RegexpTools#nonmatching_strings - generates a set of strings that do not match the regular expression.
