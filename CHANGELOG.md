@@ -1,6 +1,6 @@
 # Changelog
 
-## Pre-release Versions
+## Current Release
 
 ### 0.5.0
 
@@ -23,7 +23,7 @@ Implement #immutable? and #mutable? for ObjectTools, ArrayTools, and HashTools, 
 
 Implement #deep_freeze for ObjectTools, ArrayTools, and HashTools which recursively freezes the object and any children (array items, hash keys, and hash values).
 
-## Current Release
+## Previous Releases
 
 ### 0.4.0
 
