@@ -553,19 +553,38 @@ Converts a mixed-case string expression to a lowercase, underscore separated str
 
 Common objects or patterns that are useful across projects but are larger than or do not fit the functional paradigm of the tools.* pattern.
 
+### ConstantMap
+
+    require 'sleeping_king_studios/tools/toolbox/constant_map'
+
+Provides an enumerable interface for defining a group of constants.
+
+    UserRoles = ConstantMap.new(
+      :GUEST => 'guest',
+      :USER  => 'user',
+      :ADMIN => 'admin'
+    ) # end constants
+
+    UserRoles::GUEST
+    #=> 'guest'
+
+    UserRoles.user
+    #=> 'user'
+
+    UserRoles.all
+    #=> { :GUEST => 'guest', :USER => 'user', :ADMIN => 'admin' }
+
 ### Delegator
 
-    require 'sleeping_king_studios/tools/delegator'
-
     require 'sleeping_king_studios/tools/toolbox/delegator'
+
+Module for extending classes with basic delegation.
 
     class MyClass
       extend SleepingKingStudios::Tools::Delegator
 
       delegate :my_method, :to => MyService
     end # class
-
-Module for extending classes with basic delegation.
 
 #### `::delegate`
 
