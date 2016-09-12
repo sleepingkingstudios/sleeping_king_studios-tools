@@ -1,12 +1,6 @@
 # Development Notes
 
-## Future Tasks
-
-- Remove 'extend self' from Tools modules.
-
-### Features
-
-#### Tools
+## 0.6.0
 
 - StringTools#chain |
 
@@ -18,6 +12,16 @@
   tools.map_lines("10\n20 GOTO 10") { |str| "  #{str}" }
   #=> "  10\n  20 GOTO 10"
 
+- IntegerTools#pluralize - have third (plural string) parameter be optional and defer to StringTools#pluralize.
+
+## Future Tasks
+
+- Remove 'extend self' from Tools modules.
+
+### Features
+
+#### Tools
+
 - ObjectTools#pretty - returns user-friendly string representation. :multiline option? Delegates to specific toolset implementations.
 - RegexpTools#matching_string - generates a string that matches the regular expression. Does not support advanced Regexp features.
 - RegexpTools#nonmatching_strings - generates a set of strings that do not match the regular expression.
@@ -27,22 +31,6 @@
 #### Toolkit
 
 - Configuration
-- ConstantEnumerator |
-
-  class MyClass
-    ROLES = ConstantEnumerator.new do
-      USER  = 'user'
-      ADMIN = 'admin'
-    end
-
-    MyClass::ROLES::USER # 'user'
-    MyClass::ROLES.admin # 'admin'
-    MyClass::ROLES.all { 'USER' => 'user', 'ADMIN' => 'admin' }
-  end
-- ImmutableConstantEnumerator
-  - Values cannot be added or removed after initial block
-  - Freezes individual values
-  - Equivalent to ConstantEnumerator.new do ... end.immutable!
 
 ### Maintenance
 

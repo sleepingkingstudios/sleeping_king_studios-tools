@@ -2,6 +2,12 @@
 
 ## Current Release
 
+### 0.6.0
+
+- Implement ConstantMap.
+
+## Current Release
+
 ### 0.5.0
 
 - Implement CoreTools#require_each.

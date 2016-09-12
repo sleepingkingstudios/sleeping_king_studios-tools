@@ -4,8 +4,12 @@ require 'sleeping_king_studios/tools/string_tools'
 require 'sleeping_king_studios/tools/toolbox'
 
 module SleepingKingStudios::Tools::Toolbox
+  # Provides an enumerable interface for defining a group of constants.
   module ConstantMap
     class << self
+      # Creates a new ConstantMap.
+      #
+      # @param constants [Hash] The constants to define.
       def new constants
         mod = Module.new
         mod.extend self
@@ -18,16 +22,29 @@ module SleepingKingStudios::Tools::Toolbox
       end # class method new
     end # eigenclass
 
+    # Returns a hash with the names and values of the defined constants.
+    #
+    # @return [Hash] The defined constants.
     def all
       constants.each.with_object({}) do |const_name, hsh|
         hsh[const_name] = const_get(const_name)
       end # each
     end # method all
 
+    # Iterates through the defined constants, yielding the name and value of
+    # each constant to the block.
+    #
+    # @yieldparam key [Symbol] The name of the symbol.
+    # @yieldparam value [Object] The value of the symbol.
     def each &block
       all.each(&block)
     end # method each
 
+    # Freezes the constant map and recursively freezes every constant value
+    # using ObjectTools#deep_freeze. Also pre-emptively defines any reader
+    # methods that are not already undefined.
+    #
+    # @see ObjectTools#deep_freeze
     def freeze
       constants.each do |const_name|
         reader_name = const_name.downcase
