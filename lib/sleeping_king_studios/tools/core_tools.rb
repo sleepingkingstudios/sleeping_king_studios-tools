@@ -34,6 +34,8 @@ module SleepingKingStudios::Tools
     end # method deprecate
 
     # Expands each file pattern and requires each file.
+    #
+    # @param file_patterns [Array] The files to require.
     def require_each *file_patterns
       file_patterns.each do |file_pattern|
         if file_pattern.include?('*')

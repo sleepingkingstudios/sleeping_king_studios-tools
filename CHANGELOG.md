@@ -1,6 +1,6 @@
 # Changelog
 
-## Current Release
+## Pre-release Versions
 
 ### 0.6.0
 
