@@ -623,8 +623,7 @@ Expects one or more method names and a delegation target, which can be an object
 
 #### `::wrap_delegate`
 
-Wraps a delegate object by automatically delegating each method that is defined on the delegate class from the instance to the delegate. The
-delegate can be specified with an object literal or with the name of an instance method or instance variable.
+Wraps a delegate object by automatically delegating each method that is defined on the delegate class from the instance to the delegate. The delegate can be specified with an object literal or with the name of an instance method or instance variable.
 
 Only methods that are defined at the time #wrap_delegate is called will be delegated, so make sure to call #wrap_delegate after loading any gems or libraries that extend your delegate class, such as ActiveSupport.
 
@@ -643,6 +642,52 @@ Only methods that are defined at the time #wrap_delegate is called will be deleg
     errors[:post].messages << "title can't be blank"
 
 Expects a delegation target and optionally a class or module (to determine which methods to delegate), as well as optional :except and :only arrays to limit which methods are delegated. The delegation target can be an object literal, or the name of an method or instance variable as a String or Symbol (in which case a class or module must be specified in :klass or an ArgumentError will be raised).
+
+### Mixin
+
+    require 'sleeping_king_studios/tools/toolbox/mixin'
+
+Implements module-based inheritance for both instance- and class-level methods, similar to the (in)famous ActiveSupport::Concern. When a Mixin is included into a class, the class will be extended with any methods defined in the special ClassMethods module, even if the Mixin is being included indirectly via one or more intermediary Mixins.
+
+    Widget = Struct.new(:widget_type)
+
+    module Widgets
+      extend SleepingKingStudios::Tools::Toolbox::Mixin
+
+      module ClassMethods
+        def widget_types
+          %w(gadget doohickey thingamabob)
+        end # class method widget_types
+      end # module
+
+      def widget? widget_type
+        self.class.widget_types.include?(widget_type)
+      end # method widget?
+    end # module
+
+    module WidgetBuilding
+      extend SleepingKingStudios::Tools::Toolbox::Mixin
+
+      include Widgets
+
+      def build_widget widget_type
+        raise ArgumentError, 'not a widget', caller unless widget?(widget_type)
+
+        Widget.new(widget_type)
+      end # method build_widget
+    end # module
+
+    class WidgetFactory
+      include WidgetBuilding
+    end # class
+
+    factory = WidgetFactory.new
+
+    factory.build_widget('gadget')
+    #=> Widget
+
+    WidgetFactory.widget_types
+    #=> ['gadget', 'doohickey', 'thingamabob']
 
 ### Semantic Version
 

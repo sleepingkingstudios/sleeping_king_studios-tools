@@ -4,7 +4,8 @@
 
 ### 0.6.0
 
-- Implement ConstantMap.
+- Implement Toolbox::ConstantMap.
+- Implement Toolbox::Mixin.
 
 ## Current Release
 
