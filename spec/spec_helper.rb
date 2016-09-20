@@ -4,6 +4,9 @@ require 'rspec'
 require 'rspec/sleeping_king_studios/all'
 require 'byebug'
 
+# Isolated namespace for defining spec-only or transient objects.
+module Spec; end
+
 # Require Factories, Custom Matchers, &c
 Dir[File.join File.dirname(__FILE__), *%w(support ** *.rb)].each { |f| require f }
 

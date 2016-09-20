@@ -2,6 +2,7 @@
 
 ## 0.6.0
 
+- Toolbelt::instance
 - StringTools#chain |
 
   tools.chain(str, :underscore, :pluralize)
