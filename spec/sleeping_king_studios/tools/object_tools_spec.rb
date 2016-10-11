@@ -491,6 +491,64 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     end # describe
   end # describe
 
+  describe '#dig' do
+    it { expect(instance).to respond_to(:dig).with(1).argument.and_unlimited_arguments }
+
+    it { expect(described_class).to respond_to(:dig).with(1).argument.and_unlimited_arguments }
+
+    describe 'with nil' do
+      let(:object) { nil }
+
+      it { expect(described_class.dig object).to be nil }
+
+      describe 'with a method that the object responds to' do
+        it { expect(described_class.dig object, :nil?).to be true }
+      end # describe
+
+      describe 'with a method that the object does not respond to' do
+        it { expect(described_class.dig object, :foo).to be nil }
+      end # describe
+
+      describe 'with many methods that the object does not respond to' do
+        it { expect(described_class.dig object, :foo, :bar, :baz).to be nil }
+      end # describe
+
+      describe 'with mixed methods that the object does and does not respond to' do
+        it { expect(described_class.dig object, :foo, :bar, :baz, :nil?).to be true }
+      end # describe
+    end # describe
+
+    describe 'with an object' do
+      let(:foo) { double('foo', :bar => bar) }
+      let(:bar) { double('bar', :baz => baz) }
+      let(:baz) { double('baz') }
+
+      let(:object) { double('object', :foo => foo) }
+
+      it { expect(described_class.dig object).to be object }
+
+      describe 'with a method that the object responds to' do
+        it { expect(described_class.dig object, :foo).to be foo }
+      end # describe
+
+      describe 'with a method that the object does not respond to' do
+        it { expect(described_class.dig object, :wibble).to be nil }
+      end # describe
+
+      describe 'with many methods that the object responds to' do
+        it { expect(described_class.dig object, :foo, :bar, :baz).to be baz }
+      end # describe
+
+      describe 'with many methods that the object does not respond to' do
+        it { expect(described_class.dig object, :foo, :wibble, :wobble).to be nil }
+      end # describe
+
+      describe 'with mixed methods that the object does and does not respond to' do
+        it { expect(described_class.dig object, :foo, :wibble, :wobble, :nil?).to be true }
+      end # describe
+    end # describe
+  end # describe
+
   describe '#eigenclass' do
     let(:object) { Object.new }
 

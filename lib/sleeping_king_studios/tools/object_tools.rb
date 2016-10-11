@@ -85,6 +85,22 @@ module SleepingKingStudios::Tools
       end # case
     end # method deep_freeze
 
+    # Accesses deeply nested attributes by calling the first named method on the
+    # given object, and each subsequent method on the result of the previous
+    # method call. If the object does not respond to the method name, nil is
+    # returned instead of calling the method.
+    #
+    # @param [Object] obj The object to dig.
+    # @param [Array] method_names The names of the methods to call.
+    #
+    # @return [Object] The result of the last method call, or nil if the last
+    #   object does not respond to the last method.
+    def dig object, *method_names
+      method_names.reduce(object) do |memo, method_name|
+        memo.respond_to?(method_name) ? memo.send(method_name) : nil
+      end # reduce
+    end # method object
+
     # Returns the object's eigenclass.
     #
     # @param [Object] object The object for which an eigenclass is required.

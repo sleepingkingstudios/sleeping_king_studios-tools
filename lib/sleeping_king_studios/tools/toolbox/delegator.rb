@@ -19,14 +19,14 @@ module SleepingKingStudios::Tools::Toolbox
     #
     # @example Delegate to an object
     #   class MyModule
-    #     extend SleepingKingStudios::Tools::Delegator
+    #     extend SleepingKingStudios::Tools::Toolbox::Delegator
     #
     #     delegate :my_method, :to => MyService
     #   end # class
     #
     # @example Delegate to a method
     #   class MyModule
-    #     extend SleepingKingStudios::Tools::Delegator
+    #     extend SleepingKingStudios::Tools::Toolbox::Delegator
     #
     #     def my_service
     #       MyService.new
@@ -37,7 +37,7 @@ module SleepingKingStudios::Tools::Toolbox
     #
     # @example Delegate to an instance variable
     #   class MyModule
-    #     extend SleepingKingStudios::Tools::Delegator
+    #     extend SleepingKingStudios::Tools::Toolbox::Delegator
     #
     #     def initialize
     #       @my_service = MyService.new
