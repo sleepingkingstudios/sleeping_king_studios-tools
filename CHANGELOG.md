@@ -4,6 +4,7 @@
 
 ### 0.6.0
 
+- Implement HashTools#convert_keys_to_strings and HashTools#convert_keys_to_symbols.
 - Implement ObjectTools#dig.
 - Implement Toolbox::ConstantMap.
 - Implement Toolbox::Mixin.
