@@ -17,6 +17,8 @@ module SleepingKingStudios::Tools
     #
     # @return [Hash] The copy of the hash.
     def deep_dup hsh
+      require_hash! hsh
+
       hsh.each.with_object(Hash.new) do |(key, value), copy|
         copy[ObjectTools.deep_dup key] = ObjectTools.deep_dup(value)
       end # each
@@ -27,6 +29,8 @@ module SleepingKingStudios::Tools
     #
     # @param [Hash] hsh The object to freeze.
     def deep_freeze hsh
+      require_hash! hsh
+
       hsh.freeze
 
       hsh.each do |key, value|
@@ -57,6 +61,8 @@ module SleepingKingStudios::Tools
     #
     # @return [Boolean] True if the hash is immutable, otherwise false.
     def immutable? hsh
+      require_hash! hsh
+
       return false unless hsh.frozen?
 
       hsh.each do |key, value|
@@ -76,5 +82,13 @@ module SleepingKingStudios::Tools
     def mutable? hsh
       !immutable?(hsh)
     end # method mutable?
+
+    private
+
+    def require_hash! value
+      return if hash?(value)
+
+      raise ArgumentError, 'argument must be a hash', caller[1..-1]
+    end # method require_array
   end # module
 end # module

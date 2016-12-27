@@ -16,6 +16,20 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
 
     it { expect(described_class).to respond_to(:deep_dup).with(1).argument }
 
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.deep_dup nil }.
+          to raise_error ArgumentError, /argument must be a hash/
+      end # it
+    end # describe
+
+    describe 'with an object' do
+      it 'should raise an error' do
+        expect { described_class.deep_dup Object.new }.
+          to raise_error ArgumentError, /argument must be a hash/
+      end # it
+    end # describe
+
     include_examples 'should create a deep copy of a hash'
   end # describe
 
@@ -23,6 +37,20 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
     it { expect(instance).to respond_to(:deep_freeze).with(1).argument }
 
     it { expect(described_class).to respond_to(:deep_freeze).with(1).argument }
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.deep_freeze nil }.
+          to raise_error ArgumentError, /argument must be a hash/
+      end # it
+    end # describe
+
+    describe 'with an object' do
+      it 'should raise an error' do
+        expect { described_class.deep_freeze Object.new }.
+          to raise_error ArgumentError, /argument must be a hash/
+      end # it
+    end # describe
 
     include_examples 'should perform a deep freeze of the hash'
   end # describe
@@ -77,6 +105,20 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
 
     it { expect(described_class).to respond_to(:immutable?).with(1).argument }
 
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.immutable? nil }.
+          to raise_error ArgumentError, /argument must be a hash/
+      end # it
+    end # describe
+
+    describe 'with an object' do
+      it 'should raise an error' do
+        expect { described_class.immutable? Object.new }.
+          to raise_error ArgumentError, /argument must be a hash/
+      end # it
+    end # describe
+
     include_examples 'should test if the hash is immutable'
   end # describe
 
@@ -86,6 +128,20 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
     it { expect(instance).to respond_to(:mutable?).with(1).argument }
 
     it { expect(described_class).to respond_to(:mutable?).with(1).argument }
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.mutable? nil }.
+          to raise_error ArgumentError, /argument must be a hash/
+      end # it
+    end # describe
+
+    describe 'with an object' do
+      it 'should raise an error' do
+        expect { described_class.mutable? Object.new }.
+          to raise_error ArgumentError, /argument must be a hash/
+      end # it
+    end # describe
 
     it 'should return the inverse of immutable' do
       expect(instance).to receive(:immutable?).with(hsh).and_return(false)

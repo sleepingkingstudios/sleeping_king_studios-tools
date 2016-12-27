@@ -2,6 +2,9 @@
 
 ## 0.6.0
 
+- HashTools::stringify_keys, ::symbolize_keys
+- ObjectTools::apply_with_arity
+- ObjectTools::method_arity
 - Toolbelt::instance
 - StringTools#chain |
 
@@ -14,6 +17,7 @@
   #=> "  10\n  20 GOTO 10"
 
 - IntegerTools#pluralize - have third (plural string) parameter be optional and defer to StringTools#pluralize.
+- Delegator#delegate, :prefix => prefix_name
 
 ## Future Tasks
 
