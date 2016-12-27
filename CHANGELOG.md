@@ -4,6 +4,7 @@
 
 ### 0.6.0
 
+- Implement ObjectTools#dig.
 - Implement Toolbox::ConstantMap.
 - Implement Toolbox::Mixin.
 

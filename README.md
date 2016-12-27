@@ -409,6 +409,13 @@ Performs a deep freeze of the object. If the object is an Array, freezes the arr
     data[:songs][0].name.frozen?
     #=> true
 
+#### `#dig`
+
+Accesses deeply nested attributes by calling the first named method on the given object, and each subsequent method on the result of the previous method call. If the object does not respond to the method name, nil is returned instead of calling the method.
+
+    ObjectTools.dig my_object, :first_method, :second_method, :third_method
+    #=> my_object.first_method.second_method.third_method
+
 #### `#eigenclass`, `#metaclass`
 
 Returns the object's eigenclass.
@@ -581,7 +588,7 @@ Provides an enumerable interface for defining a group of constants.
 Module for extending classes with basic delegation.
 
     class MyClass
-      extend SleepingKingStudios::Tools::Delegator
+      extend SleepingKingStudios::Tools::Toolbox::Delegator
 
       delegate :my_method, :to => MyService
     end # class
@@ -592,14 +599,14 @@ Defines a wrapper method to delegate implementation of the specified method or m
 
     # Delegate to an object
     class MyModule
-      extend SleepingKingStudios::Tools::Delegator
+      extend SleepingKingStudios::Tools::Toolbox::Delegator
 
       delegate :my_method, :to => MyService
     end class
 
     # Delegate to a method
     class MyModule
-      extend SleepingKingStudios::Tools::Delegator
+      extend SleepingKingStudios::Tools::Toolbox::Delegator
 
       def my_service
         MyService.new
@@ -610,7 +617,7 @@ Defines a wrapper method to delegate implementation of the specified method or m
 
     # Delegate to an instance variable
     class MyModule
-      extend SleepingKingStudios::Tools::Delegator
+      extend SleepingKingStudios::Tools::Toolbox::Delegator
 
       def initialize
         @my_service = MyService.new
@@ -629,7 +636,7 @@ Only methods that are defined at the time #wrap_delegate is called will be deleg
 
     # Create a class that wraps a Hash
     class Errors
-      extend SleepingKingStudios::Tools::Delegator
+      extend SleepingKingStudios::Tools::Toolbox::Delegator
 
       wrap_delegate Hash.new { |hsh, key| hsh[key] = Errors.new }, :klass => Hash
 
