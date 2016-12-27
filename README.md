@@ -201,6 +201,38 @@ Takes a file pattern or a list of file names and requires each file.
 
 Tools for working with array-like enumerable objects.
 
+#### `#convert_keys_to_strings`
+
+Creates a copy of the hash with the keys converted to strings, including keys of nested hashes and hashes inside nested arrays.
+
+    hsh = { :one => 1, :two => 2, :three => 3 }
+    cpy = HashTools.convert_keys_to_strings(hsh)
+    #=> { 'one' => 1, 'two' => 2, 'three' => 3 }
+    hsh
+    #=> { :one => 1, :two => 2, :three => 3 }
+
+    hsh = { :odd => { :one => 1, :three => 3 }, :even => { :two => 2, :four => 4 } }
+    cpy = HashTools.convert_keys_to_strings(hsh)
+    #=> { 'odd' => { 'one' => 1, 'three' => 3 }, 'even' => { 'two' => 2, 'four' => 4 } }
+    hsh
+    #=> { :odd => { :one => 1, :three => 3 }, :even => { :two => 2, :four => 4 } }
+
+#### `#convert_keys_to_symbols`
+
+Creates a copy of the hash with the keys converted to symbols, including keys of nested hashes and hashes inside nested arrays.
+
+    hsh = { 'one' => 1, 'two' => 2, 'three' => 3 }
+    cpy = HashTools.convert_keys_to_strings(hsh)
+    #=> { :one => 1, :two => 2, :three => 3 }
+    hsh
+    #=> { 'one' => 1, 'two' => 2, 'three' => 3 }
+
+    hsh = { 'odd' => { 'one' => 1, 'three' => 3 }, 'even' => { 'two' => 2, 'four' => 4 } }
+    cpy = HashTools.convert_keys_to_strings(hsh)
+    #=> { :odd => { :one => 1, :three => 3 }, :even => { :two => 2, :four => 4 } }
+    hsh
+    #=> { 'odd' => { 'one' => 1, 'three' => 3 }, 'even' => { 'two' => 2, 'four' => 4 } }
+
 #### `#deep_dup`
 
 Creates a deep copy of the object by returning a new Hash with deep copies of each key and value. See also ObjectTools#deep_dup[#label-Object+Tools].
@@ -257,6 +289,14 @@ Returns true if the hash is immutable, i.e. if the hash is frozen and each hash 
 #### `#mutable?`
 
 Returns true if the hash is mutable (see `#immutable?`, above).
+
+#### `#stringify_keys`
+
+See HashTools#convert_keys_to_strings[#label-Hash+Tools]
+
+#### `#symbolize_keys`
+
+See HashTools#convert_keys_to_symbols[#label-Hash+Tools]
 
 ### Integer Tools
 
