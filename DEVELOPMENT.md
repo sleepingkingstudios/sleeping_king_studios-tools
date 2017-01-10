@@ -9,6 +9,7 @@
   #=> shorthand for tools.pluralize(tools.underscore str)
 
 - IntegerTools#pluralize - have third (plural string) parameter be optional and defer to StringTools#pluralize.
+- Ruby 2.4.0 support.
 
 ## Future Tasks
 
