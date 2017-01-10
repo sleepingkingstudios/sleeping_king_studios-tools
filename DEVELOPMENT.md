@@ -2,28 +2,28 @@
 
 ## 0.6.0
 
-- HashTools::stringify_keys, ::symbolize_keys
-- ObjectTools::apply_with_arity
-- ObjectTools::method_arity
 - Toolbelt::instance
 - StringTools#chain |
 
   tools.chain(str, :underscore, :pluralize)
   #=> shorthand for tools.pluralize(tools.underscore str)
 
-- StringTools#map_lines |
-
-  tools.map_lines("10\n20 GOTO 10") { |str| "  #{str}" }
-  #=> "  10\n  20 GOTO 10"
-
 - IntegerTools#pluralize - have third (plural string) parameter be optional and defer to StringTools#pluralize.
-- Delegator#delegate, :prefix => prefix_name
 
 ## Future Tasks
 
 - Remove 'extend self' from Tools modules.
 
 ### Features
+
+- HashTools::slice, ::bisect_keys
+- ObjectTools::apply_with_arity
+- ObjectTools::method_arity
+- StringTools#map_lines |
+
+  tools.map_lines("10\n20 GOTO 10") { |str| "  #{str}" }
+  #=> "  10\n  20 GOTO 10"
+- Delegator#delegate, :prefix => prefix_name
 
 #### Tools
 

@@ -45,6 +45,14 @@ module SleepingKingStudios::Tools
       plural_inflector.define_uncountable_word word
     end # method define_uncountable_word
 
+    # Determines whether or not the given word is in plural form. If calling
+    # #pluralize(word) is equal to word, the word is considered plural.
+    #
+    # @return [Boolean] True if the word is in plural form, otherwise false.
+    def plural? word
+      word == pluralize(word)
+    end # method plural?
+
     # @overload pluralize(str)
     #   Takes a word in singular form and returns the plural form, based on the
     #   defined rules and known irregular/uncountable words.
@@ -83,6 +91,14 @@ module SleepingKingStudios::Tools
 
       plural_inflector.pluralize args.first
     end # method pluralize
+
+    # Determines whether or not the given word is in singular form. If calling
+    # #singularize(word) is equal to word, the word is considered singular.
+    #
+    # @return [Boolean] True if the word is in singular form, otherwise false.
+    def singular? word
+      word == singularize(word)
+    end # method singular?
 
     # (see PluralInflector#singularize)
     def singularize str

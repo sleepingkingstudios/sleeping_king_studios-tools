@@ -355,7 +355,7 @@ Returns true if the object is an Integer.
 
 Returns the singular or the plural value, depending on the provided item count.
 
-    StringTools.pluralize 4, 'light', 'lights'
+    IntegerTools.pluralize 4, 'light', 'lights'
     #=> 'lights'
 
 #### `#romanize`
@@ -532,6 +532,16 @@ Converts a lowercase, underscore separated string to a mixed-case string express
     StringTools#camelize 'muspelheimr_and_niflheimr'
     #=> 'MuspelheimrAndNiflheimr'
 
+#### `#plural?`
+
+Returns true if the word is in plural form, and returns false otherwise. A word is in plural form if and only if calling `#pluralize` (see below) on the word returns the word without modification.
+
+    StringTools.plural? 'light'
+    #=> false
+
+    StringTools.plural? 'lights'
+    #=> true
+
 #### `#pluralize`
 
 Takes a word in singular form and returns the plural form, based on the defined rules and known irregular/uncountable words.
@@ -559,6 +569,16 @@ Additional rules can be defined using the following methods:
     StringTools.define_uncountable_word('series')
     StringTools.pluralize 'series'
     # => 'series'
+
+#### `#singular?`
+
+Returns true if the word is in singular form, and returns false otherwise. A word is in singular form if and only if calling `#singularize` (see below) on the word returns the word without modification.
+
+    StringTools.singular? 'light'
+    #=> true
+
+    StringTools.singular? 'lights'
+    #=> false
 
 #### `#singularize`
 
