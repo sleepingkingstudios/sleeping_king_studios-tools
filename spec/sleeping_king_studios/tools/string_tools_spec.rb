@@ -119,6 +119,30 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     end # it
   end # describe
 
+  describe '#plural?' do
+    it { expect(instance).to respond_to(:plural?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:plural?).with(1).argument }
+
+    it { expect(described_class.plural? 'thing').to be == false }
+
+    it { expect(described_class.plural? 'things').to be == true }
+
+    it 'should delegate to an inflector' do
+      inflector = double('inflector', :pluralize => nil)
+
+      allow(instance).to receive(:plural_inflector).and_return(inflector)
+
+      expect(inflector).to receive(:pluralize).and_return('words')
+
+      expect(instance.plural? 'word').to be false
+
+      expect(inflector).to receive(:pluralize).and_return('words')
+
+      expect(instance.plural? 'words').to be true
+    end # it
+  end # describe
+
   describe '#pluralize' do
     it { expect(instance).to respond_to(:pluralize).with(1).argument }
 
@@ -174,6 +198,30 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
         it { expect(described_class.pluralize 3, single, plural).to be == plural }
       end # describe
     end # describe
+  end # describe
+
+  describe '#singular?' do
+    it { expect(instance).to respond_to(:singular?).with(1).argument }
+
+    it { expect(described_class).to respond_to(:singular?).with(1).argument }
+
+    it { expect(described_class.singular? 'thing').to be == true }
+
+    it { expect(described_class.singular? 'things').to be == false }
+
+    it 'should delegate to an inflector' do
+      inflector = double('inflector', :singularize => nil)
+
+      allow(instance).to receive(:plural_inflector).and_return(inflector)
+
+      expect(inflector).to receive(:singularize).and_return('word')
+
+      expect(instance.singular? 'word').to be true
+
+      expect(inflector).to receive(:singularize).and_return('word')
+
+      expect(instance.singular? 'words').to be false
+    end # it
   end # describe
 
   describe '#singularize' do
