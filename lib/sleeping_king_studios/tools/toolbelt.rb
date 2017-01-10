@@ -5,6 +5,10 @@ require 'sleeping_king_studios/tools/all'
 module SleepingKingStudios::Tools
   # Helper object for quick access to all available tools.
   class Toolbelt < BasicObject
+    def self.instance
+      @instance ||= new
+    end # class method instance
+
     namespace = ::SleepingKingStudios::Tools
 
     %w(array core hash integer object string).each do |name|

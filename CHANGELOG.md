@@ -7,6 +7,7 @@
 - Implement HashTools#convert_keys_to_strings and #convert_keys_to_symbols.
 - Implement ObjectTools#dig.
 - Implement StringTools#singular? and #plural?.
+- Implement Toolbelt::instance.
 - Implement Toolbox::ConstantMap.
 - Implement Toolbox::Mixin.
 
