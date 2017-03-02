@@ -1,10 +1,5 @@
 # Development Notes
 
-## 0.6.0
-
-- Toolbelt#inspect, #to_s
-- Ruby 2.4.0 support.
-
 ## 0.7.0
 
 - StringTools - support symbolic arguments

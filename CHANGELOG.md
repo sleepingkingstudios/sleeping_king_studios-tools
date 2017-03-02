@@ -1,6 +1,6 @@
 # Changelog
 
-## Pre-release Versions
+## Current Release
 
 ### 0.6.0
 
@@ -11,8 +11,6 @@
 - Implement Toolbox::ConstantMap.
 - Implement Toolbox::Mixin.
 - Add support for Ruby 2.4.0.
-
-## Current Release
 
 ### 0.5.0
 
