@@ -29,4 +29,12 @@ RSpec.describe SleepingKingStudios::Tools::Toolbelt do
       it { expect(instance.__send__ name).to be tools }
     end # describe
   end # each
+
+  describe '#inspect' do
+    it { expect(instance.inspect).to be == "#<#{described_class.name}>" }
+  end # describe
+
+  describe '#to_s' do
+    it { expect(instance.to_s).to be == "#<#{described_class.name}>" }
+  end # describe
 end # describe

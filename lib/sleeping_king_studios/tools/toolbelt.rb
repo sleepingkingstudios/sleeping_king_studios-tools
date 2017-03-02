@@ -20,5 +20,15 @@ module SleepingKingStudios::Tools
         end # begin-rescue
       end # each
     end # each
+
+    def inspect
+      @to_s ||=
+        begin
+          object_class = class << self; self; end.superclass
+
+          "#<#{object_class.name}>"
+        end # string
+    end # method inspect
+    alias_method :to_s, :inspect
   end # module
 end # module

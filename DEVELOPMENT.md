@@ -2,14 +2,18 @@
 
 ## 0.6.0
 
-- Toolbelt::instance
+- Toolbelt#inspect, #to_s
+- Ruby 2.4.0 support.
+
+## 0.7.0
+
+- StringTools - support symbolic arguments
 - StringTools#chain |
 
   tools.chain(str, :underscore, :pluralize)
   #=> shorthand for tools.pluralize(tools.underscore str)
 
 - IntegerTools#pluralize - have third (plural string) parameter be optional and defer to StringTools#pluralize.
-- Ruby 2.4.0 support.
 
 ## Future Tasks
 
