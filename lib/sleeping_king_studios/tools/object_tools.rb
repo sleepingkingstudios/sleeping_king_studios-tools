@@ -20,14 +20,8 @@ module SleepingKingStudios::Tools
     #
     # @return The result of calling the proc or lambda with the given
     #   receiver and any additional arguments or block.
-    def apply base, proc, *args, **kwargs, &block
-      unless block_given?
-        if kwargs.empty?
-          return base.instance_exec *args, &proc
-        else
-          return base.instance_exec *args, **kwargs, &proc
-        end # if-else
-      end # unless
+    def apply base, proc, *args, &block
+      return base.instance_exec *args, &proc unless block_given?
 
       temporary_method_name = :__sleeping_king_studios_tools_object_tools_temporary_method_for_applying_proc__
 
@@ -35,11 +29,7 @@ module SleepingKingStudios::Tools
       metaclass.send :define_method, temporary_method_name, &proc
 
       begin
-        if kwargs.empty?
-          base.send temporary_method_name, *args, &block
-        else
-          base.send temporary_method_name, *args, **kwargs, &block
-        end # if-else
+        base.send temporary_method_name, *args, &block
       ensure
         metaclass.send :remove_method, temporary_method_name if temporary_method_name && defined?(temporary_method_name)
       end
@@ -55,7 +45,7 @@ module SleepingKingStudios::Tools
     # @return The copy of the object.
     def deep_dup obj
       case obj
-      when FalseClass, Fixnum, Float, NilClass, Symbol, TrueClass
+      when FalseClass, Integer, Float, NilClass, Symbol, TrueClass
         obj
       when ->(_) { ArrayTools.array?(obj) }
         ArrayTools.deep_dup obj
@@ -74,7 +64,7 @@ module SleepingKingStudios::Tools
     # @param [Object] obj The object to freeze.
     def deep_freeze obj
       case obj
-      when FalseClass, Fixnum, Float, NilClass, Symbol, TrueClass
+      when FalseClass, Integer, Float, NilClass, Symbol, TrueClass
         # Object is inherently immutable; do nothing here.
       when ->(_) { ArrayTools.array?(obj) }
         ArrayTools.deep_freeze(obj)

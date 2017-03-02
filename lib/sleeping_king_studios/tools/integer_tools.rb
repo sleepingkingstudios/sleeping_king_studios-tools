@@ -3,7 +3,7 @@
 require 'sleeping_king_studios/tools'
 
 module SleepingKingStudios::Tools
-  # Tools for working with integers and fixnums.
+  # Tools for working with integers.
   module IntegerTools
     extend self
 
