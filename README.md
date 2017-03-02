@@ -300,7 +300,7 @@ See HashTools#convert_keys_to_symbols[#label-Hash+Tools]
 
 ### Integer Tools
 
-Tools for working with integers and fixnums.
+Tools for working with integers.
 
 #### `#count_digits`
 

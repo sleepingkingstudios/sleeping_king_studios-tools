@@ -7,9 +7,10 @@
 - Implement HashTools#convert_keys_to_strings and #convert_keys_to_symbols.
 - Implement ObjectTools#dig.
 - Implement StringTools#singular? and #plural?.
-- Implement Toolbelt::instance.
+- Implement Toolbelt::instance, #inspect, #to_s.
 - Implement Toolbox::ConstantMap.
 - Implement Toolbox::Mixin.
+- Add support for Ruby 2.4.0.
 
 ## Current Release
 

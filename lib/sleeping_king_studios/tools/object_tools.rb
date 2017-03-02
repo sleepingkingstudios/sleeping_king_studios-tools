@@ -45,7 +45,7 @@ module SleepingKingStudios::Tools
     # @return The copy of the object.
     def deep_dup obj
       case obj
-      when FalseClass, Fixnum, Float, NilClass, Symbol, TrueClass
+      when FalseClass, Integer, Float, NilClass, Symbol, TrueClass
         obj
       when ->(_) { ArrayTools.array?(obj) }
         ArrayTools.deep_dup obj
@@ -64,7 +64,7 @@ module SleepingKingStudios::Tools
     # @param [Object] obj The object to freeze.
     def deep_freeze obj
       case obj
-      when FalseClass, Fixnum, Float, NilClass, Symbol, TrueClass
+      when FalseClass, Integer, Float, NilClass, Symbol, TrueClass
         # Object is inherently immutable; do nothing here.
       when ->(_) { ArrayTools.array?(obj) }
         ArrayTools.deep_freeze(obj)
