@@ -20,14 +20,8 @@ module SleepingKingStudios::Tools
     #
     # @return The result of calling the proc or lambda with the given
     #   receiver and any additional arguments or block.
-    def apply base, proc, *args, **kwargs, &block
-      unless block_given?
-        if kwargs.empty?
-          return base.instance_exec *args, &proc
-        else
-          return base.instance_exec *args, **kwargs, &proc
-        end # if-else
-      end # unless
+    def apply base, proc, *args, &block
+      return base.instance_exec *args, &proc unless block_given?
 
       temporary_method_name = :__sleeping_king_studios_tools_object_tools_temporary_method_for_applying_proc__
 
@@ -35,11 +29,7 @@ module SleepingKingStudios::Tools
       metaclass.send :define_method, temporary_method_name, &proc
 
       begin
-        if kwargs.empty?
-          base.send temporary_method_name, *args, &block
-        else
-          base.send temporary_method_name, *args, **kwargs, &block
-        end # if-else
+        base.send temporary_method_name, *args, &block
       ensure
         metaclass.send :remove_method, temporary_method_name if temporary_method_name && defined?(temporary_method_name)
       end
