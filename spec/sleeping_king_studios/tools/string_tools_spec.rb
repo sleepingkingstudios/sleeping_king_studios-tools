@@ -53,6 +53,14 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     describe 'with a string with hyphens' do
       it { expect(described_class.camelize 'muspelheimr-and-niflheimr').to be == 'MuspelheimrAndNiflheimr' }
     end # describe
+
+    describe 'with an empty symbol' do
+      it { expect(described_class.camelize :'').to be == '' }
+    end # describe
+
+    describe 'with a lowercase symbol' do
+      it { expect(described_class.camelize :valhalla).to be == 'Valhalla' }
+    end # describe
   end # describe
 
   describe '#define_irregular_word' do
@@ -128,19 +136,35 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
     it { expect(described_class.plural? 'things').to be == true }
 
-    it 'should delegate to an inflector' do
-      inflector = double('inflector', :pluralize => nil)
+      it 'should delegate to an inflector' do
+        inflector = double('inflector', :pluralize => nil)
 
-      allow(instance).to receive(:plural_inflector).and_return(inflector)
+        allow(instance).to receive(:plural_inflector).and_return(inflector)
 
-      expect(inflector).to receive(:pluralize).and_return('words')
+        expect(inflector).to receive(:pluralize).and_return('words')
 
-      expect(instance.plural? 'word').to be false
+        expect(instance.plural? 'word').to be false
 
-      expect(inflector).to receive(:pluralize).and_return('words')
+        expect(inflector).to receive(:pluralize).and_return('words')
 
-      expect(instance.plural? 'words').to be true
-    end # it
+        expect(instance.plural? 'words').to be true
+      end # it
+
+    describe 'with a symbol' do
+      it 'should delegate to an inflector' do
+        inflector = double('inflector', :pluralize => nil)
+
+        allow(instance).to receive(:plural_inflector).and_return(inflector)
+
+        expect(inflector).to receive(:pluralize).and_return('words')
+
+        expect(instance.plural? :word).to be false
+
+        expect(inflector).to receive(:pluralize).and_return('words')
+
+        expect(instance.plural? :words).to be true
+      end # it
+    end # describe
   end # describe
 
   describe '#pluralize' do
@@ -163,6 +187,18 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     describe 'with nil' do
       it 'should raise an error' do
         expect { described_class.pluralize nil }.to raise_error ArgumentError, /argument must be a string/
+      end # it
+    end # describe
+
+    describe 'with a symbol' do
+      it 'should delegate to an inflector' do
+        inflector = double('inflector', :pluralize => nil)
+
+        allow(instance).to receive(:plural_inflector).and_return(inflector)
+
+        expect(inflector).to receive(:pluralize).and_return('words')
+
+        expect(instance.pluralize :word).to be == 'words'
       end # it
     end # describe
 
@@ -222,6 +258,22 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
       expect(instance.singular? 'words').to be false
     end # it
+
+    describe 'with a symbol' do
+      it 'should delegate to an inflector' do
+        inflector = double('inflector', :singularize => nil)
+
+        allow(instance).to receive(:plural_inflector).and_return(inflector)
+
+        expect(inflector).to receive(:singularize).and_return('word')
+
+        expect(instance.singular? :word).to be true
+
+        expect(inflector).to receive(:singularize).and_return('word')
+
+        expect(instance.singular? :words).to be false
+      end # it
+    end # describe
   end # describe
 
   describe '#singularize' do
@@ -244,6 +296,18 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     describe 'with nil' do
       it 'should raise an error' do
         expect { described_class.singularize nil }.to raise_error ArgumentError, /argument must be a string/
+      end # it
+    end # describe
+
+    describe 'with a symbol' do
+      it 'should delegate to an inflector' do
+        inflector = double('inflector', :singularize => nil)
+
+        allow(instance).to receive(:plural_inflector).and_return(inflector)
+
+        expect(inflector).to receive(:singularize).and_return('word')
+
+        expect(instance.singularize :words).to be == 'word'
       end # it
     end # describe
   end # describe
@@ -331,6 +395,14 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
     describe 'with a string with hyphens' do
       it { expect(described_class.underscore 'Muspelheimr-and-Niflheimr').to be == 'muspelheimr_and_niflheimr' }
+    end # describe
+
+    describe 'with an empty symbol' do
+      it { expect(described_class.underscore :'').to be == '' }
+    end # describe
+
+    describe 'with a capitalized symbol' do
+      it { expect(described_class.underscore :Bifrost).to be == 'bifrost' }
     end # describe
   end # describe
 end # describe

@@ -18,7 +18,7 @@ module SleepingKingStudios::Tools
     #
     # @see ActiveSupport::Inflector#camelize.
     def camelize str
-      require_string! str
+      str = require_string! str
 
       str = str.dup
       str.gsub!(/(\b|[_-])([a-z])/) { |match| $2.upcase }
@@ -50,6 +50,8 @@ module SleepingKingStudios::Tools
     #
     # @return [Boolean] True if the word is in plural form, otherwise false.
     def plural? word
+      word = require_string!(word)
+
       word == pluralize(word)
     end # method plural?
 
@@ -87,9 +89,9 @@ module SleepingKingStudios::Tools
         return IntegerTools.pluralize(*args)
       end # if
 
-      require_string! args.first
+      str = require_string! args.first
 
-      plural_inflector.pluralize args.first
+      plural_inflector.pluralize str
     end # method pluralize
 
     # Determines whether or not the given word is in singular form. If calling
@@ -97,6 +99,8 @@ module SleepingKingStudios::Tools
     #
     # @return [Boolean] True if the word is in singular form, otherwise false.
     def singular? word
+      word = require_string!(word)
+
       word == singularize(word)
     end # method singular?
 
@@ -125,7 +129,7 @@ module SleepingKingStudios::Tools
     #
     # @see ActiveSupport::Inflector#underscore.
     def underscore str
-      require_string! str
+      str = require_string! str
 
       str = str.dup
       str.gsub!(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2')
@@ -142,7 +146,9 @@ module SleepingKingStudios::Tools
     end # method plural_inflector
 
     def require_string! value
-      return if string?(value)
+      return value if string?(value)
+
+      return value.to_s if value.is_a?(Symbol)
 
       raise ArgumentError, 'argument must be a string', caller[1..-1]
     end # method require_array
