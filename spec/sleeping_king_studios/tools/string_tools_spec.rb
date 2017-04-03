@@ -193,6 +193,71 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     end # it
   end # describe
 
+  describe '#indent' do
+    it { expect(instance).to respond_to(:indent).with(1..2).arguments }
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.indent nil }.to raise_error ArgumentError, /argument must be a string/
+      end # it
+    end # describe
+
+    describe 'with an empty string' do
+      it { expect(instance.indent '').to be == '' }
+    end # describe
+
+    describe 'with a single-line string' do
+      let(:string)   { 'Greetings, programs!' }
+      let(:expected) { "  #{string}" }
+
+      it { expect(instance.indent string).to be == expected }
+
+      describe 'with an indent count' do
+        let(:expected) { "    #{string}" }
+
+        it { expect(instance.indent string, 4).to be == expected }
+      end # describe
+    end # describe
+
+    describe 'with a single-line string with trailing newline' do
+      let(:string)   { "Greetings, programs!\n" }
+      let(:expected) { "  #{string}" }
+
+      it { expect(instance.indent string).to be == expected }
+
+      describe 'with an indent count' do
+        let(:expected) { "    #{string}" }
+
+        it { expect(instance.indent string, 4).to be == expected }
+      end # describe
+    end # describe
+
+    describe 'with a multi-line string' do
+      let(:string) do
+        "The Fellowship of the Ring\n"\
+        "The Two Towers\n"\
+        'The Return of the King'
+      end # let
+      let(:expected) do
+        "  The Fellowship of the Ring\n"\
+        "  The Two Towers\n"\
+        '  The Return of the King'
+      end # let
+
+      it { expect(instance.indent string).to be == expected }
+
+      describe 'with an indent count' do
+        let(:expected) do
+          "    The Fellowship of the Ring\n"\
+          "    The Two Towers\n"\
+          '    The Return of the King'
+        end # let
+
+        it { expect(instance.indent string, 4).to be == expected }
+      end # describe
+    end # describe
+  end # describe
+
   describe '#map_lines' do
     it { expect(instance).to respond_to(:map_lines).with(1).argument }
 

@@ -58,6 +58,20 @@ module SleepingKingStudios::Tools
       plural_inflector.define_uncountable_word word
     end # method define_uncountable_word
 
+    # Adds the specified number of spaces to the start of each line of the
+    # string. Defaults to 2 spaces.
+    #
+    # @param str [String] The string to indent.
+    # @param count [Integer] The number of spaces to add.
+    #
+    # @return [String] The indented string.
+    def indent str, count = 2
+      str = require_string! str
+      pre = " " * count
+
+      map_lines(str) { |line| "#{pre}#{line}" }
+    end # method indent
+
     # Yields each line of the string to the provided block and combines the
     # results into a new multiline string.
     #

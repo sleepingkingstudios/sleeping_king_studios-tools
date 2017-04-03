@@ -2,11 +2,6 @@
 
 ## 0.7.0
 
-- StringTools#map_lines |
-
-  tools.map_lines("10\n20 GOTO 10") { |str| "  #{str}" }
-  #=> "  10\n  20 GOTO 10"
-
 - IntegerTools#pluralize - have third (plural string) parameter be optional and defer to StringTools#pluralize.
 
 - Toolbelt should be autoloaded via Tools.
