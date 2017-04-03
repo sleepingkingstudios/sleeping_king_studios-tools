@@ -51,7 +51,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply base, proc
         end # method perform_action
 
-        if RUBY_VERSION < '2.4.0'
+        if RUBY_VERSION != '2.4.0'
           it 'should raise an error' do
             expect { perform_action }.to raise_error ArgumentError, /wrong number of arguments/
           end # it
@@ -91,7 +91,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply base, proc
         end # method perform_action
 
-        if RUBY_VERSION < '2.4.0'
+        if RUBY_VERSION != '2.4.0'
           it 'should raise an error' do
             expect { perform_action }.to raise_error ArgumentError, /wrong number of arguments/
           end # it
@@ -218,7 +218,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply base, proc
         end # method perform_action
 
-        if RUBY_VERSION < '2.4.0'
+        if RUBY_VERSION != '2.4.0'
           it 'should raise an error' do
             expect { perform_action }.to raise_error ArgumentError, /wrong number of arguments/
           end # it
