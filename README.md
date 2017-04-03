@@ -16,7 +16,7 @@ Hi, I'm Rob Smith, a Ruby Engineer and the developer of this library. I use thes
 
 The tools can be accessed in a convenient form using the Toolbelt class.
 
-    require 'sleeping_king_studios/tools/toolbelt'
+    require 'sleeping_king_studios/tools'
 
     tools = ::SleepingKingStudios::Tools::Toolbelt.instance
 

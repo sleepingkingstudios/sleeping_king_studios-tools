@@ -4,10 +4,16 @@
 
 ### 0.7.0
 
+#### Tools
+
 - Support symbol arguments to StringTools methods.
 - Implement StringTools#chain.
 - Implement StringTools#indent.
 - Implement StringTools#map_lines.
+
+#### Misc.
+
+- SleepingKingStudios::Tools::Toolbelt is now autoloaded from SleepingKingStudios::Tools.
 
 ## Current Release
 
