@@ -540,6 +540,42 @@ Performs multiple string tools operations in sequence, starting with the given s
     StringTools#chain 'ArchivedPeriodical', :underscore, :pluralize
     # => 'archived_periodicals'
 
+Adds the specified number of spaces to the start of each line of the string. Defaults to 2 spaces.
+
+    string = 'The Hobbit'
+    StringTools.indent(string)
+    #=> '  The Hobbit'
+
+    titles = [
+      "The Fellowship of the Ring",
+      "The Two Towers",
+      "The Return of the King"
+    ] # end titles
+    string = titles.join "\n"
+    StringTools.indent(string, 4)
+    #=> "    The Fellowship of the Ring\n"\
+        "    The Two Towers\n"\
+        "    The Return of the King"
+
+#### `#map_lines`
+
+Yields each line of the string to the provided block and combines the results into a new multiline string.
+
+    string = 'The Hobbit'
+    StringTools.map_lines(string) { |line| "  #{line}" }
+    #=> '- The Hobbit'
+
+    titles = [
+      "The Fellowship of the Ring",
+      "The Two Towers",
+      "The Return of the King"
+    ] # end titles
+    string = titles.join "\n"
+    StringTools.map_lines(string) { |line, index| "#{index}. #{line}" }
+    #=> "0. The Fellowship of the Ring\n"\
+        "1. The Two Towers\n"\
+        "2. The Return of the King"
+
 #### `#plural?`
 
 Returns true if the word is in plural form, and returns false otherwise. A word is in plural form if and only if calling `#pluralize` (see below) on the word returns the word without modification.

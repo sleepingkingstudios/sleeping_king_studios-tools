@@ -6,6 +6,8 @@
 
 - Support symbol arguments to StringTools methods.
 - Implement StringTools#chain.
+- Implement StringTools#indent.
+- Implement StringTools#map_lines.
 
 ## Current Release
 
