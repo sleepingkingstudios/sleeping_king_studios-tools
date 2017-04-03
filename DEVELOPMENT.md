@@ -2,11 +2,14 @@
 
 ## 0.7.0
 
-- StringTools - support symbolic arguments
 - StringTools#chain |
 
   tools.chain(str, :underscore, :pluralize)
   #=> shorthand for tools.pluralize(tools.underscore str)
+- StringTools#map_lines |
+
+  tools.map_lines("10\n20 GOTO 10") { |str| "  #{str}" }
+  #=> "  10\n  20 GOTO 10"
 
 - IntegerTools#pluralize - have third (plural string) parameter be optional and defer to StringTools#pluralize.
 
@@ -21,10 +24,6 @@
 - HashTools::slice, ::bisect_keys
 - ObjectTools::apply_with_arity
 - ObjectTools::method_arity
-- StringTools#map_lines |
-
-  tools.map_lines("10\n20 GOTO 10") { |str| "  #{str}" }
-  #=> "  10\n  20 GOTO 10"
 - Delegator#delegate, :prefix => prefix_name
 
 #### Tools
