@@ -2,7 +2,6 @@
 
 ## 0.7.0
 
-- StringTools - support symbolic arguments
 - StringTools#chain |
 
   tools.chain(str, :underscore, :pluralize)

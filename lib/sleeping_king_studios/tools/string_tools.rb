@@ -25,6 +25,19 @@ module SleepingKingStudios::Tools
       str
     end # method camelize
 
+    # Performs multiple string tools operations in sequence, starting with the
+    # given string and passing the result of each operation to the next.
+    #
+    # @param str [String] The string to process.
+    # @param commands [Array<String, Symbol>] The string operations to apply.
+    #
+    # @return [String] The processed string.
+    def chain str, *commands
+      str = require_string! str
+
+      commands.reduce(str) { |memo, command| send(command, memo) }
+    end # method chain
+
     # (see PluralInflector#define_irregular_word)
     def define_irregular_word singular, plural
       plural_inflector.define_irregular_word singular, plural

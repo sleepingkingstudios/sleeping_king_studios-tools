@@ -1,5 +1,12 @@
 # Changelog
 
+## Upcoming Release
+
+### 0.7.0
+
+- Support symbol arguments to StringTools methods.
+- Implement StringTools#chain.
+
 ## Current Release
 
 ### 0.6.0

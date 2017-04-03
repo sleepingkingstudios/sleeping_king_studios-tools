@@ -532,6 +532,14 @@ Converts a lowercase, underscore separated string to a mixed-case string express
     StringTools#camelize 'muspelheimr_and_niflheimr'
     #=> 'MuspelheimrAndNiflheimr'
 
+#### `#chain`
+
+Performs multiple string tools operations in sequence, starting with the given string and passing the result of each operation to the next.
+
+    # Equivalent to `StringTools.underscore(StringTools.pluralize str)`.
+    StringTools#chain 'ArchivedPeriodical', :underscore, :pluralize
+    # => 'archived_periodicals'
+
 #### `#plural?`
 
 Returns true if the word is in plural form, and returns false otherwise. A word is in plural form if and only if calling `#pluralize` (see below) on the word returns the word without modification.

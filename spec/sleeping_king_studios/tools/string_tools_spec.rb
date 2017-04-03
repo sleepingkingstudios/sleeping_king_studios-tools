@@ -63,6 +63,72 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     end # describe
   end # describe
 
+  describe '#chain' do
+    let(:operations) { [] }
+    let(:value)      { 'ArchivedPeriodical' }
+    let(:expected)   { 'ArchivedPeriodical' }
+
+    it 'should define the method' do
+      expect(instance).
+        to respond_to(:chain).
+        with(1).argument.
+        and_unlimited_arguments
+    end # it
+
+    it 'should define the class method' do
+      expect(described_class).
+        to respond_to(:chain).
+        with(1).argument.
+        and_unlimited_arguments
+    end # it
+
+    describe 'with a string' do
+      it 'should return the string' do
+        expect(instance.chain value, *operations).to be == expected
+      end # it
+    end # describe
+
+    describe 'with a symbol' do
+      it 'should return the string' do
+        expect(instance.chain value.intern, *operations).to be == expected
+      end # it
+    end # describe
+
+    describe 'with one operation' do
+      let(:operations) { [:underscore] }
+      let(:expected)   { 'archived_periodical' }
+
+      describe 'with a string' do
+        it 'should return the string' do
+          expect(instance.chain value, *operations).to be == expected
+        end # it
+      end # describe
+
+      describe 'with a symbol' do
+        it 'should return the string' do
+          expect(instance.chain value.intern, *operations).to be == expected
+        end # it
+      end # describe
+    end # describe
+
+    describe 'with many operations' do
+      let(:operations) { [:underscore, :pluralize] }
+      let(:expected)   { 'archived_periodicals' }
+
+      describe 'with a string' do
+        it 'should return the string' do
+          expect(instance.chain value, *operations).to be == expected
+        end # it
+      end # describe
+
+      describe 'with a symbol' do
+        it 'should return the string' do
+          expect(instance.chain value.intern, *operations).to be == expected
+        end # it
+      end # describe
+    end # describe
+  end # describe
+
   describe '#define_irregular_word' do
     it { expect(instance).to respond_to(:define_irregular_word).with(2).arguments }
 
