@@ -13,10 +13,10 @@ module SleepingKingStudios
       private
 
       MAJOR      = 0
-      MINOR      = 6
+      MINOR      = 7
       PATCH      = 0
-      PRERELEASE = nil
-      BUILD      = nil
+      PRERELEASE = :alpha
+      BUILD      = 0
     end # module
 
     VERSION = Version.to_gem_version
