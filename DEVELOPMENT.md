@@ -2,10 +2,6 @@
 
 ## 0.7.0
 
-- StringTools#chain |
-
-  tools.chain(str, :underscore, :pluralize)
-  #=> shorthand for tools.pluralize(tools.underscore str)
 - StringTools#map_lines |
 
   tools.map_lines("10\n20 GOTO 10") { |str| "  #{str}" }

@@ -58,6 +58,23 @@ module SleepingKingStudios::Tools
       plural_inflector.define_uncountable_word word
     end # method define_uncountable_word
 
+    # Yields each line of the string to the provided block and combines the
+    # results into a new multiline string.
+    #
+    # @param str [String] The string to map.
+    #
+    # @yieldparam line [String] The current line.
+    # @yieldparam index [Integer] The index of the current line.
+    #
+    # @return [String] The mapped string.
+    def map_lines str
+      str = require_string! str
+
+      str.each_line.with_index.reduce('') do |memo, (line, index)|
+        memo << yield(line, index)
+      end # each_line
+    end # method map_lines
+
     # Determines whether or not the given word is in plural form. If calling
     # #pluralize(word) is equal to word, the word is considered plural.
     #
