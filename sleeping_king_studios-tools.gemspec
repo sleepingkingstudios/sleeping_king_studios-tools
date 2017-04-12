@@ -20,7 +20,7 @@ classes without polluting the global namespace.
   gem.require_path = 'lib'
   gem.files        = Dir["lib/**/*.rb", "LICENSE", "*.md"]
 
-  gem.add_development_dependency 'rake',   '~> 10.5'
+  gem.add_development_dependency 'rake',   '~> 12.0'
   gem.add_development_dependency 'rspec',  '~> 3.4'
   gem.add_development_dependency 'byebug', '~> 8.2',  '>= 8.2.2'
 
