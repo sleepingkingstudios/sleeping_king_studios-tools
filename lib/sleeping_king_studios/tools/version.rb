@@ -15,7 +15,7 @@ module SleepingKingStudios
       MAJOR      = 0
       MINOR      = 7
       PATCH      = 0
-      PRERELEASE = :alpha
+      PRERELEASE = :beta
       BUILD      = 0
     end # module
 

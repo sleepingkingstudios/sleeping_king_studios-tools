@@ -2,8 +2,6 @@
 
 ## 0.7.0
 
-- IntegerTools#pluralize - have third (plural string) parameter be optional and defer to StringTools#pluralize.
-
 ## Future Tasks
 
 - Remove 'extend self' from Tools modules.
@@ -22,10 +20,6 @@
 - RegexpTools#nonmatching_strings - generates a set of strings that do not match the regular expression.
 - Identity Methods
   - RegexpTools#regexp? - true if object is regular expression, otherwise false.
-
-#### Toolkit
-
-- Configuration
 
 ### Maintenance
 
