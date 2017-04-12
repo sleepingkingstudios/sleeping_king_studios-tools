@@ -664,6 +664,73 @@ Converts a mixed-case string expression to a lowercase, underscore separated str
 
 Common objects or patterns that are useful across projects but are larger than or do not fit the functional paradigm of the tools.* pattern.
 
+### Configuration
+
+    require 'sleeping_king_studios/tools/toolbox/configuration'
+
+Provides a simple DSL for defining configuration objects, which can be populated via hashes or data objects (such as a Rails configuration object).
+
+    class MyGemConfig < SleepingKingStudios::Tools::Toolbox::Configuration
+      option :template_dir
+
+      namespace :serialization do
+        option :format, :default => :json, :enum => [:json, :xml, :yaml]
+      end # namespace
+    end # class
+
+    # Initialize with a hash.
+    hsh    = YAML.load(File.read 'path/to/config.yml')
+    config = MyGemConfig.new(hsh)
+
+    # Initialize with a data object.
+    klass  = Struct.new(:template_dir)
+    data   = klass.new('path/to/templates')
+    config = MyGemConfig.new(data)
+
+    # Retrieve data by calling methods or using hash syntax. All of the
+    # following will return the configured value:
+    config.serialization.format
+    config[:serialization][:format]
+    config['serialization']['format']
+    config.dig(:serialization, :format)
+    config.fetch(:serialization', {}).fetch(:format, :json)
+
+#### `::namespace`
+
+Defines an inner namespace for the configuration, which will itself be an instance of Configuration. Can be nested to any depth:
+
+    class MyGemConfig < SleepingKingStudios::Tools::Toolbox::Configuration
+      namespace :weapons do
+        namespace :swords do
+          namespace :upgrades do
+            option :hilts
+
+            option :tangs
+          end # namespace
+        end # namespace
+      end # namespace
+    end # class
+
+    config.weapons.swords.upgrades
+    #=> a Configuration instance, with options #hilts and #tangs.
+
+#### `::option`
+
+Defines an option, which creates an accessor and mutator method for the property. Can configure a :default (can be a value, a Proc, or the name of a
+method) and/or allowable values via the :enum option.
+
+    class MyGemConfig < SleepingKingStudios::Tools::Toolbox::Configuration
+      option :max_level, :default => 20
+
+      option :class, :enum => %(warrior ranger elementalist monk)
+    end # class
+
+    config.max_level
+    # Returns 20 if no configured value is set.
+
+    config.class = 'necromancer'
+    # Raises an error.
+
 ### ConstantMap
 
     require 'sleeping_king_studios/tools/toolbox/constant_map'

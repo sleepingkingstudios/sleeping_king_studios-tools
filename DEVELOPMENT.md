@@ -4,8 +4,6 @@
 
 - IntegerTools#pluralize - have third (plural string) parameter be optional and defer to StringTools#pluralize.
 
-- Toolbelt should be autoloaded via Tools.
-
 ## Future Tasks
 
 - Remove 'extend self' from Tools modules.

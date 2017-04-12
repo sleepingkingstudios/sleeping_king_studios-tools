@@ -72,6 +72,34 @@ module SleepingKingStudios::Tools::Toolbox
       yield(singleton_class) if block_given?
     end # constructor
 
+    def [] key
+      send(key) if respond_to?(key)
+    end # method []
+
+    def []= key, value
+      send(:"#{key}=", value)
+    end # method []=
+
+    def dig *keys
+      keys.reduce(self) do |hsh, key|
+        value = hsh[key]
+
+        return value if value.nil?
+
+        value
+      end # reduce
+    end # method dig
+
+    def fetch key, default = DEFAULT_OPTION
+      return send(key) if respond_to?(key)
+
+      return default unless default == DEFAULT_OPTION
+
+      return yield if block_given?
+
+      raise KeyError, 'key not found'
+    end # method fetch
+
     protected
 
     attr_accessor :__root_namespace__

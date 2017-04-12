@@ -36,6 +36,8 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
           weapons.option :allow_polearms
 
           weapons.namespace :swords do |swords|
+            swords.option :default_attack
+
             swords.option :upgrade_parts
           end # namespace
         end # namespace
@@ -458,6 +460,62 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
     end # describe
   end # describe
 
+  describe '#[]' do
+    it { expect(instance).to respond_to(:[]).with(1).argument }
+
+    describe 'with a string' do
+      it { expect(instance['rations']).to be nil }
+    end # describe
+
+    describe 'with a symbol' do
+      it { expect(instance[:rations]).to be nil }
+    end # describe
+
+    wrap_context 'when many configuration options are defined' do
+      describe 'with a string' do
+        it { expect(instance['rations']).to be == hash[:rations] }
+      end # describe
+
+      describe 'with a symbol' do
+        it { expect(instance[:rations]).to be == hash[:rations] }
+      end # describe
+    end # wrap_context
+  end # describe
+
+  describe '#[]=' do
+    it { expect(instance).to respond_to(:[]=).with(2).arguments }
+
+      describe 'with a string' do
+        it 'should raise an error' do
+          expect { instance['rations'] = '2/day' }.to raise_error NoMethodError
+        end # it
+      end # describe
+
+    describe 'with a symbol' do
+      it 'should raise an error' do
+        expect { instance[:rations] = '2/day' }.to raise_error NoMethodError
+      end # it
+    end # describe
+
+    wrap_context 'when many configuration options are defined' do
+      describe 'with a string' do
+        it 'should set the value' do
+          expect { instance['rations'] = '2/day' }.
+            to change(instance, :rations).
+            to be == '2/day'
+        end # it
+      end # describe
+
+      describe 'with a symbol' do
+        it 'should set the value' do
+          expect { instance[:rations] = '2/day' }.
+            to change(instance, :rations).
+            to be == '2/day'
+        end # it
+      end # describe
+    end # wrap_context
+  end # describe
+
   describe '#__data__' do
     def expect_object_to_equal_hash obj, hsh
       hsh.each do |key, expected|
@@ -500,5 +558,121 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
     end # it
 
     it { expect(instance.send :__root_namespace__).to be instance }
+  end # describe
+
+  describe '#dig' do
+    it { expect(instance).to respond_to(:dig).with_unlimited_arguments }
+
+    describe 'with a string' do
+      it { expect(instance.dig 'rations').to be nil }
+    end # describe
+
+    describe 'with a symbol' do
+      it { expect(instance.dig :rations).to be nil }
+    end # describe
+
+    describe 'with many strings' do
+      it { expect(instance.dig(*%w(weapons swords default_attack))).to be nil }
+    end # describe
+
+    describe 'with many symbols' do
+      it { expect(instance.dig(*%i(weapons swords default_attack))).to be nil }
+    end # describe
+
+    wrap_context 'when many configuration options are defined' do
+      describe 'with a string' do
+        it { expect(instance.dig 'rations').to be == hash[:rations] }
+      end # describe
+
+      describe 'with a symbol' do
+        it { expect(instance.dig :rations).to be == hash[:rations] }
+      end # describe
+
+      describe 'with many strings' do
+        it 'should return the value' do
+          expect(instance.dig(*%w(weapons swords default_attack))).
+            to be == hash[:weapons][:swords][:default_attack]
+        end # it
+      end # describe
+
+      describe 'with many symbols' do
+        it 'should return the value' do
+          expect(instance.dig(*%i(weapons swords default_attack))).
+            to be == hash[:weapons][:swords][:default_attack]
+        end # it
+      end # describe
+    end # wrap_context
+  end # describe
+
+  describe '#fetch' do
+    it 'should define the method' do
+      expect(instance).to respond_to(:fetch).with(1..2).arguments
+    end # it
+
+    describe 'with a string' do
+      it 'should raise an error' do
+        expect { instance.fetch 'rations' }.to raise_error KeyError
+      end # it
+
+      describe 'with a default block' do
+        it { expect(instance.fetch('rations') { '0/day' }).to be == '0/day' }
+      end # describe
+
+      describe 'with a default value' do
+        it { expect(instance.fetch 'rations', '0/day').to be == '0/day' }
+      end # describe
+    end # describe
+
+    describe 'with a symbol' do
+      it 'should raise an error' do
+        expect { instance.fetch :rations }.to raise_error KeyError
+      end # it
+
+      describe 'with a default block' do
+        it { expect(instance.fetch(:rations) { '0/day' }).to be == '0/day' }
+      end # describe
+
+      describe 'with a default value' do
+        it { expect(instance.fetch :rations, '0/day').to be == '0/day' }
+      end # describe
+    end # describe
+
+    wrap_context 'when many configuration options are defined' do
+      describe 'with a string' do
+        it { expect(instance.fetch 'rations').to be == hash[:rations] }
+
+        describe 'with a default block' do
+          it 'should return the value' do
+            expect(instance.fetch('rations') { '0/day' }).
+              to be == hash[:rations]
+          end # it
+        end # describe
+
+        describe 'with a default value' do
+          it 'should return the value' do
+            expect(instance.fetch 'rations', '0/day').
+              to be == hash[:rations]
+          end # it
+        end # describe
+      end # describe
+
+      describe 'with a symbol' do
+        it { expect(instance.fetch :rations).to be == hash[:rations] }
+
+        describe 'with a default block' do
+          it 'should return the value' do
+            expect(instance.fetch(:rations) { '0/day' }).
+              to be == hash[:rations]
+          end # it
+        end # describe
+
+        describe 'with a default value' do
+          it 'should return the value' do
+            expect(instance.fetch :rations, '0/day').
+              to be == hash[:rations]
+          end # it
+        end # describe
+      end # describe
+    end # wrap_context
   end # describe
 end # describe
