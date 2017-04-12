@@ -17,6 +17,7 @@
 
 #### Misc.
 
+- IntegerTools#pluralize now accepts 2..3 arguments, and will automatically generate the plural string using StringTools#pluralize if an explicit plural is not given.
 - SleepingKingStudios::Tools::Toolbelt is now autoloaded from SleepingKingStudios::Tools.
 
 ## Current Release
