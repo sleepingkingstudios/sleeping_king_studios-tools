@@ -353,10 +353,13 @@ Returns true if the object is an Integer.
 
 #### `#pluralize`
 
-Returns the singular or the plural value, depending on the provided item count.
+Returns the singular or the plural value, depending on the provided item count. Can be given an explicit plural argument, or will delegate to StringTools#pluralize.
 
-    IntegerTools.pluralize 4, 'light', 'lights'
+    IntegerTools.pluralize 4, 'light'
     #=> 'lights'
+
+    IntegerTools.pluralize 3, 'cow', 'kine'
+    #=> 'kine'
 
 #### `#romanize`
 

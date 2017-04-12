@@ -1,6 +1,7 @@
 # lib/sleeping_king_studios/tools/integer_tools.rb
 
 require 'sleeping_king_studios/tools'
+require 'sleeping_king_studios/tools/string_tools'
 
 module SleepingKingStudios::Tools
   # Tools for working with integers.
@@ -88,7 +89,9 @@ module SleepingKingStudios::Tools
     #
     # @return [String] The single form if count == 1; otherwise the plural
     #   form.
-    def pluralize count, single, plural
+    def pluralize count, single, plural = nil
+      plural ||= StringTools.pluralize(single)
+
       1 == count ? single : plural
     end # method pluralize
 
