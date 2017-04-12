@@ -11,6 +11,10 @@
 - Implement StringTools#indent.
 - Implement StringTools#map_lines.
 
+#### Toolbox
+
+- Implement Toolbox::Configuration.
+
 #### Misc.
 
 - SleepingKingStudios::Tools::Toolbelt is now autoloaded from SleepingKingStudios::Tools.
