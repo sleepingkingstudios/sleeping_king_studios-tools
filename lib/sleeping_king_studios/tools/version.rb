@@ -16,7 +16,7 @@ module SleepingKingStudios
       MINOR      = 7
       PATCH      = 0
       PRERELEASE = :beta
-      BUILD      = 0
+      BUILD      = 1
     end # module
 
     VERSION = Version.to_gem_version
