@@ -345,9 +345,11 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
       context 'when the option is defined on a nested namespace' do
         it 'should define the accessor' do
+          default_proc = default
+
           described_class.namespace :weapons do |weapons|
             weapons.namespace :swords do |swords|
-              swords.option :overkill_damage, :default => default
+              swords.option :overkill_damage, :default => default_proc
             end # namespace
           end # namespace
 
