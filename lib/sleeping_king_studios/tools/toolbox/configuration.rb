@@ -41,14 +41,17 @@ module SleepingKingStudios::Tools::Toolbox
       end # method define_mutator
 
       def define_namespace namespace_name, &block
+        namespace =
+          Class.new(SleepingKingStudios::Tools::Toolbox::Configuration)
+        namespace.instance_exec namespace, &block if block_given?
+
         define_method namespace_name do
           if instance_variable_defined?(:"@#{namespace_name}")
             return instance_variable_get(:"@#{namespace_name}")
           end # if
 
           data   = __get_value__(namespace_name, :default => Object.new)
-          config =
-            SleepingKingStudios::Tools::Toolbox::Configuration.new(data, &block)
+          config = namespace.new(data)
 
           config.__root_namespace__ = __root_namespace__ || self
 
