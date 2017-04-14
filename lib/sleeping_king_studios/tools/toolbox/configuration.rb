@@ -51,17 +51,19 @@ module SleepingKingStudios::Tools::Toolbox
         namespace =
           Class.new(SleepingKingStudios::Tools::Toolbox::Configuration)
 
-        define_method namespace_name do
+        define_method namespace_name do |&block|
           if instance_variable_defined?(:"@#{namespace_name}")
-            return instance_variable_get(:"@#{namespace_name}")
+            config = instance_variable_get(:"@#{namespace_name}")
+          else
+            data   = __get_value__(namespace_name, :default => Object.new)
+            config = namespace.new(data)
+
+            config.__root_namespace__ = __root_namespace__ || self
+
+            instance_variable_set(:"@#{namespace_name}", config)
           end # if
 
-          data   = __get_value__(namespace_name, :default => Object.new)
-          config = namespace.new(data)
-
-          config.__root_namespace__ = __root_namespace__ || self
-
-          instance_variable_set(:"@#{namespace_name}", config)
+          block.call(config) if block
 
           config
         end # method namespace_name

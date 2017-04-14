@@ -100,6 +100,12 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
       expect(instance.psionics).
         to be_a SleepingKingStudios::Tools::Toolbox::Configuration
+
+      yielded = nil
+
+      instance.psionics { |obj| yielded = obj }
+
+      expect(yielded).to be instance.psionics
     end # it
 
     it 'should set the root namespace' do
