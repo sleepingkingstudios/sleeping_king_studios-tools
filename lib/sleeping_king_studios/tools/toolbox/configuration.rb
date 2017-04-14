@@ -9,7 +9,14 @@ module SleepingKingStudios::Tools::Toolbox
 
       # Defines a nested namespace for the configuration object.
       def namespace namespace_name, &block
-        define_namespace namespace_name, &block
+        namespace =
+          (@namespaces ||= {}).fetch(namespace_name) do
+            @namespaces[namespace_name] = define_namespace namespace_name
+          end # fetch
+
+        namespace.instance_exec namespace, &block if block_given?
+
+        namespace
       end # method namespace
 
       # Defines an option for the configuration object.
@@ -40,10 +47,9 @@ module SleepingKingStudios::Tools::Toolbox
         end # method option_name=
       end # method define_mutator
 
-      def define_namespace namespace_name, &block
+      def define_namespace namespace_name
         namespace =
           Class.new(SleepingKingStudios::Tools::Toolbox::Configuration)
-        namespace.instance_exec namespace, &block if block_given?
 
         define_method namespace_name do
           if instance_variable_defined?(:"@#{namespace_name}")
@@ -59,6 +65,8 @@ module SleepingKingStudios::Tools::Toolbox
 
           config
         end # method namespace_name
+
+        namespace
       end # method define_namespace
     end # module
     extend ClassMethods

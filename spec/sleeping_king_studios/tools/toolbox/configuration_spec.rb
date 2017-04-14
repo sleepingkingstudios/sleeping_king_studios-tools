@@ -166,6 +166,33 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
           not_to respond_to(:planar_mechanics, :moral_axes)
       end # it
     end # context
+
+    context 'when many configuration options are defined' do
+      let(:hash) do
+        hsh = super()
+
+        hsh[:armor][:upgrade_parts] = %w(rune insignia)
+
+        hsh
+      end # let
+
+      it 'should update the namespace' do
+        described_class.namespace :armor do
+          option :materials
+        end # namespace
+
+        described_class.namespace :armor do
+          option :upgrade_parts
+        end # namespace
+
+        expect(instance.armor).
+          to be_a SleepingKingStudios::Tools::Toolbox::Configuration
+        expect(instance.armor.materials).
+          to be == hash.fetch(:armor).fetch(:materials)
+        expect(instance.armor.upgrade_parts).
+          to be == hash.fetch(:armor).fetch(:upgrade_parts)
+      end # it
+    end # wrap_context
   end # describe
 
   describe '::option' do
