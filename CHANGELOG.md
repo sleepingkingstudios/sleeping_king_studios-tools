@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming Release
+## Current Release
 
 ### 0.7.0
 
@@ -20,7 +20,7 @@
 - IntegerTools#pluralize now accepts 2..3 arguments, and will automatically generate the plural string using StringTools#pluralize if an explicit plural is not given.
 - SleepingKingStudios::Tools::Toolbelt is now autoloaded from SleepingKingStudios::Tools.
 
-## Current Release
+## Previous Releases
 
 ### 0.6.0
 
@@ -76,8 +76,6 @@ Implement ArrayTools#bisect and ArrayTools#splice.
 #### StringTools
 
 Implement #underscore.
-
-## Previous Releases
 
 ### 0.2.0
 
