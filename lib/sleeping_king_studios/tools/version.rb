@@ -14,7 +14,7 @@ module SleepingKingStudios
 
       MAJOR      = 0
       MINOR      = 7
-      PATCH      = 0
+      PATCH      = 1
       PRERELEASE = nil
       BUILD      = nil
     end # module
