@@ -2,6 +2,11 @@
 
 ## Current Release
 
+### 0.7.1
+
+- Implement CoreTools#empty_binding.
+- Implement HashTools#generate_binding.
+
 ### 0.7.0
 
 #### Tools

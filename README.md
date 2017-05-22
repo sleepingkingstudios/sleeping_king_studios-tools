@@ -187,6 +187,14 @@ Prints a deprecation warning.
     ObjectTools#old_method was deprecated in version 0.1.0.
       called from /path/to/file.rb:4: in something_or_other
 
+#### `#empty_binding`
+
+Generates an empty Binding object. Note that this binding object still has
+access to Object methods and constants - it is **not** eval-safe.
+
+    CoreTools.empty_binding
+    #=> Binding
+
 #### `#require_each`
 
 Takes a file pattern or a list of file names and requires each file.
@@ -261,6 +269,22 @@ Freezes the hash and performs a deep freeze on each hash key and value.
     #=> true
     hsh[:one].frozen?
     #=> true
+
+#### `#generate_binding`
+
+Generates a Binding object, with the hash converted to local variables in the
+binding.
+
+    hsh     = { :one => 'one', :two => 'two', :three => 'three' }
+    binding = HashTools.generate_binding(hsh)
+    #=> Binding
+
+    binding.local_variable_defined?(:one)
+    #=> true
+    binding.local_variable_get(:one)
+    #=> 'one'
+    binding.eval('one')
+    #=> 'one'
 
 #### `#hash?`
 

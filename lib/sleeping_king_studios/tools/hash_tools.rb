@@ -2,6 +2,7 @@
 
 require 'sleeping_king_studios/tools'
 require 'sleeping_king_studios/tools/array_tools'
+require 'sleeping_king_studios/tools/core_tools'
 require 'sleeping_king_studios/tools/object_tools'
 
 module SleepingKingStudios::Tools
@@ -71,6 +72,16 @@ module SleepingKingStudios::Tools
         ObjectTools.deep_freeze value
       end # each
     end # method deep_freeze
+
+    def generate_binding hsh
+      require_hash! hsh
+
+      CoreTools.empty_binding.tap do |binding|
+        hsh.each do |key, value|
+          binding.local_variable_set key, value
+        end # each
+      end # tap
+    end # method generate_binding
 
     # Returns true if the object is or appears to be a Hash.
     #

@@ -63,6 +63,20 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
     end # describe
   end # describe
 
+  describe '#empty_binding' do
+    it 'should define the method' do
+      expect(described_class).to respond_to(:empty_binding).with(0).arguments
+    end # it
+
+    it { expect(described_class.empty_binding).to be_a Binding }
+
+    it 'should set an Object as the receiver' do
+      binding = described_class.empty_binding
+
+      expect(binding.receiver.class).to be Object
+    end # it
+  end # describe
+
   describe '#require_each' do
     it 'should define the method' do
       expect(described_class).
