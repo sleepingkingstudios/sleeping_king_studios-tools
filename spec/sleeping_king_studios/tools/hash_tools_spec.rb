@@ -281,6 +281,46 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
     include_examples 'should perform a deep freeze of the hash'
   end # describe
 
+  describe '#generate_binding' do
+    it { expect(instance).to respond_to(:generate_binding).with(1).argument }
+
+    it 'should define the method' do
+      expect(described_class).to respond_to(:generate_binding).with(1).argument
+    end # it
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { described_class.generate_binding nil }.
+          to raise_error ArgumentError, /argument must be a hash/
+      end # it
+    end # describe
+
+    describe 'with an empty hash' do
+      it { expect(described_class.generate_binding({})).to be_a Binding }
+    end # describe
+
+    describe 'with a hash with values' do
+      let(:hash) do
+        {
+          :first  => 1,
+          :second => 'a String',
+          :third  => Object.new
+        } # end hash
+      end # let
+
+      it { expect(described_class.generate_binding(hash)).to be_a Binding }
+
+      it 'should bind the hash values' do
+        binding = described_class.generate_binding(hash)
+
+        hash.each do |key, value|
+          expect(binding.local_variable_defined?(key)).to be true
+          expect(binding.local_variable_get(key)).to be == value
+        end # each
+      end # it
+    end # describe
+  end # describe
+
   describe '#hash?' do
     it { expect(instance).to respond_to(:hash?).with(1).argument }
 

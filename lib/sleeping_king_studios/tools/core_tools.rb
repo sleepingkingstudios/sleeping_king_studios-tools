@@ -33,6 +33,19 @@ module SleepingKingStudios::Tools
       Kernel.warn str
     end # method deprecate
 
+    # Generates an empty Binding object with a BasicObject as the receiver.
+    #
+    # @return [Binding] The empty binding object.
+    def empty_binding
+      context = Object.new
+
+      def context.binding
+        Kernel.instance_method(:binding).bind(self).call
+      end # singleton method binding
+
+      context.binding
+    end # method empty_binding
+
     # Expands each file pattern and requires each file.
     #
     # @param file_patterns [Array] The files to require.
