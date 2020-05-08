@@ -1,4 +1,4 @@
-# lib/sleeping_king_studios/tools/toolbox.rb
+# frozen_string_literal: true
 
 require 'sleeping_king_studios/tools'
 
@@ -7,4 +7,4 @@ module SleepingKingStudios::Tools
   # are larger than or do not fit the functional paradigm of the tools.*
   # pattern.
   module Toolbox; end
-end # module
+end
