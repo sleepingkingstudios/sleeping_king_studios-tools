@@ -10,10 +10,6 @@ Preview build for 1.0.0: maintain backward compability with deprecation warnings
 - Address all RuboCop warnings
 - Remove sleeping_king_studios/tools/all
 
-#### Delegator
-
-- Deprecate Delegator (just use Forwardable instead)
-
 #### Inflector
 
 - Refactor PluralInflector to Inflector.

@@ -783,70 +783,7 @@ Provides an enumerable interface for defining a group of constants.
 
     require 'sleeping_king_studios/tools/toolbox/delegator'
 
-Module for extending classes with basic delegation.
-
-    class MyClass
-      extend SleepingKingStudios::Tools::Toolbox::Delegator
-
-      delegate :my_method, :to => MyService
-    end # class
-
-#### `::delegate`
-
-Defines a wrapper method to delegate implementation of the specified method or methods to an object, to the object at another specified method, or to the object at a specified instance variable.
-
-    # Delegate to an object
-    class MyModule
-      extend SleepingKingStudios::Tools::Toolbox::Delegator
-
-      delegate :my_method, :to => MyService
-    end class
-
-    # Delegate to a method
-    class MyModule
-      extend SleepingKingStudios::Tools::Toolbox::Delegator
-
-      def my_service
-        MyService.new
-      end method my_service
-
-      delegate :my_method, :to => :my_service
-    end class
-
-    # Delegate to an instance variable
-    class MyModule
-      extend SleepingKingStudios::Tools::Toolbox::Delegator
-
-      def initialize
-        @my_service = MyService.new
-      end constructor
-
-      delegate :my_method, :to => :@my_service
-    end class
-
-Expects one or more method names and a delegation target, which can be an object literal, or the name of an method or instance variable as a String or Symbol. Defines a wrapper method to delegate implementation of the specified method or methods to an object, to the object at the another specified method, or to the object at the specified instance variable.
-
-#### `::wrap_delegate`
-
-Wraps a delegate object by automatically delegating each method that is defined on the delegate class from the instance to the delegate. The delegate can be specified with an object literal or with the name of an instance method or instance variable.
-
-Only methods that are defined at the time #wrap_delegate is called will be delegated, so make sure to call #wrap_delegate after loading any gems or libraries that extend your delegate class, such as ActiveSupport.
-
-    # Create a class that wraps a Hash
-    class Errors
-      extend SleepingKingStudios::Tools::Toolbox::Delegator
-
-      wrap_delegate Hash.new { |hsh, key| hsh[key] = Errors.new }, :klass => Hash
-
-      def messages
-        @messages ||= []
-      end # method messages
-    end # class
-
-    errors = Errors.new
-    errors[:post].messages << "title can't be blank"
-
-Expects a delegation target and optionally a class or module (to determine which methods to delegate), as well as optional :except and :only arrays to limit which methods are delegated. The delegation target can be an object literal, or the name of an method or instance variable as a String or Symbol (in which case a class or module must be specified in :klass or an ArgumentError will be raised).
+This module is now deprecated. Use the stdlib `Forwardable` module instead.
 
 ### Mixin
 
