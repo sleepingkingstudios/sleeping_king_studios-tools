@@ -1,6 +1,14 @@
 # Changelog
 
-## Current Release
+### 0.8.0
+
+Last minor release before 1.0.0.
+
+This release adds a number of deprecations. All deprecated code will be removed in version 1.0.0. Update dependent code accordingly.
+
+#### Toolbox
+
+- Deprecate Toolbox::Delegator. Use the stdlib Forwardable module instead.
 
 ### 0.7.1
 
@@ -24,8 +32,6 @@
 
 - IntegerTools#pluralize now accepts 2..3 arguments, and will automatically generate the plural string using StringTools#pluralize if an explicit plural is not given.
 - SleepingKingStudios::Tools::Toolbelt is now autoloaded from SleepingKingStudios::Tools.
-
-## Previous Releases
 
 ### 0.6.0
 

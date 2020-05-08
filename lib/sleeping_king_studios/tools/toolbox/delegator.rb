@@ -1,7 +1,12 @@
-# lib/sleeping_king_studios/tools/toolbox/delegator.rb
+# frozen_string_literal: true
 
+require 'sleeping_king_studios/tools/core_tools'
 require 'sleeping_king_studios/tools/toolbox'
 
+# rubocop:disable Metrics/AbcSize
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/MethodLength
+# rubocop:disable Metrics/PerceivedComplexity
 module SleepingKingStudios::Tools::Toolbox
   # Module for extending classes with basic delegation. Supports passing
   # arguments, keywords, and blocks to the delegated method.
@@ -13,6 +18,15 @@ module SleepingKingStudios::Tools::Toolbox
   #     delegate :my_method, :to => MyService
   #   end # class
   module Delegator
+    def self.extended(_module)
+      super
+
+      SleepingKingStudios::Tools::CoreTools.deprecate(
+        'SleepingKingStudios::Tools::Toolbox::Delegator',
+        message: 'Use Ruby stdlib Forwardable instead.'
+      )
+    end
+
     # Defines a wrapper method to delegate implementation of the specified
     # method or methods to an object, to the object at another specified method,
     # or to the object at a specified instance variable.
@@ -58,13 +72,13 @@ module SleepingKingStudios::Tools::Toolbox
     #   variable of that name and call `method_name` on the result.
     #
     # @raise ArgumentError if no delegate is specified.
-    def delegate *method_names, to: nil, allow_nil: false
-      raise ArgumentError.new('must specify a delegate') if to.nil? && !allow_nil
+    def delegate(*method_names, to: nil, allow_nil: false)
+      raise ArgumentError, 'must specify a delegate' if to.nil? && !allow_nil
 
       method_names.each do |method_name|
-        delegate_method method_name, to, { :allow_nil => !!allow_nil }
-      end # each
-    end # method delegate
+        delegate_method method_name, to, { allow_nil: !!allow_nil }
+      end
+    end
 
     # Wraps a delegate object by automatically delegating each method that is
     # defined on the delegate class from the instance to the delegate. The
@@ -79,7 +93,10 @@ module SleepingKingStudios::Tools::Toolbox
     #   class Errors
     #     extend SleepingKingStudios::Tools::Delegator
     #
-    #     wrap_delegate Hash.new { |hsh, key| hsh[key] = Errors.new }, :klass => Hash
+    #     wrap_delegate(
+    #       Hash.new { |hsh, key| hsh[key] = Errors.new },
+    #       :klass => Hash
+    #     )
     #
     #     def messages
     #       @messages ||= []
@@ -116,33 +133,33 @@ module SleepingKingStudios::Tools::Toolbox
     #   belong to the specified klass.
     #
     # @see #delegate
-    def wrap_delegate target, klass: nil, except: [], only: []
+    def wrap_delegate(target, klass: nil, except: [], only: [])
       if klass.is_a?(Module)
-        unless target.is_a?(String) || target.is_a?(Symbol) || target.is_a?(klass)
-          raise ArgumentError.new "expected delegate to be a #{klass.name}"
-        end # unless
+        unless target.is_a?(String) ||
+               target.is_a?(Symbol) ||
+               target.is_a?(klass)
+          raise ArgumentError, "expected delegate to be a #{klass.name}"
+        end
 
         method_names = klass.instance_methods - Object.instance_methods
       elsif target.is_a?(String) || target.is_a?(Symbol)
-        raise ArgumentError.new 'must specify a delegate class'
+        raise ArgumentError, 'must specify a delegate class'
       else
         method_names = target.methods - Object.new.methods
-      end # if-elsif-else
+      end
 
       if except.is_a?(Array) && !except.empty?
-        method_names = method_names - except.map(&:intern)
-      end # if
+        method_names -= except.map(&:intern)
+      end
 
-      if only.is_a?(Array) && !only.empty?
-        method_names = method_names & only.map(&:intern)
-      end # if
+      method_names &= only.map(&:intern) if only.is_a?(Array) && !only.empty?
 
-      delegate *method_names, :to => target
-    end # method wrap_delegate
+      delegate(*method_names, to: target)
+    end
 
     private
 
-    def delegate_method method_name, target, options = {}
+    def delegate_method(method_name, target, options = {})
       if target.is_a?(String) || target.is_a?(Symbol)
         target = target.intern
 
@@ -153,7 +170,7 @@ module SleepingKingStudios::Tools::Toolbox
             return nil if receiver.nil? && options[:allow_nil]
 
             receiver.send(method_name, *args, &block)
-          end # define_method
+          end
         else
           define_method method_name do |*args, &block|
             receiver = send(target)
@@ -161,15 +178,19 @@ module SleepingKingStudios::Tools::Toolbox
             return nil if receiver.nil? && options[:allow_nil]
 
             receiver.send(method_name, *args, &block)
-          end # define_method
-        end # if-else
+          end
+        end
       else
         define_method method_name do |*args, &block|
           return nil if target.nil? && options[:allow_nil]
 
           target.send(method_name, *args, &block)
-        end # define_method
-      end # if
-    end # method delegate_method
-  end # module
-end # module
+        end
+      end
+    end
+  end
+end
+# rubocop:enable Metrics/AbcSize
+# rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable Metrics/MethodLength
+# rubocop:enable Metrics/PerceivedComplexity

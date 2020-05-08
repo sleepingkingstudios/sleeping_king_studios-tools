@@ -1,4 +1,4 @@
-# lib/sleeping_king_studios/tools.rb
+# frozen_string_literal: true
 
 # Hic iacet Arthurus, rex quondam, rexque futurus.
 module SleepingKingStudios
@@ -6,7 +6,6 @@ module SleepingKingStudios
   # core classes without polluting the global namespace.
   module Tools
     autoload :Toolbelt, 'sleeping_king_studios/tools/toolbelt'
-  end # module
-end # module
-
-require 'sleeping_king_studios/tools/version'
+    autoload :Version,  'sleeping_king_studios/tools/version'
+  end
+end
