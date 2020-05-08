@@ -16,6 +16,10 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Delegator do
   let(:described_class) { Class.new.extend(concern) }
   let(:instance)        { described_class.new }
 
+  before(:example) do
+    allow(SleepingKingStudios::Tools::CoreTools).to receive(:deprecate)
+  end
+
   describe '#delegate' do
     shared_examples 'should delegate method' do |method_name|
       let(:args)   { %w[foo bar baz] }

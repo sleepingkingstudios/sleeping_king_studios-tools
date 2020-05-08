@@ -18,6 +18,15 @@ module SleepingKingStudios::Tools::Toolbox
   #     delegate :my_method, :to => MyService
   #   end # class
   module Delegator
+    def self.extended(_module)
+      super
+
+      SleepingKingStudios::Tools::CoreTools.deprecate(
+        'SleepingKingStudios::Tools::Toolbox::Delegator',
+        message: 'Use Ruby stdlib Forwardable instead.'
+      )
+    end
+
     # Defines a wrapper method to delegate implementation of the specified
     # method or methods to an object, to the object at another specified method,
     # or to the object at a specified instance variable.
