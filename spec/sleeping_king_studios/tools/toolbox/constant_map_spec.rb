@@ -1,4 +1,4 @@
-# spec/sleeping_king_studios/tools/toolbox/constant_map_spec.rb
+# frozen_string_literal: true
 
 require 'sleeping_king_studios/tools/toolbox/constant_map'
 
@@ -6,29 +6,35 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
   shared_context 'when many constants are defined' do
     let(:constants) do
       {
-        :GUEST     => 'guest',
-        :PATRON    => 'patron',
-        :LIBRARIAN => 'librarian'
-      } # end hash
-    end # let
-  end # shared_context
+        GUEST:     'guest',
+        PATRON:    'patron',
+        LIBRARIAN: 'librarian'
+      }
+    end
+  end
+
+  subject(:constant_map) { described_class.new(constants) }
 
   let(:constants) { {} }
-  let(:instance)  { described_class.new constants }
+  let(:instance)  { constant_map }
 
   describe '::new' do
     it { expect(described_class).to respond_to(:new).with(1).argument }
 
     wrap_context 'when many constants are defined' do
-      it 'should define the constants' do
-        instance = described_class.new(constants)
+      it { expect(constant_map::GUEST).to be == constants[:GUEST] }
 
-        expect(instance::GUEST).to     be == constants[:GUEST]
-        expect(instance::PATRON).to    be == constants[:PATRON]
-        expect(instance::LIBRARIAN).to be == constants[:LIBRARIAN]
-      end # it
-    end # wrap_context
-  end # describe
+      it { expect(constant_map::PATRON).to be == constants[:PATRON] }
+
+      it { expect(constant_map::LIBRARIAN).to be == constants[:LIBRARIAN] }
+
+      it { expect(constant_map.guest).to be == constants[:GUEST] }
+
+      it { expect(constant_map.patron).to be == constants[:PATRON] }
+
+      it { expect(constant_map.librarian).to be == constants[:LIBRARIAN] }
+    end
+  end
 
   describe '#all' do
     it { expect(instance).to respond_to(:all).with(0).arguments }
@@ -37,8 +43,8 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
 
     wrap_context 'when many constants are defined' do
       it { expect(instance.all).to be == constants }
-    end # wrap_context
-  end # describe
+    end
+  end
 
   describe '#const_defined?' do
     it { expect(instance).to respond_to(:const_defined?).with(1).argument }
@@ -49,32 +55,34 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
       it { expect(instance.const_defined? :INTRUDER).to be false }
 
       it { expect(instance.const_defined? :GUEST).to be true }
-    end # wrap_context
-  end # describe
+    end
+  end
 
   describe '#const_get' do
     it { expect(instance).to respond_to(:const_get).with(1).argument }
 
     it 'should raise an error' do
       expect { instance.const_get :GUEST }.to raise_error NameError
-    end # it
+    end
 
-    wrap_context 'when many constants are defined' do
+    context 'when many constants are defined' do
+      include_context 'when many constants are defined'
+
       it 'should raise an error' do
         expect { instance.const_get :INTRUDER }.to raise_error NameError
-      end # it
+      end
 
       it { expect(instance.const_get :GUEST).to be == constants[:GUEST] }
-    end # wrap_context
-  end # describe
+    end
+  end
 
   describe '#constants' do
     it { expect(instance).to have_reader(:constants).with_value(be == []) }
 
     wrap_context 'when many constants are defined' do
       it { expect(instance.constants).to contain_exactly(*constants.keys) }
-    end # wrap_context
-  end # describe
+    end
+  end
 
   describe '#each' do
     it { expect(instance).to respond_to(:each).with(0).arguments.and_a_block }
@@ -85,7 +93,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
       instance.each { |key, value| yielded[key] = value }
 
       expect(yielded).to be == {}
-    end # it
+    end
 
     wrap_context 'when many constants are defined' do
       it 'should yield the constant names and values' do
@@ -94,22 +102,28 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
         instance.each { |key, value| yielded[key] = value }
 
         expect(yielded).to be == constants
-      end # it
-    end # wrap_context
-  end # describe
+      end
+    end
+  end
 
   describe '#freeze' do
     shared_examples 'should freeze the constant map' do
-      it 'should freeze the constant map' do
-        expect(instance.freeze).to be instance
+      it { expect(instance.freeze).to be instance }
 
-        expect { instance.send :remove_const, :GUEST }.
-          to raise_error RuntimeError
+      it 'should not permit changing a constant' do
+        instance.freeze
 
-        expect { instance.const_set :GUEST, 'intruder' }.
-          to raise_error RuntimeError
-      end # it
-    end # method shared_examples
+        expect { instance.const_set :GUEST, 'intruder' }
+          .to raise_error RuntimeError
+      end
+
+      it 'should not permit removing a constant' do
+        instance.freeze
+
+        expect { instance.send :remove_const, :GUEST }
+          .to raise_error RuntimeError
+      end
+    end
 
     it { expect(instance).to respond_to(:freeze).with(0).arguments }
 
@@ -123,11 +137,11 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
 
         const_value = instance::GUEST
 
-        expect { const_value[0..-1] = 'intruder' }.
-          to raise_error RuntimeError
-      end # it
-    end # method wrap_context
-  end # describe
+        expect { const_value[0..-1] = 'intruder' }
+          .to raise_error RuntimeError
+      end
+    end
+  end
 
   describe '#method_missing' do
     it { expect { instance.guest }.to raise_error NoMethodError }
@@ -141,7 +155,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
         instance.guest
 
         expect(instance.method(:guest)).to be_a Method
-      end # it
+      end
 
       context 'when the map is frozen' do
         before(:example) { instance.freeze }
@@ -149,9 +163,9 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
         it { expect { instance.intruder }.to raise_error NoMethodError }
 
         it { expect(instance.guest).to be == constants[:GUEST] }
-      end # context
-    end # wrap_context
-  end # describe
+      end
+    end
+  end
 
   describe '#respond_to_missing?' do
     it { expect(instance.respond_to? :guest).to be false }
@@ -160,6 +174,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
       it { expect(instance.respond_to? :intruder).to be false }
 
       it { expect(instance.respond_to? :guest).to be true }
-    end # wrap_context
-  end # describe
-end # describe
+    end
+  end
+end
