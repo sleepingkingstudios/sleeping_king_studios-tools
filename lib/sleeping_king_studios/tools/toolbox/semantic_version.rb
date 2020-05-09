@@ -1,4 +1,4 @@
-# lib/sleeping_king_studios/tools/toolbox/semantic_version.rb
+# frozen_string_literal: true
 
 require 'sleeping_king_studios/tools/toolbox'
 
@@ -47,7 +47,7 @@ module SleepingKingStudios::Tools::Toolbox
     #
     # @raise InvalidVersionError If MAJOR, MINOR, or PATCH is undefined.
     def to_gem_version
-      str = "#{const_fetch :MAJOR}.#{const_fetch :MINOR}.#{const_fetch :PATCH}"
+      str = +"#{const_fetch :MAJOR}.#{const_fetch :MINOR}.#{const_fetch :PATCH}"
 
       prerelease = const_fetch(:PRERELEASE, nil)
       str << ".#{prerelease}" unless prerelease.nil? || prerelease.empty?
@@ -56,7 +56,7 @@ module SleepingKingStudios::Tools::Toolbox
       str << ".#{build}" unless build.nil? || build.empty?
 
       str
-    end # method to_version
+    end
 
     # Concatenates the MAJOR, MINOR, and PATCH constant values with PRERELEASE
     # and BUILD (if available) to generate a semantic version string. The
@@ -82,7 +82,7 @@ module SleepingKingStudios::Tools::Toolbox
     #
     # @raise InvalidVersionError If MAJOR, MINOR, or PATCH is undefined.
     def to_version
-      str = "#{const_fetch :MAJOR}.#{const_fetch :MINOR}.#{const_fetch :PATCH}"
+      str = +"#{const_fetch :MAJOR}.#{const_fetch :MINOR}.#{const_fetch :PATCH}"
 
       prerelease = const_fetch(:PRERELEASE, nil)
       str << "-#{prerelease}" unless prerelease.nil? || prerelease.empty?
@@ -91,18 +91,19 @@ module SleepingKingStudios::Tools::Toolbox
       str << "+#{build}" unless build.nil? || build.empty?
 
       str
-    end # method to_version
+    end
 
     private
 
     FETCH_DEFAULT = Object.new.freeze
 
-    def const_fetch name, default = FETCH_DEFAULT
-      if self.const_defined?(name)
-        return self.const_get(name).to_s
-      elsif default == FETCH_DEFAULT
-        raise InvalidVersionError.new "undefined constant for #{name.downcase} version"
-      end # if-else
-    end # method const_fetch
-  end # module
-end # module
+    def const_fetch(name, default = FETCH_DEFAULT)
+      return const_get(name).to_s if const_defined?(name)
+
+      return nil unless default == FETCH_DEFAULT
+
+      raise InvalidVersionError,
+        "undefined constant for #{name.downcase} version"
+    end
+  end
+end

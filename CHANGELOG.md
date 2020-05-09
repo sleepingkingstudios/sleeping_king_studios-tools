@@ -6,6 +6,8 @@ Last minor release before 1.0.0.
 
 This release adds a number of deprecations. All deprecated code will be removed in version 1.0.0. Update dependent code accordingly.
 
+- Removed deprecated SleepingKingStudios::Tools::SemanticVersion. This functionality is still available as SleepingKingStudios::Tools::Toolbox::SemanticVersion.
+
 #### Toolbox
 
 - Deprecate Toolbox::Delegator. Use the stdlib Forwardable module instead.

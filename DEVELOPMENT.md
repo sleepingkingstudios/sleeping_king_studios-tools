@@ -8,7 +8,22 @@ Preview build for 1.0.0: maintain backward compability with deprecation warnings
 - Update gem dependencies
   - Add RuboCop, SimpleCov
 - Address all RuboCop warnings
-- Remove sleeping_king_studios/tools/all
+- Deprecate sleeping_king_studios/tools/all
+- Remove /bin directory.
+
+#### Configuration
+
+- Extract Configuration::Option
+- Track .options, .namespaces
+- Raise on invalid value on initialization, not read
+- Refactor @data to Hash, pull data from given object or Hash
+- #[] and #[] should fail on invalid options
+  - deprecate #fetch?
+- Clarify :allow_nil option
+
+#### ConstantMap
+
+- Refactor to use ConstantMap < Module.new pattern ?
 
 #### Inflector
 
@@ -32,8 +47,9 @@ Preview build for 1.0.0: maintain backward compability with deprecation warnings
 
 ## 1.0.0
 
-- Remove deprecated StringTools#pluralize(int, str, str) implementation.
+- Remove sleeping_king_studios/tools/all
 - Remove all deprecated methods and references.
+- Documentation pass.
 
 ## Future Tasks
 

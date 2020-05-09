@@ -1,713 +1,1176 @@
-# spec/sleeping_king_studios/tools/toolbox/configuration_spec.rb
+# frozen_string_literal: true
 
 require 'sleeping_king_studios/tools/toolbox/configuration'
 
 RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
+  extend RSpec::SleepingKingStudios::Concerns::ExampleConstants
+
+  shared_context 'when a namespace is defined' do
+    let(:data) do
+      {
+        armor: {
+          materials: %w[leather iron steel mithril adamantium orichalcum]
+        }
+      }
+    end
+
+    before(:example) do
+      Spec::Configuration.namespace :armor do |armor|
+        armor.option :materials
+      end
+    end
+  end
+
+  shared_context 'when an option is defined' do
+    let(:options) { {} }
+    let(:data) do
+      { rations: '1/day' }
+    end
+
+    before(:example) do
+      Spec::Configuration.option(:rations, **options)
+    end
+  end
+
+  shared_context 'when many configuration options are defined' do
+    let(:data) do
+      {
+        weapons: {
+          swords: {
+            default_attack: :slash,
+            upgrade_parts:  %w[hilt tang pommel]
+          }
+        },
+        armor:   {
+          materials: %w[leather iron steel mithril adamantium orichalcum]
+        },
+        rations: '1/day'
+      }
+    end
+
+    before(:example) do
+      Spec::Configuration.option :rations
+
+      Spec::Configuration.namespace :armor do |armor|
+        armor.option :materials
+      end
+
+      Spec::Configuration.namespace :weapons do |weapons|
+        weapons.option :allow_polearms
+
+        weapons.namespace :swords do |swords|
+          swords.option :default_attack
+
+          swords.option :upgrade_parts
+        end
+      end
+    end
+  end
+
   shared_context 'when the data source is nil' do
     let(:instance) { described_class.new }
-  end # shared_context
+  end
 
   shared_context 'when the data source is an object' do
     let(:instance) { described_class.new(build_configuration(hash), &block) }
 
-    def build_configuration hsh
+    def build_configuration(hsh)
       obj = Struct.new(*hsh.keys).new
 
       hsh.each do |key, value|
         val = value.is_a?(Hash) ? build_configuration(value) : value
 
         obj.send :"#{key}=", val
-      end # each
+      end
 
       obj
-    end # method build_configuration
-  end # shared_context
+    end
+  end
 
-  shared_context 'when many configuration options are defined' do
-    let(:block) do
-      lambda do |config|
-        config.option :rations
+  subject(:configuration) { described_class.new(initial_state) }
 
-        config.namespace :armor do |armor|
-          armor.option :materials
-        end # namespace
+  let(:described_class) { Spec::Configuration }
+  let(:initial_state)   { nil }
+  let(:instance)        { configuration }
 
-        config.namespace :weapons do |weapons|
-          weapons.option :allow_polearms
-
-          weapons.namespace :swords do |swords|
-            swords.option :default_attack
-
-            swords.option :upgrade_parts
-          end # namespace
-        end # namespace
-      end # lambda
-    end # let
-  end # shared_context
-
-  let(:hash) do
-    {
-      :weapons => {
-        :swords => {
-          :default_attack => :slash,
-          :upgrade_parts  => %w(hilt tang pommel)
-        }, # end swords
-        :bows => {
-          :quiver_capacity => 30
-        }, # end bows
-        :allow_polearms => true
-      }, # end weapons
-      :armor => {
-        :materials => %w(leather iron steel mithril adamantium orichalcum)
-      }, # end armor
-      :rations          => '1/day',
-      :tutorial_monster => ->() { double('goblin') },
-      :fix_bards        => false,
-      :eleven_foot_pole => nil
-    } # end hash
-  end # let
-  let(:block)    { ->(_) {} }
-  let(:instance) { described_class.new(hash, &block) }
+  # rubocop:disable RSpec/DescribedClass
+  example_class 'Spec::Configuration',
+    SleepingKingStudios::Tools::Toolbox::Configuration
+  # rubocop:enable RSpec/DescribedClass
 
   describe '::new' do
     it { expect(described_class).to be_constructible.with(0..1).arguments }
-
-    wrap_context 'when many configuration options are defined' do
-      it 'should evaluate the block' do
-        expect(instance.rations).
-          to be == hash.fetch(:rations)
-
-        expect(instance.armor.materials).
-          to be == hash.fetch(:armor).fetch(:materials)
-
-        expect(instance.weapons.swords.upgrade_parts).
-          to be == hash.fetch(:weapons).fetch(:swords).fetch(:upgrade_parts)
-      end # it
-    end # wrap_context
-  end # describe
+  end
 
   describe '::namespace' do
-    let(:described_class) { Class.new(super()) }
-
     it 'should define the class method' do
-      expect(described_class).
-        to respond_to(:namespace).
-        with(1).argument.and_a_block
-    end # it
+      expect(described_class)
+        .to respond_to(:namespace)
+        .with(1).argument
+        .and_a_block
+    end
 
-    it 'should define the namespace' do
-      described_class.namespace :psionics
+    # rubocop:disable RSpec/DescribedClass
+    it 'should return the namespace' do
+      expect(described_class.namespace :psionics)
+        .to be_a(Class)
+        .and(be < SleepingKingStudios::Tools::Toolbox::Configuration)
+    end
+    # rubocop:enable RSpec/DescribedClass
 
-      expect(instance.psionics).
-        to be_a SleepingKingStudios::Tools::Toolbox::Configuration
+    # rubocop:disable RSpec/DescribedClass
+    context 'when called on the abstract class' do
+      let(:error_message) do
+        "can't define namespace or option on abstract class"
+      end
 
-      yielded = nil
-
-      instance.psionics { |obj| yielded = obj }
-
-      expect(yielded).to be instance.psionics
-    end # it
-
-    it 'should set the root namespace' do
-      described_class.namespace :psionics
-
-      expect(instance.psionics.send :__root_namespace__).to be instance
-    end # it
-
-    context 'when a value is defined for the namespace' do
-      it 'should define the namespace' do
-        described_class.namespace :armor do |config|
-          config.option :materials
-        end # namespace
-
-        expect(instance.armor).
-          to be_a SleepingKingStudios::Tools::Toolbox::Configuration
-        expect(instance.armor.materials).
-          to be == hash.fetch(:armor).fetch(:materials)
-      end # it
-    end # context
-
-    context 'when nested hash is defined for the namespace' do
-      it 'should define the nested namespaces' do
-        described_class.namespace :weapons do |config|
-          config.namespace :swords do |swords|
-            swords.option :default_attack
-          end # namespace
-        end # namespace
-
-        expect(instance.weapons).
-          to be_a SleepingKingStudios::Tools::Toolbox::Configuration
-        expect(instance.weapons.swords).
-          to be_a SleepingKingStudios::Tools::Toolbox::Configuration
-        expect(instance.weapons.swords.default_attack).
-          to be == hash.fetch(:weapons).fetch(:swords).fetch(:default_attack)
-      end # it
-
-      it 'should set the root namespace' do
-        described_class.namespace :weapons do |config|
-          config.namespace :swords
-        end # namespace
-
-        expect(instance.weapons.swords.send :__root_namespace__).to be instance
-      end # it
-    end # context
-
-    context 'when a namespace is defined on a subclass' do
-      let(:subclass) do
-        Class.new(described_class) do
-          option :moral_axes
-        end # class
-      end # let
-      let(:instance) { subclass.new(hash) }
-
-      it 'should not recursively define itself' do
-        described_class.namespace :planar_mechanics do |planar_mechanics|
-          planar_mechanics.option :elemental_affinities
-        end # described_class
-
-        expect(instance.planar_mechanics).
-          to be_a SleepingKingStudios::Tools::Toolbox::Configuration
-        expect(instance.planar_mechanics).not_to be_a subclass
-        expect(instance.planar_mechanics).
-          not_to respond_to(:planar_mechanics, :moral_axes)
-      end # it
-    end # context
-
-    context 'when many configuration options are defined' do
-      let(:hash) do
-        hsh = super()
-
-        hsh[:armor][:upgrade_parts] = %w(rune insignia)
-
-        hsh
-      end # let
-
-      it 'should update the namespace' do
-        described_class.namespace :armor do
-          option :materials
-        end # namespace
-
-        described_class.namespace :armor do
-          option :upgrade_parts
-        end # namespace
-
-        expect(instance.armor).
-          to be_a SleepingKingStudios::Tools::Toolbox::Configuration
-        expect(instance.armor.materials).
-          to be == hash.fetch(:armor).fetch(:materials)
-        expect(instance.armor.upgrade_parts).
-          to be == hash.fetch(:armor).fetch(:upgrade_parts)
-      end # it
-    end # wrap_context
-  end # describe
+      it 'should raise an error' do
+        expect do
+          SleepingKingStudios::Tools::Toolbox::Configuration.namespace :psionics
+        end
+          .to raise_error RuntimeError, error_message
+      end
+    end
+    # rubocop:enable RSpec/DescribedClass
+  end
 
   describe '::option' do
-    let(:described_class) { Class.new(super()) }
-
     it 'should define the class method' do
-      expect(described_class).
-        to respond_to(:option).
-        with(1).argument.
-        and_keywords(:allow_nil, :default, :enum)
-    end # it
+      expect(described_class)
+        .to respond_to(:option)
+        .with(1).argument
+        .and_keywords(:allow_nil, :default, :enum)
+    end
 
-    it 'should define the accessor' do
-      described_class.option :magic_enabled
+    it 'should return the option name' do
+      expect(described_class.option :cheat_mode).to be :cheat_mode
+    end
 
-      expect(instance).to have_reader(:magic_enabled).with_value(nil)
-    end # it
+    # rubocop:disable RSpec/DescribedClass
+    context 'when called on the abstract class' do
+      let(:error_message) do
+        "can't define namespace or option on abstract class"
+      end
 
-    it 'should define the mutator' do
-      described_class.option :magic_enabled
+      it 'should raise an error' do
+        expect do
+          SleepingKingStudios::Tools::Toolbox::Configuration.option :cheat_mode
+        end
+          .to raise_error RuntimeError, error_message
+      end
+    end
+    # rubocop:enable RSpec/DescribedClass
+  end
 
-      expect(instance).to have_writer(:magic_enabled)
+  describe '#:namespace' do
+    it { expect(configuration).not_to respond_to(:armor) }
 
-      expect { instance.magic_enabled = :confirmed }.
-        to change(instance, :magic_enabled).
-        to be == :confirmed
-    end # it
+    context 'when a namespace is defined' do
+      include_context 'when a namespace is defined'
 
-    context 'when a value is defined for the option' do
-      it 'should define the accessor' do
-        described_class.option :rations
+      let(:namespace) { configuration.armor }
 
-        expect(instance).
-          to have_reader(:rations).
-          with_value(hash.fetch :rations)
-      end # it
+      it { expect(configuration).to respond_to(:armor).with(0).arguments }
 
-      it 'should define the mutator' do
-        described_class.option :rations
+      # rubocop:disable RSpec/DescribedClass
+      it 'should be a configuration object' do
+        expect(namespace)
+          .to be_a SleepingKingStudios::Tools::Toolbox::Configuration
+      end
+      # rubocop:enable RSpec/DescribedClass
 
-        expect(instance).to have_writer(:rations)
+      describe 'with a block' do
+        it 'should yield the namespace' do
+          yielded = nil
 
-        expect { instance.rations = :confirmed }.
-          to change(instance, :rations).
-          to be == :confirmed
-      end # it
-    end # context
+          configuration.armor do |value|
+            yielded = value
+          end
 
-    describe 'with :default => object' do
-      let(:default) { :new_value }
+          expect(yielded).to be namespace
+        end
+      end
+    end
 
-      it 'should define the accessor' do
-        described_class.option :magic_enabled, :default => default
+    context 'when many configuration options are defined' do
+      include_context 'when many configuration options are defined'
 
-        expect(instance).
-          to have_reader(:magic_enabled).
-          with_value(be == default)
-      end # it
+      let(:namespace) { configuration.weapons }
 
-      context 'when a nil value is defined for the option' do
-        it 'should define the accessor' do
-          described_class.option :eleven_foot_pole, :default => default
+      it { expect(configuration).to respond_to(:weapons).with(0).arguments }
 
-          expect(instance).
-          to have_reader(:eleven_foot_pole).
-          with_value(default)
-        end # it
-      end # context
+      # rubocop:disable RSpec/DescribedClass
+      it 'should be a configuration object' do
+        expect(namespace)
+          .to be_a SleepingKingStudios::Tools::Toolbox::Configuration
+      end
+      # rubocop:enable RSpec/DescribedClass
 
-      context 'when a falsy value is defined for the option' do
-        it 'should define the accessor' do
-          described_class.option :fix_bards, :default => default
+      describe 'with a block' do
+        it 'should yield the namespace' do
+          yielded = nil
 
-          expect(instance).
-            to have_reader(:fix_bards).
-            with_value(hash.fetch :fix_bards)
-        end # it
-      end # context
+          configuration.weapons do |value|
+            yielded = value
+          end
 
-      context 'when a value is defined for the option' do
-        it 'should define the accessor' do
-          described_class.option :rations, :default => default
+          expect(yielded).to be namespace
+        end
+      end
 
-          expect(instance).
-            to have_reader(:rations).
-            with_value(hash.fetch :rations)
-        end # it
-      end # context
-    end # describe
+      context 'when the namespace is nested' do
+        let(:namespace) { configuration.weapons.swords }
 
-    describe 'with :default => proc' do
-      let(:default) { ->() { :custom_value } }
+        it { expect(configuration).to respond_to(:weapons).with(0).arguments }
 
-      it 'should define the accessor' do
-        described_class.option :magic_enabled, :default => default
+        # rubocop:disable RSpec/DescribedClass
+        it 'should be a configuration object' do
+          expect(namespace)
+            .to be_a SleepingKingStudios::Tools::Toolbox::Configuration
+        end
+        # rubocop:enable RSpec/DescribedClass
 
-        expect(instance).
-          to have_reader(:magic_enabled).
-          with_value(be == default.call)
-      end # it
+        describe 'with a block' do
+          it 'should yield the namespace' do
+            yielded = nil
 
-      context 'when a nil value is defined for the option' do
-        it 'should define the accessor' do
-          described_class.option :eleven_foot_pole, :default => default
+            configuration.weapons.swords do |value|
+              yielded = value
+            end
 
-          expect(instance).
-            to have_reader(:eleven_foot_pole).
-            with_value(default.call)
-        end # it
-      end # context
+            expect(yielded).to be namespace
+          end
+        end
+      end
+    end
+  end
 
-      context 'when a falsy value is defined for the option' do
-        it 'should define the accessor' do
-          described_class.option :fix_bards, :default => default
+  describe '#:option' do
+    it { expect(configuration).not_to respond_to(:rations) }
 
-          expect(instance).
-            to have_reader(:fix_bards).
-            with_value(hash.fetch :fix_bards)
-        end # it
-      end # context
+    context 'when an option is defined' do
+      include_context 'when an option is defined'
 
-      context 'when a value is defined for the option' do
-        it 'should define the accessor' do
-          described_class.option :rations, :default => default
+      it { expect(configuration).to have_reader(:rations).with_value(nil) }
 
-          expect(instance).
-            to have_reader(:rations).
-            with_value(hash.fetch :rations)
-        end # it
-      end # context
-    end # describe
+      context 'when the data includes a value for the option' do
+        let(:initial_state) { data }
 
-    describe 'with :default => method_call' do
-      let(:default) { ->() { scouter_level } }
+        it { expect(configuration.rations).to be == data.dig(:rations) }
+      end
 
-      before(:example) do
-        instance.define_singleton_method :scouter_level, ->() { 9_001 }
-      end # before_example
+      context 'with default: method call' do
+        let(:options) { super().merge(default: -> { feeding_schedule }) }
 
-      it 'should define the accessor' do
-        described_class.option :magic_enabled, :default => default
+        before(:example) do
+          Spec::Configuration.send(:define_method, :feeding_schedule) do
+            'Fortnightly'
+          end
+        end
 
-        expect(instance).
-          to have_reader(:magic_enabled).
-          with_value(be == instance.scouter_level)
-      end # it
+        it 'should return the default value' do
+          expect(configuration)
+            .to have_reader(:rations)
+            .with_value('Fortnightly')
+        end
 
-      context 'when a nil value is defined for the option' do
-        it 'should define the accessor' do
-          described_class.option :eleven_foot_pole, :default => default
+        context 'when the data includes a value for the option' do
+          let(:initial_state) { data }
 
-          expect(instance).
-            to have_reader(:eleven_foot_pole).
-            with_value(instance.scouter_level)
-        end # it
-      end # context
+          it { expect(configuration.rations).to be == data.dig(:rations) }
+        end
+      end
 
-      context 'when a falsy value is defined for the option' do
-        it 'should define the accessor' do
-          described_class.option :fix_bards, :default => default
+      context 'with default: proc' do
+        let(:options) { super().merge(default: -> { 'Monthly' }) }
 
-          expect(instance).
-            to have_reader(:fix_bards).
-            with_value(hash.fetch :fix_bards)
-        end # it
-      end # context
+        it 'should return the default value' do
+          expect(configuration)
+            .to have_reader(:rations)
+            .with_value('Monthly')
+        end
 
-      context 'when a value is defined for the option' do
-        it 'should define the accessor' do
-          described_class.option :rations, :default => default
+        context 'when the data includes a value for the option' do
+          let(:initial_state) { data }
 
-          expect(instance).
-            to have_reader(:rations).
-            with_value(hash.fetch :rations)
-        end # it
-      end # context
+          it { expect(configuration.rations).to be == data.dig(:rations) }
+        end
+      end
 
-      context 'when the option is defined on a nested namespace' do
-        it 'should define the accessor' do
-          default_proc = default
+      context 'with default: value' do
+        let(:options) { super().merge(default: 'Occasionally') }
 
-          described_class.namespace :weapons do |weapons|
-            weapons.namespace :swords do |swords|
-              swords.option :overkill_damage, :default => default_proc
-            end # namespace
-          end # namespace
+        it 'should return the default value' do
+          expect(configuration)
+            .to have_reader(:rations)
+            .with_value('Occasionally')
+        end
 
-          expect(instance.weapons.swords.overkill_damage).
-            to be == instance.scouter_level
-        end # it
-      end # context
-    end # describe
+        context 'when the data includes a value for the option' do
+          let(:initial_state) { data }
 
-    describe 'with :enum => an Array' do
-      let(:hash) { super().fetch(:weapons) }
-      let(:enum) { %w(spear pike halberd bohemian-earspoon) }
-      let(:name) { :starting_polearm }
-      let(:opts) { { :enum => enum } }
+          it { expect(configuration.rations).to be == data.dig(:rations) }
+        end
+      end
+    end
 
-      before(:example) do
-        described_class.option name, **opts
-      end # before example
+    context 'when an option is defined in a namespace' do
+      include_context 'when a namespace is defined'
 
-      def error_message value
-        array_tools   = ::SleepingKingStudios::Tools::ArrayTools
-        valid_options =
-          array_tools.humanize_list(
-            enum.map(&:inspect),
-            :last_separator => ' or '
-          ) # end humanize_list
+      it 'should define the option' do
+        expect(configuration.armor).to have_reader(:materials).with_value(nil)
+      end
 
-        "expected option to be #{valid_options}, but was #{value.inspect}"
-      end # method error_message
+      context 'when the data includes a value for the option' do
+        let(:initial_state) { data }
 
-      describe 'should define the accessor' do
-        it { expect(instance).to have_reader(:starting_polearm) }
+        it 'should return the value' do
+          expect(configuration.armor.materials)
+            .to be == data.dig(:armor, :materials)
+        end
+      end
+    end
 
-        it 'should raise an error' do
-          expect { instance.starting_polearm }.
-            to raise_error error_message(nil)
-        end # it
+    context 'when an option is defined in a nested namespace' do
+      include_context 'when many configuration options are defined'
 
-        describe 'with :allow_nil => true' do
-          let(:opts) { super().merge :allow_nil => true }
+      it 'should define the option' do
+        expect(configuration.weapons.swords)
+          .to have_reader(:upgrade_parts)
+          .with_value(nil)
+      end
 
-          it 'should return nil' do
-            expect(instance.starting_polearm).to be nil
-          end # it
-        end # describe
-      end # describe
+      context 'when the data includes a value for the option' do
+        let(:initial_state) { data }
 
-      describe 'should define the mutator' do
-        it { expect(instance).to have_writer(:starting_polearm) }
+        it 'should return the value' do
+          expect(configuration.weapons.swords.upgrade_parts)
+            .to be == data.dig(:weapons, :swords, :upgrade_parts)
+        end
+      end
+    end
+  end
+
+  describe '#:option=' do
+    it { expect(configuration).not_to respond_to(:rations=) }
+
+    context 'when an option is defined' do
+      include_context 'when an option is defined'
+
+      it { expect(configuration).to respond_to(:rations=).with(1).argument }
+
+      describe 'with nil' do
+        it 'should not change the value' do
+          expect { configuration.rations = nil }
+            .not_to change(configuration, :rations)
+        end
+      end
+
+      describe 'with a value' do
+        it 'should set the value' do
+          expect { configuration.rations = 'Rarely' }
+            .to change(configuration, :rations)
+            .to be == 'Rarely'
+        end
+      end
+
+      context 'when the data includes a value for the option' do
+        let(:initial_state) { data }
 
         describe 'with nil' do
+          it 'should clear the value' do
+            expect { configuration.rations = nil }
+              .to change(configuration, :rations)
+              .to be nil
+          end
+        end
+
+        describe 'with the old value' do
+          it 'should not change the value' do
+            expect { configuration.rations = data[:rations] }
+              .not_to change(configuration, :rations)
+          end
+        end
+
+        describe 'with a new value' do
+          it 'should set the value' do
+            expect { configuration.rations = 'Rarely' }
+              .to change(configuration, :rations)
+              .to be == 'Rarely'
+          end
+        end
+      end
+
+      context 'with enum: value' do
+        let(:initial_state) do
+          { rations: 'Daily' }
+        end
+        let(:options) { super().merge(enum: %w[Daily Weekly Monthly]) }
+
+        describe 'with nil' do
+          let(:error_message) do
+            'expected option to be "Daily", "Weekly", or "Monthly", but was nil'
+          end
+
           it 'should raise an error' do
-            expect { instance.starting_polearm = nil }.
-              to raise_error error_message(nil)
-          end # it
-        end # describe
+            expect { configuration.rations = nil }
+              .to raise_error error_message
+          end
+        end
 
         describe 'with an invalid value' do
+          let(:error_message) do
+            'expected option to be "Daily", "Weekly", or "Monthly", but was' \
+            ' "Fortnightly"'
+          end
+
           it 'should raise an error' do
-            expect { instance.starting_polearm = 'bec-du-corbin' }.
-              to raise_error error_message('bec-du-corbin')
-          end # it
-        end # describe
+            expect { configuration.rations = 'Fortnightly' }
+              .to raise_error error_message
+          end
+        end
 
         describe 'with a valid value' do
           it 'should set the value' do
-            instance.starting_polearm = 'halberd'
-
-            expect(instance.starting_polearm).to be == 'halberd'
-          end # it
-        end # describe
-      end # describe
-
-      context 'when an invalid value is defined for the option' do
-        let(:hash) { super().merge :starting_polearm => 'bec-du-corbin' }
-
-        describe 'should define the accessor' do
-          it 'should raise an error' do
-            expect { instance.starting_polearm }.
-              to raise_error error_message('bec-du-corbin')
-          end # it
-        end # describe
-
-        describe 'should define the mutator' do
-          it 'should set the value' do
-            instance.starting_polearm = 'halberd'
-
-            expect(instance.starting_polearm).to be == 'halberd'
-          end # it
-        end # describe
-      end # context
-
-      context 'when a valid value is defined for the option' do
-        let(:hash) { super().merge :starting_polearm => 'bohemian-earspoon' }
-
-        describe 'should define the accessor' do
-          it 'should return the value' do
-            expect(instance.starting_polearm).to be == 'bohemian-earspoon'
-          end # it
-        end # describe
-
-        describe 'should define the mutator' do
-          it 'should set the value' do
-            expect { instance.starting_polearm = 'halberd' }.
-              to change(instance, :starting_polearm).
-              to be == 'halberd'
-          end # it
-        end # describe
-      end # context
-    end # describe
-  end # describe
+            expect { configuration.rations = 'Weekly' }
+              .to change(configuration, :rations)
+              .to be == 'Weekly'
+          end
+        end
+      end
+    end
+  end
 
   describe '#[]' do
-    it { expect(instance).to respond_to(:[]).with(1).argument }
+    it { expect(configuration).to respond_to(:[]).with(1).argument }
 
-    describe 'with a string' do
-      it { expect(instance['rations']).to be nil }
-    end # describe
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { configuration[nil] }
+          .to raise_error TypeError, 'nil is not a symbol nor a string'
+      end
+    end
 
-    describe 'with a symbol' do
-      it { expect(instance[:rations]).to be nil }
-    end # describe
+    describe 'with an invalid string' do
+      it { expect(configuration['psionics']).to be nil }
+    end
 
-    wrap_context 'when many configuration options are defined' do
-      describe 'with a string' do
-        it { expect(instance['rations']).to be == hash[:rations] }
-      end # describe
+    describe 'with an invalid symbol' do
+      it { expect(configuration[:psionics]).to be nil }
+    end
 
-      describe 'with a symbol' do
-        it { expect(instance[:rations]).to be == hash[:rations] }
-      end # describe
-    end # wrap_context
-  end # describe
+    context 'when an option is defined' do
+      include_context 'when an option is defined'
+
+      describe 'with nil' do
+        it 'should raise an error' do
+          expect { configuration[nil] }
+            .to raise_error TypeError, 'nil is not a symbol nor a string'
+        end
+      end
+
+      describe 'with an invalid string' do
+        it { expect(configuration['psionics']).to be nil }
+      end
+
+      describe 'with an invalid symbol' do
+        it { expect(configuration[:psionics]).to be nil }
+      end
+
+      describe 'with a valid string' do
+        it { expect(configuration['rations']).to be nil }
+      end
+
+      context 'when the data includes a value for the option' do
+        let(:initial_state) { data }
+
+        describe 'with a valid symbol' do
+          it { expect(configuration[:rations]).to be == data[:rations] }
+        end
+
+        describe 'with a valid string' do
+          it { expect(configuration['rations']).to be == data[:rations] }
+        end
+      end
+
+      context 'with default: method call' do
+        let(:options) { super().merge(default: -> { feeding_schedule }) }
+
+        before(:example) do
+          Spec::Configuration.send(:define_method, :feeding_schedule) do
+            'Fortnightly'
+          end
+        end
+
+        describe 'with a valid symbol' do
+          it { expect(configuration[:rations]).to be == 'Fortnightly' }
+        end
+
+        describe 'with a valid string' do
+          it { expect(configuration['rations']).to be == 'Fortnightly' }
+        end
+
+        # rubocop:disable RSpec/NestedGroups
+        context 'when the data includes a value for the option' do
+          let(:initial_state) { data }
+
+          describe 'with a valid symbol' do
+            it { expect(configuration[:rations]).to be == data[:rations] }
+          end
+
+          describe 'with a valid string' do
+            it { expect(configuration['rations']).to be == data[:rations] }
+          end
+        end
+        # rubocop:enable RSpec/NestedGroups
+      end
+
+      context 'with default: proc' do
+        let(:options) { super().merge(default: -> { 'Monthly' }) }
+
+        describe 'with a valid symbol' do
+          it { expect(configuration[:rations]).to be == 'Monthly' }
+        end
+
+        describe 'with a valid string' do
+          it { expect(configuration['rations']).to be == 'Monthly' }
+        end
+
+        # rubocop:disable RSpec/NestedGroups
+        context 'when the data includes a value for the option' do
+          let(:initial_state) { data }
+
+          describe 'with a valid symbol' do
+            it { expect(configuration[:rations]).to be == data[:rations] }
+          end
+
+          describe 'with a valid string' do
+            it { expect(configuration['rations']).to be == data[:rations] }
+          end
+        end
+        # rubocop:enable RSpec/NestedGroups
+      end
+
+      context 'with default: value' do
+        let(:options) { super().merge(default: 'Occasionally') }
+
+        describe 'with a valid symbol' do
+          it { expect(configuration[:rations]).to be == 'Occasionally' }
+        end
+
+        describe 'with a valid string' do
+          it { expect(configuration['rations']).to be == 'Occasionally' }
+        end
+
+        # rubocop:disable RSpec/NestedGroups
+        context 'when the data includes a value for the option' do
+          let(:initial_state) { data }
+
+          describe 'with a valid symbol' do
+            it { expect(configuration[:rations]).to be == data[:rations] }
+          end
+
+          describe 'with a valid string' do
+            it { expect(configuration['rations']).to be == data[:rations] }
+          end
+        end
+        # rubocop:enable RSpec/NestedGroups
+      end
+    end
+  end
 
   describe '#[]=' do
     it { expect(instance).to respond_to(:[]=).with(2).arguments }
 
-      describe 'with a string' do
-        it 'should raise an error' do
-          expect { instance['rations'] = '2/day' }.to raise_error NoMethodError
-        end # it
-      end # describe
-
-    describe 'with a symbol' do
+    describe 'with nil' do
       it 'should raise an error' do
-        expect { instance[:rations] = '2/day' }.to raise_error NoMethodError
-      end # it
-    end # describe
+        expect { configuration[nil] = 'value' }
+          .to raise_error TypeError, 'nil is not a symbol nor a string'
+      end
+    end
 
-    wrap_context 'when many configuration options are defined' do
-      describe 'with a string' do
-        it 'should set the value' do
-          expect { instance['rations'] = '2/day' }.
-            to change(instance, :rations).
-            to be == '2/day'
-        end # it
-      end # describe
+    describe 'with an invalid string' do
+      it { expect { configuration['psionics'] = true }.not_to raise_error }
+    end
 
-      describe 'with a symbol' do
-        it 'should set the value' do
-          expect { instance[:rations] = '2/day' }.
-            to change(instance, :rations).
-            to be == '2/day'
-        end # it
-      end # describe
-    end # wrap_context
-  end # describe
+    describe 'with an invalid symbol' do
+      it { expect { configuration[:psionics] = true }.not_to raise_error }
+    end
 
-  describe '#__data__' do
-    def expect_object_to_equal_hash obj, hsh
-      hsh.each do |key, expected|
-        expect(obj).to respond_to(key).with(0).arguments
+    context 'when an option is defined' do
+      include_context 'when an option is defined'
 
-        value = obj.send(key)
+      describe 'with nil' do
+        it 'should raise an error' do
+          expect { configuration[nil] = 'value' }
+            .to raise_error TypeError, 'nil is not a symbol nor a string'
+        end
+      end
 
-        if expected.is_a?(Hash)
-          expect_object_to_equal_hash value, expected
-        else
-          expect(value).to be == expected
-        end # if-else
-      end # each
-    end # method obj, hsh
+      describe 'with an invalid string' do
+        it { expect { configuration['psionics'] = true }.not_to raise_error }
+      end
 
-    it 'should define the private reader' do
-      expect(instance).not_to respond_to(:__data__)
+      describe 'with an invalid symbol' do
+        it { expect { configuration[:psionics] = true }.not_to raise_error }
+      end
 
-      expect(instance).to respond_to(:__data__, true).with(0).arguments
-    end # it
+      describe 'with a valid string and nil value' do
+        it 'should not change the value' do
+          expect { configuration['rations'] = nil }
+            .not_to change(configuration, :rations)
+        end
+      end
 
-    it { expect_object_to_equal_hash instance.send(:__data__), hash }
+      describe 'with a valid string and new value' do
+        it 'should not set the value' do
+          expect { configuration['rations'] = 'Fortnightly' }
+            .to change(configuration, :rations)
+            .to be == 'Fortnightly'
+        end
+      end
 
-    wrap_context 'when the data source is nil' do
-      it { expect(instance.send :__data__).to be nil }
-    end # wrap_context
+      describe 'with a valid symbol and nil value' do
+        it 'should not change the value' do
+          expect { configuration[:rations] = nil }
+            .not_to change(configuration, :rations)
+        end
+      end
 
-    wrap_context 'when the data source is an object' do
-      it { expect_object_to_equal_hash instance.send(:__data__), hash }
-    end # wrap_context
-  end # describe
+      describe 'with a valid symbol and new value' do
+        it 'should not set the value' do
+          expect { configuration[:rations] = 'Fortnightly' }
+            .to change(configuration, :rations)
+            .to be == 'Fortnightly'
+        end
+      end
 
-  describe '#__root_namespace__' do
-    it 'should define the private reader' do
-      expect(instance).not_to respond_to(:__root_namespace__)
+      context 'when the data includes a value for the option' do
+        let(:initial_state) { data }
 
-      expect(instance).
-        to respond_to(:__root_namespace__, true).
-        with(0).arguments
-    end # it
+        describe 'with a valid string and nil value' do
+          it 'should clear the value' do
+            expect { configuration['rations'] = nil }
+              .to change(configuration, :rations)
+              .to be nil
+          end
+        end
 
-    it { expect(instance.send :__root_namespace__).to be instance }
-  end # describe
+        describe 'with a valid string and the old value' do
+          it 'should not change the value' do
+            expect { configuration['rations'] = data[:rations] }
+              .not_to change(configuration, :rations)
+          end
+        end
+
+        describe 'with a valid string and a new value' do
+          it 'should clear the value' do
+            expect { configuration['rations'] = 'Fortnightly' }
+              .to change(configuration, :rations)
+              .to be 'Fortnightly'
+          end
+        end
+
+        describe 'with a valid symbol and nil value' do
+          it 'should clear the value' do
+            expect { configuration[:rations] = nil }
+              .to change(configuration, :rations)
+              .to be nil
+          end
+        end
+
+        describe 'with a valid symbol and the old value' do
+          it 'should not change the value' do
+            expect { configuration[:rations] = data[:rations] }
+              .not_to change(configuration, :rations)
+          end
+        end
+
+        describe 'with a valid symbol and a new value' do
+          it 'should clear the value' do
+            expect { configuration[:rations] = 'Fortnightly' }
+              .to change(configuration, :rations)
+              .to be 'Fortnightly'
+          end
+        end
+      end
+
+      context 'with enum: value' do
+        let(:initial_state) do
+          { rations: 'Daily' }
+        end
+        let(:options) { super().merge(enum: %w[Daily Weekly Monthly]) }
+
+        describe 'with a valid string and nil value' do
+          let(:error_message) do
+            'expected option to be "Daily", "Weekly", or "Monthly", but was nil'
+          end
+
+          it 'should raise an error' do
+            expect { configuration['rations'] = nil }
+              .to raise_error error_message
+          end
+        end
+
+        describe 'with a valid string and invalid value' do
+          let(:error_message) do
+            'expected option to be "Daily", "Weekly", or "Monthly", but was' \
+            ' "Fortnightly"'
+          end
+
+          it 'should raise an error' do
+            expect { configuration['rations'] = 'Fortnightly' }
+              .to raise_error error_message
+          end
+        end
+
+        describe 'with a valid string and a valid value' do
+          it 'should clear the value' do
+            expect { configuration['rations'] = 'Monthly' }
+              .to change(configuration, :rations)
+              .to be 'Monthly'
+          end
+        end
+
+        describe 'with a valid symbol and nil value' do
+          let(:error_message) do
+            'expected option to be "Daily", "Weekly", or "Monthly", but was nil'
+          end
+
+          it 'should raise an error' do
+            expect { configuration[:rations] = nil }
+              .to raise_error error_message
+          end
+        end
+
+        describe 'with a valid symbol and invalid value' do
+          let(:error_message) do
+            'expected option to be "Daily", "Weekly", or "Monthly", but was' \
+            ' "Fortnightly"'
+          end
+
+          it 'should raise an error' do
+            expect { configuration[:rations] = 'Fortnightly' }
+              .to raise_error error_message
+          end
+        end
+
+        describe 'with a valid symbol and a valid value' do
+          it 'should clear the value' do
+            expect { configuration[:rations] = 'Monthly' }
+              .to change(configuration, :rations)
+              .to be 'Monthly'
+          end
+        end
+      end
+    end
+  end
 
   describe '#dig' do
     it { expect(instance).to respond_to(:dig).with_unlimited_arguments }
 
-    describe 'with a string' do
-      it { expect(instance.dig 'rations').to be nil }
-    end # describe
+    describe 'with an invalid string' do
+      it { expect(instance.dig 'psionics').to be nil }
+    end
 
-    describe 'with a symbol' do
-      it { expect(instance.dig :rations).to be nil }
-    end # describe
+    describe 'with an invalid symbol' do
+      it { expect(instance.dig :psionics).to be nil }
+    end
 
-    describe 'with many strings' do
-      it { expect(instance.dig(*%w(weapons swords default_attack))).to be nil }
-    end # describe
+    describe 'with an invalid sequence of strings' do
+      it 'should return nil' do
+        expect(instance.dig('spells', 'evocation', 'magic_missile')).to be nil
+      end
+    end
 
-    describe 'with many symbols' do
-      it { expect(instance.dig(*%i(weapons swords default_attack))).to be nil }
-    end # describe
+    describe 'with an invalid sequence of symbols' do
+      it 'should return nil' do
+        expect(instance.dig(:spells, :evocation, :magic_missile)).to be nil
+      end
+    end
 
-    wrap_context 'when many configuration options are defined' do
-      describe 'with a string' do
-        it { expect(instance.dig 'rations').to be == hash[:rations] }
-      end # describe
+    context 'when an option is defined' do
+      include_context 'when an option is defined'
 
-      describe 'with a symbol' do
-        it { expect(instance.dig :rations).to be == hash[:rations] }
-      end # describe
+      describe 'with an invalid string' do
+        it { expect(instance.dig 'psionics').to be nil }
+      end
 
-      describe 'with many strings' do
-        it 'should return the value' do
-          expect(instance.dig(*%w(weapons swords default_attack))).
-            to be == hash[:weapons][:swords][:default_attack]
-        end # it
-      end # describe
+      describe 'with an invalid symbol' do
+        it { expect(instance.dig :psionics).to be nil }
+      end
 
-      describe 'with many symbols' do
-        it 'should return the value' do
-          expect(instance.dig(*%i(weapons swords default_attack))).
-            to be == hash[:weapons][:swords][:default_attack]
-        end # it
-      end # describe
-    end # wrap_context
-  end # describe
+      describe 'with a valid string' do
+        it { expect(instance.dig 'rations').to be nil }
+      end
+
+      describe 'with a valid symbol' do
+        it { expect(instance.dig :rations).to be nil }
+      end
+
+      describe 'with an invalid sequence of strings' do
+        it 'should return nil' do
+          expect(instance.dig('spells', 'evocation', 'magic_missile')).to be nil
+        end
+      end
+
+      describe 'with an invalid sequence of symbols' do
+        it 'should return nil' do
+          expect(instance.dig(:spells, :evocation, :magic_missile)).to be nil
+        end
+      end
+
+      context 'when the data includes a value for the option' do
+        let(:initial_state) { data }
+
+        describe 'with a valid string' do
+          it { expect(instance.dig 'rations').to be == data[:rations] }
+        end
+
+        describe 'with a valid symbol' do
+          it { expect(instance.dig :rations).to be == data[:rations] }
+        end
+      end
+    end
+
+    context 'when a namespace is defined' do
+      include_context 'when a namespace is defined'
+
+      describe 'with an invalid string' do
+        it { expect(instance.dig 'psionics').to be nil }
+      end
+
+      describe 'with an invalid symbol' do
+        it { expect(instance.dig :psionics).to be nil }
+      end
+
+      describe 'with a valid scoped string' do
+        it { expect(instance.dig 'armor', 'materials').to be nil }
+      end
+
+      describe 'with a valid scoped symbol' do
+        it { expect(instance.dig :armor, :materials).to be nil }
+      end
+
+      context 'when the data includes a value for the option' do
+        let(:initial_state) { data }
+
+        describe 'with a valid scoped string' do
+          it 'should find the value' do
+            expect(instance.dig 'armor', 'materials')
+              .to be == data[:armor][:materials]
+          end
+        end
+
+        describe 'with a valid scoped symbol' do
+          it 'should find the value' do
+            expect(instance.dig :armor, :materials)
+              .to be == data[:armor][:materials]
+          end
+        end
+      end
+    end
+
+    context 'when many configuration options are defined' do
+      include_context 'when many configuration options are defined'
+
+      describe 'with an invalid string' do
+        it { expect(instance.dig 'psionics').to be nil }
+      end
+
+      describe 'with an invalid symbol' do
+        it { expect(instance.dig :psionics).to be nil }
+      end
+
+      describe 'with a valid scoped string' do
+        it 'should return nil' do
+          expect(instance.dig 'weapons', 'swords', 'default_attack').to be nil
+        end
+      end
+
+      describe 'with a valid scoped symbol' do
+        it 'should return nil' do
+          expect(instance.dig :weapons, :swords, :default_attack).to be nil
+        end
+      end
+
+      context 'when the data includes a value for the option' do
+        let(:initial_state) { data }
+
+        describe 'with a valid scoped string' do
+          it 'should find the value' do
+            expect(instance.dig 'weapons', 'swords', 'default_attack')
+              .to be == data[:weapons][:swords][:default_attack]
+          end
+        end
+
+        describe 'with a valid scoped symbol' do
+          it 'should find the value' do
+            expect(instance.dig :weapons, :swords, :default_attack)
+              .to be == data[:weapons][:swords][:default_attack]
+          end
+        end
+      end
+    end
+  end
 
   describe '#fetch' do
     it 'should define the method' do
       expect(instance).to respond_to(:fetch).with(1..2).arguments
-    end # it
+    end
 
-    describe 'with a string' do
+    describe 'with nil' do
       it 'should raise an error' do
-        expect { instance.fetch 'rations' }.to raise_error KeyError
-      end # it
+        expect { configuration.fetch nil }
+          .to raise_error TypeError, 'nil is not a symbol nor a string'
+      end
+    end
 
-      describe 'with a default block' do
-        it { expect(instance.fetch('rations') { '0/day' }).to be == '0/day' }
-      end # describe
+    describe 'with an invalid string' do
+      it 'should raise an error' do
+        expect { configuration.fetch 'psionics' }
+          .to raise_error KeyError, 'key not found: "psionics"'
+      end
+
+      describe 'with a block' do
+        it 'should evaluate and return the block' do
+          expect(configuration.fetch('psionics') { 'No value' })
+            .to be == 'No value'
+        end
+      end
+
+      describe 'with a block with a yielded parameter' do
+        it 'should evaluate and return the block' do
+          expect(configuration.fetch('psionics') { |key| "Unknown key #{key}" })
+            .to be == 'Unknown key psionics'
+        end
+      end
 
       describe 'with a default value' do
-        it { expect(instance.fetch 'rations', '0/day').to be == '0/day' }
-      end # describe
-    end # describe
+        it 'should return the default value' do
+          expect(configuration.fetch('psionics', 'unknown'))
+            .to be == 'unknown'
+        end
+      end
+    end
 
-    describe 'with a symbol' do
+    describe 'with an invalid symbol' do
       it 'should raise an error' do
-        expect { instance.fetch :rations }.to raise_error KeyError
-      end # it
+        expect { configuration.fetch :psionics }
+          .to raise_error KeyError, 'key not found: :psionics'
+      end
 
-      describe 'with a default block' do
-        it { expect(instance.fetch(:rations) { '0/day' }).to be == '0/day' }
-      end # describe
+      describe 'with a block' do
+        it 'should evaluate and return the block' do
+          expect(configuration.fetch(:psionics) { 'No value' })
+            .to be == 'No value'
+        end
+      end
+
+      describe 'with a block with a yielded parameter' do
+        it 'should evaluate and return the block' do
+          expect(configuration.fetch(:psionics) { |key| "Unknown key #{key}" })
+            .to be == 'Unknown key psionics'
+        end
+      end
 
       describe 'with a default value' do
-        it { expect(instance.fetch :rations, '0/day').to be == '0/day' }
-      end # describe
-    end # describe
+        it 'should return the default value' do
+          expect(configuration.fetch(:psionics, 'unknown'))
+            .to be == 'unknown'
+        end
+      end
+    end
 
-    wrap_context 'when many configuration options are defined' do
-      describe 'with a string' do
-        it { expect(instance.fetch 'rations').to be == hash[:rations] }
+    context 'when an option is defined' do
+      include_context 'when an option is defined'
 
-        describe 'with a default block' do
+      describe 'with nil' do
+        it 'should raise an error' do
+          expect { configuration.fetch nil }
+            .to raise_error TypeError, 'nil is not a symbol nor a string'
+        end
+      end
+
+      describe 'with an invalid string' do
+        it 'should raise an error' do
+          expect { configuration.fetch 'psionics' }
+            .to raise_error KeyError, 'key not found: "psionics"'
+        end
+
+        describe 'with a block' do
+          it 'should evaluate and return the block' do
+            expect(configuration.fetch('psionics') { 'No value' })
+              .to be == 'No value'
+          end
+        end
+
+        describe 'with a block with a yielded parameter' do
+          it 'should evaluate and return the block' do
+            expect(
+              configuration.fetch('psionics') { |key| "Unknown key #{key}" }
+            )
+              .to be == 'Unknown key psionics'
+          end
+        end
+
+        describe 'with a default value' do
+          it 'should return the default value' do
+            expect(configuration.fetch('psionics', 'unknown'))
+              .to be == 'unknown'
+          end
+        end
+      end
+
+      describe 'with an invalid symbol' do
+        it 'should raise an error' do
+          expect { configuration.fetch :psionics }
+            .to raise_error KeyError, 'key not found: :psionics'
+        end
+
+        describe 'with a block' do
+          it 'should evaluate and return the block' do
+            expect(configuration.fetch(:psionics) { 'No value' })
+              .to be == 'No value'
+          end
+        end
+
+        describe 'with a block with a yielded parameter' do
+          it 'should evaluate and return the block' do
+            expect(
+              configuration.fetch(:psionics) { |key| "Unknown key #{key}" }
+            )
+              .to be == 'Unknown key psionics'
+          end
+        end
+
+        describe 'with a default value' do
+          it 'should return the default value' do
+            expect(configuration.fetch(:psionics, 'unknown'))
+              .to be == 'unknown'
+          end
+        end
+      end
+
+      describe 'with a valid string' do
+        it 'should return the value' do
+          expect(configuration.fetch 'rations').to be nil
+        end
+
+        describe 'with a block' do
           it 'should return the value' do
-            expect(instance.fetch('rations') { '0/day' }).
-              to be == hash[:rations]
-          end # it
-        end # describe
+            expect(configuration.fetch('rations') { 'No value' }).to be nil
+          end
+        end
+
+        describe 'with a block with a yielded parameter' do
+          it 'should return the value' do
+            expect(
+              configuration.fetch('rations') { |key| "Unknown key #{key}" }
+            )
+              .to be nil
+          end
+        end
 
         describe 'with a default value' do
           it 'should return the value' do
-            expect(instance.fetch 'rations', '0/day').
-              to be == hash[:rations]
-          end # it
-        end # describe
-      end # describe
+            expect(configuration.fetch('rations', 'unknown')).to be nil
+          end
+        end
+      end
 
-      describe 'with a symbol' do
-        it { expect(instance.fetch :rations).to be == hash[:rations] }
+      describe 'with a valid symbol' do
+        it 'should return the value' do
+          expect(configuration.fetch :rations).to be nil
+        end
 
-        describe 'with a default block' do
+        describe 'with a block' do
           it 'should return the value' do
-            expect(instance.fetch(:rations) { '0/day' }).
-              to be == hash[:rations]
-          end # it
-        end # describe
+            expect(configuration.fetch(:rations) { 'No value' }).to be nil
+          end
+        end
+
+        describe 'with a block with a yielded parameter' do
+          it 'should return the value' do
+            expect(
+              configuration.fetch(:rations) { |key| "Unknown key #{key}" }
+            )
+              .to be nil
+          end
+        end
 
         describe 'with a default value' do
           it 'should return the value' do
-            expect(instance.fetch :rations, '0/day').
-              to be == hash[:rations]
-          end # it
-        end # describe
-      end # describe
-    end # wrap_context
-  end # describe
-end # describe
+            expect(configuration.fetch(:rations, 'unknown')).to be nil
+          end
+        end
+      end
+
+      # rubocop:disable RSpec/NestedGroups
+      context 'when the data includes a value for the option' do
+        let(:initial_state) { data }
+
+        describe 'with a valid string' do
+          it 'should return the value' do
+            expect(configuration.fetch 'rations')
+              .to be == data[:rations]
+          end
+
+          describe 'with a block' do
+            it 'should return the value' do
+              expect(configuration.fetch('rations') { 'No value' })
+                .to be == data[:rations]
+            end
+          end
+
+          describe 'with a block with a yielded parameter' do
+            it 'should return the value' do
+              expect(
+                configuration.fetch('rations') { |key| "Unknown key #{key}" }
+              )
+                .to be == data[:rations]
+            end
+          end
+
+          describe 'with a default value' do
+            it 'should return the value' do
+              expect(configuration.fetch('rations', 'unknown'))
+                .to be == data[:rations]
+            end
+          end
+        end
+
+        describe 'with a valid symbol' do
+          it 'should return the value' do
+            expect(configuration.fetch :rations)
+              .to be == data[:rations]
+          end
+
+          describe 'with a block' do
+            it 'should return the value' do
+              expect(configuration.fetch(:rations) { 'No value' })
+                .to be == data[:rations]
+            end
+          end
+
+          describe 'with a block with a yielded parameter' do
+            it 'should return the value' do
+              expect(
+                configuration.fetch(:rations) { |key| "Unknown key #{key}" }
+              )
+                .to be == data[:rations]
+            end
+          end
+
+          describe 'with a default value' do
+            it 'should return the value' do
+              expect(configuration.fetch(:rations, 'unknown'))
+                .to be == data[:rations]
+            end
+          end
+        end
+      end
+      # rubocop:enable RSpec/NestedGroups
+    end
+  end
+end
