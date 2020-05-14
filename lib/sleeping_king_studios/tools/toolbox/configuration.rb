@@ -125,10 +125,10 @@ module SleepingKingStudios::Tools::Toolbox
       @data           = convert_data_to_struct(data)
       @root_namespace = self
 
-      return unless block_given?
-
       SleepingKingStudios::Tools::CoreTools
-        .deprecate('Configuration#initialize with a block')
+        .deprecate('Configuration', message: 'use a Stannum::Struct')
+
+      return unless block_given?
 
       yield(singleton_class)
     end
