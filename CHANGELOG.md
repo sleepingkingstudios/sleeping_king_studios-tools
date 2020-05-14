@@ -10,6 +10,7 @@ This release adds a number of deprecations. All deprecated code will be removed 
 
 #### Toolbox
 
+- Deprecate Toolbox::Configuration. Use a struct instead.
 - Deprecate Toolbox::Delegator. Use the stdlib Forwardable module instead.
 
 ### 0.7.1

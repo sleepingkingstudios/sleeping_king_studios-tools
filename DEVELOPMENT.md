@@ -11,16 +11,6 @@ Preview build for 1.0.0: maintain backward compability with deprecation warnings
 - Deprecate sleeping_king_studios/tools/all
 - Remove /bin directory.
 
-#### Configuration
-
-- Extract Configuration::Option
-- Track .options, .namespaces
-- Raise on invalid value on initialization, not read
-- Refactor @data to Hash, pull data from given object or Hash
-- #[] and #[] should fail on invalid options
-  - deprecate #fetch?
-- Clarify :allow_nil option
-
 #### ConstantMap
 
 - Refactor to use ConstantMap < Module.new pattern ?
@@ -44,6 +34,7 @@ Preview build for 1.0.0: maintain backward compability with deprecation warnings
 - Remove non-abbreviated methods (tools.object, tools.array)
   - Causes conflict with core #hash method
   - Add abbreviated methods (#obj, #ary, #hsh)
+  - Add non-abbreviated suffixed methods (#hash_tools)
 
 ## 1.0.0
 
