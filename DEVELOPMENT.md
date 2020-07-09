@@ -11,10 +11,6 @@ Preview build for 1.0.0: maintain backward compability with deprecation warnings
 - Deprecate sleeping_king_studios/tools/all
 - Remove /bin directory.
 
-#### ConstantMap
-
-- Refactor to use ConstantMap < Module.new pattern ?
-
 #### Inflector
 
 - Refactor PluralInflector to Inflector.
