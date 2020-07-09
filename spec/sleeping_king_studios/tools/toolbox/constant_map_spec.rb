@@ -36,6 +36,18 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
     end
   end
 
+  describe '#:constant_name' do
+    it { expect(instance).not_to respond_to(:guest) }
+
+    wrap_context 'when many constants are defined' do
+      it { expect(instance).not_to respond_to(:intruder) }
+
+      it { expect(instance).to respond_to(:guest).with(0).arguments }
+
+      it { expect(instance.guest).to be == constants[:GUEST] }
+    end
+  end
+
   describe '#all' do
     it { expect(instance).to respond_to(:all).with(0).arguments }
 
@@ -85,23 +97,37 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
   end
 
   describe '#each' do
-    it { expect(instance).to respond_to(:each).with(0).arguments.and_a_block }
+    it { expect(instance).to respond_to(:each).with(0).arguments }
 
-    it 'should not yield any constants' do
-      yielded = {}
+    it { expect(instance.each).to be_a Enumerator }
 
-      instance.each { |key, value| yielded[key] = value }
+    it { expect(instance.each.size).to be 0 }
 
-      expect(yielded).to be == {}
-    end
-
-    wrap_context 'when many constants are defined' do
-      it 'should yield the constant names and values' do
+    describe 'with a block' do
+      it 'should not yield any constants' do
         yielded = {}
 
         instance.each { |key, value| yielded[key] = value }
 
-        expect(yielded).to be == constants
+        expect(yielded).to be == {}
+      end
+    end
+
+    context 'when many constants are defined' do
+      include_context 'when many constants are defined'
+
+      it { expect(instance.each).to be_a Enumerator }
+
+      it { expect(instance.each.size).to be constants.size }
+
+      describe 'with a block' do
+        it 'should yield the constant names and values' do
+          yielded = {}
+
+          instance.each { |key, value| yielded[key] = value }
+
+          expect(yielded).to be == constants
+        end
       end
     end
   end
@@ -140,40 +166,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
         expect { const_value[0..-1] = 'intruder' }
           .to raise_error RuntimeError
       end
-    end
-  end
-
-  describe '#method_missing' do
-    it { expect { instance.guest }.to raise_error NoMethodError }
-
-    wrap_context 'when many constants are defined' do
-      it { expect { instance.intruder }.to raise_error NoMethodError }
-
-      it { expect(instance.guest).to be == constants[:GUEST] }
-
-      it 'should define the method' do
-        instance.guest
-
-        expect(instance.method(:guest)).to be_a Method
-      end
-
-      context 'when the map is frozen' do
-        before(:example) { instance.freeze }
-
-        it { expect { instance.intruder }.to raise_error NoMethodError }
-
-        it { expect(instance.guest).to be == constants[:GUEST] }
-      end
-    end
-  end
-
-  describe '#respond_to_missing?' do
-    it { expect(instance.respond_to? :guest).to be false }
-
-    wrap_context 'when many constants are defined' do
-      it { expect(instance.respond_to? :intruder).to be false }
-
-      it { expect(instance.respond_to? :guest).to be true }
     end
   end
 end

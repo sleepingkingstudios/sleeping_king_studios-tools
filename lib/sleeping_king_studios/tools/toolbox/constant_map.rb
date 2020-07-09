@@ -5,20 +5,15 @@ require 'sleeping_king_studios/tools/toolbox'
 
 module SleepingKingStudios::Tools::Toolbox
   # Provides an enumerable interface for defining a group of constants.
-  module ConstantMap
-    class << self
-      # Creates a new ConstantMap.
-      #
-      # @param constants [Hash] The constants to define.
-      def new(constants)
-        mod = Module.new
-        mod.extend self
+  class ConstantMap < Module
+    # @param constants [Hash] The constants to define.
+    def initialize(constants)
+      super()
 
-        constants.each do |const_name, const_value|
-          mod.const_set const_name, const_value
-        end
+      constants.each do |const_name, const_value|
+        const_set(const_name, const_value)
 
-        mod
+        define_reader(const_name)
       end
     end
 
@@ -47,12 +42,6 @@ module SleepingKingStudios::Tools::Toolbox
     # @see ObjectTools#deep_freeze
     def freeze
       constants.each do |const_name|
-        reader_name = const_name.downcase
-
-        unless methods.include?(reader_name)
-          define_reader(const_name, reader_name)
-        end
-
         object_tools.deep_freeze const_get(const_name)
       end
 
@@ -62,31 +51,13 @@ module SleepingKingStudios::Tools::Toolbox
     private
 
     def define_reader(const_name, reader_name = nil)
-      reader_name ||= const_name.downcase
+      reader_name ||= string_tools.underscore(const_name.to_s).intern
 
-      define_singleton_method reader_name, -> { const_get const_name }
-    end
-
-    def method_missing(symbol, *args, &block)
-      const_name = string_tools.underscore(symbol.to_s).upcase.intern
-
-      if constants.include?(const_name)
-        define_reader(const_name, symbol)
-
-        return send(symbol, *args, &block)
-      end
-
-      super
+      define_singleton_method(reader_name) { const_get const_name }
     end
 
     def object_tools
       ::SleepingKingStudios::Tools::ObjectTools
-    end
-
-    def respond_to_missing?(symbol, include_all = false)
-      const_name = string_tools.underscore(symbol.to_s).upcase.intern
-
-      constants.include?(const_name) || super
     end
 
     def string_tools
