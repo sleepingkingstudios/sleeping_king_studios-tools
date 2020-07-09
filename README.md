@@ -695,6 +695,8 @@ Common objects or patterns that are useful across projects but are larger than o
 
     require 'sleeping_king_studios/tools/toolbox/configuration'
 
+This module is now deprecated. Use a struct instead.
+
 Provides a simple DSL for defining configuration objects, which can be populated via hashes or data objects (such as a Rails configuration object).
 
     class MyGemConfig < SleepingKingStudios::Tools::Toolbox::Configuration

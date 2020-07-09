@@ -93,6 +93,10 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
   let(:initial_state)   { nil }
   let(:instance)        { configuration }
 
+  before(:example) do
+    allow(SleepingKingStudios::Tools::CoreTools).to receive(:deprecate)
+  end
+
   # rubocop:disable RSpec/DescribedClass
   example_class 'Spec::Configuration',
     SleepingKingStudios::Tools::Toolbox::Configuration
