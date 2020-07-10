@@ -51,17 +51,9 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply base, proc
         end # method perform_action
 
-        if RUBY_VERSION != '2.4.0'
-          it 'should raise an error' do
-            expect { perform_action }.to raise_error ArgumentError, /wrong number of arguments/
-          end # it
-        else
-          it 'should set the base object as the receiver and call the proc with nil arguments' do
-            expect(base).to receive(:instance_method).with(nil, nil, nil).and_return(:return_value)
-
-            expect(perform_action).to be == :return_value
-          end # it
-        end # if-else
+        it 'should raise an error' do
+          expect { perform_action }.to raise_error ArgumentError, /wrong number of arguments/
+        end # it
 
         include_examples 'should not change the objects on the method'
       end # describe
@@ -91,17 +83,9 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply base, proc
         end # method perform_action
 
-        if RUBY_VERSION != '2.4.0'
-          it 'should raise an error' do
-            expect { perform_action }.to raise_error ArgumentError, /wrong number of arguments/
-          end # it
-        else
-          it 'should set the base object as the receiver and call the proc with nil arguments' do
-            expect(base).to receive(:instance_method).with(nil, nil, nil, nil, nil).and_return(:return_value)
-
-            expect(perform_action).to be == :return_value
-          end # it
-        end # if-else
+        it 'should raise an error' do
+          expect { perform_action }.to raise_error ArgumentError, /wrong number of arguments/
+        end # it
 
         include_examples 'should not change the objects on the method'
       end # describe
@@ -218,17 +202,9 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply base, proc
         end # method perform_action
 
-        if RUBY_VERSION != '2.4.0'
-          it 'should raise an error' do
-            expect { perform_action }.to raise_error ArgumentError, /wrong number of arguments/
-          end # it
-        else
-          it 'should set the base object as the receiver and call the proc with nil arguments' do
-            expect(base).to receive(:instance_method).with(nil, nil, nil, nil, nil, :first => nil, :second => nil, :third => nil).and_return(:return_value)
-
-            expect(perform_action).to be == :return_value
-          end # it
-        end # if-else
+        it 'should raise an error' do
+          expect { perform_action }.to raise_error ArgumentError, /wrong number of arguments/
+        end # it
 
         include_examples 'should not change the objects on the method'
       end # describe

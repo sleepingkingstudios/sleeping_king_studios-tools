@@ -67,26 +67,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
     end
   end
 
-  shared_context 'when the data source is nil' do
-    let(:instance) { described_class.new }
-  end
-
-  shared_context 'when the data source is an object' do
-    let(:instance) { described_class.new(build_configuration(hash), &block) }
-
-    def build_configuration(hsh)
-      obj = Struct.new(*hsh.keys).new
-
-      hsh.each do |key, value|
-        val = value.is_a?(Hash) ? build_configuration(value) : value
-
-        obj.send :"#{key}=", val
-      end
-
-      obj
-    end
-  end
-
   subject(:configuration) { described_class.new(initial_state) }
 
   let(:described_class) { Spec::Configuration }
@@ -1069,10 +1049,10 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
         describe 'with a block with a yielded parameter' do
           it 'should return the value' do
-            expect(
+            value =
               configuration.fetch('rations') { |key| "Unknown key #{key}" }
-            )
-              .to be nil
+
+            expect(value).to be nil
           end
         end
 
@@ -1096,10 +1076,10 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
         describe 'with a block with a yielded parameter' do
           it 'should return the value' do
-            expect(
+            value =
               configuration.fetch(:rations) { |key| "Unknown key #{key}" }
-            )
-              .to be nil
+
+            expect(value).to be nil
           end
         end
 
@@ -1129,10 +1109,9 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
           describe 'with a block with a yielded parameter' do
             it 'should return the value' do
-              expect(
-                configuration.fetch('rations') { |key| "Unknown key #{key}" }
-              )
-                .to be == data[:rations]
+              value = configuration.fetch('rations') { |key| "Unknown key #{key}" }
+
+              expect(value).to be == data[:rations]
             end
           end
 
@@ -1159,10 +1138,10 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
           describe 'with a block with a yielded parameter' do
             it 'should return the value' do
-              expect(
+              value =
                 configuration.fetch(:rations) { |key| "Unknown key #{key}" }
-              )
-                .to be == data[:rations]
+
+              expect(value).to be == data[:rations]
             end
           end
 

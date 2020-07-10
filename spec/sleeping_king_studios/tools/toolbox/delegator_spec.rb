@@ -516,10 +516,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Delegator do
         let(:method_names) do
           delegate_superclass.instance_methods - Object.instance_methods
         end
-        let(:skipped_methods) do
-          delegate_class.instance_methods -
-            delegate_superclass.instance_methods
-        end
 
         include_examples 'should delegate to the target'
       end
@@ -568,9 +564,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Delegator do
         let(:method_names) do
           delegate_superclass.instance_methods - Object.instance_methods
         end
-        let(:skipped_methods) do
-          delegate_class.instance_methods - delegate_superclass.instance_methods
-        end
 
         include_examples 'should delegate to the target'
       end
@@ -604,9 +597,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Delegator do
         end
         let(:method_names) do
           delegate_superclass.instance_methods - Object.instance_methods
-        end
-        let(:skipped_methods) do
-          delegate_class.instance_methods - delegate_superclass.instance_methods
         end
 
         include_examples 'should delegate to the target'
