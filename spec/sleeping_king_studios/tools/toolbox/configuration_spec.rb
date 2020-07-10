@@ -938,7 +938,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
       describe 'with a block' do
         it 'should evaluate and return the block' do
-          expect(configuration.fetch('psionics') { 'No value' })
+          expect(configuration.fetch('psionics', 'No value'))
             .to be == 'No value'
         end
       end
@@ -966,7 +966,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
       describe 'with a block' do
         it 'should evaluate and return the block' do
-          expect(configuration.fetch(:psionics) { 'No value' })
+          expect(configuration.fetch(:psionics, 'No value'))
             .to be == 'No value'
         end
       end
@@ -1004,7 +1004,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
         describe 'with a block' do
           it 'should evaluate and return the block' do
-            expect(configuration.fetch('psionics') { 'No value' })
+            expect(configuration.fetch('psionics', 'No value'))
               .to be == 'No value'
           end
         end
@@ -1034,7 +1034,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
         describe 'with a block' do
           it 'should evaluate and return the block' do
-            expect(configuration.fetch(:psionics) { 'No value' })
+            expect(configuration.fetch(:psionics, 'No value'))
               .to be == 'No value'
           end
         end
@@ -1063,7 +1063,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
         describe 'with a block' do
           it 'should return the value' do
-            expect(configuration.fetch('rations') { 'No value' }).to be nil
+            expect(configuration.fetch('rations', 'No value')).to be nil
           end
         end
 
@@ -1090,7 +1090,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
         describe 'with a block' do
           it 'should return the value' do
-            expect(configuration.fetch(:rations) { 'No value' }).to be nil
+            expect(configuration.fetch(:rations, 'No value')).to be nil
           end
         end
 
@@ -1122,7 +1122,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
           describe 'with a block' do
             it 'should return the value' do
-              expect(configuration.fetch('rations') { 'No value' })
+              expect(configuration.fetch('rations', 'No value'))
                 .to be == data[:rations]
             end
           end
@@ -1152,7 +1152,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
           describe 'with a block' do
             it 'should return the value' do
-              expect(configuration.fetch(:rations) { 'No value' })
+              expect(configuration.fetch(:rations, 'No value'))
                 .to be == data[:rations]
             end
           end

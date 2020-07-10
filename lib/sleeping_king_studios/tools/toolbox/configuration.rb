@@ -206,9 +206,11 @@ module SleepingKingStudios::Tools::Toolbox
     def get_method_value(name, options)
       value = data.send(name)
 
+      # rubocop:disable Style/IfUnlessModifier
       if value.nil? && options[:default] != DEFAULT_OPTION
         value = evaluate_default(options[:default])
       end
+      # rubocop:enable Style/IfUnlessModifier
 
       validate_value(value, options)
 

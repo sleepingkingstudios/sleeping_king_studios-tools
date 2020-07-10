@@ -18,5 +18,3 @@
 
 # Ignore temporary files.
 .byebug_history
-.rubocop.yml
-.rubocop_todo.yml
