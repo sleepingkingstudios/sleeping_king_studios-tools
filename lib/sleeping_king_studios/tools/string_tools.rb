@@ -1,14 +1,14 @@
 # lib/sleeping_king_studios/tools/string_tools.rb
 
 require 'sleeping_king_studios/tools'
+require 'sleeping_king_studios/tools/integer_tools'
 require 'sleeping_king_studios/tools/object_tools'
+require 'sleeping_king_studios/tools/toolbox/inflector'
 
 module SleepingKingStudios::Tools
   # Tools for working with strings.
   module StringTools
     extend self
-
-    autoload :PluralInflector, 'sleeping_king_studios/tools/string_tools/plural_inflector'
 
     # Converts a lowercase, underscore-separated string to CamelCase.
     #
@@ -20,9 +20,7 @@ module SleepingKingStudios::Tools
     def camelize str
       str = require_string! str
 
-      str = str.dup
-      str.gsub!(/(\b|[_-])([a-z])/) { |match| $2.upcase }
-      str
+      inflector.camelize(str)
     end # method camelize
 
     # Performs multiple string tools operations in sequence, starting with the
@@ -40,22 +38,30 @@ module SleepingKingStudios::Tools
 
     # (see PluralInflector#define_irregular_word)
     def define_irregular_word singular, plural
-      plural_inflector.define_irregular_word singular, plural
+      CoreTools.deprecate 'StringTools#define_irregular_word'
+
+      inflector.rules.define_irregular_word singular, plural
     end # method define_irregular_word
 
     # (see PluralInflector#define_plural_rule)
     def define_plural_rule match, replace
-      plural_inflector.define_plural_rule match, replace
+      CoreTools.deprecate 'StringTools#define_plural_rule'
+
+      inflector.rules.define_plural_rule match, replace
     end # method define_plural_rule
 
     # (see PluralInflector#define_singular_rule)
     def define_singular_rule match, replace
-      plural_inflector.define_singular_rule match, replace
+      CoreTools.deprecate 'StringTools#define_singular_rule'
+
+      inflector.rules.define_singular_rule match, replace
     end # method define_singular_rule
 
     # (see PluralInflector#define_uncountable_word)
     def define_uncountable_word word
-      plural_inflector.define_uncountable_word word
+      CoreTools.deprecate 'StringTools#define_uncountable_word'
+
+      inflector.rules.define_uncountable_word word
     end # method define_uncountable_word
 
     # Adds the specified number of spaces to the start of each line of the
@@ -135,7 +141,7 @@ module SleepingKingStudios::Tools
 
       str = require_string! args.first
 
-      plural_inflector.pluralize str
+      inflector.pluralize str
     end # method pluralize
 
     # Determines whether or not the given word is in singular form. If calling
@@ -152,7 +158,7 @@ module SleepingKingStudios::Tools
     def singularize str
       require_string! str
 
-      plural_inflector.singularize str
+      inflector.singularize str
     end # method singularize
 
     # Returns true if the object is a String.
@@ -175,19 +181,14 @@ module SleepingKingStudios::Tools
     def underscore str
       str = require_string! str
 
-      str = str.dup
-      str.gsub!(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2')
-      str.gsub!(/([a-z\d])([A-Z])/, '\1_\2')
-      str.tr!("-", "_")
-      str.downcase!
-      str
+      inflector.underscore(str)
     end # method underscore
 
     private
 
-    def plural_inflector
-      @plural_inflector ||= PluralInflector.new
-    end # method plural_inflector
+    def inflector
+      @inflector ||= SleepingKingStudios::Tools::Toolbox::Inflector.new
+    end # method inflector
 
     def require_string! value
       return value if string?(value)

@@ -11,16 +11,6 @@ Preview build for 1.0.0: maintain backward compability with deprecation warnings
 - Deprecate sleeping_king_studios/tools/all
 - Remove /bin directory.
 
-#### Inflector
-
-- Refactor PluralInflector to Inflector.
-- Implement Inflector::PluralRules ?
-
-#### StringTools
-
-- Inject "inflector" dependency.
-  - Defaults to Inflector instance.
-
 #### Tools
 
 - Refactor all tools modules to class instances.

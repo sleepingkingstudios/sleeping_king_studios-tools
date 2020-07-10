@@ -5,62 +5,36 @@ require 'spec_helper'
 require 'sleeping_king_studios/tools/string_tools'
 
 RSpec.describe SleepingKingStudios::Tools::StringTools do
+  shared_examples 'should delegate to the inflector' \
+  do |method_name, *arguments|
+    before(:example) { allow(inflector).to receive(method_name) }
+
+    it 'should delegate to the inflector' do
+      instance.send(method_name, *arguments)
+
+      expect(inflector).to have_received(method_name).with(*arguments)
+    end
+  end
+
   let(:instance) { Object.new.extend described_class }
+  let(:inflector) do
+    instance_double(SleepingKingStudios::Tools::Toolbox::Inflector)
+  end
+
+  before(:example) do
+    allow(SleepingKingStudios::Tools::CoreTools).to receive(:deprecate)
+
+    allow(instance).to receive(:inflector).and_return(inflector)
+  end
 
   describe '#camelize' do
     it { expect(instance).to respond_to(:camelize).with(1).argument }
 
     it { expect(described_class).to respond_to(:camelize).with(1).argument }
 
-    describe 'with nil' do
-      it 'should raise an error' do
-        expect { described_class.camelize nil }.to raise_error ArgumentError, /argument must be a string/
-      end # it
-    end # describe
-
-    describe 'with an empty string' do
-      it { expect(described_class.camelize '').to be == '' }
-    end # describe
-
-    describe 'with a lowercase string' do
-      it { expect(described_class.camelize 'valhalla').to be == 'Valhalla' }
-    end # describe
-
-    describe 'with a capitalized string' do
-      it { expect(described_class.camelize 'Bifrost').to be == 'Bifrost' }
-    end # describe
-
-    describe 'with an uppercase string' do
-      it { expect(described_class.camelize 'ASGARD').to be == 'ASGARD' }
-    end # describe
-
-    describe 'with a mixed-case string' do
-      it { expect(described_class.camelize 'FenrisWolf').to be == 'FenrisWolf' }
-    end # describe
-
-    describe 'with an underscore-separated string' do
-      it { expect(described_class.camelize 'frost_giant').to be == 'FrostGiant' }
-    end # describe
-
-    describe 'with an underscore-separated string with digits' do
-      it { expect(described_class.camelize '9_worlds').to be == '9Worlds' }
-    end # describe
-
-    describe 'with an underscore-separated string with consecutive capitals' do
-      it { expect(described_class.camelize 'ygg_drasil').to be == 'YggDrasil' }
-    end # describe
-
-    describe 'with a string with hyphens' do
-      it { expect(described_class.camelize 'muspelheimr-and-niflheimr').to be == 'MuspelheimrAndNiflheimr' }
-    end # describe
-
-    describe 'with an empty symbol' do
-      it { expect(described_class.camelize :'').to be == '' }
-    end # describe
-
-    describe 'with a lowercase symbol' do
-      it { expect(described_class.camelize :valhalla).to be == 'Valhalla' }
-    end # describe
+    include_examples 'should delegate to the inflector',
+      :camelize,
+      'greetings_programs'
   end # describe
 
   describe '#chain' do
@@ -98,6 +72,13 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
       let(:operations) { [:underscore] }
       let(:expected)   { 'archived_periodical' }
 
+      before(:example) do
+        allow(inflector)
+          .to receive(:underscore)
+          .with('ArchivedPeriodical')
+          .and_return('archived_periodical')
+      end
+
       describe 'with a string' do
         it 'should return the string' do
           expect(instance.chain value, *operations).to be == expected
@@ -115,6 +96,18 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
       let(:operations) { [:underscore, :pluralize] }
       let(:expected)   { 'archived_periodicals' }
 
+      before(:example) do
+        allow(inflector)
+          .to receive(:underscore)
+          .with('ArchivedPeriodical')
+          .and_return('archived_periodical')
+
+        allow(inflector)
+          .to receive(:pluralize)
+          .with('archived_periodical')
+          .and_return('archived_periodicals')
+      end
+
       describe 'with a string' do
         it 'should return the string' do
           expect(instance.chain value, *operations).to be == expected
@@ -130,67 +123,123 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
   end # describe
 
   describe '#define_irregular_word' do
+    let(:rules) do
+      instance_double(SleepingKingStudios::Tools::Toolbox::Inflector::Rules)
+    end
+
+    before(:example) do
+      allow(inflector).to receive(:rules).and_return(rules)
+
+      allow(rules).to receive(:define_irregular_word)
+    end
+
     it { expect(instance).to respond_to(:define_irregular_word).with(2).arguments }
 
     it { expect(described_class).to respond_to(:define_irregular_word).with(2).arguments }
 
-    it 'should delegate to an inflector' do
-      inflector = double('inflector', :define_irregular_word => nil)
+    it 'should delegate to the inflector rules' do
+      instance.define_irregular_word('goose', 'geese')
 
-      allow(instance).to receive(:plural_inflector).and_return(inflector)
+      expect(inflector.rules)
+        .to have_received(:define_irregular_word)
+        .with('goose', 'geese')
+    end
 
-      expect(inflector).to receive(:define_irregular_word).with('goose', 'geese')
+    it 'should be deprecated' do
+      instance.define_irregular_word('goose', 'geese')
 
-      instance.define_irregular_word 'goose', 'geese'
-    end # it
+      expect(SleepingKingStudios::Tools::CoreTools).to have_received(:deprecate)
+    end
   end # describe
 
   describe '#define_plural_rule' do
+    let(:rules) do
+      instance_double(SleepingKingStudios::Tools::Toolbox::Inflector::Rules)
+    end
+
+    before(:example) do
+      allow(inflector).to receive(:rules).and_return(rules)
+
+      allow(rules).to receive(:define_plural_rule)
+    end
+
     it { expect(instance).to respond_to(:define_plural_rule).with(2).arguments }
 
     it { expect(described_class).to respond_to(:define_plural_rule).with(2).arguments }
 
-    it 'should delegate to an inflector' do
-      inflector = double('inflector', :define_plural_rule => nil)
-
-      allow(instance).to receive(:plural_inflector).and_return(inflector)
-
-      expect(inflector).to receive(:define_plural_rule).with(/lf$/, 'lves')
-
+    it 'should delegate to the inflector rules' do
       instance.define_plural_rule(/lf$/, 'lves')
-    end # it
+
+      expect(inflector.rules)
+        .to have_received(:define_plural_rule)
+        .with(/lf$/, 'lves')
+    end
+
+    it 'should be deprecated' do
+      instance.define_plural_rule(/lf$/, 'lves')
+
+      expect(SleepingKingStudios::Tools::CoreTools).to have_received(:deprecate)
+    end
   end # describe
 
   describe '#define_singular_rule' do
+    let(:rules) do
+      instance_double(SleepingKingStudios::Tools::Toolbox::Inflector::Rules)
+    end
+
+    before(:example) do
+      allow(inflector).to receive(:rules).and_return(rules)
+
+      allow(rules).to receive(:define_singular_rule)
+    end
+
     it { expect(instance).to respond_to(:define_singular_rule).with(2).arguments }
 
     it { expect(described_class).to respond_to(:define_singular_rule).with(2).arguments }
 
-    it 'should delegate to an inflector' do
-      inflector = double('inflector', :define_singular_rule => nil)
-
-      allow(instance).to receive(:plural_inflector).and_return(inflector)
-
-      expect(inflector).to receive(:define_singular_rule).with(/lves$/, 'lf')
-
+    it 'should delegate to the inflector rules' do
       instance.define_singular_rule(/lves$/, 'lf')
-    end # it
+
+      expect(inflector.rules)
+        .to have_received(:define_singular_rule)
+        .with(/lves$/, 'lf')
+    end
+
+    it 'should be deprecated' do
+      instance.define_singular_rule(/lves$/, 'lf')
+
+      expect(SleepingKingStudios::Tools::CoreTools).to have_received(:deprecate)
+    end
   end # describe
 
   describe '#define_uncountable_word' do
+    let(:rules) do
+      instance_double(SleepingKingStudios::Tools::Toolbox::Inflector::Rules)
+    end
+
+    before(:example) do
+      allow(inflector).to receive(:rules).and_return(rules)
+
+      allow(rules).to receive(:define_uncountable_word)
+    end
+
     it { expect(instance).to respond_to(:define_uncountable_word).with(1).argument }
 
     it { expect(described_class).to respond_to(:define_uncountable_word).with(1).argument }
 
-    it 'should delegate to an inflector' do
-      inflector = double('inflector', :define_uncountable_word => nil)
+    it 'should delegate to the inflector rules' do
+      instance.define_uncountable_word('metadata')
 
-      allow(instance).to receive(:plural_inflector).and_return(inflector)
+      expect(inflector.rules)
+        .to have_received(:define_uncountable_word)
+        .with('metadata')
+    end
 
-      expect(inflector).to receive(:define_uncountable_word).with('data')
+    it 'should be deprecated' do
+      instance.define_uncountable_word('metadata')
 
-      instance.define_uncountable_word 'data'
-    end # it
+      expect(SleepingKingStudios::Tools::CoreTools).to have_received(:deprecate)
+    end
   end # describe
 
   describe '#indent' do
@@ -348,6 +397,8 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
   end # describe
 
   describe '#plural?' do
+    before(:example) { allow(inflector).to receive(:pluralize) }
+
     it { expect(instance).to respond_to(:plural?).with(1).argument }
 
     it { expect(described_class).to respond_to(:plural?).with(1).argument }
@@ -356,34 +407,16 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
     it { expect(described_class.plural? 'things').to be == true }
 
-      it 'should delegate to an inflector' do
-        inflector = double('inflector', :pluralize => nil)
+    it 'should delegate to the inflector' do
+      instance.send(:plural?, 'word')
 
-        allow(instance).to receive(:plural_inflector).and_return(inflector)
-
-        expect(inflector).to receive(:pluralize).and_return('words')
-
-        expect(instance.plural? 'word').to be false
-
-        expect(inflector).to receive(:pluralize).and_return('words')
-
-        expect(instance.plural? 'words').to be true
-      end # it
+      expect(inflector).to have_received(:pluralize).with('word')
+    end
 
     describe 'with a symbol' do
-      it 'should delegate to an inflector' do
-        inflector = double('inflector', :pluralize => nil)
+      it { expect(described_class.plural? :thing).to be == false }
 
-        allow(instance).to receive(:plural_inflector).and_return(inflector)
-
-        expect(inflector).to receive(:pluralize).and_return('words')
-
-        expect(instance.plural? :word).to be false
-
-        expect(inflector).to receive(:pluralize).and_return('words')
-
-        expect(instance.plural? :words).to be true
-      end # it
+      it { expect(described_class.plural? :things).to be == true }
     end # describe
   end # describe
 
@@ -394,33 +427,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
     it { expect(described_class.pluralize 'thing').to be == 'things' }
 
-    it 'should delegate to an inflector' do
-      inflector = double('inflector', :pluralize => nil)
-
-      allow(instance).to receive(:plural_inflector).and_return(inflector)
-
-      expect(inflector).to receive(:pluralize).and_return('words')
-
-      expect(instance.pluralize 'word').to be == 'words'
-    end # it
-
-    describe 'with nil' do
-      it 'should raise an error' do
-        expect { described_class.pluralize nil }.to raise_error ArgumentError, /argument must be a string/
-      end # it
-    end # describe
-
-    describe 'with a symbol' do
-      it 'should delegate to an inflector' do
-        inflector = double('inflector', :pluralize => nil)
-
-        allow(instance).to receive(:plural_inflector).and_return(inflector)
-
-        expect(inflector).to receive(:pluralize).and_return('words')
-
-        expect(instance.pluralize :word).to be == 'words'
-      end # it
-    end # describe
+    include_examples 'should delegate to the inflector', :pluralize, 'thing'
 
     describe 'with an integer and two objects' do
       let(:single) { 'cow' }
@@ -457,6 +464,8 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
   end # describe
 
   describe '#singular?' do
+    before(:example) { allow(inflector).to receive(:singularize) }
+
     it { expect(instance).to respond_to(:singular?).with(1).argument }
 
     it { expect(described_class).to respond_to(:singular?).with(1).argument }
@@ -465,34 +474,16 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
     it { expect(described_class.singular? 'things').to be == false }
 
-    it 'should delegate to an inflector' do
-      inflector = double('inflector', :singularize => nil)
+    it 'should delegate to the inflector' do
+      instance.send(:singular?, 'words')
 
-      allow(instance).to receive(:plural_inflector).and_return(inflector)
-
-      expect(inflector).to receive(:singularize).and_return('word')
-
-      expect(instance.singular? 'word').to be true
-
-      expect(inflector).to receive(:singularize).and_return('word')
-
-      expect(instance.singular? 'words').to be false
-    end # it
+      expect(inflector).to have_received(:singularize).with('words')
+    end
 
     describe 'with a symbol' do
-      it 'should delegate to an inflector' do
-        inflector = double('inflector', :singularize => nil)
+      it { expect(described_class.singular? :thing).to be == true }
 
-        allow(instance).to receive(:plural_inflector).and_return(inflector)
-
-        expect(inflector).to receive(:singularize).and_return('word')
-
-        expect(instance.singular? :word).to be true
-
-        expect(inflector).to receive(:singularize).and_return('word')
-
-        expect(instance.singular? :words).to be false
-      end # it
+      it { expect(described_class.singular? :things).to be == false }
     end # describe
   end # describe
 
@@ -503,33 +494,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
     it { expect(described_class.singularize 'things').to be == 'thing' }
 
-    it 'should delegate to an inflector' do
-      inflector = double('inflector', :singularize => nil)
-
-      allow(instance).to receive(:plural_inflector).and_return(inflector)
-
-      expect(inflector).to receive(:singularize).and_return('word')
-
-      expect(instance.singularize 'words').to be == 'word'
-    end # it
-
-    describe 'with nil' do
-      it 'should raise an error' do
-        expect { described_class.singularize nil }.to raise_error ArgumentError, /argument must be a string/
-      end # it
-    end # describe
-
-    describe 'with a symbol' do
-      it 'should delegate to an inflector' do
-        inflector = double('inflector', :singularize => nil)
-
-        allow(instance).to receive(:plural_inflector).and_return(inflector)
-
-        expect(inflector).to receive(:singularize).and_return('word')
-
-        expect(instance.singularize :words).to be == 'word'
-      end # it
-    end # describe
+    include_examples 'should delegate to the inflector', :singularize, 'things'
   end # describe
 
   describe '#string?' do
@@ -579,50 +544,8 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
     it { expect(described_class).to respond_to(:underscore).with(1).argument }
 
-    describe 'with nil' do
-      it 'should raise an error' do
-        expect { described_class.underscore nil }.to raise_error ArgumentError, /argument must be a string/
-      end # it
-    end # describe
-
-    describe 'with an empty string' do
-      it { expect(described_class.underscore '').to be == '' }
-    end # describe
-
-    describe 'with a lowercase string' do
-      it { expect(described_class.underscore 'valhalla').to be == 'valhalla' }
-    end # describe
-
-    describe 'with a capitalized string' do
-      it { expect(described_class.underscore 'Bifrost').to be == 'bifrost' }
-    end # describe
-
-    describe 'with an uppercase string' do
-      it { expect(described_class.underscore 'ASGARD').to be == 'asgard' }
-    end # describe
-
-    describe 'with a mixed-case string' do
-      it { expect(described_class.underscore 'FenrisWolf').to be == 'fenris_wolf' }
-    end # describe
-
-    describe 'with a mixed-case string with digits' do
-      it { expect(described_class.underscore '9Worlds').to be == '9_worlds' }
-    end # describe
-
-    describe 'with a mixed-case string with consecutive capitals' do
-      it { expect(described_class.underscore 'YGGDrasil').to be == 'ygg_drasil' }
-    end # describe
-
-    describe 'with a string with hyphens' do
-      it { expect(described_class.underscore 'Muspelheimr-and-Niflheimr').to be == 'muspelheimr_and_niflheimr' }
-    end # describe
-
-    describe 'with an empty symbol' do
-      it { expect(described_class.underscore :'').to be == '' }
-    end # describe
-
-    describe 'with a capitalized symbol' do
-      it { expect(described_class.underscore :Bifrost).to be == 'bifrost' }
-    end # describe
+    include_examples 'should delegate to the inflector',
+      :underscore,
+      'GreetingsPrograms'
   end # describe
 end # describe
