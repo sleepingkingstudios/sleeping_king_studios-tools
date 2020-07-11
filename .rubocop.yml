@@ -15,6 +15,8 @@ AllCops:
     - spec/sleeping_king_studios/tools/toolbelt_spec.rb
     - spec/spec_helper.rb
     - spec/support/**/*.rb
+    - 'tmp/**/*'
+    - 'vendor/**/*'
 
 Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
