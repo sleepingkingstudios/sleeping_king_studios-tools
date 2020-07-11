@@ -3,6 +3,10 @@ language: ruby
 rvm:
 - 2.5.8
 - 2.6.6
+before_script:
+  - cp .rspec.example .rspec
+script:
+  - bundle exec thor ci:steps
 
 # Travis-CI Configuration
 cache: bundler

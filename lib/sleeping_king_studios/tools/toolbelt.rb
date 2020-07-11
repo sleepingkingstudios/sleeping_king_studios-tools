@@ -16,7 +16,9 @@ module SleepingKingStudios::Tools
         begin
           namespace.const_get("#{name.capitalize}Tools")
         rescue NameError => exception
+          # :nocov:
           nil
+          # :nocov:
         end # begin-rescue
       end # each
     end # each

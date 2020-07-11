@@ -1,0 +1,57 @@
+# See https://github.com/rubocop-hq/rubocop/blob/master/manual/configuration.md
+
+require: rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.5
+  Exclude:
+    - Rakefile
+    - lib/sleeping_king_studios/tools/toolbelt.rb
+    - lib/sleeping_king_studios/tools/all.rb
+    - lib/sleeping_king_studios/tools/*_tools.rb
+    - lib/sleeping_king_studios/tools/version.rb
+    - spec/sleeping_king_studios/tools/*_tools_spec.rb
+    - spec/sleeping_king_studios/tools/toolbelt_spec.rb
+    - spec/spec_helper.rb
+    - spec/support/**/*.rb
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/HashAlignment:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+
+Naming/MethodParameterName:
+  AllowedNames:
+    - as
+    - to
+
+RSpec/ExampleWording:
+  Enabled: false
+
+RSpec/HookArgument:
+  EnforcedStyle: example
+
+RSpec/NestedGroups:
+  Max: 5
+
+Style/AccessorGrouping:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/NestedParenthesizedCalls:
+  Exclude:
+    - spec/**/*_spec.rb

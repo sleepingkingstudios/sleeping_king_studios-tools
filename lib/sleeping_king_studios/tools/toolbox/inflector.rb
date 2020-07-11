@@ -95,9 +95,12 @@ module SleepingKingStudios::Tools::Toolbox
 
       return normalized if irregular_words.key?(normalized)
 
+      # rubocop:disable Style/IfUnlessModifier
       if irregular_words_reversed.key?(normalized)
         return irregular_words_reversed[normalized]
       end
+
+      # rubocop:enable Style/IfUnlessModifier
 
       singular_rules.each do |match, replace|
         next unless normalized =~ match
