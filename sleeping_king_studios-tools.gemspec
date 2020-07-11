@@ -27,6 +27,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rubocop',       '~> 0.87.1'
   gem.add_development_dependency 'rubocop-rspec', '~> 1.42.0'
   gem.add_development_dependency 'simplecov',     '~> 0.18.5'
+  gem.add_development_dependency 'thor',          '~> 1.0'
 
   gem.add_development_dependency 'rspec-sleeping_king_studios', '~> 2.5'
+  gem.add_development_dependency 'sleeping_king_studios-tasks', '~> 0.3'
 end

@@ -19,3 +19,4 @@
 # Ignore temporary files.
 .byebug_history
 /coverage/*
+/tmp
