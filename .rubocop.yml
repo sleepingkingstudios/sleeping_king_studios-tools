@@ -9,9 +9,18 @@ AllCops:
     - Rakefile
     - lib/sleeping_king_studios/tools/toolbelt.rb
     - lib/sleeping_king_studios/tools/all.rb
-    - lib/sleeping_king_studios/tools/*_tools.rb
+    - lib/sleeping_king_studios/tools/core_tools.rb
+    - lib/sleeping_king_studios/tools/enumerable_tools.rb
+    - lib/sleeping_king_studios/tools/hash_tools.rb
+    - lib/sleeping_king_studios/tools/integer_tools.rb
+    - lib/sleeping_king_studios/tools/object_tools.rb
+    - lib/sleeping_king_studios/tools/string_tools.rb
     - lib/sleeping_king_studios/tools/version.rb
-    - spec/sleeping_king_studios/tools/*_tools_spec.rb
+    - spec/sleeping_king_studios/tools/core_tools_spec.rb
+    - spec/sleeping_king_studios/tools/hash_tools_spec.rb
+    - spec/sleeping_king_studios/tools/integer_tools_spec.rb
+    - spec/sleeping_king_studios/tools/object_tools_spec.rb
+    - spec/sleeping_king_studios/tools/string_tools_spec.rb
     - spec/sleeping_king_studios/tools/toolbelt_spec.rb
     - spec/spec_helper.rb
     - spec/support/**/*.rb
