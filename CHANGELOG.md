@@ -4,14 +4,33 @@
 
 Last minor release before 1.0.0.
 
-This release adds a number of deprecations. All deprecated code will be removed in version 1.0.0. Update dependent code accordingly.
+This release adds a number of deprecations. All deprecated code will be removed
+in version 1.0.0. Update dependent code accordingly.
 
-- Removed deprecated SleepingKingStudios::Tools::SemanticVersion. This functionality is still available as SleepingKingStudios::Tools::Toolbox::SemanticVersion.
+- Removed deprecated SleepingKingStudios::Tools::SemanticVersion. This
+  functionality is still available as
+  SleepingKingStudios::Tools::Toolbox::SemanticVersion.
+
+#### Tools
+
+- Refactored all Tools modules to classes.
+- Removed StringTools::PluralInflector. It's functionality is now handled by
+  Toolbox::Inflector.
+
+#### Toolbelt
+
+- Refactored Toolbelt to reference Tools instances rather than classes.
+- Defined new abbreviated helpers #ary, #hsh, #int, #obj, #str.
+- Defined new helpers #array_tools, #core_tools, #hash_tools, #integer_tools,
+  #object_tools, #string_tools.
+- Deprecated old abbreviated helpers #array, #core, #hash, #integer, #object,
+  #string.
 
 #### Toolbox
 
 - Deprecate Toolbox::Configuration. Use a struct instead.
 - Deprecate Toolbox::Delegator. Use the stdlib Forwardable module instead.
+- Implement Toolbox::Inflector, which serves as a delegate for StringTools.
 
 ### 0.7.1
 
