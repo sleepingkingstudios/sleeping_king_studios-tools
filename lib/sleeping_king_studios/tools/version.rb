@@ -1,4 +1,4 @@
-# lib/sleeping_king_studios/tools/version.rb
+# frozen_string_literal: true
 
 require 'sleeping_king_studios/tools/toolbox/semantic_version'
 
@@ -10,15 +10,13 @@ module SleepingKingStudios
     module Version
       extend SleepingKingStudios::Tools::Toolbox::SemanticVersion
 
-      private
-
       MAJOR      = 0
       MINOR      = 7
       PATCH      = 1
       PRERELEASE = nil
       BUILD      = nil
-    end # module
+    end
 
     VERSION = Version.to_gem_version
-  end # module
-end # module
+  end
+end
