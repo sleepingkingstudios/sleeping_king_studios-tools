@@ -13,6 +13,7 @@ Preview build for 1.0.0: maintain backward compability with deprecation warnings
 
 - Deprecate EnumerableTools.
 - Refactor all tools modules to class instances.
+- CoreTools#binding: update to use a BasicObject
 
 #### Toolbelt
 
