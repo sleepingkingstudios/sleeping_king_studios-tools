@@ -6,8 +6,6 @@ Preview build for 1.0.0: maintain backward compability with deprecation warnings
 
 - Support Ruby 2.5 through 2.7
 - Address all RuboCop warnings
-- Deprecate sleeping_king_studios/tools/all
-- Remove /bin directory.
 - Remove Rakefile.
 
 ## 1.0.0
