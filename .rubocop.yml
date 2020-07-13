@@ -8,9 +8,7 @@ AllCops:
   Exclude:
     - Rakefile
     - lib/sleeping_king_studios/tools/all.rb
-    - lib/sleeping_king_studios/tools/toolbelt.rb
     - lib/sleeping_king_studios/tools/version.rb
-    - spec/sleeping_king_studios/tools/toolbelt_spec.rb
     - spec/spec_helper.rb
     - spec/support/**/*.rb
     - 'tmp/**/*'
