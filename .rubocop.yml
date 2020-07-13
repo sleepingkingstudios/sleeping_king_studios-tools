@@ -8,7 +8,6 @@ AllCops:
   Exclude:
     - Rakefile
     - lib/sleeping_king_studios/tools/all.rb
-    - lib/sleeping_king_studios/tools/enumerable_tools.rb
     - lib/sleeping_king_studios/tools/hash_tools.rb
     - lib/sleeping_king_studios/tools/integer_tools.rb
     - lib/sleeping_king_studios/tools/object_tools.rb
