@@ -6,7 +6,6 @@ AllCops:
   NewCops: enable
   TargetRubyVersion: 2.5
   Exclude:
-    - spec/support/examples/array_examples.rb
     - spec/support/examples/hash_examples.rb
     - 'tmp/**/*'
     - 'vendor/**/*'
