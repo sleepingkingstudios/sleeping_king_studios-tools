@@ -17,11 +17,9 @@ module SleepingKingStudios::Tools::Toolbox
       return super unless defined?(self::ClassMethods)
 
       if SleepingKingStudios::Tools::Toolbox::Mixin.mixin?(other)
-        # rubocop:disable Style/IfUnlessModifier
         unless other.constants(false).include?(:ClassMethods)
           other.const_set(:ClassMethods, Module.new)
         end
-        # rubocop:enable Style/IfUnlessModifier
 
         other::ClassMethods.include(self::ClassMethods)
       else

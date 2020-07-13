@@ -1,4 +1,4 @@
-# spec/sleeping_king_studios/tools/object_tools_spec.rb
+# frozen_string_literaL: true
 
 require 'spec_helper'
 
@@ -10,297 +10,359 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
   include Spec::Examples::ArrayExamples
   include Spec::Examples::HashExamples
 
-  let(:instance) { Object.new.extend described_class }
+  let(:instance) { described_class.instance }
 
   describe '#apply' do
     shared_examples 'should not change the objects on the method' do
       it 'should not change the objects on the method' do
-        expect {
-          begin; perform_action; rescue ArgumentError; end
-        }.not_to change(base, :methods)
-      end # it
-    end # shared_examples
+        expect do
+          apply_proc
+        rescue ArgumentError # rubocop:disable Lint/SuppressedException
+        end.not_to change(receiver, :methods)
+      end
+    end
 
-    let(:base) { double('base object', :instance_method => nil) }
+    let(:receiver) do
+      # rubocop:disable RSpec/VerifiedDoubles
+      double('base object', instance_method: nil)
+      # rubocop:enable RSpec/VerifiedDoubles
+    end
+
+    before(:example) do
+      allow(receiver).to receive(:instance_method).and_return(:return_value)
+    end
 
     it { expect(instance).to respond_to(:apply).with(2).arguments }
 
     it { expect(described_class).to respond_to(:apply).with(2).arguments }
 
     describe 'with a proc with no parameters' do
-      let(:proc) { ->() { self.instance_method() } }
+      let(:proc) { ->(*args) { instance_method(*args) } }
 
-      def perform_action
-        described_class.apply base, proc
-      end # method perform_action
+      def apply_proc
+        described_class.apply receiver, proc
+      end
 
-      it 'should set the base object as the receiver and call the proc with no arguments' do
-        expect(base).to receive(:instance_method).with(no_args).and_return(:return_value)
+      it { expect(apply_proc).to be == :return_value }
 
-        expect(perform_action).to be == :return_value
-      end # it
+      it 'should call the instance method' do
+        apply_proc
+
+        expect(receiver).to have_received(:instance_method).with(no_args)
+      end
 
       include_examples 'should not change the objects on the method'
-    end # describe
+    end
 
     describe 'with a proc with required parameters' do
-      let(:proc) { ->(foo, bar, baz) { self.instance_method(foo, bar, baz) } }
+      let(:proc) { ->(foo, bar, baz) { instance_method(foo, bar, baz) } }
 
       describe 'with no arguments' do
-        def perform_action
-          described_class.apply base, proc
-        end # method perform_action
+        def apply_proc
+          described_class.apply receiver, proc
+        end
 
         it 'should raise an error' do
-          expect { perform_action }.to raise_error ArgumentError, /wrong number of arguments/
-        end # it
+          expect { apply_proc }
+            .to raise_error ArgumentError, /wrong number of arguments/
+        end
 
         include_examples 'should not change the objects on the method'
-      end # describe
+      end
 
       describe 'with the required arguments' do
-        let(:args) { %w(ichi ni san) }
+        let(:args) { %w[ichi ni san] }
 
-        def perform_action
-          described_class.apply base, proc, *args
-        end # method perform_action
+        def apply_proc
+          described_class.apply receiver, proc, *args
+        end
 
-        it 'should set the base object as the receiver and call the proc with the provided arguments' do
-          expect(base).to receive(:instance_method).with(*args).and_return(:return_value)
+        it 'should call the instance method with the arguments' do
+          apply_proc
 
-          expect(perform_action).to be == :return_value
-        end # it
+          expect(receiver).to have_received(:instance_method).with(*args)
+        end
 
         include_examples 'should not change the objects on the method'
-      end # describe
-    end # it
+      end
+    end
 
     describe 'with a proc with required and optional parameters' do
-      let(:proc) { ->(foo, bar, baz, wibble = nil, wobble = nil) { self.instance_method(foo, bar, baz, wibble, wobble) } }
+      let(:proc) do
+        lambda do |foo, bar, baz, wibble = nil, wobble = nil|
+          instance_method(foo, bar, baz, wibble, wobble)
+        end
+      end
 
       describe 'with no arguments' do
-        def perform_action
-          described_class.apply base, proc
-        end # method perform_action
+        def apply_proc
+          described_class.apply receiver, proc
+        end
 
         it 'should raise an error' do
-          expect { perform_action }.to raise_error ArgumentError, /wrong number of arguments/
-        end # it
+          expect { apply_proc }
+            .to raise_error ArgumentError, /wrong number of arguments/
+        end
 
         include_examples 'should not change the objects on the method'
-      end # describe
+      end
 
       describe 'with the required arguments' do
-        let(:args) { %w(ichi ni san) }
+        let(:args)     { %w[ichi ni san] }
+        let(:expected) { [*args, nil, nil] }
 
-        def perform_action
-          described_class.apply base, proc, *args
-        end # method perform_action
+        def apply_proc
+          described_class.apply receiver, proc, *args
+        end
 
-        it 'should set the base object as the receiver and call the proc with the provided arguments' do
-          expect(base).to receive(:instance_method).with(*args, nil, nil).and_return(:return_value)
+        it 'should call the instance method with the arguments' do
+          apply_proc
 
-          expect(perform_action).to be == :return_value
-        end # it
+          expect(receiver).to have_received(:instance_method).with(*expected)
+        end
 
         include_examples 'should not change the objects on the method'
-      end # describe
+      end
 
       describe 'with the required and optional arguments' do
-        let(:args) { %w(ichi ni san yon go) }
+        let(:args) { %w[ichi ni san yon go] }
 
-        def perform_action
-          described_class.apply base, proc, *args
-        end # method perform_action
+        def apply_proc
+          described_class.apply receiver, proc, *args
+        end
 
-        it 'should set the base object as the receiver and call the proc with the provided arguments' do
-          expect(base).to receive(:instance_method).with(*args).and_return(:return_value)
+        it 'should call the instance method with the arguments' do
+          apply_proc
 
-          expect(perform_action).to be == :return_value
-        end # it
+          expect(receiver).to have_received(:instance_method).with(*args)
+        end
 
         include_examples 'should not change the objects on the method'
-      end # describe
-    end # it
+      end
+    end
 
     describe 'with a proc with a splat parameter' do
-      let(:args) { %w(ichi ni san) }
-      let(:proc) { ->(*args) { self.instance_method(*args) } }
+      let(:args) { %w[ichi ni san] }
+      let(:proc) { ->(*args) { instance_method(*args) } }
 
-      def perform_action
-        described_class.apply base, proc, *args
-      end # method perform_action
+      def apply_proc
+        described_class.apply receiver, proc, *args
+      end
 
-      it 'should set the base object as the receiver and call the proc with the provided arguments' do
-        expect(base).to receive(:instance_method).with(*args).and_return(:return_value)
+      it 'should call the instance method with the arguments' do
+        apply_proc
 
-        expect(perform_action).to be == :return_value
-      end # it
+        expect(receiver).to have_received(:instance_method).with(*args)
+      end
 
       include_examples 'should not change the objects on the method'
-    end # describe
+    end
 
     describe 'with a proc with optional keyword parameters' do
-      let(:kwargs) { { :first => 'Who', :second => 'What', :third => "I Don't Know" } }
-      let(:proc)   { ->(first: nil, second: nil, third: nil) { self.instance_method(:first => first, :second => second, :third => third) } }
+      let(:kwargs) { { first: 'Who', second: 'What', third: "I Don't Know" } }
+      let(:proc) do
+        lambda do |first: nil, second: nil, third: nil|
+          instance_method(first: first, second: second, third: third)
+        end
+      end
 
       describe 'with no arguments' do
-        def perform_action
-          described_class.apply base, proc
-        end # method perform_action
+        let(:expected) { { first: nil, second: nil, third: nil } }
 
-        it 'should set the base object as the receiver and call the proc with no arguments' do
-          expect(base).to receive(:instance_method).with(:first => nil, :second => nil, :third => nil).and_return(:return_value)
+        def apply_proc
+          described_class.apply receiver, proc
+        end
 
-          expect(perform_action).to be == :return_value
-        end # it
+        it 'should call the instance method with the default arguments' do
+          apply_proc
+
+          expect(receiver).to have_received(:instance_method).with(**expected)
+        end
 
         include_examples 'should not change the objects on the method'
-      end # describe
+      end
 
       describe 'with the optional keywords' do
-        def perform_action
-          described_class.apply base, proc, **kwargs
-        end # method perform_action
+        def apply_proc
+          described_class.apply receiver, proc, **kwargs
+        end
 
-        it 'should set the base object as the receiver and call the proc with no arguments' do
-          expect(base).to receive(:instance_method).with(**kwargs).and_return(:return_value)
+        it 'should call the instance method with the arguments' do
+          apply_proc
 
-          expect(perform_action).to be == :return_value
-        end # it
+          expect(receiver).to have_received(:instance_method).with(**kwargs)
+        end
 
         include_examples 'should not change the objects on the method'
-      end # describe
-    end # describe
+      end
+    end
 
     describe 'with a proc with a keyword splat parameter' do
-      let(:kwargs) { { :first => 'Who', :second => 'What', :third => "I Don't Know" } }
-      let(:proc)   { ->(**kwargs) { self.instance_method(**kwargs) } }
+      let(:kwargs) { { first: 'Who', second: 'What', third: "I Don't Know" } }
+      let(:proc)   { ->(**kwargs) { instance_method(**kwargs) } }
 
-      def perform_action
-        described_class.apply base, proc, **kwargs
-      end # method perform_action
+      def apply_proc
+        described_class.apply receiver, proc, **kwargs
+      end
 
-      it 'should set the base object as the receiver and call the proc with no arguments' do
-        expect(base).to receive(:instance_method).with(**kwargs).and_return(:return_value)
+      it 'should call the instance method with the arguments' do
+        apply_proc
 
-        expect(perform_action).to be == :return_value
-      end # it
+        expect(receiver).to have_received(:instance_method).with(**kwargs)
+      end
 
       include_examples 'should not change the objects on the method'
-    end # describe
+    end
 
     describe 'with a proc with required, optional, and keyword parameters' do
       let(:proc) do
-        ->(foo, bar, baz, wibble = nil, wobble = nil, first: nil, second: nil, third: nil) {
-          self.instance_method(foo, bar, baz, wibble, wobble, :first => first, :second => second, :third => third)
-        } # end lambda
-      end # let
+        lambda do |
+          foo,
+          bar,
+          baz,
+          wibble = nil,
+          wobble = nil,
+          first: nil,
+          second: nil,
+          third: nil
+        |
+          instance_method(
+            foo,
+            bar,
+            baz,
+            wibble,
+            wobble,
+            first:  first,
+            second: second,
+            third:  third
+          )
+        end
+      end
 
       describe 'with no arguments' do
-        def perform_action
-          described_class.apply base, proc
-        end # method perform_action
+        def apply_proc
+          described_class.apply receiver, proc
+        end
 
         it 'should raise an error' do
-          expect { perform_action }.to raise_error ArgumentError, /wrong number of arguments/
-        end # it
+          expect { apply_proc }
+            .to raise_error ArgumentError, /wrong number of arguments/
+        end
 
         include_examples 'should not change the objects on the method'
-      end # describe
+      end
 
       describe 'with the required arguments' do
-        let(:args) { %w(ichi ni san) }
+        let(:args)          { %w[ichi ni san] }
+        let(:expected_args) { [*args, nil, nil] }
+        let(:expected_kwargs) do
+          { first: nil, second: nil, third: nil }
+        end
 
-        def perform_action
-          described_class.apply base, proc, *args
-        end # method perform_action
+        def apply_proc
+          described_class.apply receiver, proc, *args
+        end
 
-        it 'should set the base object as the receiver and call the proc with the provided arguments' do
-          expect(base).to receive(:instance_method).with(*args, nil, nil, :first => nil, :second => nil, :third => nil).and_return(:return_value)
+        it 'should call the instance method with the arguments and defaults' do
+          apply_proc
 
-          expect(perform_action).to be == :return_value
-        end # it
+          expect(receiver)
+            .to have_received(:instance_method)
+            .with(*expected_args, **expected_kwargs)
+        end
 
         include_examples 'should not change the objects on the method'
-      end # describe
+      end
 
       describe 'with the required arguments and keywords' do
-        let(:args)   { %w(ichi ni san) }
-        let(:kwargs) { { :first => 'Who', :second => 'What', :third => "I Don't Know" } }
+        let(:args)          { %w[ichi ni san] }
+        let(:expected_args) { [*args, nil, nil] }
+        let(:kwargs) do
+          { first: 'Who', second: 'What', third: "I Don't Know" }
+        end
 
-        def perform_action
-          described_class.apply base, proc, *args, **kwargs
-        end # method perform_action
+        def apply_proc
+          described_class.apply receiver, proc, *args, **kwargs
+        end
 
-        it 'should set the base object as the receiver and call the proc with the provided arguments' do
-          expect(base).to receive(:instance_method).with(*args, nil, nil, **kwargs).and_return(:return_value)
+        it 'should call the instance method with the arguments and defaults' do
+          apply_proc
 
-          expect(perform_action).to be == :return_value
-        end # it
+          expect(receiver)
+            .to have_received(:instance_method)
+            .with(*expected_args, **kwargs)
+        end
 
         include_examples 'should not change the objects on the method'
-      end # describe
+      end
 
       describe 'with the required and optional arguments' do
-        let(:args) { %w(ichi ni san yon go) }
+        let(:args) { %w[ichi ni san yon go] }
+        let(:expected_kwargs) do
+          { first: nil, second: nil, third: nil }
+        end
 
-        def perform_action
-          described_class.apply base, proc, *args
-        end # method perform_action
+        def apply_proc
+          described_class.apply receiver, proc, *args
+        end
 
-        it 'should set the base object as the receiver and call the proc with the provided arguments' do
-          expect(base).to receive(:instance_method).with(*args, :first => nil, :second => nil, :third => nil).and_return(:return_value)
+        it 'should call the instance method with the arguments and defaults' do
+          apply_proc
 
-          expect(perform_action).to be == :return_value
-        end # it
+          expect(receiver)
+            .to have_received(:instance_method)
+            .with(*args, **expected_kwargs)
+        end
 
         include_examples 'should not change the objects on the method'
-      end # describe
+      end
 
       describe 'with the required and optional arguments and keywords' do
-        let(:args)   { %w(ichi ni san yon go) }
-        let(:kwargs) { { :first => 'Who', :second => 'What', :third => "I Don't Know" } }
+        let(:args)   { %w[ichi ni san yon go] }
+        let(:kwargs) { { first: 'Who', second: 'What', third: "I Don't Know" } }
 
-        def perform_action
-          described_class.apply base, proc, *args, **kwargs
-        end # method perform_action
+        def apply_proc
+          described_class.apply receiver, proc, *args, **kwargs
+        end
 
-        it 'should set the base object as the receiver and call the proc with the provided arguments' do
-          expect(base).to receive(:instance_method).with(*args, **kwargs).and_return(:return_value)
+        it 'should call the instance method with the arguments' do
+          apply_proc
 
-          expect(perform_action).to be == :return_value
-        end # it
+          expect(receiver)
+            .to have_received(:instance_method)
+            .with(*args, **kwargs)
+        end
 
         include_examples 'should not change the objects on the method'
-      end # describe
-    end # describe
+      end
+    end
 
     describe 'with a proc with a block parameter' do
-      let(:args) { %w(ichi ni san) }
-      let(:proc) { ->(*args, &block) { self.instance_method *args, &block } }
+      let(:args) { %w[ichi ni san] }
+      let(:proc) { ->(*args, &block) { instance_method(*args, &block) } }
 
-      def perform_action(&block)
-        described_class.apply base, proc, *args, &block
-      end # method perform_action
+      def apply_proc(&block)
+        described_class.apply receiver, proc, *args, &block
+      end
 
-      it 'sets the base object as the receiver and calls the proc with the block' do
-        expect(base).to receive(:instance_method) do |*args, &block|
-          args.each { |arg| block.call(arg) }
+      it 'should call the instance method with the arguments' do
+        apply_proc
 
-          :return_value
-        end # receive
+        expect(receiver).to have_received(:instance_method).with(*args)
+      end
 
-        yielded = []
+      it 'should pass the block to the instance method' do
+        allow(receiver).to receive(:instance_method) do |*_args, &block|
+          block.call('in_instance_method')
+        end
 
-        expect(described_class.apply(base, proc, *args) { |arg| yielded << arg }).to be == :return_value
-
-        expect(yielded).to be == args
-      end # it
+        expect { |block| apply_proc(&block) }
+          .to yield_with_args('in_instance_method')
+      end
 
       include_examples 'should not change the objects on the method'
-    end # describe
-  end # describe
+    end
+  end
 
   describe '#deep_dup' do
     it { expect(instance).to respond_to(:deep_dup).with(1).argument }
@@ -313,46 +375,43 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
     describe 'with false' do
       it { expect(instance.deep_dup false).to be false }
-    end # describe
+    end
 
     describe 'with a float' do
       it { expect(instance.deep_dup 1.0).to be == 1.0 }
-    end # describe
+    end
 
     describe 'with an integer' do
       it { expect(instance.deep_dup 42).to be == 42 }
-    end # describe
+    end
 
     describe 'with nil' do
       it { expect(instance.deep_dup nil).to be nil }
-    end # describe
+    end
 
     describe 'with an object' do
       let(:object) { Object.new }
+      let(:copy)   { Object.new }
 
-      it 'should delegate to Object#dup' do
-        expected = double 'copy'
+      before(:example) do
+        allow(object).to receive(:dup).and_return(copy)
+      end
 
-        expect(object).to receive(:dup).and_return(expected)
+      it { expect(instance.deep_dup object).to be copy }
+    end
 
-        expect(instance.deep_dup object).to be == expected
-      end # it
+    describe 'with an object that responds to #deep_dup' do
+      let(:object) { Object.new }
+      let(:copy)   { Object.new }
 
-      context 'with a defined #deep_dup method' do
-        before(:example) do
-          instance.eigenclass(object).send :define_method, :deep_dup do; end
-        end # before example
+      before(:example) do
+        copied_object = copy
 
-        it 'should delegate to Object#deep_dup' do
-          expected = double 'copy'
+        object.define_singleton_method(:deep_dup) { copied_object }
+      end
 
-          expect(object).not_to receive(:dup)
-          expect(object).to receive(:deep_dup).and_return(expected)
-
-          expect(instance.deep_dup object).to be == expected
-        end # it
-      end # context
-    end # describe
+      it { expect(instance.deep_dup object).to be copy }
+    end
 
     describe 'with a string' do
       it { expect(instance.deep_dup 'foo').to be == 'foo' }
@@ -361,9 +420,9 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         orig = 'foo'
         copy = instance.deep_dup orig
 
-        expect { copy << 'bar' }.not_to change { orig }
-      end # it
-    end # describe
+        expect { copy << 'bar' }.not_to(change { orig })
+      end
+    end
 
     describe 'with a struct' do
       let(:struct_class) { Struct.new(:prop) }
@@ -372,81 +431,78 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       it { expect(instance.deep_dup struct).to be_a struct_class }
 
       it { expect(instance.deep_dup(struct).prop).to be == struct.prop }
-    end # describe
+    end
 
     describe 'with a symbol' do
       it { expect(instance.deep_dup :foo).to be :foo }
-    end # describe
+    end
 
     describe 'with true' do
       it { expect(instance.deep_dup true).to be true }
-    end # describe
+    end
 
     describe 'with a complex data structure' do
       let(:hsh) do
-        { :posts => [
-            { :riddle => 'What lies beyond the furthest reaches of the sky?',
-              :answer => 'That which will lead the lost child back to her mother\'s arms. Exile.',
-              :tags   => ['House Eraclea', 'Exile', 'the Guild']
-            }, # end hash
-            { :riddle => 'The waves that flow and dye the land gold.',
-              :answer => 'The blessed breath that nurtures life. A land of wheat.',
-              :tags   => ['House Dagobert', 'Anatoray', 'Disith']
-            }, # end hash
-            { :riddle => 'The path the angels descend upon.',
-              :answer => 'The path of great winds. The Grand Stream.',
-              :tags   => ['House Bassianus', 'the Grand Stream']
-            }, # end hash
-            { :riddle => 'What lies within the furthest depths of one\'s memory?',
-              :answer => 'The place where all are born and where all will return. A blue star.',
-              :tags   => ['House Hamilton', 'Earth']
-            }  # end hash
-          ] # end array
-        } # end hash
-      end # let
+        {
+          posts: [
+            {
+              riddle: 'What lies beyond the furthest reaches of the sky?',
+              answer: 'That which will lead the lost child back to her' \
+                      ' mother\'s arms. Exile.',
+              tags:   ['House Eraclea', 'Exile', 'the Guild']
+            },
+            {
+              riddle: 'The waves that flow and dye the land gold.',
+              answer: 'The blessed breath that nurtures life. A land of' \
+                      ' wheat.',
+              tags:   ['House Dagobert', 'Anatoray', 'Disith']
+            },
+            {
+              riddle: 'The path the angels descend upon.',
+              answer: 'The path of great winds. The Grand Stream.',
+              tags:   ['House Bassianus', 'the Grand Stream']
+            },
+            {
+              riddle: 'What lies within the furthest depths of one\'s' \
+                      ' memory?',
+              answer: 'The place where all are born and where all will' \
+                      ' return. A blue star.',
+              tags:   ['House Hamilton', 'Earth']
+            }
+          ]
+        }
+      end
       let(:cpy) { instance.deep_dup hsh }
 
       it { expect(cpy).to be == hsh }
 
-      it 'should return a copy of the data structure' do
-        expect { cpy[:author] = {} }.not_to change { hsh }
+      it { expect { cpy[:author] = {} }.not_to(change { hsh }) }
 
-        expect { cpy[:posts]  = [] }.not_to change { hsh }
-      end # it
+      it { expect { cpy[:posts] = [] }.not_to(change { hsh }) }
 
-      it 'should return a copy of the posts array' do
-        posts = cpy[:posts]
+      it { expect { cpy[:posts] << {} }.not_to(change { hsh }) }
 
-        expect { posts << {} }.not_to change { hsh }
-      end # it
+      it { expect { cpy[:posts].first[:episode] = 3 }.not_to(change { hsh }) }
 
       it 'should return a copy of the posts array items' do
-        posts = cpy[:posts]
-        post  = cpy[:posts].first
+        riddle =
+          'Why do hot dogs come in packages of ten, and hot dog buns come in' \
+          ' packages of eight?'
 
-        expect { post[:episode] = 3 }.not_to change { hsh }
-
-        riddle = 'Why do hot dogs come in packages of ten, and hot dog buns come in packages of eight?'
-        expect { post[:riddle ] = riddle }.not_to change { hsh }
-      end # it
+        expect { cpy[:posts].first[:riddle] = riddle }.not_to(change { hsh })
+      end
 
       it 'should return a copy of the post tags array' do
-        posts = cpy[:posts]
-        post  = cpy[:posts].first
-        tags  = post[:tags]
-
-        expect { tags << 'Lavie Head' }.not_to change { hsh }
-      end # it
+        expect { cpy[:posts].first[:tags] << 'Claus Valca' }
+          .not_to(change { hsh })
+      end
 
       it 'should return a copy of the post tags array items' do
-        posts = cpy[:posts]
-        post  = cpy[:posts].first
-        tags  = post[:tags]
-
-        expect { tags.last << ' Wars' }.not_to change { hsh }
-      end # it
-    end # describe
-  end # describe
+        expect { cpy[:posts].first[:tags].last << ' Wars' }
+          .not_to(change { hsh })
+      end
+    end
+  end
 
   describe '#deep_freeze' do
     it { expect(instance).to respond_to(:deep_freeze).with(1).argument }
@@ -463,38 +519,51 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       it 'should not raise an error' do
         objects.each do |object|
           expect { instance.deep_freeze object }.not_to raise_error
-        end # each
-      end # it
-    end # describe
+        end
+      end
+    end
 
     describe 'with an object' do
       let(:object) { Object.new }
 
       it 'should freeze the object' do
-        expect { instance.deep_freeze object }.
-          to change(object, :frozen?).
-          to be true
-      end # it
+        expect { instance.deep_freeze object }
+          .to change(object, :frozen?)
+          .to be true
+      end
+    end
 
-      context 'with a defined #deep_dup method' do
-        before(:example) do
-          instance.eigenclass(object).send :define_method, :deep_freeze do; end
-        end # before example
+    describe 'with an object that responds to #deep_freeze' do
+      let(:object) { Object.new }
 
-        it 'should delegate to Object#deep_dup' do
-          expect(object).not_to receive(:freeze)
-          expect(object).to receive(:deep_freeze)
+      before(:example) do
+        object.define_singleton_method(:deep_freeze) {}
 
-          instance.deep_freeze object
-        end # it
-      end # context
-    end # describe
-  end # describe
+        allow(object).to receive(:deep_freeze)
+      end
+
+      it 'should delegate to #deep_freeze' do
+        instance.deep_freeze object
+
+        expect(object).to have_received(:deep_freeze)
+      end
+    end
+  end
 
   describe '#dig' do
-    it { expect(instance).to respond_to(:dig).with(1).argument.and_unlimited_arguments }
+    it 'should define the method' do
+      expect(instance)
+        .to respond_to(:dig)
+        .with(1).argument
+        .and_unlimited_arguments
+    end
 
-    it { expect(described_class).to respond_to(:dig).with(1).argument.and_unlimited_arguments }
+    it 'should define the class method' do
+      expect(described_class)
+        .to respond_to(:dig)
+        .with(1).argument
+        .and_unlimited_arguments
+    end
 
     describe 'with nil' do
       let(:object) { nil }
@@ -503,51 +572,44 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
       describe 'with a method that the object responds to' do
         it { expect(described_class.dig object, :nil?).to be true }
-      end # describe
+      end
 
       describe 'with a method that the object does not respond to' do
         it { expect(described_class.dig object, :foo).to be nil }
-      end # describe
+      end
 
-      describe 'with many methods that the object does not respond to' do
+      describe 'with an invalid method chain' do
         it { expect(described_class.dig object, :foo, :bar, :baz).to be nil }
-      end # describe
-
-      describe 'with mixed methods that the object does and does not respond to' do
-        it { expect(described_class.dig object, :foo, :bar, :baz, :nil?).to be true }
-      end # describe
-    end # describe
+      end
+    end
 
     describe 'with an object' do
-      let(:foo) { double('foo', :bar => bar) }
-      let(:bar) { double('bar', :baz => baz) }
-      let(:baz) { double('baz') }
-
-      let(:object) { double('object', :foo => foo) }
+      let(:baz)    { Object.new }
+      let(:bar)    { Struct.new(:baz).new(baz) }
+      let(:foo)    { Struct.new(:bar).new(bar) }
+      let(:object) { Struct.new(:foo).new(foo) }
 
       it { expect(described_class.dig object).to be object }
 
       describe 'with a method that the object responds to' do
         it { expect(described_class.dig object, :foo).to be foo }
-      end # describe
+      end
 
       describe 'with a method that the object does not respond to' do
         it { expect(described_class.dig object, :wibble).to be nil }
-      end # describe
+      end
 
-      describe 'with many methods that the object responds to' do
+      describe 'with a valid method chain' do
         it { expect(described_class.dig object, :foo, :bar, :baz).to be baz }
-      end # describe
+      end
 
-      describe 'with many methods that the object does not respond to' do
-        it { expect(described_class.dig object, :foo, :wibble, :wobble).to be nil }
-      end # describe
-
-      describe 'with mixed methods that the object does and does not respond to' do
-        it { expect(described_class.dig object, :foo, :wibble, :wobble, :nil?).to be true }
-      end # describe
-    end # describe
-  end # describe
+      describe 'with an invalid method chain' do
+        it 'should return nil' do
+          expect(described_class.dig object, :foo, :wibble, :wobble).to be nil
+        end
+      end
+    end
+  end
 
   describe '#eigenclass' do
     let(:object) { Object.new }
@@ -556,12 +618,16 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
     it { expect(described_class).to respond_to(:eigenclass).with(1).argument }
 
-    it "returns the object's metaclass" do
+    it { expect(instance).to alias_method(:eigenclass).as(:metaclass) }
+
+    it { expect(described_class).to alias_method(:eigenclass).as(:metaclass) }
+
+    it "returns the object's singleton class" do
       metaclass = class << object; self; end
 
       expect(described_class.eigenclass(object)).to be == metaclass
-    end # it
-  end # describe
+    end
+  end
 
   describe '#immutable?' do
     it { expect(instance).to respond_to(:immutable?).with(1).argument }
@@ -574,64 +640,56 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
     describe 'with nil' do
       it { expect(described_class.immutable? nil).to be true }
-    end # describe
+    end
 
     describe 'with false' do
       it { expect(described_class.immutable? false).to be true }
-    end # describe
+    end
 
     describe 'with true' do
       it { expect(described_class.immutable? true).to be true }
-    end # describe
+    end
 
     describe 'with an Integer' do
       it { expect(described_class.immutable? 0).to be true }
-    end # describe
+    end
 
     describe 'with a Float' do
       it { expect(described_class.immutable? 0.0).to be true }
-    end # describe
+    end
 
     describe 'with a Symbol' do
       it { expect(described_class.immutable? :symbol).to be true }
-    end # describe
+    end
 
     describe 'with an Object' do
       it { expect(described_class.immutable? Object.new).to be false }
-    end # describe
+    end
 
     describe 'with a frozen Object' do
       it { expect(described_class.immutable? Object.new.freeze).to be true }
-    end # describe
-  end # describe
-
-  describe '#metaclass' do
-    let(:object) { Object.new }
-
-    it { expect(instance).to respond_to(:metaclass).with(1).argument }
-
-    it { expect(described_class).to respond_to(:metaclass).with(1).argument }
-
-    it "returns the object's metaclass" do
-      metaclass = class << object; self; end
-
-      expect(described_class.metaclass(object)).to be == metaclass
-    end # it
-  end # describe
+    end
+  end
 
   describe '#mutable?' do
     let(:object) { Object.new }
+
+    before(:example) do
+      allow(instance).to receive(:immutable?).and_return(false)
+    end
 
     it { expect(instance).to respond_to(:mutable?).with(1).argument }
 
     it { expect(described_class).to respond_to(:mutable?).with(1).argument }
 
-    it 'should return the inverse of immutable' do
-      expect(instance).to receive(:immutable?).with(object).and_return(false)
+    it { expect(instance.mutable? object).to be true }
 
-      expect(instance.mutable? object).to be true
-    end # it
-  end # describe
+    it 'should delegate to #immutable?' do
+      instance.mutable?(object)
+
+      expect(instance).to have_received(:immutable?).with(object)
+    end
+  end
 
   describe '#object?' do
     it { expect(instance).to respond_to(:object?).with(1).argument }
@@ -640,113 +698,109 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
     describe 'with nil' do
       it { expect(described_class.object? nil).to be true }
-    end # describe
+    end
 
     describe 'with a basic object' do
       it { expect(described_class.object? BasicObject.new).to be false }
-    end # describe
+    end
 
     describe 'with an object' do
       it { expect(described_class.object? Object.new).to be true }
-    end # describe
+    end
 
     describe 'with a string' do
       it { expect(described_class.object? 'greetings,programs').to be true }
-    end # describe
+    end
 
     describe 'with an integer' do
       it { expect(described_class.object? 42).to be true }
-    end # describe
+    end
 
     describe 'with an empty array' do
       it { expect(described_class.object? []).to be true }
-    end # describe
+    end
 
     describe 'with a non-empty array' do
-      it { expect(described_class.object? %w(ichi ni san)).to be true }
-    end # describe
+      it { expect(described_class.object? %w[ichi ni san]).to be true }
+    end
 
     describe 'with an empty hash' do
       it { expect(described_class.object?({})).to be true }
-    end # describe
+    end
 
     describe 'with a non-empty hash' do
-      it { expect(described_class.object?({ :greetings => 'programs' })).to be true }
-    end # describe
-  end # describe
+      let(:object) { { greetings: 'programs' } }
+
+      it { expect(described_class.object?(object)).to be true }
+    end
+  end
 
   describe '#try' do
     let(:object) { Object.new }
 
-    it { expect(instance).to respond_to(:try).with(2).arguments.and_unlimited_arguments }
+    it 'should define the method' do
+      expect(instance)
+        .to respond_to(:try)
+        .with(2).arguments
+        .and_unlimited_arguments
+    end
 
-    it { expect(described_class).to respond_to(:try).with(2).arguments.and_unlimited_arguments }
+    it 'should define the class method' do
+      expect(described_class)
+        .to respond_to(:try)
+        .with(2).arguments
+        .and_unlimited_arguments
+    end
 
     describe 'with nil' do
       let(:object) { nil }
 
       describe 'with a method name that the object responds to' do
         it { expect(described_class.try object, :nil?).to be true }
-      end # describe
+      end
 
       describe 'with a method name that the object does not respond to' do
         it { expect(described_class.try object, :foo).to be nil }
-      end # describe
-    end # describe
+      end
+    end
 
-    describe 'with an object that responds to :try' do
-      let(:object) { double('object', :nil? => false, :try => nil) }
-
-      describe 'with a method name that the object responds to' do
-        it 'should delegate to object#try' do
-          expect(object).to receive(:try) do |method_name, *args|
+    describe 'with an object that responds to #try' do
+      let(:object_class) do
+        Class.new do
+          def try(method_name, *args)
             "tried :#{method_name} with #{args.count} arguments"
-          end # expect
+          end
+        end
+      end
+      let(:object)   { object_class.new }
+      let(:expected) { 'tried :nil? with 3 arguments' }
 
-          expected = 'tried :nil? with 3 arguments'
-          received = described_class.try object, :nil?, 'ichi', 'ni', 'san'
-
-          expect(received).to be == expected
-        end # it
-      end # describe
-
-      describe 'with a method name that the object does not respond to' do
-        it 'should delegate to object#try' do
-          expect(object).to receive(:try) do |method_name, *args|
-            "tried :#{method_name} with #{args.count} arguments"
-          end # expect
-
-          expected = 'tried :foo with 3 arguments'
-          received = described_class.try object, :foo, 'ichi', 'ni', 'san'
-
-          expect(received).to be == expected
-        end # it
-      end # describe
-    end # describe
+      it 'should delegate to object#try' do
+        expect(described_class.try object, :nil?, 'ichi', 'ni', 'san')
+          .to be == expected
+      end
+    end
 
     describe 'with an object that does not respond to :try' do
-      let(:object) do
-        Class.new do
-          def foo *args; end
-        end.new # class
-      end # let
+      let(:object) { Object.new }
+
+      before(:example) do
+        allow(object).to receive(:is_a?).and_return(false)
+      end
 
       describe 'with a method name that the object responds to' do
+        it { expect(described_class.try(object, :is_a?, Object)).to be false }
+
         it 'should call the method' do
-          expect(object).to receive(:foo) do |*args|
-            "called :foo with #{args.count} arguments"
-          end # expect
+          described_class.try(object, :is_a?, Object)
 
-          expected = 'called :foo with 3 arguments'
-          received = described_class.try object, :foo, 'ichi', 'ni', 'san'
-
-          expect(received).to be == expected
-        end # it
-      end # describe
+          expect(object).to have_received(:is_a?).with(Object)
+        end
+      end
 
       describe 'with a method name that the object does not respond to' do
         it { expect(described_class.try object, :bar).to be nil }
-      end # describe
-    end # describe
-  end # describe
-end # describe
+      end
+    end
+  end
+end

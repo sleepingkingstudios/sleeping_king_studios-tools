@@ -1109,7 +1109,8 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
 
           describe 'with a block with a yielded parameter' do
             it 'should return the value' do
-              value = configuration.fetch('rations') { |key| "Unknown key #{key}" }
+              value =
+                configuration.fetch('rations') { |key| "Unknown key #{key}" }
 
               expect(value).to be == data[:rations]
             end

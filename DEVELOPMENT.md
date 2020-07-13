@@ -5,22 +5,10 @@
 Preview build for 1.0.0: maintain backward compability with deprecation warnings
 
 - Support Ruby 2.5 through 2.7
-- Update gem dependencies
-  - Add RuboCop, SimpleCov
 - Address all RuboCop warnings
 - Deprecate sleeping_king_studios/tools/all
 - Remove /bin directory.
-
-#### Tools
-
-- Refactor all tools modules to class instances.
-
-#### Toolbelt
-
-- Remove non-abbreviated methods (tools.object, tools.array)
-  - Causes conflict with core #hash method
-  - Add abbreviated methods (#obj, #ary, #hsh)
-  - Add non-abbreviated suffixed methods (#hash_tools)
+- Remove Rakefile.
 
 ## 1.0.0
 
