@@ -1,14 +1,35 @@
-# lib/sleeping_king_studios/tools/string_tools.rb
+# frozen_string_literal: true
 
 require 'sleeping_king_studios/tools'
-require 'sleeping_king_studios/tools/integer_tools'
-require 'sleeping_king_studios/tools/object_tools'
 require 'sleeping_king_studios/tools/toolbox/inflector'
 
 module SleepingKingStudios::Tools
   # Tools for working with strings.
-  module StringTools
-    extend self
+  class StringTools < SleepingKingStudios::Tools::Base
+    class << self
+      def_delegators :instance,
+        :camelize,
+        :chain,
+        :define_irregular_word,
+        :define_plural_rule,
+        :define_singular_rule,
+        :define_uncountable_word,
+        :indent,
+        :map_lines,
+        :plural?,
+        :pluralize,
+        :singular?,
+        :singularize,
+        :string?,
+        :underscore
+    end
+
+    def initialize(inflector: nil)
+      @inflector =
+        inflector || SleepingKingStudios::Tools::Toolbox::Inflector.new
+    end
+
+    attr_reader :inflector
 
     # Converts a lowercase, underscore-separated string to CamelCase.
     #
@@ -17,11 +38,11 @@ module SleepingKingStudios::Tools
     # @return [String] The converted string.
     #
     # @see ActiveSupport::Inflector#camelize.
-    def camelize str
+    def camelize(str)
       str = require_string! str
 
       inflector.camelize(str)
-    end # method camelize
+    end
 
     # Performs multiple string tools operations in sequence, starting with the
     # given string and passing the result of each operation to the next.
@@ -30,39 +51,39 @@ module SleepingKingStudios::Tools
     # @param commands [Array<String, Symbol>] The string operations to apply.
     #
     # @return [String] The processed string.
-    def chain str, *commands
+    def chain(str, *commands)
       str = require_string! str
 
       commands.reduce(str) { |memo, command| send(command, memo) }
-    end # method chain
+    end
 
     # (see PluralInflector#define_irregular_word)
-    def define_irregular_word singular, plural
+    def define_irregular_word(singular, plural)
       CoreTools.deprecate 'StringTools#define_irregular_word'
 
       inflector.rules.define_irregular_word singular, plural
-    end # method define_irregular_word
+    end
 
     # (see PluralInflector#define_plural_rule)
-    def define_plural_rule match, replace
+    def define_plural_rule(match, replace)
       CoreTools.deprecate 'StringTools#define_plural_rule'
 
       inflector.rules.define_plural_rule match, replace
-    end # method define_plural_rule
+    end
 
     # (see PluralInflector#define_singular_rule)
-    def define_singular_rule match, replace
+    def define_singular_rule(match, replace)
       CoreTools.deprecate 'StringTools#define_singular_rule'
 
       inflector.rules.define_singular_rule match, replace
-    end # method define_singular_rule
+    end
 
     # (see PluralInflector#define_uncountable_word)
-    def define_uncountable_word word
+    def define_uncountable_word(word)
       CoreTools.deprecate 'StringTools#define_uncountable_word'
 
       inflector.rules.define_uncountable_word word
-    end # method define_uncountable_word
+    end
 
     # Adds the specified number of spaces to the start of each line of the
     # string. Defaults to 2 spaces.
@@ -71,12 +92,12 @@ module SleepingKingStudios::Tools
     # @param count [Integer] The number of spaces to add.
     #
     # @return [String] The indented string.
-    def indent str, count = 2
+    def indent(str, count = 2)
       str = require_string! str
-      pre = " " * count
+      pre = ' ' * count
 
       map_lines(str) { |line| "#{pre}#{line}" }
-    end # method indent
+    end
 
     # Yields each line of the string to the provided block and combines the
     # results into a new multiline string.
@@ -87,23 +108,23 @@ module SleepingKingStudios::Tools
     # @yieldparam index [Integer] The index of the current line.
     #
     # @return [String] The mapped string.
-    def map_lines str
+    def map_lines(str)
       str = require_string! str
 
-      str.each_line.with_index.reduce('') do |memo, (line, index)|
+      str.each_line.with_index.reduce(+'') do |memo, (line, index)|
         memo << yield(line, index)
-      end # each_line
-    end # method map_lines
+      end
+    end
 
     # Determines whether or not the given word is in plural form. If calling
     # #pluralize(word) is equal to word, the word is considered plural.
     #
     # @return [Boolean] True if the word is in plural form, otherwise false.
-    def plural? word
+    def plural?(word)
       word = require_string!(word)
 
       word == pluralize(word)
-    end # method plural?
+    end
 
     # @overload pluralize(str)
     #   Takes a word in singular form and returns the plural form, based on the
@@ -131,44 +152,44 @@ module SleepingKingStudios::Tools
     #
     #   @return [String] The single form if count == 1; otherwise the plural
     #     form.
-    def pluralize *args
+    def pluralize(*args)
       if args.count == 3
         CoreTools.deprecate 'StringTools#pluralize with 3 arguments',
-          :message => 'Use IntegerTools#pluralize instead.'
+          message: 'Use IntegerTools#pluralize instead.'
 
         return IntegerTools.pluralize(*args)
-      end # if
+      end
 
       str = require_string! args.first
 
       inflector.pluralize str
-    end # method pluralize
+    end
 
     # Determines whether or not the given word is in singular form. If calling
     # #singularize(word) is equal to word, the word is considered singular.
     #
     # @return [Boolean] True if the word is in singular form, otherwise false.
-    def singular? word
+    def singular?(word)
       word = require_string!(word)
 
       word == singularize(word)
-    end # method singular?
+    end
 
     # (see PluralInflector#singularize)
-    def singularize str
+    def singularize(str)
       require_string! str
 
       inflector.singularize str
-    end # method singularize
+    end
 
     # Returns true if the object is a String.
     #
     # @param str [Object] The object to test.
     #
     # @return [Boolean] True if the object is a String, otherwise false.
-    def string? str
-      String === str
-    end # method string?
+    def string?(str)
+      str.is_a?(String)
+    end
 
     # Converts a mixed-case string expression to a lowercase, underscore
     # separated string.
@@ -178,24 +199,20 @@ module SleepingKingStudios::Tools
     # @return [String] The converted string.
     #
     # @see ActiveSupport::Inflector#underscore.
-    def underscore str
+    def underscore(str)
       str = require_string! str
 
       inflector.underscore(str)
-    end # method underscore
+    end
 
     private
 
-    def inflector
-      @inflector ||= SleepingKingStudios::Tools::Toolbox::Inflector.new
-    end # method inflector
-
-    def require_string! value
+    def require_string!(value)
       return value if string?(value)
 
       return value.to_s if value.is_a?(Symbol)
 
       raise ArgumentError, 'argument must be a string', caller[1..-1]
-    end # method require_array
-  end # module
-end # module
+    end
+  end
+end
