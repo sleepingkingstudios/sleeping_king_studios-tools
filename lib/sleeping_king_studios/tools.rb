@@ -7,6 +7,7 @@ module SleepingKingStudios
   module Tools
     autoload :Base,        'sleeping_king_studios/tools/base'
     autoload :ArrayTools,  'sleeping_king_studios/tools/array_tools'
+    autoload :CoreTools,   'sleeping_king_studios/tools/core_tools'
     autoload :ObjectTools, 'sleeping_king_studios/tools/object_tools'
     autoload :Toolbelt,    'sleeping_king_studios/tools/toolbelt'
     autoload :Version,     'sleeping_king_studios/tools/version'

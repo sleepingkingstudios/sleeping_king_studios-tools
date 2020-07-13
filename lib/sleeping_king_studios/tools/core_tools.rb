@@ -1,11 +1,16 @@
-# lib/sleeping_king_studios/tools/core_tools.rb
+# frozen_string_literal: true
 
 require 'sleeping_king_studios/tools'
 
 module SleepingKingStudios::Tools
   # Tools for working with an application or working environment.
-  module CoreTools
-    extend self
+  class CoreTools < Base
+    class << self
+      def_delegators :instance,
+        :deprecate,
+        :empty_binding,
+        :require_each
+    end
 
     # @overload deprecate(name, message: nil)
     #   Prints a deprecation warning.
@@ -22,8 +27,8 @@ module SleepingKingStudios::Tools
     #   @param format [String] The format string.
     #   @param message [String] An optional message to print after the formatted
     #     string. Defaults to nil.
-    def deprecate *args, format: nil, message: nil
-      format ||= "[WARNING] %s has been deprecated."
+    def deprecate(*args, format: nil, message: nil)
+      format ||= '[WARNING] %s has been deprecated.'
 
       str = format % args
       str << ' ' << message if message
@@ -31,7 +36,7 @@ module SleepingKingStudios::Tools
       str << "\n  called from #{caller[1]}"
 
       Kernel.warn str
-    end # method deprecate
+    end
 
     # Generates an empty Binding object with a BasicObject as the receiver.
     #
@@ -41,24 +46,24 @@ module SleepingKingStudios::Tools
 
       def context.binding
         Kernel.instance_method(:binding).bind(self).call
-      end # singleton method binding
+      end
 
       context.binding
-    end # method empty_binding
+    end
 
     # Expands each file pattern and requires each file.
     #
     # @param file_patterns [Array] The files to require.
-    def require_each *file_patterns
+    def require_each(*file_patterns)
       file_patterns.each do |file_pattern|
         if file_pattern.include?('*')
           Dir[file_pattern].each do |file_name|
             Kernel.require file_name
-          end # each
+          end
         else
           Kernel.require file_pattern
-        end # unless
-      end # each
-    end # method require_each
-  end # module
-end # module
+        end
+      end
+    end
+  end
+end
