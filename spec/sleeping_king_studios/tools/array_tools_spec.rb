@@ -290,7 +290,8 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
         let(:mapped) { values.map(&:upcase) }
 
         it 'passes the item to the block' do
-          expect(described_class.humanize_list values, &:upcase).to be == expected
+          expect(described_class.humanize_list values, &:upcase)
+            .to be == expected
         end
       end
     end
@@ -360,7 +361,8 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
         let(:mapped) { values.map(&:upcase) }
 
         it 'passes the items to the block' do
-          expect(described_class.humanize_list values, &:upcase).to be == expected
+          expect(described_class.humanize_list values, &:upcase)
+            .to be == expected
         end
       end
     end

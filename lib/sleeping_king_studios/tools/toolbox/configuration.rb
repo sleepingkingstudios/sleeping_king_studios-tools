@@ -209,11 +209,9 @@ module SleepingKingStudios::Tools::Toolbox
       value = data.send(name)
 
       # :nocov:
-      # rubocop:disable Style/IfUnlessModifier
       if value.nil? && options[:default] != DEFAULT_OPTION
         value = evaluate_default(options[:default])
       end
-      # rubocop:enable Style/IfUnlessModifier
       # :nocov:
 
       validate_value(value, options)

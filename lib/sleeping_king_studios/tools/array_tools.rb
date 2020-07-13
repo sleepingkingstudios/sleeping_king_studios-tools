@@ -4,7 +4,7 @@ require 'sleeping_king_studios/tools'
 
 module SleepingKingStudios::Tools
   # Tools for working with array-like enumerable objects.
-  class ArrayTools < Base
+  class ArrayTools < SleepingKingStudios::Tools::Base
     ARRAY_METHODS = %i[[] count each].freeze
     OTHER_METHODS = %i[each_key each_pair].freeze
 
@@ -162,7 +162,10 @@ module SleepingKingStudios::Tools
     #   #=> 'spam, eggs, bacon, and spam'
     #
     # @example With Three Or More Items And Options
-    #   ArrayTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'], :last_separator => ' or ')
+    #   ArrayTools.humanize_list(
+    #     ['spam', 'eggs', 'bacon', 'spam'],
+    #     :last_separator => ' or '
+    #   )
     #   #=> 'spam, eggs, bacon, or spam'
     #
     # @param [Array<String>] ary The list of values to format. Will be

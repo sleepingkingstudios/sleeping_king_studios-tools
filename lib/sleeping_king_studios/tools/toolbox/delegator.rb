@@ -148,11 +148,9 @@ module SleepingKingStudios::Tools::Toolbox
         method_names = target.methods - Object.new.methods
       end
 
-      # rubocop:disable Style/IfUnlessModifier
       if except.is_a?(Array) && !except.empty?
         method_names -= except.map(&:intern)
       end
-      # rubocop:enable Style/IfUnlessModifier
 
       method_names &= only.map(&:intern) if only.is_a?(Array) && !only.empty?
 

@@ -159,11 +159,9 @@ class SleepingKingStudios::Tools::Toolbox::Inflector
     def validate_string(word, as: 'word')
       raise ArgumentError, "#{as} can't be blank", caller(1..-1) if word.nil?
 
-      # rubocop:disable Style/IfUnlessModifier
       unless word.is_a?(String)
         raise ArgumentError, "#{as} must be a String", caller(1..-1)
       end
-      # rubocop:enable Style/IfUnlessModifier
 
       return unless word.empty?
 
