@@ -5,12 +5,22 @@ require 'sleeping_king_studios/tools'
 module SleepingKingStudios::Tools
   # Tools for working with an application or working environment.
   class CoreTools < Base
+    class DeprecationError < StandardError; end
+
     class << self
       def_delegators :instance,
         :deprecate,
         :empty_binding,
         :require_each
     end
+
+    def initialize(deprecation_strategy: nil)
+      @deprecation_strategy =
+        deprecation_strategy || ENV.fetch('DEPRECATION_STRATEGY', 'warn')
+    end
+
+    # @return [String] The current deprecation strategy.
+    attr_reader :deprecation_strategy
 
     # @overload deprecate(name, message: nil)
     #   Prints a deprecation warning.
@@ -28,14 +38,12 @@ module SleepingKingStudios::Tools
     #   @param message [String] An optional message to print after the formatted
     #     string. Defaults to nil.
     def deprecate(*args, format: nil, message: nil)
-      format ||= '[WARNING] %s has been deprecated.'
-
-      str = format % args
-      str << ' ' << message if message
-
-      str << "\n  called from #{caller[1]}"
-
-      Kernel.warn str
+      send(
+        :"deprecate_as_#{deprecation_strategy}",
+        *args,
+        format:  format,
+        message: message
+      )
     end
 
     # Generates an empty Binding object with a BasicObject as the receiver.
@@ -64,6 +72,30 @@ module SleepingKingStudios::Tools
           Kernel.require file_pattern
         end
       end
+    end
+
+    private
+
+    def deprecate_as_ignore(*_args, **_kwargs); end
+
+    def deprecate_as_raise(*args, format: nil, message: nil)
+      format ||= '%s has been deprecated.'
+
+      str = format % args
+      str << ' ' << message if message
+
+      raise DeprecationError, str, caller(2..-1)
+    end
+
+    def deprecate_as_warn(*args, format: nil, message: nil)
+      format ||= '[WARNING] %s has been deprecated.'
+
+      str = format % args
+      str << ' ' << message if message
+
+      str << "\n  called from #{caller[1]}"
+
+      Kernel.warn str
     end
   end
 end

@@ -6,7 +6,7 @@ rvm:
 before_script:
   - cp .rspec.example .rspec
 script:
-  - bundle exec thor ci:steps
+  - DEPRECATION_STRATEGY=ignore bundle exec thor ci:steps
 
 # Travis-CI Configuration
 cache: bundler

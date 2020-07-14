@@ -7,7 +7,20 @@ require 'sleeping_king_studios/tools/core_tools'
 RSpec.describe SleepingKingStudios::Tools::CoreTools do
   let(:instance) { described_class.instance }
 
+  describe '.new' do
+    describe 'with deprecation_strategy: value' do
+      let(:instance) do
+        described_class.new(deprecation_strategy: 'panic')
+      end
+
+      it 'should set the deprecation strategy' do
+        expect(instance.deprecation_strategy).to be == 'panic'
+      end
+    end
+  end
+
   describe '#deprecate' do
+    let(:strategy)      { 'warn' }
     let(:object)        { 'PHP' }
     let(:custom_format) { '[WARNING] %s has been deprecated.' }
     let(:object_string) { Kernel.format(custom_format, object) }
@@ -18,7 +31,9 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
     end
 
     before(:example) do
-      allow(instance).to receive(:caller).and_return([nil, caller_string])
+      allow(instance).to receive(:caller).and_return(['', caller_string])
+
+      allow(instance).to receive(:deprecation_strategy).and_return(strategy)
 
       allow(Kernel).to receive(:warn)
     end
@@ -31,37 +46,119 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         .and_unlimited_arguments
     end
 
-    it 'should print a deprecation warning' do
-      instance.deprecate object
+    context 'when the deprecation strategy is "ignore"' do
+      let(:strategy) { 'ignore' }
 
-      expect(Kernel).to have_received(:warn).with(formatted_warning)
-    end
+      it 'should not print a warning' do
+        instance.deprecate object
 
-    describe 'with an additional message' do
-      let(:message) { 'You should probably switch to a real language.' }
-      let(:formatted_warning) do
-        str = object_string
-        str << ' ' << message
-        str << "\n  called from #{caller_string}"
-      end
-
-      it 'should print a deprecation warning' do
-        instance.deprecate object, message: message
-
-        expect(Kernel).to have_received(:warn).with(formatted_warning)
+        expect(Kernel).not_to have_received(:warn)
       end
     end
 
-    describe 'with a custom format string' do
-      let(:custom_format) { '[ALERT] %s has been deprecated since %s.' }
-      let(:version)       { '1.0.0' }
-      let(:object_string) { format(custom_format, object, version) }
+    context 'when the deprecation strategy is "raise"' do
+      let(:strategy)      { 'raise' }
+      let(:custom_format) { '%s has been deprecated.' }
+      let(:error_message) { object_string }
+
+      it 'should raise an error' do
+        expect { instance.deprecate object }
+          .to raise_error described_class::DeprecationError, error_message
+      end
+
+      describe 'with an additional message' do
+        let(:message)       { 'You should probably switch to a real language.' }
+        let(:error_message) { object_string + ' ' + message }
+
+        it 'should raise an error' do
+          expect { instance.deprecate object, message: message }
+            .to raise_error described_class::DeprecationError, error_message
+        end
+      end
+
+      describe 'with a custom format string' do
+        let(:custom_format) { '%s has been deprecated since %s.' }
+        let(:version)       { '1.0.0' }
+        let(:object_string) { format(custom_format, object, version) }
+
+        it 'should raise an error' do
+          expect { instance.deprecate object, version, format: custom_format }
+            .to raise_error described_class::DeprecationError, error_message
+        end
+      end
+    end
+
+    context 'when the deprecation strategy is "warn"' do
+      let(:strategy) { 'warn' }
 
       it 'should print a deprecation warning' do
-        instance.deprecate object, version, format: custom_format
+        instance.deprecate object
 
         expect(Kernel).to have_received(:warn).with(formatted_warning)
       end
+
+      describe 'with an additional message' do
+        let(:message) { 'You should probably switch to a real language.' }
+        let(:formatted_warning) do
+          str = object_string
+          str << ' ' << message
+          str << "\n  called from #{caller_string}"
+        end
+
+        it 'should print a deprecation warning' do
+          instance.deprecate object, message: message
+
+          expect(Kernel).to have_received(:warn).with(formatted_warning)
+        end
+      end
+
+      describe 'with a custom format string' do
+        let(:custom_format) { '[ALERT] %s has been deprecated since %s.' }
+        let(:version)       { '1.0.0' }
+        let(:object_string) { format(custom_format, object, version) }
+
+        it 'should print a deprecation warning' do
+          instance.deprecate object, version, format: custom_format
+
+          expect(Kernel).to have_received(:warn).with(formatted_warning)
+        end
+      end
+    end
+  end
+
+  describe '#deprecation_strategy' do
+    let(:instance) { described_class.new }
+
+    it 'should define the method' do
+      expect(instance).to respond_to(:deprecation_strategy).with(0).arguments
+    end
+
+    context 'when ENV[DEPRECATION_STRATEGY] is not set' do
+      around(:example) do |example|
+        previous = ENV['DEPRECATION_STRATEGY']
+
+        ENV['DEPRECATION_STRATEGY'] = nil
+
+        example.call
+      ensure
+        ENV['DEPRECATION_STRATEGY'] = previous
+      end
+
+      it { expect(instance.send :deprecation_strategy).to be == 'warn' }
+    end
+
+    context 'when ENV[DEPRECATION_STRATEGY] is set' do
+      around(:example) do |example|
+        previous = ENV['DEPRECATION_STRATEGY']
+
+        ENV['DEPRECATION_STRATEGY'] = 'panic'
+
+        example.call
+      ensure
+        ENV['DEPRECATION_STRATEGY'] = previous
+      end
+
+      it { expect(instance.send :deprecation_strategy).to be == 'panic' }
     end
   end
 
