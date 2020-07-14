@@ -24,15 +24,8 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
     let(:object)        { 'PHP' }
     let(:custom_format) { '[WARNING] %s has been deprecated.' }
     let(:object_string) { Kernel.format(custom_format, object) }
-    let(:caller_string) { '/path/to/file.rb:4: in something_or_other' }
-    let(:formatted_warning) do
-      str = object_string
-      str << "\n  called from #{caller_string}"
-    end
 
     before(:example) do
-      allow(instance).to receive(:caller).and_return(['', caller_string])
-
       allow(instance).to receive(:deprecation_strategy).and_return(strategy)
 
       allow(Kernel).to receive(:warn)
@@ -89,7 +82,24 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
     end
 
     context 'when the deprecation strategy is "warn"' do
-      let(:strategy) { 'warn' }
+      let(:strategy)      { 'warn' }
+      let(:caller_string) { '/path/to/file.rb:4: in something_or_other' }
+      let(:formatted_warning) do
+        str = object_string
+        str << "\n  called from #{caller_string}"
+      end
+
+      before(:example) do
+        allow(instance)
+          .to receive(:caller)
+          .and_return(
+            [
+              '/path/to/sleeping_king_studios-tools/some/internal/code.rb',
+              '/path/to/forwardable.rb',
+              caller_string
+            ]
+          )
+      end
 
       it 'should print a deprecation warning' do
         instance.deprecate object
