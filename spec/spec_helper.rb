@@ -1,4 +1,4 @@
-# spec/spec_helper.rb
+# frozen_string_literal: true
 
 require 'rspec'
 require 'rspec/sleeping_king_studios/all'
@@ -14,7 +14,9 @@ end
 module Spec; end
 
 # Require Factories, Custom Matchers, &c
-Dir[File.join File.dirname(__FILE__), *%w(support ** *.rb)].each { |f| require f }
+Dir[File.join File.dirname(__FILE__), 'support', '**', '*.rb']
+  .sort
+  .each { |f| require f }
 
 RSpec.configure do |config|
   config.extend RSpec::SleepingKingStudios::Concerns::FocusExamples
@@ -36,7 +38,7 @@ RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     # Enable only the newer, non-monkey-patching expect syntax.
     expectations.syntax = :expect
-  end # expect_with
+  end
 
   # rspec-mocks config goes here.
   config.mock_with :rspec do |mocks|
@@ -46,5 +48,5 @@ RSpec.configure do |config|
     # Prevents you from mocking or stubbing a method that does not exist on
     # a real object. This is generally recommended.
     mocks.verify_partial_doubles = true
-  end # mock_with
-end # config
+  end
+end

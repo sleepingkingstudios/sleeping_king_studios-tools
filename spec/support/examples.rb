@@ -1,7 +1,5 @@
-# spec/support/examples.rb
+# frozen_string_literal: true
 
 module Spec
-  module Examples
-
-  end # module
-end # module
+  module Examples; end
+end
