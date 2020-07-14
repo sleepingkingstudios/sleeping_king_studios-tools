@@ -93,9 +93,18 @@ module SleepingKingStudios::Tools
       str = format % args
       str << ' ' << message if message
 
-      str << "\n  called from #{caller[1]}"
+      str << "\n  called from #{external_caller}"
 
       Kernel.warn str
+    end
+
+    def external_caller
+      caller.find do |line|
+        !(
+          line.include?('forwardable.rb') ||
+          line.include?('sleeping_king_studios-tools')
+        )
+      end
     end
   end
 end
