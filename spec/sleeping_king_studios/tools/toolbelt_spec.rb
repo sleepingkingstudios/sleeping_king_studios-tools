@@ -22,6 +22,15 @@ RSpec.describe SleepingKingStudios::Tools::Toolbelt do
   end
 
   describe '.new' do
+    describe 'with deprecation_strategy: value' do
+      let(:instance) { described_class.new(deprecation_strategy: 'panic') }
+
+      it 'should pass the strategy to #core_tools' do
+        expect(instance.core_tools.deprecation_strategy)
+          .to be == 'panic'
+      end
+    end
+
     describe 'with inflector: value' do
       let(:inflector) do
         instance_double(SleepingKingStudios::Tools::Toolbox::Inflector)
@@ -29,7 +38,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbelt do
       let(:instance) { described_class.new(inflector: inflector) }
 
       it 'should pass the inflector to #string_tools' do
-        expect(instance.__send__(:string_tools).inflector)
+        expect(instance.string_tools.inflector)
           .to be inflector
       end
     end

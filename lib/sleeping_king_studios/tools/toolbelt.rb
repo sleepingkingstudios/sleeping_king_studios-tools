@@ -9,9 +9,11 @@ module SleepingKingStudios::Tools
       @instance ||= new
     end
 
-    def initialize(inflector: nil)
+    def initialize(deprecation_strategy: nil, inflector: nil)
       @array_tools   = ::SleepingKingStudios::Tools::ArrayTools.new
-      @core_tools    = ::SleepingKingStudios::Tools::CoreTools.new
+      @core_tools    = ::SleepingKingStudios::Tools::CoreTools.new(
+        deprecation_strategy: deprecation_strategy
+      )
       @hash_tools    = ::SleepingKingStudios::Tools::HashTools.new
       @integer_tools = ::SleepingKingStudios::Tools::IntegerTools.new
       @object_tools  = ::SleepingKingStudios::Tools::ObjectTools.new

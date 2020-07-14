@@ -16,6 +16,7 @@ in version 1.0.0. Update dependent code accordingly.
 - Refactored all Tools modules to classes.
 - Removed StringTools::PluralInflector. It's functionality is now handled by
   Toolbox::Inflector.
+- Added support for deprecation strategy to CoreTools#deprecate.
 
 #### Toolbelt
 
