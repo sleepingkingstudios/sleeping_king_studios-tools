@@ -1,11 +1,5 @@
 # Development Notes
 
-## 0.8.0
-
-Preview build for 1.0.0: maintain backward compability with deprecation warnings
-
-- Support Ruby 2.5 through 2.7
-
 ## 1.0.0
 
 - Remove sleeping_king_studios/tools/all

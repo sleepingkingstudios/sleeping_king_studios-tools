@@ -11,8 +11,8 @@ module SleepingKingStudios
       extend SleepingKingStudios::Tools::Toolbox::SemanticVersion
 
       MAJOR      = 0
-      MINOR      = 7
-      PATCH      = 1
+      MINOR      = 8
+      PATCH      = 0
       PRERELEASE = nil
       BUILD      = nil
     end
