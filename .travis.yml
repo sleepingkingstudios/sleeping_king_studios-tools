@@ -3,6 +3,7 @@ language: ruby
 rvm:
 - 2.5.8
 - 2.6.6
+- 2.7.1
 before_script:
   - cp .rspec.example .rspec
 script:
