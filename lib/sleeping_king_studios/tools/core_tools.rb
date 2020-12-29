@@ -15,6 +15,8 @@ module SleepingKingStudios::Tools
     end
 
     def initialize(deprecation_strategy: nil)
+      super()
+
       @deprecation_strategy =
         deprecation_strategy || ENV.fetch('DEPRECATION_STRATEGY', 'warn')
     end

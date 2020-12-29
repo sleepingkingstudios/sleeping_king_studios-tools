@@ -378,7 +378,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     end
 
     describe 'with a float' do
-      it { expect(instance.deep_dup 1.0).to be == 1.0 }
+      it { expect(instance.deep_dup 1.0).to eq 1.0 }
     end
 
     describe 'with an integer' do
@@ -537,7 +537,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:object) { Object.new }
 
       before(:example) do
-        object.define_singleton_method(:deep_freeze) {}
+        object.define_singleton_method(:deep_freeze) { nil }
 
         allow(object).to receive(:deep_freeze)
       end
@@ -550,6 +550,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     end
   end
 
+  # rubocop:disable Style/SingleArgumentDig
   describe '#dig' do
     it 'should define the method' do
       expect(instance)
@@ -610,6 +611,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       end
     end
   end
+  # rubocop:enable Style/SingleArgumentDig
 
   describe '#eigenclass' do
     let(:object) { Object.new }

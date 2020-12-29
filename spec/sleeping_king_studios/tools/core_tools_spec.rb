@@ -61,7 +61,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
 
       describe 'with an additional message' do
         let(:message)       { 'You should probably switch to a real language.' }
-        let(:error_message) { object_string + ' ' + message }
+        let(:error_message) { "#{object_string} #{message}" }
 
         it 'should raise an error' do
           expect { instance.deprecate object, message: message }

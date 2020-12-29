@@ -168,7 +168,7 @@ module SleepingKingStudios::Tools
           romanize_digit(additive: additive, digit: digit.to_i, tens: index)
         end
         .reverse
-        .join ''
+        .join
     end
 
     private

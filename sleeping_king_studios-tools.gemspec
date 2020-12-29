@@ -18,14 +18,16 @@ Gem::Specification.new do |gem|
   gem.homepage    = 'http://sleepingkingstudios.com'
   gem.license     = 'MIT'
 
-  gem.require_path = 'lib'
-  gem.files        = Dir['lib/**/*.rb', 'LICENSE', '*.md']
+  gem.required_ruby_version = '>= 2.5.0'
+  gem.require_path          = 'lib'
+  gem.files                 = Dir['lib/**/*.rb', 'LICENSE', '*.md']
 
   gem.add_development_dependency 'byebug',        '~> 11.1'
   gem.add_development_dependency 'rake',          '~> 13.0'
-  gem.add_development_dependency 'rspec',         '~> 3.9'
-  gem.add_development_dependency 'rubocop',       '~> 0.87.1'
-  gem.add_development_dependency 'rubocop-rspec', '~> 1.42.0'
+  gem.add_development_dependency 'rspec',         '~> 3.10'
+  gem.add_development_dependency 'rubocop',       '~> 1.6'
+  gem.add_development_dependency 'rubocop-rake',  '~> 0.5'
+  gem.add_development_dependency 'rubocop-rspec', '~> 2.1'
   gem.add_development_dependency 'simplecov',     '~> 0.18.5'
   gem.add_development_dependency 'thor',          '~> 1.0'
 

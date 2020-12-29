@@ -1,6 +1,8 @@
 # See https://github.com/rubocop-hq/rubocop/blob/master/manual/configuration.md
 
-require: rubocop-rspec
+require:
+  - rubocop-rake
+  - rubocop-rspec
 
 AllCops:
   NewCops: enable
@@ -38,6 +40,12 @@ RSpec/ExampleWording:
 
 RSpec/HookArgument:
   EnforcedStyle: example
+
+RSpec/LeadingSubject:
+  Enabled: false # Does not support shared contexts/examples before subject.
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
 
 RSpec/NestedGroups:
   Max: 5
