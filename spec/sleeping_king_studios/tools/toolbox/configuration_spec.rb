@@ -240,7 +240,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
       context 'when the data includes a value for the option' do
         let(:initial_state) { data }
 
-        it { expect(configuration.rations).to be == data.dig(:rations) }
+        it { expect(configuration.rations).to be == data[:rations] }
       end
 
       context 'with default: method call' do
@@ -261,7 +261,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
         context 'when the data includes a value for the option' do
           let(:initial_state) { data }
 
-          it { expect(configuration.rations).to be == data.dig(:rations) }
+          it { expect(configuration.rations).to be == data[:rations] }
         end
       end
 
@@ -277,7 +277,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
         context 'when the data includes a value for the option' do
           let(:initial_state) { data }
 
-          it { expect(configuration.rations).to be == data.dig(:rations) }
+          it { expect(configuration.rations).to be == data[:rations] }
         end
       end
 
@@ -293,7 +293,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
         context 'when the data includes a value for the option' do
           let(:initial_state) { data }
 
-          it { expect(configuration.rations).to be == data.dig(:rations) }
+          it { expect(configuration.rations).to be == data[:rations] }
         end
       end
     end
@@ -754,11 +754,11 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
     it { expect(instance).to respond_to(:dig).with_unlimited_arguments }
 
     describe 'with an invalid string' do
-      it { expect(instance.dig 'psionics').to be nil }
+      it { expect(instance['psionics']).to be nil }
     end
 
     describe 'with an invalid symbol' do
-      it { expect(instance.dig :psionics).to be nil }
+      it { expect(instance[:psionics]).to be nil }
     end
 
     describe 'with an invalid sequence of strings' do
@@ -777,19 +777,19 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
       include_context 'when an option is defined'
 
       describe 'with an invalid string' do
-        it { expect(instance.dig 'psionics').to be nil }
+        it { expect(instance['psionics']).to be nil }
       end
 
       describe 'with an invalid symbol' do
-        it { expect(instance.dig :psionics).to be nil }
+        it { expect(instance[:psionics]).to be nil }
       end
 
       describe 'with a valid string' do
-        it { expect(instance.dig 'rations').to be nil }
+        it { expect(instance['rations']).to be nil }
       end
 
       describe 'with a valid symbol' do
-        it { expect(instance.dig :rations).to be nil }
+        it { expect(instance[:rations]).to be nil }
       end
 
       describe 'with an invalid sequence of strings' do
@@ -808,11 +808,11 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
         let(:initial_state) { data }
 
         describe 'with a valid string' do
-          it { expect(instance.dig 'rations').to be == data[:rations] }
+          it { expect(instance['rations']).to be == data[:rations] }
         end
 
         describe 'with a valid symbol' do
-          it { expect(instance.dig :rations).to be == data[:rations] }
+          it { expect(instance[:rations]).to be == data[:rations] }
         end
       end
     end
@@ -821,11 +821,11 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
       include_context 'when a namespace is defined'
 
       describe 'with an invalid string' do
-        it { expect(instance.dig 'psionics').to be nil }
+        it { expect(instance['psionics']).to be nil }
       end
 
       describe 'with an invalid symbol' do
-        it { expect(instance.dig :psionics).to be nil }
+        it { expect(instance[:psionics]).to be nil }
       end
 
       describe 'with a valid scoped string' do
@@ -859,11 +859,11 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Configuration do
       include_context 'when many configuration options are defined'
 
       describe 'with an invalid string' do
-        it { expect(instance.dig 'psionics').to be nil }
+        it { expect(instance['psionics']).to be nil }
       end
 
       describe 'with an invalid symbol' do
-        it { expect(instance.dig :psionics).to be nil }
+        it { expect(instance[:psionics]).to be nil }
       end
 
       describe 'with a valid scoped string' do

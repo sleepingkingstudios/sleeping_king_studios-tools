@@ -2,9 +2,11 @@
 
 ## 1.0.0
 
+- Ruby 3.0 support.
 - Remove sleeping_king_studios/tools/all
 - Remove all deprecated methods and references.
 - Documentation pass.
+- Update RuboCop.
 
 ## Future Tasks
 

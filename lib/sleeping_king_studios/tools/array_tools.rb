@@ -182,7 +182,7 @@ module SleepingKingStudios::Tools
     # @raise ArgumentError If the first argument is not an Array-like object.
     #
     # @return [String] The formatted string.
-    def humanize_list(ary, **options, &block) # rubocop:disable Metrics/AbcSize
+    def humanize_list(ary, **options, &block)
       require_array! ary
 
       return '' if ary.empty?
@@ -280,9 +280,9 @@ module SleepingKingStudios::Tools
     private
 
     def options_for_humanize_list(
+      size:,
       last_separator: ' and ',
-      separator: ', ',
-      size:
+      separator: ', '
     )
       return [separator, last_separator] if size < 3
 

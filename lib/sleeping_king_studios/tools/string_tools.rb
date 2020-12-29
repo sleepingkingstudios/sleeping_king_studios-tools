@@ -25,6 +25,8 @@ module SleepingKingStudios::Tools
     end
 
     def initialize(inflector: nil)
+      super()
+
       @inflector =
         inflector || SleepingKingStudios::Tools::Toolbox::Inflector.new
     end

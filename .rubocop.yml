@@ -39,6 +39,12 @@ RSpec/ExampleWording:
 RSpec/HookArgument:
   EnforcedStyle: example
 
+RSpec/LeadingSubject:
+  Enabled: false # Does not support shared contexts/examples before subject.
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
 RSpec/NestedGroups:
   Max: 5
 

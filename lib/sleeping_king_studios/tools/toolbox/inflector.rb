@@ -42,7 +42,7 @@ module SleepingKingStudios::Tools::Toolbox
     #   capitalized. Defaults to true.
     #
     # @return [String] The word in CamelCase.
-    def camelize(word, uppercase_first_letter = true)
+    def camelize(word, uppercase_first_letter = true) # rubocop:disable Style/OptionalBooleanParameter
       return '' if word.nil? || word.empty?
 
       word = word.to_s.gsub(/(\b|[_-])([a-z])/) { Regexp.last_match(2).upcase }
@@ -80,15 +80,12 @@ module SleepingKingStudios::Tools::Toolbox
     # rubocop:enable Metrics/AbcSize
     # rubocop:enable Metrics/CyclomaticComplexity
 
-    # rubocop:disable Metrics/AbcSize
-    # rubocop:disable Metrics/MethodLength
-
     # Transforms the word to a singular, lowercase form.
     #
     # @param word [String] The word to transform.
     #
     # @return [String] The word in singular form.
-    def singularize(word)
+    def singularize(word) # rubocop:disable Metrics/MethodLength
       return '' if word.nil? || word.empty?
 
       normalized = word.to_s.strip.downcase
@@ -107,9 +104,6 @@ module SleepingKingStudios::Tools::Toolbox
 
       word
     end
-
-    # rubocop:enable Metrics/AbcSize
-    # rubocop:enable Metrics/MethodLength
 
     # Transforms the word to a lowercase, underscore-separated form.
     #
