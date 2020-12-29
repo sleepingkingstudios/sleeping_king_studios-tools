@@ -1,6 +1,8 @@
 # See https://github.com/rubocop-hq/rubocop/blob/master/manual/configuration.md
 
-require: rubocop-rspec
+require:
+  - rubocop-rake
+  - rubocop-rspec
 
 AllCops:
   NewCops: enable

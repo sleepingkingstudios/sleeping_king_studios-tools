@@ -26,6 +26,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake',          '~> 13.0'
   gem.add_development_dependency 'rspec',         '~> 3.10'
   gem.add_development_dependency 'rubocop',       '~> 1.6'
+  gem.add_development_dependency 'rubocop-rake',  '~> 0.5'
   gem.add_development_dependency 'rubocop-rspec', '~> 2.1'
   gem.add_development_dependency 'simplecov',     '~> 0.18.5'
   gem.add_development_dependency 'thor',          '~> 1.0'
