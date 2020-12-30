@@ -44,30 +44,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbelt do
     end
   end
 
-  %w[array core hash integer object string].each do |name|
-    describe "##{name}" do
-      let(:namespace) { SleepingKingStudios::Tools }
-      let(:tools)     { namespace.const_get("#{name.capitalize}Tools") }
-
-      before(:example) do
-        allow(SleepingKingStudios::Tools::CoreTools).to receive(:deprecate)
-      end
-
-      it { expect(instance.__send__ name).to be tools }
-
-      it 'should be deprecated' do # rubocop:disable RSpec/ExampleLength
-        instance.__send__(name)
-
-        expect(SleepingKingStudios::Tools::CoreTools)
-          .to have_received(:deprecate)
-          .with(
-            "SleepingKingStudios::Tools::Toolbelt##{name}",
-            message: "Use ##{name}_tools instead."
-          )
-      end
-    end
-  end
-
   describe '#array_tools' do
     it 'should return an instance of ArrayTools' do
       expect(instance.__send__ :array_tools)

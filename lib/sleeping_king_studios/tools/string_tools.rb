@@ -59,34 +59,6 @@ module SleepingKingStudios::Tools
       commands.reduce(str) { |memo, command| send(command, memo) }
     end
 
-    # (see PluralInflector#define_irregular_word)
-    def define_irregular_word(singular, plural)
-      CoreTools.deprecate 'StringTools#define_irregular_word'
-
-      inflector.rules.define_irregular_word singular, plural
-    end
-
-    # (see PluralInflector#define_plural_rule)
-    def define_plural_rule(match, replace)
-      CoreTools.deprecate 'StringTools#define_plural_rule'
-
-      inflector.rules.define_plural_rule match, replace
-    end
-
-    # (see PluralInflector#define_singular_rule)
-    def define_singular_rule(match, replace)
-      CoreTools.deprecate 'StringTools#define_singular_rule'
-
-      inflector.rules.define_singular_rule match, replace
-    end
-
-    # (see PluralInflector#define_uncountable_word)
-    def define_uncountable_word(word)
-      CoreTools.deprecate 'StringTools#define_uncountable_word'
-
-      inflector.rules.define_uncountable_word word
-    end
-
     # Adds the specified number of spaces to the start of each line of the
     # string. Defaults to 2 spaces.
     #
@@ -135,33 +107,7 @@ module SleepingKingStudios::Tools
     #   @param str [String] The word to pluralize.
     #
     #   @return [String] The pluralized word.
-    #
-    # @overload pluralize(count, single, plural)
-    #   @deprecated This functionality is deprecated as of version 0.4.0 and
-    #     will be removed in a future version. Use IntegerTools#pluralize
-    #     instead.
-    #
-    #   Returns the singular or the plural value, depending on the provided
-    #   item count.
-    #
-    #   @example
-    #     "There are four #{StringTools.pluralize 4, 'light', 'lights'}!"
-    #     #=> 'There are four lights!'
-    #
-    #   @param [Integer] count The number of items.
-    #   @param [String] single The singular form of the word or phrase.
-    #   @param [String] plural The plural form of the word or phrase.
-    #
-    #   @return [String] The single form if count == 1; otherwise the plural
-    #     form.
     def pluralize(*args)
-      if args.count == 3
-        CoreTools.deprecate 'StringTools#pluralize with 3 arguments',
-          message: 'Use IntegerTools#pluralize instead.'
-
-        return IntegerTools.pluralize(*args)
-      end
-
       str = require_string! args.first
 
       inflector.pluralize str

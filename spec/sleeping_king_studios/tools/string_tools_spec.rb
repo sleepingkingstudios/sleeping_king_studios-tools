@@ -31,10 +31,6 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
   let(:instance) { described_class.instance }
 
-  before(:example) do
-    allow(SleepingKingStudios::Tools::CoreTools).to receive(:deprecate)
-  end
-
   describe '.new' do
     describe 'with inflector: value' do
       let(:inflector) do
@@ -142,136 +138,6 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
           expect(instance.chain value.intern, *operations).to be == expected
         end
       end
-    end
-  end
-
-  describe '#define_irregular_word' do
-    include_context 'with an inflector double'
-
-    let(:rules) do
-      instance_double(SleepingKingStudios::Tools::Toolbox::Inflector::Rules)
-    end
-
-    before(:example) do
-      allow(rules).to receive(:define_irregular_word)
-    end
-
-    it 'should define the method' do
-      expect(instance).to respond_to(:define_irregular_word).with(2).arguments
-    end
-
-    it 'should define the class method' do
-      expect(described_class)
-        .to respond_to(:define_irregular_word)
-        .with(2).arguments
-    end
-
-    it 'should delegate to the inflector rules' do
-      instance.define_irregular_word('goose', 'geese')
-
-      expect(inflector.rules)
-        .to have_received(:define_irregular_word)
-        .with('goose', 'geese')
-    end
-
-    it 'should be deprecated' do
-      instance.define_irregular_word('goose', 'geese')
-
-      expect(SleepingKingStudios::Tools::CoreTools).to have_received(:deprecate)
-    end
-  end
-
-  describe '#define_plural_rule' do
-    include_context 'with an inflector double'
-
-    before(:example) do
-      allow(rules).to receive(:define_plural_rule)
-    end
-
-    it { expect(instance).to respond_to(:define_plural_rule).with(2).arguments }
-
-    it 'should define the class method' do
-      expect(described_class)
-        .to respond_to(:define_plural_rule)
-        .with(2).arguments
-    end
-
-    it 'should delegate to the inflector rules' do
-      instance.define_plural_rule(/lf$/, 'lves')
-
-      expect(inflector.rules)
-        .to have_received(:define_plural_rule)
-        .with(/lf$/, 'lves')
-    end
-
-    it 'should be deprecated' do
-      instance.define_plural_rule(/lf$/, 'lves')
-
-      expect(SleepingKingStudios::Tools::CoreTools).to have_received(:deprecate)
-    end
-  end
-
-  describe '#define_singular_rule' do
-    include_context 'with an inflector double'
-
-    before(:example) do
-      allow(rules).to receive(:define_singular_rule)
-    end
-
-    it 'should define the method' do
-      expect(instance).to respond_to(:define_singular_rule).with(2).arguments
-    end
-
-    it 'should define the class method' do
-      expect(described_class)
-        .to respond_to(:define_singular_rule)
-        .with(2).arguments
-    end
-
-    it 'should delegate to the inflector rules' do
-      instance.define_singular_rule(/lves$/, 'lf')
-
-      expect(inflector.rules)
-        .to have_received(:define_singular_rule)
-        .with(/lves$/, 'lf')
-    end
-
-    it 'should be deprecated' do
-      instance.define_singular_rule(/lves$/, 'lf')
-
-      expect(SleepingKingStudios::Tools::CoreTools).to have_received(:deprecate)
-    end
-  end
-
-  describe '#define_uncountable_word' do
-    include_context 'with an inflector double'
-
-    before(:example) do
-      allow(rules).to receive(:define_uncountable_word)
-    end
-
-    it 'should define the method' do
-      expect(instance).to respond_to(:define_uncountable_word).with(1).argument
-    end
-
-    it 'should define the class method' do
-      expect(described_class)
-        .to respond_to(:define_uncountable_word)
-        .with(1).argument
-    end
-
-    it 'should delegate to the inflector rules' do
-      instance.define_uncountable_word('metadata')
-
-      expect(inflector.rules)
-        .to have_received(:define_uncountable_word)
-        .with('metadata')
-    end
-
-    it 'should be deprecated' do
-      instance.define_uncountable_word('metadata')
-
-      expect(SleepingKingStudios::Tools::CoreTools).to have_received(:deprecate)
     end
   end
 
@@ -515,44 +381,6 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     it { expect(described_class).to respond_to(:pluralize).with(1).argument }
 
     include_examples 'should delegate to the inflector', :pluralize, 'thing'
-
-    describe 'with an integer and two objects' do
-      let(:single) { 'cow' }
-      let(:plural) { 'kine' }
-
-      it { expect(instance).to respond_to(:pluralize).with(3).arguments }
-
-      it { expect(described_class).to respond_to(:pluralize).with(3).arguments }
-
-      it 'should print a deprecation warning' do # rubocop:disable RSpec/ExampleLength
-        described_class.pluralize 0, single, plural
-
-        expect(SleepingKingStudios::Tools::CoreTools)
-          .to have_received(:deprecate)
-          .with(
-            'StringTools#pluralize with 3 arguments',
-            message: 'Use IntegerTools#pluralize instead.'
-          )
-      end
-
-      describe 'with zero items' do
-        it 'should return the plural term' do
-          expect(described_class.pluralize 0, single, plural).to be == plural
-        end
-      end
-
-      describe 'with one item' do
-        it 'should return the singular term' do
-          expect(described_class.pluralize 1, single, plural).to be == single
-        end
-      end
-
-      describe 'with many items' do
-        it 'should return the plural term' do
-          expect(described_class.pluralize 3, single, plural).to be == plural
-        end
-      end
-    end
   end
 
   describe '#singular?' do
