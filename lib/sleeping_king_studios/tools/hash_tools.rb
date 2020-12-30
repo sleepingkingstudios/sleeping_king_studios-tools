@@ -5,6 +5,7 @@ require 'sleeping_king_studios/tools'
 module SleepingKingStudios::Tools
   # Tools for working with hash-like enumerable objects.
   class HashTools < SleepingKingStudios::Tools::Base
+    # Expected methods that a Hash-like object should implement.
     HASH_METHODS = %i[[] count each each_key each_pair].freeze
 
     class << self
@@ -16,10 +17,9 @@ module SleepingKingStudios::Tools
         :generate_binding,
         :hash?,
         :immutable?,
-        :mutable?
-
-      alias stringify_keys convert_keys_to_strings
-      alias symbolize_keys convert_keys_to_symbols
+        :mutable?,
+        :stringify_keys,
+        :symbolize_keys
     end
 
     # Returns a copy of the hash with the keys converted to strings.
@@ -83,6 +83,10 @@ module SleepingKingStudios::Tools
       end
     end
 
+    # Generates a Binding object with an Object as the receiver and the hash
+    # key-value pairs set as local variables.
+    #
+    # @return [Binding] The binding object.
     def generate_binding(hsh)
       require_hash! hsh
 

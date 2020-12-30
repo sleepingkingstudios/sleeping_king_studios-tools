@@ -17,11 +17,10 @@ module SleepingKingStudios::Tools
         :dig,
         :eigenclass,
         :immutable?,
+        :metaclass,
         :mutable?,
         :object?,
         :try
-
-      alias metaclass eigenclass
     end
 
     # Takes a proc or lambda and invokes it with the given object as
@@ -93,7 +92,7 @@ module SleepingKingStudios::Tools
     # method call. If the object does not respond to the method name, nil is
     # returned instead of calling the method.
     #
-    # @param [Object] obj The object to dig.
+    # @param [Object] object The object to dig.
     # @param [Array] method_names The names of the methods to call.
     #
     # @return [Object] The result of the last method call, or nil if the last
@@ -104,11 +103,18 @@ module SleepingKingStudios::Tools
       end
     end
 
+    # @!method metaclass(object)
+    #   Returns the object's singleton class.
+    #
+    #   @param [Object] object The object for which an eigenclass is required.
+    #
+    #   @return [Class] The object's eigenclass.
+
     # Returns the object's eigenclass.
     #
     # @param [Object] object The object for which an eigenclass is required.
     #
-    # @return [Class] The object's eigenclass.
+    # @return [Class] The object's singleton class.
     def eigenclass(object)
       object.singleton_class
     end

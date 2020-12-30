@@ -5,6 +5,8 @@ require 'sleeping_king_studios/tools'
 module SleepingKingStudios::Tools
   # Tools for working with an application or working environment.
   class CoreTools < Base
+    # Exception class used when deprecated code is called and the deprecation
+    # strategy is 'raise'.
     class DeprecationError < StandardError; end
 
     class << self
@@ -14,6 +16,8 @@ module SleepingKingStudios::Tools
         :require_each
     end
 
+    # @param deprecation_strategy [String] The name of the strategy used when
+    #   deprecated code is called. Must be 'ignore', 'raise', or 'warn'.
     def initialize(deprecation_strategy: nil)
       super()
 
@@ -48,17 +52,11 @@ module SleepingKingStudios::Tools
       )
     end
 
-    # Generates an empty Binding object with a BasicObject as the receiver.
+    # Generates an empty Binding object with an Object as the receiver.
     #
     # @return [Binding] The empty binding object.
     def empty_binding
-      context = Object.new
-
-      def context.binding
-        Kernel.instance_method(:binding).bind(self).call
-      end
-
-      context.binding
+      Object.new.instance_exec { binding }
     end
 
     # Expands each file pattern and requires each file.

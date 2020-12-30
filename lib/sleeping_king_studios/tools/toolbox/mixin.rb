@@ -12,7 +12,7 @@ module SleepingKingStudios::Tools::Toolbox
       mod.singleton_class.include?(self)
     end
 
-    # @api private
+    # @private
     def included(other)
       return super unless defined?(self::ClassMethods)
 

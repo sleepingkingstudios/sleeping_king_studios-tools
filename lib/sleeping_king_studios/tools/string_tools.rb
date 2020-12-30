@@ -24,6 +24,9 @@ module SleepingKingStudios::Tools
         :underscore
     end
 
+    # @param inflector [Object] An object that conforms to the interface used
+    #   by SleepingKingStudios::Tools::Toolbox::Inflector, such as
+    #   ActiveSupport::Inflector .
     def initialize(inflector: nil)
       super()
 
@@ -123,7 +126,11 @@ module SleepingKingStudios::Tools
       word == singularize(word)
     end
 
-    # (see PluralInflector#singularize)
+    # Transforms the word to a singular, lowercase form.
+    #
+    # @param str [String] The word to transform.
+    #
+    # @return [String] The word in singular form.
     def singularize(str)
       require_string! str
 

@@ -11,6 +11,8 @@ module SleepingKingStudios::Tools
       extend Forwardable
     end
 
+    # @return [SleepingKingStudios::Tools::Base] a memoized instance of the
+    #   tools class.
     def self.instance
       @instance ||= new
     end

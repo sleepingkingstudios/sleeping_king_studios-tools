@@ -622,7 +622,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
     it { expect(instance).to alias_method(:eigenclass).as(:metaclass) }
 
-    it { expect(described_class).to alias_method(:eigenclass).as(:metaclass) }
+    it { expect(described_class).to respond_to(:metaclass).with(1).argument }
 
     it "returns the object's singleton class" do
       metaclass = class << object; self; end
