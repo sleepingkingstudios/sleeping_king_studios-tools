@@ -18,6 +18,8 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
   let(:constants) { {} }
   let(:instance)  { constant_map }
 
+  it { expect(described_class).to be < Enumerable }
+
   describe '::new' do
     it { expect(described_class).to respond_to(:new).with(1).argument }
 
@@ -45,16 +47,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
       it { expect(instance).to respond_to(:guest).with(0).arguments }
 
       it { expect(instance.guest).to be == constants[:GUEST] }
-    end
-  end
-
-  describe '#all' do
-    it { expect(instance).to respond_to(:all).with(0).arguments }
-
-    it { expect(instance.all).to be == {} }
-
-    wrap_context 'when many constants are defined' do
-      it { expect(instance.all).to be == constants }
     end
   end
 
@@ -132,6 +124,114 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
     end
   end
 
+  describe '#each_key' do
+    it { expect(instance).to respond_to(:each_key).with(0).arguments }
+
+    it { expect(instance.each_key).to be_a Enumerator }
+
+    it { expect(instance.each_key.size).to be 0 }
+
+    describe 'with a block' do
+      it 'should not yield any values' do
+        yielded = []
+
+        instance.each_key { |key| yielded << key }
+
+        expect(yielded).to be == []
+      end
+    end
+
+    context 'when many constants are defined' do
+      include_context 'when many constants are defined'
+
+      it { expect(instance.each_key).to be_a Enumerator }
+
+      it { expect(instance.each_key.size).to be constants.size }
+
+      describe 'with a block' do
+        it 'should yield the constant names' do
+          yielded = []
+
+          instance.each_key { |key| yielded << key }
+
+          expect(yielded).to be == constants.keys
+        end
+      end
+    end
+  end
+
+  describe '#each_pair' do
+    it { expect(instance).to respond_to(:each_pair).with(0).arguments }
+
+    it { expect(instance.each_pair).to be_a Enumerator }
+
+    it { expect(instance.each_pair.size).to be 0 }
+
+    describe 'with a block' do
+      it 'should not yield any constants' do
+        yielded = {}
+
+        instance.each_pair { |key, value| yielded[key] = value }
+
+        expect(yielded).to be == {}
+      end
+    end
+
+    context 'when many constants are defined' do
+      include_context 'when many constants are defined'
+
+      it { expect(instance.each_pair).to be_a Enumerator }
+
+      it { expect(instance.each_pair.size).to be constants.size }
+
+      describe 'with a block' do
+        it 'should yield the constant names and values' do
+          yielded = {}
+
+          instance.each_pair { |key, value| yielded[key] = value }
+
+          expect(yielded).to be == constants
+        end
+      end
+    end
+  end
+
+  describe '#each_value' do
+    it { expect(instance).to respond_to(:each_value).with(0).arguments }
+
+    it { expect(instance.each_value).to be_a Enumerator }
+
+    it { expect(instance.each_value.size).to be 0 }
+
+    describe 'with a block' do
+      it 'should not yield any values' do
+        yielded = []
+
+        instance.each_value { |value| yielded << value }
+
+        expect(yielded).to be == []
+      end
+    end
+
+    context 'when many constants are defined' do
+      include_context 'when many constants are defined'
+
+      it { expect(instance.each_value).to be_a Enumerator }
+
+      it { expect(instance.each_value.size).to be constants.size }
+
+      describe 'with a block' do
+        it 'should yield the constant values' do
+          yielded = []
+
+          instance.each_value { |value| yielded << value }
+
+          expect(yielded).to be == constants.values
+        end
+      end
+    end
+  end
+
   describe '#freeze' do
     shared_examples 'should freeze the constant map' do
       it { expect(instance.freeze).to be instance }
@@ -166,6 +266,38 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
         expect { const_value[0..-1] = 'intruder' }
           .to raise_error RuntimeError
       end
+    end
+  end
+
+  describe '#keys' do
+    it { expect(instance).to have_reader(:keys).with_value([]) }
+
+    context 'when many constants are defined' do
+      include_context 'when many constants are defined'
+
+      it { expect(instance.keys).to be == constants.keys }
+    end
+  end
+
+  describe '#to_h' do
+    it { expect(instance).to respond_to(:to_h).with(0).arguments }
+
+    it { expect(instance).to alias_method(:to_h).as(:all) }
+
+    it { expect(instance.to_h).to be == {} }
+
+    wrap_context 'when many constants are defined' do
+      it { expect(instance.to_h).to be == constants }
+    end
+  end
+
+  describe '#values' do
+    it { expect(instance).to have_reader(:values).with_value([]) }
+
+    context 'when many constants are defined' do
+      include_context 'when many constants are defined'
+
+      it { expect(instance.values).to be == constants.values }
     end
   end
 end
