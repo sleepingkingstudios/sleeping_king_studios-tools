@@ -432,19 +432,19 @@ Creates a deep copy of the object. If the object is an Array, returns a new Arra
           :name   => 'Welcome to the Jungle',
           :artist => "Guns N' Roses",
           :album  => 'Appetite for Destruction'
-        }, # end hash
+        },
         {
           :name   => 'Hells Bells',
           :artist => 'AC/DC',
           :album  => 'Back in Black'
-        }, # end hash
+        },
         {
           :name   => "Knockin' on Heaven's Door",
           :artist => 'Bob Dylan',
           :album  => 'Pat Garrett & Billy The Kid'
-        } # end hash
-      ] # end array
-    } # end hash
+        }
+      ]
+    }
 
     copy = ObjectTools.deep_dup data
 
@@ -466,19 +466,19 @@ Performs a deep freeze of the object. If the object is an Array, freezes the arr
           :name   => 'Welcome to the Jungle',
           :artist => "Guns N' Roses",
           :album  => 'Appetite for Destruction'
-        }, # end hash
+        },
         {
           :name   => 'Hells Bells',
           :artist => 'AC/DC',
           :album  => 'Back in Black'
-        }, # end hash
+        },
         {
           :name   => "Knockin' on Heaven's Door",
           :artist => 'Bob Dylan',
           :album  => 'Pat Garrett & Billy The Kid'
-        } # end hash
-      ] # end array
-    } # end hash
+        }
+      ]
+    }
     ObjectTools.deep_freeze(data)
 
     data.frozen?
@@ -591,7 +591,7 @@ Adds the specified number of spaces to the start of each line of the string. Def
       "The Fellowship of the Ring",
       "The Two Towers",
       "The Return of the King"
-    ] # end titles
+    ]
     string = titles.join "\n"
     StringTools.indent(string, 4)
     #=> "    The Fellowship of the Ring\n"\
@@ -610,7 +610,7 @@ Yields each line of the string to the provided block and combines the results in
       "The Fellowship of the Ring",
       "The Two Towers",
       "The Return of the King"
-    ] # end titles
+    ]
     string = titles.join "\n"
     StringTools.map_lines(string) { |line, index| "#{index}. #{line}" }
     #=> "0. The Fellowship of the Ring\n"\
@@ -712,10 +712,12 @@ Common objects or patterns that are useful across projects but are larger than o
 Provides an enumerable interface for defining a group of constants.
 
     UserRoles = ConstantMap.new(
-      :GUEST => 'guest',
-      :USER  => 'user',
-      :ADMIN => 'admin'
-    ) # end constants
+      {
+        GUEST: 'guest',
+        USER:  'user',
+        ADMIN: 'admin'
+      }'
+    )
 
     UserRoles::GUEST
     #=> 'guest'
@@ -725,6 +727,28 @@ Provides an enumerable interface for defining a group of constants.
 
     UserRoles.all
     #=> { :GUEST => 'guest', :USER => 'user', :ADMIN => 'admin' }
+
+ConstantMap includes `Enumerable`, with `#each` yielding the name and value of each defined constant. It also defines the following additional methods:
+
+#### `#each_key`
+
+Yields each defined constant name, similar to `Hash#each_key`.
+
+#### `#each_value`
+
+Yields each defined constant value, similar to `Hash#each_value`.
+
+#### `#keys`
+
+Returns an array containing the names of the defined constants, similar to `Hash#keys`.
+
+#### `#to_h`
+
+Also `#all`. Returns a Hash representation of the constants.
+
+#### `#values`
+
+Returns an array containing the values of the defined constants, similar to `Hash#values`.
 
 ### Mixin
 
