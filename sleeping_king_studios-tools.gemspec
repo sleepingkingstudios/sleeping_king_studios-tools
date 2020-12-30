@@ -32,5 +32,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'thor',          '~> 1.0'
 
   gem.add_development_dependency 'rspec-sleeping_king_studios', '~> 2.5'
-  gem.add_development_dependency 'sleeping_king_studios-tasks', '~> 0.3'
+  gem.add_development_dependency 'sleeping_king_studios-tasks', '~> 0.4'
 end

@@ -39,17 +39,6 @@ module SleepingKingStudios::Tools
     alias obj object_tools
     alias str string_tools
 
-    %w[array core hash integer object string].each do |name|
-      define_method(name) do
-        ::SleepingKingStudios::Tools::CoreTools.deprecate(
-          "SleepingKingStudios::Tools::Toolbelt##{name}",
-          message: "Use ##{name}_tools instead."
-        )
-
-        ::SleepingKingStudios::Tools.const_get("#{name.capitalize}Tools")
-      end
-    end
-
     def inspect
       "#<#{::Object.instance_method(:class).bind(self).call.name}>"
     end
