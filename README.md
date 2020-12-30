@@ -2,7 +2,21 @@
 
 A library of utility services and concerns to expand the functionality of core classes without polluting the global namespace.
 
-## Contribute
+## About
+
+SleepingKingStudios::Tools is tested against MRI Ruby 2.5 through 3.0.
+
+### Documentation
+
+Method and class documentation is available courtesy of RubyDoc.
+
+Documentation is generated using [YARD](https://yardoc.org/), and can be generated locally using the `yard` gem.
+
+### License
+
+SleepingKingStudios::Tools is released under the [MIT License](https://opensource.org/licenses/MIT).
+
+### Contribute
 
 The canonical repository for this gem is on [GitHub](https://github.com/sleepingkingstudios/sleeping_king_studios-tasks). Community contributions are welcome - please feel free to fork or submit issues, bug reports or pull requests.
 
