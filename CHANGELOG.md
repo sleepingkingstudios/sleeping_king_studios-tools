@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.0.0
+
+- Removed all deprecated code from pre-1.0 releases.
+
 ### 0.8.0
 
 Last minor release before 1.0.0.
