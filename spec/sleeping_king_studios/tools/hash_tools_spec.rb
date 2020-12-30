@@ -28,10 +28,10 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
         .as(:stringify_keys)
     end
 
-    it 'should alias the class method' do
+    it 'should define the aliased class method' do
       expect(described_class)
-        .to alias_method(:convert_keys_to_strings)
-        .as(:stringify_keys)
+        .to respond_to(:stringify_keys)
+        .with(1).argument
     end
 
     describe 'with nil' do
@@ -143,10 +143,10 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
         .as(:symbolize_keys)
     end
 
-    it 'should alias the class method' do
+    it 'should define the aliased class method' do
       expect(described_class)
-        .to alias_method(:convert_keys_to_symbols)
-        .as(:symbolize_keys)
+        .to respond_to(:symbolize_keys)
+        .with(1).argument
     end
 
     describe 'with nil' do

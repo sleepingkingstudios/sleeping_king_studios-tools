@@ -10,13 +10,19 @@ module SleepingKingStudios
     module Version
       extend SleepingKingStudios::Tools::Toolbox::SemanticVersion
 
-      MAJOR      = 0
-      MINOR      = 8
-      PATCH      = 0
+      # Major version.
+      MAJOR = 0
+      # Minor version.
+      MINOR = 8
+      # Patch version.
+      PATCH = 0
+      # Prerelease version.
       PRERELEASE = nil
-      BUILD      = nil
+      # Build metadata.
+      BUILD = nil
     end
 
+    # The current version of the gem.
     VERSION = Version.to_gem_version
   end
 end

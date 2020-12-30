@@ -4,9 +4,14 @@
 
 - Documentation pass.
 
+### Constants Maps
+
+- Remove lazy definition of constant readers.
+- Define #[], #each_key, #each_pair, #each_value, #fetch, #to_h.
+
 ## Future Tasks
 
-### Features
+### Tools
 
 - HashTools#bisect_keys
 - HashTools#slice

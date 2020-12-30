@@ -107,7 +107,7 @@ module SleepingKingStudios::Tools::Toolbox
 
     # Transforms the word to a lowercase, underscore-separated form.
     #
-    # @params word [String] the word to transform.
+    # @param word [String] the word to transform.
     #
     # @return [String] The word in underscored form.
     def underscore(word)

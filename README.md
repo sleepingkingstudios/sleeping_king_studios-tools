@@ -2,13 +2,27 @@
 
 A library of utility services and concerns to expand the functionality of core classes without polluting the global namespace.
 
-## Contribute
+## About
 
-- https://github.com/sleepingkingstudios/sleeping_king_studios-tools
+SleepingKingStudios::Tools is tested against MRI Ruby 2.5 through 3.0.
 
-### A Note From The Developer
+### Documentation
 
-Hi, I'm Rob Smith, a Ruby Engineer and the developer of this library. I use these tools every day, but they're not just written for me. If you find this project helpful in your own work, or if you have any questions, suggestions or critiques, please feel free to get in touch! I can be reached on GitHub (see above, and feel encouraged to submit bug reports or merge requests there) or via email at `merlin@sleepingkingstudios.com`. I look forward to hearing from you!
+Method and class documentation is available courtesy of RubyDoc.
+
+Documentation is generated using [YARD](https://yardoc.org/), and can be generated locally using the `yard` gem.
+
+### License
+
+SleepingKingStudios::Tools is released under the [MIT License](https://opensource.org/licenses/MIT).
+
+### Contribute
+
+The canonical repository for this gem is on [GitHub](https://github.com/sleepingkingstudios/sleeping_king_studios-tasks). Community contributions are welcome - please feel free to fork or submit issues, bug reports or pull requests.
+
+### Code of Conduct
+
+Please note that the `SleepingKingStudios::Tools` project is released with a [Contributor Code of Conduct](https://github.com/sleepingkingstudios/sleeping_king_studios-tools/blob/master/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
 
 ## Tools
 

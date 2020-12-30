@@ -5,7 +5,10 @@ require 'sleeping_king_studios/tools'
 module SleepingKingStudios::Tools
   # Tools for working with array-like enumerable objects.
   class ArrayTools < SleepingKingStudios::Tools::Base
+    # Expected methods that an Array-like object should implement.
     ARRAY_METHODS = %i[[] count each].freeze
+
+    # Methods that an Array-like object should *not* implement.
     OTHER_METHODS = %i[each_key each_pair].freeze
 
     class << self
