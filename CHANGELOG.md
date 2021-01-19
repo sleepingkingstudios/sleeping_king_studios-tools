@@ -4,6 +4,11 @@
 
 - Removed all deprecated code from pre-1.0 releases.
 
+#### Toolbox
+
+Added some Hash-like methods to ConstantMap - `#each_key`, `#each_value`,
+`#keys`, `#to_h`, and `#values`.
+
 ### 0.8.0
 
 Last minor release before 1.0.0.
