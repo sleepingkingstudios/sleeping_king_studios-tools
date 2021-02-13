@@ -1,8 +1,12 @@
 # Changelog
 
+### 1.0.1
+
+Added a missing `require 'set'` to Toolbox::Inflector::Rules.
+
 ### 1.0.0
 
-- Removed all deprecated code from pre-1.0 releases.
+Removed all deprecated code from pre-1.0 releases.
 
 #### Toolbox
 
