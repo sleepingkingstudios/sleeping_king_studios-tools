@@ -1,5 +1,9 @@
 # Changelog
 
+### 1.0.2
+
+Updated gem metadata.
+
 ### 1.0.1
 
 Added a missing `require 'set'` to Toolbox::Inflector::Rules.
