@@ -18,6 +18,11 @@ Gem::Specification.new do |gem|
   gem.homepage    = 'http://sleepingkingstudios.com'
   gem.license     = 'MIT'
 
+  gem.metadata = {
+    'bug_tracker_uri' => 'https://github.com/sleepingkingstudios/sleeping_king_studios-tools/issues',
+    'source_code_uri' => 'https://github.com/sleepingkingstudios/sleeping_king_studios-tools'
+  }
+
   gem.required_ruby_version = '>= 2.5.0'
   gem.require_path          = 'lib'
   gem.files                 = Dir['lib/**/*.rb', 'LICENSE', '*.md']
