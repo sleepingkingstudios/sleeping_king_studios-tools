@@ -108,7 +108,7 @@ module SleepingKingStudios::Tools
     # @return [Array<String>] The digits of the decomposed integer,
     #   represented as a bigendian array of strings.
     def digits(integer, base: 10)
-      integer.to_s(base).split('')
+      integer.to_s(base).chars
     end
 
     # Returns true if the object is an Integer.
