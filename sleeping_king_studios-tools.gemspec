@@ -7,7 +7,6 @@ require 'sleeping_king_studios/tools/version'
 Gem::Specification.new do |gem|
   gem.name        = 'sleeping_king_studios-tools'
   gem.version     = SleepingKingStudios::Tools::VERSION
-  gem.date        = Time.now.utc.strftime '%Y-%m-%d'
   gem.summary     = 'A library of utility services and concerns.'
   gem.description = <<~DESCRIPTION
     A library of utility services and concerns to expand the functionality of
@@ -19,8 +18,9 @@ Gem::Specification.new do |gem|
   gem.license     = 'MIT'
 
   gem.metadata = {
-    'bug_tracker_uri' => 'https://github.com/sleepingkingstudios/sleeping_king_studios-tools/issues',
-    'source_code_uri' => 'https://github.com/sleepingkingstudios/sleeping_king_studios-tools'
+    'bug_tracker_uri'       => 'https://github.com/sleepingkingstudios/sleeping_king_studios-tools/issues',
+    'source_code_uri'       => 'https://github.com/sleepingkingstudios/sleeping_king_studios-tools',
+    'rubygems_mfa_required' => 'true'
   }
 
   gem.required_ruby_version = '>= 2.5.0'
@@ -30,9 +30,9 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'byebug',        '~> 11.1'
   gem.add_development_dependency 'rake',          '~> 13.0'
   gem.add_development_dependency 'rspec',         '~> 3.10'
-  gem.add_development_dependency 'rubocop',       '~> 1.6'
-  gem.add_development_dependency 'rubocop-rake',  '~> 0.5'
-  gem.add_development_dependency 'rubocop-rspec', '~> 2.1'
+  gem.add_development_dependency 'rubocop',       '~> 1.24'
+  gem.add_development_dependency 'rubocop-rake',  '~> 0.6'
+  gem.add_development_dependency 'rubocop-rspec', '~> 2.7'
   gem.add_development_dependency 'simplecov',     '~> 0.18.5'
   gem.add_development_dependency 'thor',          '~> 1.0'
 

@@ -183,23 +183,23 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
     describe 'with a multi-line string' do
       let(:string) do
-        "The Fellowship of the Ring\n"\
-        "The Two Towers\n"\
-        'The Return of the King'
+        "The Fellowship of the Ring\n" \
+          "The Two Towers\n" \
+          'The Return of the King'
       end
       let(:expected) do
-        "  The Fellowship of the Ring\n"\
-        "  The Two Towers\n"\
-        '  The Return of the King'
+        "  The Fellowship of the Ring\n" \
+          "  The Two Towers\n" \
+          '  The Return of the King'
       end
 
       it { expect(instance.indent string).to be == expected }
 
       describe 'with an indent count' do
         let(:expected) do
-          "    The Fellowship of the Ring\n"\
-          "    The Two Towers\n"\
-          '    The Return of the King'
+          "    The Fellowship of the Ring\n" \
+            "    The Two Towers\n" \
+            '    The Return of the King'
         end
 
         it { expect(instance.indent string, 4).to be == expected }
@@ -276,14 +276,14 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
     describe 'with a multi-line string' do
       let(:string) do
-        "The Fellowship of the Ring\n"\
-        "The Two Towers\n"\
-        'The Return of the King'
+        "The Fellowship of the Ring\n" \
+          "The Two Towers\n" \
+          'The Return of the King'
       end
       let(:expected) do
-        "- The Fellowship of the Ring\n"\
-        "- The Two Towers\n"\
-        '- The Return of the King'
+        "- The Fellowship of the Ring\n" \
+          "- The Two Towers\n" \
+          '- The Return of the King'
       end
 
       it 'should map each line' do
@@ -293,9 +293,9 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
       describe 'with a block that yields the index' do
         let(:expected) do
-          "0. The Fellowship of the Ring\n"\
-          "1. The Two Towers\n"\
-          '2. The Return of the King'
+          "0. The Fellowship of the Ring\n" \
+            "1. The Two Towers\n" \
+            '2. The Return of the King'
         end
 
         it 'should map each line' do

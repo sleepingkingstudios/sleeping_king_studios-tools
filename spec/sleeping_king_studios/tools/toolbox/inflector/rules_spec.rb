@@ -277,7 +277,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Inflector::Rules do
   describe '#inspect' do
     let(:expected) do
       '#<SleepingKingStudios::Tools::Toolbox::Inflector::Rules:' \
-      "#{rules.object_id}>"
+        "#{rules.object_id}>"
     end
 
     it { expect(rules.inspect).to be == expected }
