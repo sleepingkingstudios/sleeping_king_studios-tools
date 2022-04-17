@@ -302,7 +302,7 @@ module SleepingKingStudios::Tools
     def require_array!(value)
       return if array?(value)
 
-      raise ArgumentError, 'argument must be an array', caller[1..-1]
+      raise ArgumentError, 'argument must be an array', caller[1..]
     end
   end
 end

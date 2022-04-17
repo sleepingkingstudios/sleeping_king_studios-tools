@@ -23,7 +23,7 @@ Gem::Specification.new do |gem|
     'rubygems_mfa_required' => 'true'
   }
 
-  gem.required_ruby_version = '>= 2.5.0'
+  gem.required_ruby_version = '>= 2.7.0'
   gem.require_path          = 'lib'
   gem.files                 = Dir['lib/**/*.rb', 'LICENSE', '*.md']
 

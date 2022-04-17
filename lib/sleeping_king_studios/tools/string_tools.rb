@@ -167,7 +167,7 @@ module SleepingKingStudios::Tools
 
       return value.to_s if value.is_a?(Symbol)
 
-      raise ArgumentError, 'argument must be a string', caller[1..-1]
+      raise ArgumentError, 'argument must be a string', caller[1..]
     end
   end
 end
