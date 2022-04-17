@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.1.0
+
+#### Tools
+
+Added :deprecation_caller_depth option to CoreTools. When calling #deprecate with the default strategy of 'warn', will print the specified number of lines from the caller. The default value is 3.
+
 ### 1.0.2
 
 Updated gem metadata.
