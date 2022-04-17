@@ -16,16 +16,28 @@ module SleepingKingStudios::Tools
         :require_each
     end
 
+    # @param deprecation_caller_depth [Integer] The number of backtrace lines to
+    #   display when outputting a deprecation warning.
     # @param deprecation_strategy [String] The name of the strategy used when
     #   deprecated code is called. Must be 'ignore', 'raise', or 'warn'.
-    def initialize(deprecation_strategy: nil)
+    def initialize(
+      deprecation_caller_depth: nil,
+      deprecation_strategy:     nil
+    )
       super()
 
+      @deprecation_caller_depth =
+        deprecation_caller_depth ||
+        ENV.fetch('DEPRECATION_CALLER_DEPTH', '3').to_i
       @deprecation_strategy =
         deprecation_strategy || ENV.fetch('DEPRECATION_STRATEGY', 'warn')
     end
 
-    # @return [String] The current deprecation strategy.
+    # @return [Integer] the number of backtrace lines to display when outputting
+    #   a deprecation warning.
+    attr_reader :deprecation_caller_depth
+
+    # @return [String] the current deprecation strategy.
     attr_reader :deprecation_strategy
 
     # @overload deprecate(name, message: nil)
@@ -92,19 +104,21 @@ module SleepingKingStudios::Tools
 
       str = format % args
       str << ' ' << message if message
-
-      str << "\n  called from #{external_caller}"
+      str << format_caller
 
       Kernel.warn str
     end
 
-    def external_caller
-      caller.find do |line|
-        !(
-          line.include?('forwardable.rb') ||
-          line.include?('sleeping_king_studios-tools')
-        )
+    def format_caller
+      lines = caller
+      start = lines.find_index do |line|
+        !line.include?('forwardable.rb') &&
+          !line.include?('sleeping_king_studios-tools')
       end
+
+      lines[start...(start + deprecation_caller_depth)]
+        .map { |line| "\n  called from #{line}" }
+        .join
     end
   end
 end

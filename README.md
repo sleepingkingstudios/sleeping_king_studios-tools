@@ -30,18 +30,20 @@ Please note that the `SleepingKingStudios::Tools` project is released with a [Co
 
 The tools can be accessed in a convenient form using the Toolbelt class.
 
-    require 'sleeping_king_studios/tools'
+```ruby
+require 'sleeping_king_studios/tools'
 
-    tools = ::SleepingKingStudios::Tools::Toolbelt.instance
+tools = ::SleepingKingStudios::Tools::Toolbelt.instance
 
-    tools.array.humanize_list 'one', 'two', 'three'
-    #=> calls ArrayTools#humanize_list
+tools.array.humanize_list 'one', 'two', 'three'
+#=> calls ArrayTools#humanize_list
 
-    tools.core.deprecate 'my_method'
-    #=> calls CoreTools#deprecate
+tools.core.deprecate 'my_method'
+#=> calls CoreTools#deprecate
 
-    tools.string.underscore 'MyModuleName'
-    #=> calls StringTools#underscore
+tools.string.underscore 'MyModuleName'
+#=> calls StringTools#underscore
+```
 
 ### Array Tools
 
@@ -189,17 +191,40 @@ Tools for working with an application or working environment.
 
 Prints a deprecation warning.
 
-    CoreTools.deprecate 'ObjectTools#old_method'
-    #=> prints to stderr:
+```ruby
+CoreTools.deprecate 'ObjectTools#old_method'
+#=> prints to stderr:
+#
+#   [WARNING] ObjectTools#old_method is deprecated.
+#       called from /path/to/file.rb:4: in something_or_other
+```
 
-    [WARNING] ObjectTools#old_method is deprecated.
-      called from /path/to/file.rb:4: in something_or_other
+You can also specify an additional message to display:
 
-    CoreTools.deprecate 'ObjectTools#old_method', '0.1.0', :format => '%s was deprecated in version %s.'
-    #=> prints to stderr:
+```ruby
+CoreTools.deprecate 'ObjectTools#old_method',
+  'Use #new_method instead.'
+#=> prints to stderr:
+#
+#   [WARNING] ObjectTools#old_method is deprecated. Use #new_method instead.
+#     called from /path/to/file.rb:4: in something_or_other
+```
 
-    ObjectTools#old_method was deprecated in version 0.1.0.
-      called from /path/to/file.rb:4: in something_or_other
+You can specify a custom format for the deprecation message:
+
+```ruby
+CoreTools.deprecate 'ObjectTools#old_method',
+  '0.1.0',
+  format: '%s was deprecated in version %s.'
+#=> prints to stderr:
+#
+#   ObjectTools#old_method was deprecated in version 0.1.0.
+#     called from /path/to/file.rb:4: in something_or_other
+```
+
+By default, `#deprecate` will print the last 3 lines of the caller, excluding
+any lines from `Forwardable` and from `SleepingKingStudios::Tools` itself. To
+print a different number of lines, pass a custom `deprecation_caller_depth` parameter to `CoreTools.new` or set the `DEPRECATION_CALLER_DEPTH` environment variable.
 
 #### `#empty_binding`
 

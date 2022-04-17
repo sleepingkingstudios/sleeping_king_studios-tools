@@ -84,21 +84,31 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
     context 'when the deprecation strategy is "warn"' do
       let(:strategy)      { 'warn' }
       let(:caller_string) { '/path/to/file.rb:4: in something_or_other' }
+      let(:caller_lines) do
+        [
+          '/path/to/sleeping_king_studios-tools/some/internal/code.rb',
+          '/path/to/forwardable.rb',
+          caller_string,
+          *caller
+        ]
+      end
+      let(:scoped_caller) do
+        caller_lines[2..(1 + instance.deprecation_caller_depth)]
+      end
+      let(:formatted_caller) do
+        scoped_caller
+          .map { |line| "\n  called from #{line}" }
+          .join
+      end
       let(:formatted_warning) do
         str = object_string
-        str << "\n  called from #{caller_string}"
+        str << formatted_caller
       end
 
       before(:example) do
         allow(instance)
           .to receive(:caller)
-          .and_return(
-            [
-              '/path/to/sleeping_king_studios-tools/some/internal/code.rb',
-              '/path/to/forwardable.rb',
-              caller_string
-            ]
-          )
+          .and_return(caller_lines)
       end
 
       it 'should print a deprecation warning' do
@@ -112,7 +122,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         let(:formatted_warning) do
           str = object_string
           str << ' ' << message
-          str << "\n  called from #{caller_string}"
+          str << formatted_caller
         end
 
         it 'should print a deprecation warning' do
@@ -133,11 +143,99 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
           expect(Kernel).to have_received(:warn).with(formatted_warning)
         end
       end
+
+      context 'when initialized with deprecation_caller_depth: 0' do
+        let(:instance) do
+          described_class.new(**constructor_options)
+        end
+        let(:constructor_options) { { deprecation_caller_depth: 0 } }
+        let(:formatted_warning)   { object_string }
+
+        it 'should print a deprecation warning' do
+          instance.deprecate object
+
+          expect(Kernel).to have_received(:warn).with(formatted_warning)
+        end
+      end
+
+      context 'when initialized with deprecation_caller_depth: value' do
+        let(:instance) do
+          described_class.new(**constructor_options)
+        end
+        let(:constructor_options) { { deprecation_caller_depth: 10 } }
+
+        it 'should print a deprecation warning' do
+          instance.deprecate object
+
+          expect(Kernel).to have_received(:warn).with(formatted_warning)
+        end
+      end
+    end
+  end
+
+  describe '#deprecation_caller_depth' do
+    let(:instance) do
+      described_class.new(**constructor_options)
+    end
+    let(:constructor_options) { {} }
+
+    it 'should define the method' do
+      expect(instance)
+        .to respond_to(:deprecation_caller_depth)
+        .with(0)
+        .arguments
+    end
+
+    context 'when ENV[DEPRECATION_CALLER_DEPTH] is not set' do
+      around(:example) do |example|
+        previous = ENV['DEPRECATION_CALLER_DEPTH']
+
+        ENV['DEPRECATION_CALLER_DEPTH'] = nil
+
+        example.call
+      ensure
+        ENV['DEPRECATION_CALLER_DEPTH'] = previous
+      end
+
+      it { expect(instance.send :deprecation_caller_depth).to be 3 }
+
+      context 'when initialized with deprecation_caller_depth: value' do
+        let(:constructor_options) do
+          super().merge(deprecation_caller_depth: 10)
+        end
+
+        it { expect(instance.send :deprecation_caller_depth).to be 10 }
+      end
+    end
+
+    context 'when ENV[DEPRECATION_CALLER_DEPTH] is set' do
+      around(:example) do |example|
+        previous = ENV['DEPRECATION_CALLER_DEPTH']
+
+        ENV['DEPRECATION_CALLER_DEPTH'] = '15'
+
+        example.call
+      ensure
+        ENV['DEPRECATION_CALLER_DEPTH'] = previous
+      end
+
+      it { expect(instance.send :deprecation_caller_depth).to be 15 }
+
+      context 'when initialized with deprecation_caller_depth: value' do
+        let(:constructor_options) do
+          super().merge(deprecation_caller_depth: 10)
+        end
+
+        it { expect(instance.send :deprecation_caller_depth).to be 10 }
+      end
     end
   end
 
   describe '#deprecation_strategy' do
-    let(:instance) { described_class.new }
+    let(:instance) do
+      described_class.new(**constructor_options)
+    end
+    let(:constructor_options) { {} }
 
     it 'should define the method' do
       expect(instance).to respond_to(:deprecation_strategy).with(0).arguments
@@ -155,6 +253,14 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       end
 
       it { expect(instance.send :deprecation_strategy).to be == 'warn' }
+
+      context 'when initialized with deprecation_strategy: value' do
+        let(:constructor_options) do
+          super().merge(deprecation_strategy: 'raise')
+        end
+
+        it { expect(instance.send :deprecation_strategy).to be == 'raise' }
+      end
     end
 
     context 'when ENV[DEPRECATION_STRATEGY] is set' do
@@ -169,6 +275,14 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       end
 
       it { expect(instance.send :deprecation_strategy).to be == 'panic' }
+
+      context 'when initialized with deprecation_strategy: value' do
+        let(:constructor_options) do
+          super().merge(deprecation_strategy: 'raise')
+        end
+
+        it { expect(instance.send :deprecation_strategy).to be == 'raise' }
+      end
     end
   end
 

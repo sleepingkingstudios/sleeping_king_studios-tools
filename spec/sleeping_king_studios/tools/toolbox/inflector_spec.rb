@@ -31,7 +31,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Inflector do
     end
 
     def downcase_first(str)
-      str[0].downcase + str[1..-1]
+      str[0].downcase + str[1..]
     end
 
     it { expect(inflector).to respond_to(:camelize).with(1..2).arguments }

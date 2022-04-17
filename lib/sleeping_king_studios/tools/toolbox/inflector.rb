@@ -47,7 +47,7 @@ module SleepingKingStudios::Tools::Toolbox
 
       word = word.to_s.gsub(/(\b|[_-])([a-z])/) { Regexp.last_match(2).upcase }
 
-      (uppercase_first_letter ? word[0].upcase : word[0].downcase) + word[1..-1]
+      (uppercase_first_letter ? word[0].upcase : word[0].downcase) + word[1..]
     end
 
     # rubocop:disable Metrics/AbcSize

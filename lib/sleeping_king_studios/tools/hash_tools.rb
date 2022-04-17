@@ -168,7 +168,7 @@ module SleepingKingStudios::Tools
     def require_hash!(value)
       return if hash?(value)
 
-      raise ArgumentError, 'argument must be a hash', caller[1..-1]
+      raise ArgumentError, 'argument must be a hash', caller[1..]
     end
   end
 end
