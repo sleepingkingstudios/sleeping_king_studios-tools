@@ -36,6 +36,9 @@ Metrics/ModuleLength:
   Exclude:
     - spec/**/*
 
+RSpec/BeNil:
+  Enabled: false
+
 RSpec/ExampleWording:
   Enabled: false
 
