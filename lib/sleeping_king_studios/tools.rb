@@ -7,6 +7,7 @@ module SleepingKingStudios
   module Tools
     autoload :Base,         'sleeping_king_studios/tools/base'
     autoload :ArrayTools,   'sleeping_king_studios/tools/array_tools'
+    autoload :Assertions,   'sleeping_king_studios/tools/assertions'
     autoload :CoreTools,    'sleeping_king_studios/tools/core_tools'
     autoload :HashTools,    'sleeping_king_studios/tools/hash_tools'
     autoload :IntegerTools, 'sleeping_king_studios/tools/integer_tools'

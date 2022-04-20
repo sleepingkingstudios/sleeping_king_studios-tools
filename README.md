@@ -35,13 +35,13 @@ require 'sleeping_king_studios/tools'
 
 tools = ::SleepingKingStudios::Tools::Toolbelt.instance
 
-tools.array.humanize_list 'one', 'two', 'three'
+tools.ary.humanize_list 'one', 'two', 'three'
 #=> calls ArrayTools#humanize_list
 
 tools.core.deprecate 'my_method'
 #=> calls CoreTools#deprecate
 
-tools.string.underscore 'MyModuleName'
+tools.str.underscore 'MyModuleName'
 #=> calls StringTools#underscore
 ```
 
@@ -182,6 +182,203 @@ Accepts an array, a start value, a number of items to delete, and zero or more i
     #=> ['crossbow']
     values
     #=> ['shortbow', 'longbow', 'arbalest', 'chu-ko-nu']
+
+### Assertions
+
+Tools for validating the current application state.
+
+#### `#assert`
+
+Raises an exception unless the given block returns a truthy value.
+
+```ruby
+Assertions.assert { true == false }
+#=> raises an AssertionError with message 'block returned a falsy value'
+
+Assertions.assert { true == true }
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
+- `message`: The error message to display.
+
+#### `#assert_class`
+
+Raises an exception unless the given value is a Class.
+
+```ruby
+Assertions.assert_class(Object.new)
+#=> raises an AssertionError with message 'value is not a class'
+
+Assertions.assert_class(String)
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
+- `message`: The error message to display.
+
+#### `#assert_instance_of`
+
+Raises an exception unless the given value is an instance of the expected Class or Module.
+
+```ruby
+Assertions.assert_instance_of(:foo, expected: String)
+#=> raises an AssertionError with message 'value is not an instance of String'
+
+Assertions.assert_instance_of('foo', expected: String)
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
+- `message`: The error message to display.
+
+#### `#assert_matches`
+
+Raises an exception unless the given value matches the expected value using case equality (`#===`).
+
+
+```ruby
+Assertions.assert_matches('bar', expected: /foo/)
+#=> raises an AssertionError with message 'value does not match the pattern /foo/'
+
+Assertions.assert_matches('foo', expected: /foo/)
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
+- `message`: The error message to display.
+
+#### `#assert_name`
+
+Raises an exception unless the given value is non-empty a String or Symbol.
+
+```ruby
+Assertions.assert_name(nil)
+#=> raises an AssertionError with message "value can't be blank"
+
+Assertions.assert_name(Object.new)
+#=> raises an AssertionError with message 'value is not a String or a Symbol'
+
+Assertions.assert_name('')
+#=> raises an AssertionError with message "value can't be blank"
+
+Assertions.assert_name('foo')
+#=> does not raise an exception
+
+Assertions.assert_name(:bar)
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
+- `message`: The error message to display.
+
+#### `#validate`
+
+Raises an `ArgumentError` unless the given block returns a truthy value.
+
+```ruby
+Assertions.validate { true == false }
+#=> raises an ArgumentError with message 'block returned a falsy value'
+
+Assertions.validate { true == true }
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `message`: The error message to display.
+
+#### `#validate_class`
+
+Raises an `ArgumentError` unless the given value is a Class.
+
+```ruby
+Assertions.validate_class(Object.new)
+#=> raises an ArgumentError with message 'value is not a class'
+
+Assertions.validate_class(String)
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `message`: The error message to display.
+
+#### `#validate_instance_of`
+
+Raises an `ArgumentError` unless the given value is an instance of the expected Class or Module.
+
+```ruby
+Assertions.validate_instance_of(:foo, expected: String)
+#=> raises an AssertionError with message 'value is not an instance of String'
+
+Assertions.validate_instance_of('foo', expected: String)
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `message`: The error message to display.
+
+#### `#validate_matches`
+
+Raises an `ArgumentError` unless the given value matches the expected value using case equality (`#===`).
+
+
+```ruby
+Assertions.validate_matches('bar', expected: /foo/)
+#=> raises an ArgumentError with message 'value does not match the pattern /foo/'
+
+Assertions.validate_matches('foo', expected: /foo/)
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `message`: The error message to display.
+
+#### `#validate_name`
+
+Raises an `ArgumentError` unless the given value is non-empty a String or Symbol.
+
+```ruby
+Assertions.validate_name(nil)
+#=> raises an ArgumentError with message "value can't be blank"
+
+Assertions.validate_name(Object.new)
+#=> raises an AssertionError with message 'value is not a String or a Symbol'
+
+Assertions.validate_name('')
+#=> raises an ArgumentError with message "value can't be blank"
+
+Assertions.validate_name('foo')
+#=> does not raise an exception
+
+Assertions.validate_name(:bar)
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `message`: The error message to display.
 
 ### Core Tools
 
