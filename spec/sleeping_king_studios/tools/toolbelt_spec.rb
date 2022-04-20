@@ -51,6 +51,13 @@ RSpec.describe SleepingKingStudios::Tools::Toolbelt do
     end
   end
 
+  describe '#assertions' do
+    it 'should return an instance of Assertions' do
+      expect(instance.__send__ :assertions)
+        .to be_a SleepingKingStudios::Tools::Assertions
+    end
+  end
+
   describe '#ary' do
     it 'should return an instance of ArrayTools' do
       expect(instance.__send__ :ary)

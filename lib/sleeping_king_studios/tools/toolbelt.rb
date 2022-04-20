@@ -18,6 +18,7 @@ module SleepingKingStudios::Tools
     #   ActiveSupport::Inflector .
     def initialize(deprecation_strategy: nil, inflector: nil)
       @array_tools   = ::SleepingKingStudios::Tools::ArrayTools.new
+      @assertions    = ::SleepingKingStudios::Tools::Assertions.new
       @core_tools    = ::SleepingKingStudios::Tools::CoreTools.new(
         deprecation_strategy: deprecation_strategy
       )
@@ -29,6 +30,8 @@ module SleepingKingStudios::Tools
     end
 
     attr_reader :array_tools
+
+    attr_reader :assertions
 
     attr_reader :core_tools
 

@@ -4,7 +4,21 @@
 
 #### Tools
 
+Implemented `SleepingKingStudios::Tools::Assertions` with the following methods:
+
+- `#assert`
+- `#assert_class`
+- `#assert_instance_of`
+- `#assert_matches`
+- `#assert_name`
+
+Each method raises an exception if its condition is not met. `Assertions` also defines equivalent `#validate` methods, which always raise an `ArgumentError`.
+
 Added :deprecation_caller_depth option to CoreTools. When calling #deprecate with the default strategy of 'warn', will print the specified number of lines from the caller. The default value is 3.
+
+#### Toolbelt
+
+- Added `#assertions` to Toolbelt.
 
 ### 1.0.2
 
