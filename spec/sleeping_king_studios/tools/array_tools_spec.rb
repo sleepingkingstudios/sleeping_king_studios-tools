@@ -152,7 +152,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
     it { expect(described_class).to respond_to(:count_values).with(1).argument }
 
-    it { expect(instance).to alias_method(:count_values).as(:tally) }
+    it { expect(instance).to have_aliased_method(:count_values).as(:tally) }
 
     it { expect(described_class).to respond_to(:tally).with(1).argument }
 

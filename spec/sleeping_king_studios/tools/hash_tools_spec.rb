@@ -24,7 +24,7 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
 
     it 'should alias the method' do
       expect(instance)
-        .to alias_method(:convert_keys_to_strings)
+        .to have_aliased_method(:convert_keys_to_strings)
         .as(:stringify_keys)
     end
 
@@ -139,7 +139,7 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
 
     it 'should alias the method' do
       expect(instance)
-        .to alias_method(:convert_keys_to_symbols)
+        .to have_aliased_method(:convert_keys_to_symbols)
         .as(:symbolize_keys)
     end
 
