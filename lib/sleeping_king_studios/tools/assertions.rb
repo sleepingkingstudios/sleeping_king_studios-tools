@@ -53,21 +53,24 @@ module SleepingKingStudios::Tools
     # @param error_class [Class] The exception class to raise on a failure.
     # @param expected [Class] The expected class.
     # @param message [String] The exception message to raise on a failure.
+    # @param optional [true, false] If true, allows nil values.
     #
     # @raise ArgumentError if the expected class is not a Class.
     # @raise AssertionError if the value is not an instance of the expected
     #   class.
-    def assert_instance_of(
+    def assert_instance_of( # rubocop:disable Metrics/ParameterLists
       value,
       expected:,
       as:          'value',
       error_class: AssertionError,
-      message:     nil
+      message:     nil,
+      optional:    false
     )
       unless expected.is_a?(Class)
         raise ArgumentError, 'expected must be a Class'
       end
 
+      return if optional && value.nil?
       return if value.is_a?(expected)
 
       raise error_class,
@@ -82,15 +85,18 @@ module SleepingKingStudios::Tools
     # @param error_class [Class] The exception class to raise on a failure.
     # @param expected [#===] The expected object.
     # @param message [String] The exception message to raise on a failure.
+    # @param optional [true, false] If true, allows nil values.
     #
     # @raise AssertionError if the value does not match the expected object.
-    def assert_matches( # rubocop:disable Metrics/MethodLength
+    def assert_matches( # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/ParameterLists
       value,
       expected:,
       as:          'value',
       error_class: AssertionError,
-      message:     nil
+      message:     nil,
+      optional:    false
     )
+      return if optional && value.nil?
       return if expected === value # rubocop:disable Style/CaseEquality
 
       message ||=
@@ -114,16 +120,20 @@ module SleepingKingStudios::Tools
     # @param as [String] The name of the asserted value.
     # @param error_class [Class] The exception class to raise on a failure.
     # @param message [String] The exception message to raise on a failure.
+    # @param optional [true, false] If true, allows nil values.
     #
     # @raise AssertionError if the value is not a String or a Symbol, or if the
     #   value is empty.
-    def assert_name( # rubocop:disable Metrics/CyclomaticComplexity
+    def assert_name( # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
       value,
       as:          'value',
       error_class: AssertionError,
-      message:     nil
+      message:     nil,
+      optional:    false
     )
       if value.nil?
+        return if optional
+
         raise error_class, message || "#{as} can't be blank", caller(1..-1)
       end
 
@@ -175,15 +185,23 @@ module SleepingKingStudios::Tools
     # @param as [String] The name of the asserted value.
     # @param expected [Class] The expected class.
     # @param message [String] The exception message to raise on a failure.
+    # @param optional [true, false] If true, allows nil values.
     #
     # @raise ArgumentError if the expected class is not a Class.
     # @raise AssertionError if the value is not an instance of the expected
     #   class.
-    def validate_instance_of(value, expected:, as: 'value', message: nil)
+    def validate_instance_of(
+      value,
+      expected:,
+      as:       'value',
+      message:  nil,
+      optional: false
+    )
       unless expected.is_a?(Class)
         raise ArgumentError, 'expected must be a Class'
       end
 
+      return if optional && value.nil?
       return if value.is_a?(expected)
 
       raise ArgumentError,
@@ -197,9 +215,17 @@ module SleepingKingStudios::Tools
     # @param as [String] The name of the asserted value.
     # @param expected [#===] The expected object.
     # @param message [String] The exception message to raise on a failure.
+    # @param optional [true, false] If true, allows nil values.
     #
     # @raise ArgumentError if the value does not match the expected object.
-    def validate_matches(value, expected:, as: 'value', message: nil) # rubocop:disable Metrics/MethodLength
+    def validate_matches( # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
+      value,
+      expected:,
+      as:       'value',
+      message:  nil,
+      optional: false
+    )
+      return if optional && value.nil?
       return if expected === value # rubocop:disable Style/CaseEquality
 
       message ||=
@@ -222,11 +248,19 @@ module SleepingKingStudios::Tools
     # @param value [Object] The value to assert on.
     # @param as [String] The name of the asserted value.
     # @param message [String] The exception message to raise on a failure.
+    # @param optional [true, false] If true, allows nil values.
     #
     # @raise ArgumentError if the value is not a String or a Symbol, or if the
     #   value is empty.
-    def validate_name(value, as: 'value', message: nil) # rubocop:disable Metrics/CyclomaticComplexity
+    def validate_name( # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+      value,
+      as:       'value',
+      message:  nil,
+      optional: false
+    )
       if value.nil?
+        return if optional
+
         raise ArgumentError, message || "#{as} can't be blank", caller(1..-1)
       end
 

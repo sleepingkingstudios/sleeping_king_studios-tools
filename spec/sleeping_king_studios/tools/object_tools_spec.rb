@@ -620,7 +620,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
     it { expect(described_class).to respond_to(:eigenclass).with(1).argument }
 
-    it { expect(instance).to alias_method(:eigenclass).as(:metaclass) }
+    it { expect(instance).to have_aliased_method(:eigenclass).as(:metaclass) }
 
     it { expect(described_class).to respond_to(:metaclass).with(1).argument }
 

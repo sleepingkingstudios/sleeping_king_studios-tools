@@ -282,7 +282,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
   describe '#to_h' do
     it { expect(instance).to respond_to(:to_h).with(0).arguments }
 
-    it { expect(instance).to alias_method(:to_h).as(:all) }
+    it { expect(instance).to have_aliased_method(:to_h).as(:all) }
 
     it { expect(instance.to_h).to be == {} }
 

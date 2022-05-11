@@ -22,6 +22,14 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     let(:options)       { super().merge(message: error_message) }
   end
 
+  shared_context 'with optional: false' do
+    let(:options) { super().merge(optional: false) }
+  end
+
+  shared_context 'with optional: true' do
+    let(:options) { super().merge(optional: true) }
+  end
+
   shared_examples 'should raise an exception' do
     it { expect { assert }.to raise_error error_class, error_message }
   end
@@ -214,7 +222,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       expect(assertions)
         .to respond_to(:assert_instance_of)
         .with(1).argument
-        .and_keywords(:as, :error_class, :expected, :message)
+        .and_keywords(:as, :error_class, :expected, :message, :optional)
     end
 
     describe 'with nil' do
@@ -361,6 +369,58 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         include_examples 'should not raise an exception'
       end
     end
+
+    wrap_context 'with optional: false' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an instance of the class' do
+        let(:value) { StandardError.new }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an instance of a subclass of the class' do
+        let(:value) { RuntimeError.new }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with optional: true' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an instance of the class' do
+        let(:value) { StandardError.new }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an instance of a subclass of the class' do
+        let(:value) { RuntimeError.new }
+
+        include_examples 'should not raise an exception'
+      end
+    end
   end
 
   describe '#assert_matches' do
@@ -382,7 +442,13 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       expect(assertions)
         .to respond_to(:assert_matches)
         .with(1).argument
-        .and_keywords(:as, :error_class, :expected, :message)
+        .and_keywords(:as, :error_class, :expected, :message, :optional)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should raise an exception'
     end
 
     describe 'with a non-matching value' do
@@ -426,6 +492,46 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
 
     wrap_context 'with message: value' do
+      describe 'with a non-matching value' do
+        let(:value) { nonmatching }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a matching value' do
+        let(:value) { matching }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with optional: false' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a non-matching value' do
+        let(:value) { nonmatching }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a matching value' do
+        let(:value) { matching }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with optional: true' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
+
       describe 'with a non-matching value' do
         let(:value) { nonmatching }
 
@@ -544,6 +650,58 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
           include_examples 'should not raise an exception'
         end
       end
+
+      wrap_context 'with optional: false' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with an Object' do
+          let(:value) { Object.new.freeze }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with an instance of the class' do
+          let(:value) { StandardError.new }
+
+          include_examples 'should not raise an exception'
+        end
+
+        describe 'with an instance of a subclass of the class' do
+          let(:value) { RuntimeError.new }
+
+          include_examples 'should not raise an exception'
+        end
+      end
+
+      wrap_context 'with optional: true' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_examples 'should not raise an exception'
+        end
+
+        describe 'with an Object' do
+          let(:value) { Object.new.freeze }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with an instance of the class' do
+          let(:value) { StandardError.new }
+
+          include_examples 'should not raise an exception'
+        end
+
+        describe 'with an instance of a subclass of the class' do
+          let(:value) { RuntimeError.new }
+
+          include_examples 'should not raise an exception'
+        end
+      end
     end
 
     context 'when the expected value is an anonymous Class' do
@@ -569,11 +727,57 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
         include_examples 'should not raise an exception'
       end
+
+      wrap_context 'with optional: false' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with an Object' do
+          let(:value) { Object.new.freeze }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with an instance of the class' do
+          let(:value) { expected.new }
+
+          include_examples 'should not raise an exception'
+        end
+      end
+
+      wrap_context 'with optional: true' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_examples 'should not raise an exception'
+        end
+
+        describe 'with an Object' do
+          let(:value) { Object.new.freeze }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with an instance of the class' do
+          let(:value) { expected.new }
+
+          include_examples 'should not raise an exception'
+        end
+      end
     end
 
     context 'when the expected value is a Proc' do
       let(:expected)      { ->(value) { value >= 0 } }
       let(:error_message) { "#{as} does not match the Proc" }
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        it { expect { assert }.to raise_error NoMethodError }
+      end
 
       describe 'with a non-matching value' do
         let(:value) { -1 }
@@ -628,12 +832,58 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
           include_examples 'should not raise an exception'
         end
       end
+
+      wrap_context 'with optional: false' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          it { expect { assert }.to raise_error NoMethodError }
+        end
+
+        describe 'with a non-matching value' do
+          let(:value) { -1 }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with a matching value' do
+          let(:value) { 1 }
+
+          include_examples 'should not raise an exception'
+        end
+      end
+
+      wrap_context 'with optional: true' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_examples 'should not raise an exception'
+        end
+
+        describe 'with a non-matching value' do
+          let(:value) { -1 }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with a matching value' do
+          let(:value) { 1 }
+
+          include_examples 'should not raise an exception'
+        end
+      end
     end
 
     context 'when the expected value is a Regexp' do
       let(:expected) { /foo/ }
       let(:error_message) do
         "#{as} does not match the pattern #{expected.inspect}"
+      end
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
       end
 
       describe 'with a non-matching value' do
@@ -689,6 +939,46 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
           include_examples 'should not raise an exception'
         end
       end
+
+      wrap_context 'with optional: false' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with a non-matching value' do
+          let(:value) { 'bar' }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with a matching value' do
+          let(:value) { 'foo' }
+
+          include_examples 'should not raise an exception'
+        end
+      end
+
+      wrap_context 'with optional: true' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_examples 'should not raise an exception'
+        end
+
+        describe 'with a non-matching value' do
+          let(:value) { 'bar' }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with a matching value' do
+          let(:value) { 'foo' }
+
+          include_examples 'should not raise an exception'
+        end
+      end
     end
   end
 
@@ -704,7 +994,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       expect(assertions)
         .to respond_to(:assert_name)
         .with(1).argument
-        .and_keywords(:as, :error_class, :message)
+        .and_keywords(:as, :error_class, :message, :optional)
     end
 
     describe 'with nil' do
@@ -849,6 +1139,87 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
       describe 'with an empty Symbol' do
         let(:value) { :'' }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a String' do
+        let(:value) { 'string' }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with a Symbol' do
+        let(:value) { :symbol }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with optional: false' do
+      describe 'with nil' do
+        let(:value)         { nil }
+        let(:error_message) { "#{as} can't be blank" }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an empty String' do
+        let(:value)         { '' }
+        let(:error_message) { "#{as} can't be blank" }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an empty Symbol' do
+        let(:value)         { :'' }
+        let(:error_message) { "#{as} can't be blank" }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a String' do
+        let(:value) { 'string' }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with a Symbol' do
+        let(:value) { :symbol }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with optional: true' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an empty String' do
+        let(:value)         { '' }
+        let(:error_message) { "#{as} can't be blank" }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an empty Symbol' do
+        let(:value)         { :'' }
+        let(:error_message) { "#{as} can't be blank" }
 
         include_examples 'should raise an exception'
       end
@@ -999,7 +1370,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       expect(assertions)
         .to respond_to(:validate_instance_of)
         .with(1).argument
-        .and_keywords(:as, :expected, :message)
+        .and_keywords(:as, :expected, :message, :optional)
     end
 
     describe 'with nil' do
@@ -1120,6 +1491,58 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         include_examples 'should not raise an exception'
       end
     end
+
+    wrap_context 'with optional: false' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an instance of the class' do
+        let(:value) { StandardError.new }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an instance of a subclass of the class' do
+        let(:value) { RuntimeError.new }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with optional: true' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an instance of the class' do
+        let(:value) { StandardError.new }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an instance of a subclass of the class' do
+        let(:value) { RuntimeError.new }
+
+        include_examples 'should not raise an exception'
+      end
+    end
   end
 
   describe '#validate_matches' do
@@ -1142,7 +1565,13 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       expect(assertions)
         .to respond_to(:validate_matches)
         .with(1).argument
-        .and_keywords(:as, :expected, :message)
+        .and_keywords(:as, :expected, :message, :optional)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should raise an exception'
     end
 
     describe 'with a non-matching value' do
@@ -1172,6 +1601,46 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
 
     wrap_context 'with message: value' do
+      describe 'with a non-matching value' do
+        let(:value) { nonmatching }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a matching value' do
+        let(:value) { matching }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with optional: false' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a non-matching value' do
+        let(:value) { nonmatching }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a matching value' do
+        let(:value) { matching }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with optional: true' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
+
       describe 'with a non-matching value' do
         let(:value) { nonmatching }
 
@@ -1264,6 +1733,58 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
           include_examples 'should not raise an exception'
         end
       end
+
+      wrap_context 'with optional: false' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with an Object' do
+          let(:value) { Object.new.freeze }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with an instance of the class' do
+          let(:value) { StandardError.new }
+
+          include_examples 'should not raise an exception'
+        end
+
+        describe 'with an instance of a subclass of the class' do
+          let(:value) { RuntimeError.new }
+
+          include_examples 'should not raise an exception'
+        end
+      end
+
+      wrap_context 'with optional: true' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_examples 'should not raise an exception'
+        end
+
+        describe 'with an Object' do
+          let(:value) { Object.new.freeze }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with an instance of the class' do
+          let(:value) { StandardError.new }
+
+          include_examples 'should not raise an exception'
+        end
+
+        describe 'with an instance of a subclass of the class' do
+          let(:value) { RuntimeError.new }
+
+          include_examples 'should not raise an exception'
+        end
+      end
     end
 
     context 'when the expected value is an anonymous Class' do
@@ -1289,11 +1810,57 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
         include_examples 'should not raise an exception'
       end
+
+      wrap_context 'with optional: false' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with an Object' do
+          let(:value) { Object.new.freeze }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with an instance of the class' do
+          let(:value) { expected.new }
+
+          include_examples 'should not raise an exception'
+        end
+      end
+
+      wrap_context 'with optional: true' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_examples 'should not raise an exception'
+        end
+
+        describe 'with an Object' do
+          let(:value) { Object.new.freeze }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with an instance of the class' do
+          let(:value) { expected.new }
+
+          include_examples 'should not raise an exception'
+        end
+      end
     end
 
     context 'when the expected value is a Proc' do
       let(:expected)      { ->(value) { value >= 0 } }
       let(:error_message) { "#{as} does not match the Proc" }
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        it { expect { assert }.to raise_error NoMethodError }
+      end
 
       describe 'with a non-matching value' do
         let(:value) { -1 }
@@ -1334,12 +1901,58 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
           include_examples 'should not raise an exception'
         end
       end
+
+      wrap_context 'with optional: false' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          it { expect { assert }.to raise_error NoMethodError }
+        end
+
+        describe 'with a non-matching value' do
+          let(:value) { -1 }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with a matching value' do
+          let(:value) { 1 }
+
+          include_examples 'should not raise an exception'
+        end
+      end
+
+      wrap_context 'with optional: true' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_examples 'should not raise an exception'
+        end
+
+        describe 'with a non-matching value' do
+          let(:value) { -1 }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with a matching value' do
+          let(:value) { 1 }
+
+          include_examples 'should not raise an exception'
+        end
+      end
     end
 
     context 'when the expected value is a Regexp' do
       let(:expected) { /foo/ }
       let(:error_message) do
         "#{as} does not match the pattern #{expected.inspect}"
+      end
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
       end
 
       describe 'with a non-matching value' do
@@ -1381,6 +1994,46 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
           include_examples 'should not raise an exception'
         end
       end
+
+      wrap_context 'with optional: false' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with a non-matching value' do
+          let(:value) { 'bar' }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with a matching value' do
+          let(:value) { 'foo' }
+
+          include_examples 'should not raise an exception'
+        end
+      end
+
+      wrap_context 'with optional: true' do
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_examples 'should not raise an exception'
+        end
+
+        describe 'with a non-matching value' do
+          let(:value) { 'bar' }
+
+          include_examples 'should raise an exception'
+        end
+
+        describe 'with a matching value' do
+          let(:value) { 'foo' }
+
+          include_examples 'should not raise an exception'
+        end
+      end
     end
   end
 
@@ -1397,7 +2050,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       expect(assertions)
         .to respond_to(:validate_name)
         .with(1).argument
-        .and_keywords(:as, :message)
+        .and_keywords(:as, :message, :optional)
     end
 
     describe 'with nil' do
@@ -1501,6 +2154,87 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
       describe 'with an empty Symbol' do
         let(:value) { :'' }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a String' do
+        let(:value) { 'string' }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with a Symbol' do
+        let(:value) { :symbol }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with optional: false' do
+      describe 'with nil' do
+        let(:value)         { nil }
+        let(:error_message) { "#{as} can't be blank" }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an empty String' do
+        let(:value)         { '' }
+        let(:error_message) { "#{as} can't be blank" }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an empty Symbol' do
+        let(:value)         { :'' }
+        let(:error_message) { "#{as} can't be blank" }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a String' do
+        let(:value) { 'string' }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with a Symbol' do
+        let(:value) { :symbol }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with optional: true' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an empty String' do
+        let(:value)         { '' }
+        let(:error_message) { "#{as} can't be blank" }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an empty Symbol' do
+        let(:value)         { :'' }
+        let(:error_message) { "#{as} can't be blank" }
 
         include_examples 'should raise an exception'
       end

@@ -188,7 +188,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
 
     context 'when ENV[DEPRECATION_CALLER_DEPTH] is not set' do
       around(:example) do |example|
-        previous = ENV['DEPRECATION_CALLER_DEPTH']
+        previous = ENV.fetch('DEPRECATION_CALLER_DEPTH', nil)
 
         ENV['DEPRECATION_CALLER_DEPTH'] = nil
 
@@ -210,7 +210,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
 
     context 'when ENV[DEPRECATION_CALLER_DEPTH] is set' do
       around(:example) do |example|
-        previous = ENV['DEPRECATION_CALLER_DEPTH']
+        previous = ENV.fetch('DEPRECATION_CALLER_DEPTH', nil)
 
         ENV['DEPRECATION_CALLER_DEPTH'] = '15'
 
@@ -243,7 +243,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
 
     context 'when ENV[DEPRECATION_STRATEGY] is not set' do
       around(:example) do |example|
-        previous = ENV['DEPRECATION_STRATEGY']
+        previous = ENV.fetch('DEPRECATION_STRATEGY', nil)
 
         ENV['DEPRECATION_STRATEGY'] = nil
 
@@ -265,7 +265,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
 
     context 'when ENV[DEPRECATION_STRATEGY] is set' do
       around(:example) do |example|
-        previous = ENV['DEPRECATION_STRATEGY']
+        previous = ENV.fetch('DEPRECATION_STRATEGY', nil)
 
         ENV['DEPRECATION_STRATEGY'] = 'panic'
 
