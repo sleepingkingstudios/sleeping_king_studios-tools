@@ -239,6 +239,7 @@ It accepts the following options:
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
 - `message`: The error message to display.
+- `optional`: If true, accepts `nil` values as well as instances of the Class or Module.
 
 #### `#assert_matches`
 
@@ -258,6 +259,7 @@ It accepts the following options:
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
 - `message`: The error message to display.
+- `optional`: If true, accepts `nil` values as well as matching values.
 
 #### `#assert_name`
 
@@ -285,6 +287,7 @@ It accepts the following options:
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
 - `message`: The error message to display.
+- `optional`: If true, accepts `nil` values as well as valid Symbols and Strings.
 
 #### `#validate`
 
@@ -335,6 +338,7 @@ It accepts the following options:
 
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `message`: The error message to display.
+- `optional`: If true, accepts `nil` values as well as instances of the Class or Module.
 
 #### `#validate_matches`
 
@@ -353,6 +357,7 @@ It accepts the following options:
 
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `message`: The error message to display.
+- `optional`: If true, accepts `nil` values as well as matching values.
 
 #### `#validate_name`
 
@@ -379,6 +384,7 @@ It accepts the following options:
 
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `message`: The error message to display.
+- `optional`: If true, accepts `nil` values as well as valid Symbols and Strings.
 
 ### Core Tools
 
