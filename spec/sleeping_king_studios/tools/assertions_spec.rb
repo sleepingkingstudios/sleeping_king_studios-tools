@@ -115,6 +115,125 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
   end
 
+  describe '#assert_boolean' do
+    let(:error_message) { 'value must be true or false' }
+
+    def assert
+      assertions.assert_boolean(value, **options)
+    end
+
+    it 'should define the method' do
+      expect(assertions)
+        .to respond_to(:assert_boolean)
+        .with(1).argument
+        .and_keywords(:as, :error_class, :message)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should raise an exception'
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      include_examples 'should raise an exception'
+    end
+
+    describe 'with false' do
+      let(:value) { false }
+
+      include_examples 'should not raise an exception'
+    end
+
+    describe 'with true' do
+      let(:value) { true }
+
+      include_examples 'should not raise an exception'
+    end
+
+    wrap_context 'with as: value' do
+      let(:error_message) { "#{as} must be true or false" }
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with false' do
+        let(:value) { false }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with true' do
+        let(:value) { true }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with error_class: value' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with false' do
+        let(:value) { false }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with true' do
+        let(:value) { true }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with message: value' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with false' do
+        let(:value) { false }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with true' do
+        let(:value) { true }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+  end
+
   describe '#assert_class' do
     let(:error_message) { 'value is not a Class' }
 
@@ -1275,6 +1394,100 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
       describe 'with a block that returns a truthy value' do
         let(:block) { -> { :ok } }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+  end
+
+  describe '#validate_boolean' do
+    let(:error_class)   { ArgumentError }
+    let(:error_message) { 'value must be true or false' }
+
+    def assert
+      assertions.validate_boolean(value, **options)
+    end
+
+    it 'should define the method' do
+      expect(assertions)
+        .to respond_to(:validate_boolean)
+        .with(1).argument
+        .and_keywords(:as, :message)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should raise an exception'
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      include_examples 'should raise an exception'
+    end
+
+    describe 'with false' do
+      let(:value) { false }
+
+      include_examples 'should not raise an exception'
+    end
+
+    describe 'with true' do
+      let(:value) { true }
+
+      include_examples 'should not raise an exception'
+    end
+
+    wrap_context 'with as: value' do
+      let(:error_message) { "#{as} must be true or false" }
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with false' do
+        let(:value) { false }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with true' do
+        let(:value) { true }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with message: value' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with false' do
+        let(:value) { false }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with true' do
+        let(:value) { true }
 
         include_examples 'should not raise an exception'
       end
