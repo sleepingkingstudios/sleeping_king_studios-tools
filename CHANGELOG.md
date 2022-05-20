@@ -7,6 +7,7 @@
 Implemented `SleepingKingStudios::Tools::Assertions` with the following methods:
 
 - `#assert`
+- `#assert_boolean`
 - `#assert_class`
 - `#assert_instance_of`
 - `#assert_matches`

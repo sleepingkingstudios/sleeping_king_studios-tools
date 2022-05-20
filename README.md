@@ -204,6 +204,30 @@ It accepts the following options:
 - `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
 - `message`: The error message to display.
 
+#### `#assert_boolean`
+
+Raises an exception unless the given value is either `true` or `false`.
+
+```ruby
+Assertions.assert_boolean(nil)
+#=> raises an AssertionError with message 'value must be true or false'
+
+Assertions.assert_boolean(Object.new)
+#=> raises an AssertionError with message 'value must be true or false'
+
+Assertions.assert_boolean(false)
+#=> does not raise an exception
+
+Assertions.assert_boolean(true)
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
+- `message`: The error message to display.
+
 #### `#assert_class`
 
 Raises an exception unless the given value is a Class.
@@ -303,6 +327,29 @@ Assertions.validate { true == true }
 
 It accepts the following options:
 
+- `message`: The error message to display.
+
+#### `#validate_boolean`
+
+Raises an exception unless the given value is either `true` or `false`.
+
+```ruby
+Assertions.validate_boolean(nil)
+#=> raises an ArgumentError with message 'value must be true or false'
+
+Assertions.validate_boolean(Object.new)
+#=> raises an ArgumentError with message 'value must be true or false'
+
+Assertions.validate_boolean(false)
+#=> does not raise an exception
+
+Assertions.validate_boolean(true)
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `message`: The error message to display.
 
 #### `#validate_class`

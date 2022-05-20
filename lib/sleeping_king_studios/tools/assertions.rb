@@ -25,6 +25,27 @@ module SleepingKingStudios::Tools
         caller(1..-1)
     end
 
+    # Asserts that the value is either true or false.
+    #
+    # @param value [Object] The value to assert on.
+    # @param as [String] The name of the asserted value.
+    # @param error_class [Class] The exception class to raise on a failure.
+    # @param message [String] The exception message to raise on a failure.
+    #
+    # @raise AssertionError if the value is not a Class.
+    def assert_boolean(
+      value,
+      as:          'value',
+      error_class: AssertionError,
+      message:     nil
+    )
+      return if value.equal?(true) || value.equal?(false)
+
+      raise error_class,
+        message || "#{as} must be true or false",
+        caller(1..-1)
+    end
+
     # Asserts that the value is a Class.
     #
     # @param value [Object] The value to assert on.
@@ -161,6 +182,21 @@ module SleepingKingStudios::Tools
 
       raise ArgumentError,
         message || 'block returned a falsy value',
+        caller(1..-1)
+    end
+
+    # Asserts that the value is either true or false.
+    #
+    # @param value [Object] The value to assert on.
+    # @param as [String] The name of the asserted value.
+    # @param message [String] The exception message to raise on a failure.
+    #
+    # @raise AssertionError if the value is not a Class.
+    def validate_boolean(value, as: 'value', message: nil)
+      return if value.equal?(true) || value.equal?(false)
+
+      raise ArgumentError,
+        message || "#{as} must be true or false",
         caller(1..-1)
     end
 
