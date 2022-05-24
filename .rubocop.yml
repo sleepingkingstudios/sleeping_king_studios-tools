@@ -1,5 +1,3 @@
-# See https://github.com/rubocop-hq/rubocop/blob/master/manual/configuration.md
-
 require:
   - rubocop-rake
   - rubocop-rspec
@@ -10,6 +8,33 @@ AllCops:
   Exclude:
     - 'tmp/**/*'
     - 'vendor/**/*'
+
+RSpec:
+  Language:
+    ExampleGroups:
+      Regular:
+        - context
+        - describe
+        - wrap_context
+      Skipped:
+        - xcontext
+        - xdescribe
+        - xwrap_context
+      Focused:
+        - fcontext
+        - fdescribe
+        - fwrap_context
+    Includes:
+      Examples:
+        - finclude_contract
+        - finclude_examples
+        - fwrap_examples
+        - include_contract
+        - include_examples
+        - wrap_examples
+        - xinclude_contract
+        - xinclude_examples
+        - xwrap_examples
 
 Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
