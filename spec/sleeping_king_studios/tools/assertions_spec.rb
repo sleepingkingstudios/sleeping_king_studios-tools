@@ -86,7 +86,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       include_examples 'should not raise an exception'
     end
 
-    wrap_context 'with error_class: value' do
+    wrap_context 'with error_class: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with a block that returns a falsy value' do
         let(:block) { -> {} }
 
@@ -100,7 +100,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with message: value' do
+    wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with a block that returns a falsy value' do
         let(:block) { -> {} }
 
@@ -181,7 +181,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with error_class: value' do
+    wrap_context 'with error_class: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with nil' do
         let(:value) { nil }
 
@@ -207,7 +207,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with message: value' do
+    wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with nil' do
         let(:value) { nil }
 
@@ -288,7 +288,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with error_class: value' do
+    wrap_context 'with error_class: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with nil' do
         let(:value) { nil }
 
@@ -308,7 +308,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with message: value' do
+    wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with nil' do
         let(:value) { nil }
 
@@ -396,7 +396,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with error_class: value' do
+    wrap_context 'with error_class: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with nil' do
         let(:value) { nil }
 
@@ -463,7 +463,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with message: value' do
+    wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with nil' do
         let(:value) { nil }
 
@@ -489,7 +489,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with optional: false' do
+    wrap_context 'with optional: false' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with nil' do
         let(:value) { nil }
 
@@ -582,7 +582,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       include_examples 'should not raise an exception'
     end
 
-    wrap_context 'with as: value' do
+    wrap_context 'with as: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with a non-matching value' do
         let(:value) { nonmatching }
 
@@ -596,7 +596,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with error_class: value' do
+    wrap_context 'with error_class: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with a non-matching value' do
         let(:value) { nonmatching }
 
@@ -610,7 +610,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with message: value' do
+    wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with a non-matching value' do
         let(:value) { nonmatching }
 
@@ -692,7 +692,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         include_examples 'should not raise an exception'
       end
 
-      wrap_context 'with as: value' do
+      wrap_context 'with as: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with nil' do
           let(:value) { nil }
 
@@ -718,7 +718,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         end
       end
 
-      wrap_context 'with error_class: value' do
+      wrap_context 'with error_class: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with nil' do
           let(:value) { nil }
 
@@ -744,7 +744,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         end
       end
 
-      wrap_context 'with message: value' do
+      wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with nil' do
           let(:value) { nil }
 
@@ -770,7 +770,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         end
       end
 
-      wrap_context 'with optional: false' do
+      wrap_context 'with optional: false' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with nil' do
           let(:value) { nil }
 
@@ -910,7 +910,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         include_examples 'should not raise an exception'
       end
 
-      wrap_context 'with as: value' do
+      wrap_context 'with as: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with a non-matching value' do
           let(:value) { -1 }
 
@@ -924,7 +924,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         end
       end
 
-      wrap_context 'with error_class: value' do
+      wrap_context 'with error_class: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with a non-matching value' do
           let(:value) { -1 }
 
@@ -938,7 +938,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         end
       end
 
-      wrap_context 'with message: value' do
+      wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with a non-matching value' do
           let(:value) { -1 }
 
@@ -1017,7 +1017,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         include_examples 'should not raise an exception'
       end
 
-      wrap_context 'with as: value' do
+      wrap_context 'with as: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with a non-matching value' do
           let(:value) { 'bar' }
 
@@ -1031,7 +1031,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         end
       end
 
-      wrap_context 'with error_class: value' do
+      wrap_context 'with error_class: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with a non-matching value' do
           let(:value) { 'bar' }
 
@@ -1045,7 +1045,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         end
       end
 
-      wrap_context 'with message: value' do
+      wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with a non-matching value' do
           let(:value) { 'bar' }
 
@@ -1155,7 +1155,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       include_examples 'should not raise an exception'
     end
 
-    wrap_context 'with as: value' do
+    wrap_context 'with as: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with nil' do
         let(:value)         { nil }
         let(:error_message) { "#{as} can't be blank" }
@@ -1196,7 +1196,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with error_class: value' do
+    wrap_context 'with error_class: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with nil' do
         let(:value)         { nil }
         let(:error_message) { "#{as} can't be blank" }
@@ -1275,7 +1275,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with optional: false' do
+    wrap_context 'with optional: false' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with nil' do
         let(:value)         { nil }
         let(:error_message) { "#{as} can't be blank" }
@@ -1679,7 +1679,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with message: value' do
+    wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with nil' do
         let(:value) { nil }
 
@@ -1705,7 +1705,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with optional: false' do
+    wrap_context 'with optional: false' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with nil' do
         let(:value) { nil }
 
@@ -1799,7 +1799,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       include_examples 'should not raise an exception'
     end
 
-    wrap_context 'with as: value' do
+    wrap_context 'with as: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with a non-matching value' do
         let(:value) { nonmatching }
 
@@ -1813,7 +1813,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with message: value' do
+    wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with a non-matching value' do
         let(:value) { nonmatching }
 
@@ -1895,7 +1895,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         include_examples 'should not raise an exception'
       end
 
-      wrap_context 'with as: value' do
+      wrap_context 'with as: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with nil' do
           let(:value) { nil }
 
@@ -1921,7 +1921,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         end
       end
 
-      wrap_context 'with message: value' do
+      wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with nil' do
           let(:value) { nil }
 
@@ -1947,7 +1947,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         end
       end
 
-      wrap_context 'with optional: false' do
+      wrap_context 'with optional: false' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with nil' do
           let(:value) { nil }
 
@@ -2087,7 +2087,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         include_examples 'should not raise an exception'
       end
 
-      wrap_context 'with as: value' do
+      wrap_context 'with as: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with a non-matching value' do
           let(:value) { -1 }
 
@@ -2101,7 +2101,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         end
       end
 
-      wrap_context 'with message: value' do
+      wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with a non-matching value' do
           let(:value) { -1 }
 
@@ -2180,7 +2180,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         include_examples 'should not raise an exception'
       end
 
-      wrap_context 'with as: value' do
+      wrap_context 'with as: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with a non-matching value' do
           let(:value) { 'bar' }
 
@@ -2194,7 +2194,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         end
       end
 
-      wrap_context 'with message: value' do
+      wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
         describe 'with a non-matching value' do
           let(:value) { 'bar' }
 
@@ -2305,7 +2305,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       include_examples 'should not raise an exception'
     end
 
-    wrap_context 'with as: value' do
+    wrap_context 'with as: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with nil' do
         let(:value)         { nil }
         let(:error_message) { "#{as} can't be blank" }
@@ -2384,7 +2384,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    wrap_context 'with optional: false' do
+    wrap_context 'with optional: false' do # rubocop:disable RSpec/RepeatedExampleGroupBody
       describe 'with nil' do
         let(:value)         { nil }
         let(:error_message) { "#{as} can't be blank" }

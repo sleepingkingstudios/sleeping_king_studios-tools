@@ -2,6 +2,8 @@
 
 ### 1.1.0
 
+Files in the `Toolbox` are now autoloaded.
+
 #### Tools
 
 Implemented `SleepingKingStudios::Tools::Assertions` with the following methods:
@@ -20,6 +22,10 @@ Added :deprecation_caller_depth option to CoreTools. When calling #deprecate wit
 #### Toolbelt
 
 - Added `#assertions` to Toolbelt.
+
+#### Toolbox
+
+Implemented `SleepingKingStudios::Tools::Toolbox::Subclass`, which implements partial application for constructor parameters.
 
 ### 1.0.2
 

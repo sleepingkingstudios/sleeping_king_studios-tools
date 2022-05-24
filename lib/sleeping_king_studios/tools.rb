@@ -14,6 +14,7 @@ module SleepingKingStudios
     autoload :ObjectTools,  'sleeping_king_studios/tools/object_tools'
     autoload :StringTools,  'sleeping_king_studios/tools/string_tools'
     autoload :Toolbelt,     'sleeping_king_studios/tools/toolbelt'
+    autoload :Toolbox,      'sleeping_king_studios/tools/toolbox'
     autoload :Version,      'sleeping_king_studios/tools/version'
   end
 end

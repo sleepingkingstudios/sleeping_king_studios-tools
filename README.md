@@ -1100,3 +1100,102 @@ Concatenates the MAJOR, MINOR, and PATCH constant values with PRERELEASE and BUI
 #### `#to_version`
 
 Concatenates the MAJOR, MINOR, and PATCH constant values with PRERELEASE and BUILD (if available) to generate a semantic version string. The major, minor, and patch values are separated by dots `.`, then the prerelease (if available) preceded by a hyphen `-`, and the build (if available) preceded by a plus sign `+`.
+
+### Subclass
+
+```ruby
+require 'sleeping_king_studios/tools/toolbox/subclass'
+```
+
+The `Subclass` module provides a mechanism for performing partial application (or "currying") of constructor parameters. This is useful for defining subclasses that inject pre-defined values into the constructor.
+
+Let's consider an example. We'll start by defining a base class.
+
+```ruby
+class Query
+  extend SleepingKingStudios::Tools::Toolbox::Subclass
+
+  def initialize(entity_class, **options)
+    @entity_class = entity_class
+    @options      = options
+  end
+
+  attr_reader :entity_class
+
+  attr_reader :options
+
+  def call
+    # Querying logic here.
+  end
+end
+
+query = Query.new(Book, limit: 10)
+query.entity_class
+#=> Book
+query.options
+#=> { limit: 10 }
+```
+
+Our `Query` class is used to perform queries on some data source - a relational table, an API, or some in-memory data structure. To perform a query, we need to know what data to request. This is represented by the `:entity_class` argument. Additionally, we can pass arbitrary `:options` as keywords.
+
+```ruby
+BooksQuery = Query.subclass(Book)
+
+query = BooksQuery.new(order: :title)
+query.entity_class
+#=> Book
+query.options
+#=> { order: :title }
+```
+
+By calling `.subclass` on our `Query` class, we are defining a new subclass of `Query` that injects the given parameters and partially applies them to the constructor. In this case, we are injecting the `Book` class into our query.
+
+We can also use `.subclass` to partially apply keywords or a block.
+
+```ruby
+RecentItemsQuery = Query.subclass(order: { created_at: :desc })
+
+query = RecentItemsQuery.new(Book)
+query.entity_class
+#=> Book
+query.options
+#=> { order: { created_at: :desc } }
+```
+
+When you call the subclass's constructor with additional parameters, they are applied in addition to the configured values (if any).
+
+- Any arguments passed to `.new` are added *after* the configured arguments.
+- Any keywords passed to `.new` are merged into the configured keywords, with the values passed to `.new` taking precedence.
+- A block passed to `.new` will take precedence over a configured block.
+
+```ruby
+class Character
+  extend SleepingKingStudios::Tools::Toolbox::Subclass
+
+  def initialize(*traits, **stats, &special)
+    @traits  = traits
+    @stats   = stats
+    @special = special
+  end
+
+  attr_reader :special
+
+  attr_reader :stats
+
+  attr_reader :traits
+end
+
+Bard = Character.subclass(:musical, performance: 5, persuasion: 10) do
+  'The bard sings a cheerful tune.'
+end
+
+aoife = Bard.new(:sorcerous, magic: 5, performance: 10) do
+  'Aoife drops her lute!'
+end
+aoife.traits
+#=> [:musical, :sorcerous]
+aoife.stats
+#=> { magic: 5, performance: 10, persuasion: 10 }
+aoife.special.call
+#=> 'Aoife drops her lute!'
+```
