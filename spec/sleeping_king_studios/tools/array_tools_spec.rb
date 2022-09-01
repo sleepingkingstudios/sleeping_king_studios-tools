@@ -329,8 +329,8 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       let(:mapped)   { values }
       let(:expected) { "#{mapped[0...-1].join(', ')}, and #{mapped.last}" }
 
-      it 'returns the items joined by commas and the last value preceded by' \
-         ' "and"' \
+      it 'returns the items joined by commas and the last value preceded by ' \
+         '"and"' \
       do
         expect(described_class.humanize_list values).to be == expected
       end
@@ -338,8 +338,8 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       describe 'with :separator => ";"' do
         let(:expected) { "#{mapped[0...-1].join('; ')}; and #{mapped.last}" }
 
-        it 'returns the items joined by semicolons and the last value' \
-           ' preceded by "and"' \
+        it 'returns the items joined by semicolons and the last value ' \
+           'preceded by "and"' \
         do
           expect(described_class.humanize_list values, separator: '; ')
             .to be == expected
@@ -349,8 +349,8 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       describe 'with :last_separator => " or "' do
         let(:expected) { "#{mapped[0...-1].join(', ')}, or #{mapped.last}" }
 
-        it 'returns the items joined by commas and the last value preceded' \
-           ' by "or"' \
+        it 'returns the items joined by commas and the last value preceded ' \
+           'by "or"' \
         do
           expect(described_class.humanize_list values, last_separator: ', or ')
             .to be == expected

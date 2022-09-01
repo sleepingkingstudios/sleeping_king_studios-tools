@@ -105,8 +105,8 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Subclass do
       let(:error_message) do
         # :nocov:
         if RUBY_VERSION >= '3.0'
-          'superclass must be an instance of Class (given an instance of' \
-            ' Object)'
+          'superclass must be an instance of Class (given an instance of ' \
+            'Object)'
         else
           'superclass must be a Class (Object given)'
         end
@@ -126,8 +126,8 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Subclass do
       let(:error_message) do
         # :nocov:
         if RUBY_VERSION >= '3.0'
-          'superclass must be an instance of Class (given an instance of' \
-            ' Module)'
+          'superclass must be an instance of Class (given an instance of ' \
+            'Module)'
         else
           'superclass must be a Class (Module given)'
         end
