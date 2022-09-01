@@ -188,18 +188,18 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
           'The Return of the King'
       end
       let(:expected) do
-        "  The Fellowship of the Ring\n" \
-          "  The Two Towers\n" \
-          '  The Return of the King'
+        "  The Fellowship of the Ring\n  " \
+          "The Two Towers\n  " \
+          'The Return of the King'
       end
 
       it { expect(instance.indent string).to be == expected }
 
       describe 'with an indent count' do
         let(:expected) do
-          "    The Fellowship of the Ring\n" \
-            "    The Two Towers\n" \
-            '    The Return of the King'
+          "    The Fellowship of the Ring\n    " \
+            "The Two Towers\n    " \
+            'The Return of the King'
         end
 
         it { expect(instance.indent string, 4).to be == expected }

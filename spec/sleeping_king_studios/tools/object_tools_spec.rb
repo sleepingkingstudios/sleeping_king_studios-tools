@@ -1,4 +1,4 @@
-# frozen_string_literaL: true
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -447,14 +447,14 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           posts: [
             {
               riddle: 'What lies beyond the furthest reaches of the sky?',
-              answer: 'That which will lead the lost child back to her' \
-                      ' mother\'s arms. Exile.',
+              answer: 'That which will lead the lost child back to her ' \
+                      'mother\'s arms. Exile.',
               tags:   ['House Eraclea', 'Exile', 'the Guild']
             },
             {
               riddle: 'The waves that flow and dye the land gold.',
-              answer: 'The blessed breath that nurtures life. A land of' \
-                      ' wheat.',
+              answer: 'The blessed breath that nurtures life. A land of ' \
+                      'wheat.',
               tags:   ['House Dagobert', 'Anatoray', 'Disith']
             },
             {
@@ -463,10 +463,10 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
               tags:   ['House Bassianus', 'the Grand Stream']
             },
             {
-              riddle: 'What lies within the furthest depths of one\'s' \
-                      ' memory?',
-              answer: 'The place where all are born and where all will' \
-                      ' return. A blue star.',
+              riddle: 'What lies within the furthest depths of one\'s ' \
+                      'memory?',
+              answer: 'The place where all are born and where all will ' \
+                      'return. A blue star.',
               tags:   ['House Hamilton', 'Earth']
             }
           ]
@@ -486,8 +486,8 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
       it 'should return a copy of the posts array items' do
         riddle =
-          'Why do hot dogs come in packages of ten, and hot dog buns come in' \
-          ' packages of eight?'
+          'Why do hot dogs come in packages of ten, and hot dog buns come in ' \
+          'packages of eight?'
 
         expect { cpy[:posts].first[:riddle] = riddle }.not_to(change { hsh })
       end

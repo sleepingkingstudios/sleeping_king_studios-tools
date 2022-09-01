@@ -177,8 +177,8 @@ module SleepingKingStudios::Tools
       return if (ROMANIZE_MIN..ROMANIZE_MAX).include?(integer)
 
       error_message =
-        "integer to romanize must be within range #{ROMANIZE_MIN} to" \
-        " #{ROMANIZE_MAX}"
+        "integer to romanize must be within range #{ROMANIZE_MIN} to " \
+        "#{ROMANIZE_MAX}"
 
       raise RangeError, error_message, caller(1..-1)
     end
