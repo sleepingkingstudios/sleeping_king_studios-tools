@@ -29,21 +29,23 @@ module SleepingKingStudios::Tools
     # @param [Object] receiver The receiver. The proc will be called in the
     #   context of this object.
     # @param [Proc] proc The proc or lambda to call.
-    # @param [Array] args Optional. Additional arguments to pass in to the
-    #   proc or lambda.
+    # @param [Array] args Optional. Additional arguments to pass in to the proc
+    #   or lambda.
+    # @param [Hash] kwargs Optional. Additional keywords to pass in to the proc
+    #   or lambda.
     # @param [block] block Optional. If present, will be passed in to proc or
     #   lambda.
     #
     # @return The result of calling the proc or lambda with the given
     #   receiver and any additional arguments or block.
-    def apply(receiver, proc, *args, &block)
-      return receiver.instance_exec(*args, &proc) unless block_given?
+    def apply(receiver, proc, *args, **kwargs, &block)
+      return receiver.instance_exec(*args, **kwargs, &proc) unless block_given?
 
       method_name =
         Kernel.format(TEMPORARY_METHOD_NAME, Thread.current.object_id)
 
       with_temporary_method(receiver, method_name, proc) do
-        receiver.send(method_name, *args, &block)
+        receiver.send(method_name, *args, **kwargs, &block)
       end
     end
 

@@ -4,7 +4,7 @@ A library of utility services and concerns to expand the functionality of core c
 
 ## About
 
-SleepingKingStudios::Tools is tested against MRI Ruby 2.6 through 3.1.
+SleepingKingStudios::Tools is tested against MRI Ruby 2.7 through 3.2.
 
 ### Documentation
 
