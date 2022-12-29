@@ -15,7 +15,7 @@ module SleepingKingStudios
       # Minor version.
       MINOR = 1
       # Patch version.
-      PATCH = 0
+      PATCH = 1
       # Prerelease version.
       PRERELEASE = nil
       # Build metadata.
