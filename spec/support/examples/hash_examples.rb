@@ -12,13 +12,13 @@ module Spec::Examples
 
     shared_context 'when the hash keys are frozen' do
       before(:example) do
-        hsh.each { |key, _| key.freeze }
+        hsh.each_key(&:freeze)
       end
     end
 
     shared_context 'when the hash values are frozen' do
       before(:example) do
-        hsh.each { |_, value| value.freeze }
+        hsh.each_value(&:freeze)
       end
     end
 
@@ -388,7 +388,7 @@ module Spec::Examples
 
             context 'when the hash child values are frozen' do
               before(:example) do
-                hsh.each { |_, child| child.each { |_, value| value.freeze } }
+                hsh.each_value { |child| child.each_value(&:freeze) }
               end
 
               it { expect(instance.immutable? hsh).to be true }

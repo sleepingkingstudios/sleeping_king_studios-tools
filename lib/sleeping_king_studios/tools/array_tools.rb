@@ -271,7 +271,7 @@ module SleepingKingStudios::Tools
     def splice(ary, start, delete_count, *insert)
       require_array! ary
 
-      start   = start.negative? ? start + ary.count : start
+      start  += ary.count if start.negative?
       range   = start...(start + delete_count)
       deleted = ary[range]
 
