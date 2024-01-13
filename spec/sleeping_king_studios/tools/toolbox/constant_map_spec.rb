@@ -84,7 +84,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
     it { expect(instance).to have_reader(:constants).with_value(be == []) }
 
     wrap_context 'when many constants are defined' do
-      it { expect(instance.constants).to contain_exactly(*constants.keys) }
+      it { expect(instance.constants).to match_array(constants.keys) }
     end
   end
 
@@ -246,7 +246,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
       it 'should not permit removing a constant' do
         instance.freeze
 
-        expect { instance.send :remove_const, :GUEST }
+        expect { instance.send :remove_const, :GUEST } # rubocop:disable RSpec/RemoveConst
           .to raise_error RuntimeError
       end
     end

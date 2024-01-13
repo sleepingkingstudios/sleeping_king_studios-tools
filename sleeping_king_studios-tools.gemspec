@@ -26,15 +26,4 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 2.7.0'
   gem.require_path          = 'lib'
   gem.files                 = Dir['lib/**/*.rb', 'LICENSE', '*.md']
-
-  gem.add_development_dependency 'byebug',        '~> 11.1'
-  gem.add_development_dependency 'rake',          '~> 13.0'
-  gem.add_development_dependency 'rspec',         '~> 3.10'
-  gem.add_development_dependency 'rubocop',       '~> 1.35'
-  gem.add_development_dependency 'rubocop-rake',  '~> 0.6'
-  gem.add_development_dependency 'rubocop-rspec', '~> 2.12'
-  gem.add_development_dependency 'simplecov',     '~> 0.18.5'
-  gem.add_development_dependency 'thor',          '~> 1.0'
-
-  gem.add_development_dependency 'rspec-sleeping_king_studios', '~> 2.7'
 end

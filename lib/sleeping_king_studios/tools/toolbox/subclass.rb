@@ -44,7 +44,7 @@ module SleepingKingStudios::Tools::Toolbox
           *args,
           **class_keywords,
           **kwargs,
-          &(block || class_block)
+          &(block || class_block) # rubocop:disable Style/RedundantParentheses
         )
       end
 

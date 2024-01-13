@@ -64,6 +64,9 @@ Metrics/ModuleLength:
 RSpec/BeNil:
   Enabled: false
 
+RSpec/Eq:
+  Enabled: false
+
 RSpec/ExampleWording:
   Enabled: false
 
