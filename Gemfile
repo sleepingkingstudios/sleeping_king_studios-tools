@@ -15,3 +15,5 @@ gem 'simplecov', '~> 0.22'
 gem 'rake', '~> 13.1'
 gem 'sleeping_king_studios-tasks', '~> 0.4', '>= 0.4.1'
 gem 'thor', '~> 1.3'
+
+gem 'benchmark-ips'
