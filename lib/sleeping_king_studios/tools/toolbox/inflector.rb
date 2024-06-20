@@ -45,7 +45,11 @@ module SleepingKingStudios::Tools::Toolbox
     def camelize(word, uppercase_first_letter = true) # rubocop:disable Style/OptionalBooleanParameter
       return '' if word.nil? || word.empty?
 
-      word = word.to_s.gsub(/(\b|[_-])([a-z])/) { Regexp.last_match(2).upcase }
+      word =
+        word
+        .to_s
+        .gsub(/(\b|[_-]+)([a-z])/) { Regexp.last_match(2).upcase }
+        .gsub(/[_-]+/, '')
 
       (uppercase_first_letter ? word[0].upcase : word[0].downcase) + word[1..]
     end
@@ -113,12 +117,13 @@ module SleepingKingStudios::Tools::Toolbox
     def underscore(word)
       return '' if word.nil? || word.empty?
 
-      word = word.to_s.gsub(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2')
-
-      word.gsub!(/([a-z\d])([A-Z])/, '\1_\2')
-      word.tr!('-', '_')
-      word.downcase!
       word
+        .to_s
+        .gsub(/([A-Z0-9\d]+)([A-Z][a-z])/, '\1_\2')
+        .gsub(/([a-z\d])([A-Z0-9])/, '\1_\2')
+        .gsub(/\A_+|_+\z/, '')
+        .tr('-', '_')
+        .downcase
     end
   end
 end

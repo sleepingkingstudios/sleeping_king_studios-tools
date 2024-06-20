@@ -45,33 +45,51 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Inflector do
     end
 
     describe 'with a lowercase string' do
-      include_examples 'should camelize', 'valhalla', 'Valhalla'
+      include_examples 'should camelize', 'string', 'String'
     end
 
     describe 'with a capitalized string' do
-      include_examples 'should camelize', 'Bifrost', 'Bifrost'
+      include_examples 'should camelize', 'Symbol', 'Symbol'
     end
 
     describe 'with an uppercase string' do
-      include_examples 'should camelize', 'ASGARD', 'ASGARD'
+      include_examples 'should camelize', 'CONSTANT', 'CONSTANT'
     end
 
     describe 'with a mixed-case string' do
-      include_examples 'should camelize', 'FenrisWolf', 'FenrisWolf'
+      include_examples 'should camelize', 'BasicObject', 'BasicObject'
+    end
+
+    describe 'with a mixed-case string with underscores' do
+      include_examples 'should camelize', 'be_a_BasicObject', 'BeABasicObject'
     end
 
     describe 'with an underscore-separated string' do
-      include_examples 'should camelize', 'frost_giant', 'FrostGiant'
+      include_examples 'should camelize', 'date_time', 'DateTime'
     end
 
     describe 'with an underscore-separated string with digits' do
-      include_examples 'should camelize', '9_worlds', '9Worlds'
+      include_examples 'should camelize', 'version_3_point_3', 'Version3Point3'
+    end
+
+    describe 'with a mixed-case string with digits' do
+      include_examples 'should camelize', 'Version3Point3', 'Version3Point3'
+    end
+
+    describe 'with a mixed-case string with consecutive capitals' do
+      include_examples 'should camelize', 'TCPConnection', 'TCPConnection'
     end
 
     describe 'with a string with hyphens' do
       include_examples 'should camelize',
-        'muspelheimr-and-niflheimr',
-        'MuspelheimrAndNiflheimr'
+        'custom-test-case',
+        'CustomTestCase'
+    end
+
+    describe 'with a string with consecutive underscores' do
+      include_examples 'should camelize',
+        '__python_private__',
+        'PythonPrivate'
     end
 
     describe 'with an empty symbol' do
@@ -79,7 +97,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Inflector do
     end
 
     describe 'with a lowercase symbol' do
-      include_examples 'should camelize', :valhalla, 'Valhalla'
+      include_examples 'should camelize', :integer, 'Integer'
     end
   end
 
@@ -229,33 +247,57 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Inflector do
     end
 
     describe 'with a lowercase string' do
-      include_examples 'should underscore', 'valhalla', 'valhalla'
+      include_examples 'should underscore', 'string', 'string'
     end
 
     describe 'with a capitalized string' do
-      include_examples 'should underscore', 'Bifrost', 'bifrost'
+      include_examples 'should underscore', 'Symbol', 'symbol'
     end
 
     describe 'with an uppercase string' do
-      include_examples 'should underscore', 'ASGARD', 'asgard'
+      include_examples 'should underscore', 'CONSTANT', 'constant'
     end
 
     describe 'with a mixed-case string' do
-      include_examples 'should underscore', 'FenrisWolf', 'fenris_wolf'
+      include_examples 'should underscore', 'BasicObject', 'basic_object'
+    end
+
+    describe 'with a mixed-case string with underscores' do
+      include_examples 'should underscore',
+        'be_a_BasicObject',
+        'be_a_basic_object'
+    end
+
+    describe 'with an underscore-separated string' do
+      include_examples 'should underscore', 'date_time', 'date_time'
+    end
+
+    describe 'with an underscore-separated string with digits' do
+      include_examples 'should underscore',
+        'version_3_point_3',
+        'version_3_point_3'
     end
 
     describe 'with a mixed-case string with digits' do
-      include_examples 'should underscore', '9Worlds', '9_worlds'
+      include_examples 'should underscore',
+        'Version3Point3',
+        'version_3_point_3'
     end
 
     describe 'with a mixed-case string with consecutive capitals' do
-      include_examples 'should underscore', 'YGGDrasil', 'ygg_drasil'
+      include_examples 'should underscore', 'TCPConnection', 'tcp_connection'
     end
 
     describe 'with a string with hyphens' do
       include_examples 'should underscore',
-        'muspelheimr-and-niflheimr',
-        'muspelheimr_and_niflheimr'
+        'custom-test-case',
+        'custom_test_case'
+    end
+
+    describe 'with a string with consecutive underscores' do
+      include_examples 'should underscore',
+        '__python_private__',
+        'python_private'
     end
 
     describe 'with an empty symbol' do
@@ -263,7 +305,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Inflector do
     end
 
     describe 'with a capitalized symbol' do
-      it { expect(inflector.underscore :Bifrost).to be == 'bifrost' }
+      it { expect(inflector.underscore :Integer).to be == 'integer' }
     end
   end
 end
