@@ -13,11 +13,11 @@ module SleepingKingStudios
       # Major version.
       MAJOR = 1
       # Minor version.
-      MINOR = 1
+      MINOR = 2
       # Patch version.
-      PATCH = 1
+      PATCH = 0
       # Prerelease version.
-      PRERELEASE = nil
+      PRERELEASE = :alpha
       # Build metadata.
       BUILD = nil
     end
