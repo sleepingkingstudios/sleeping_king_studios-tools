@@ -185,18 +185,18 @@ module SleepingKingStudios::Tools
     # @raise ArgumentError If the first argument is not an Array-like object.
     #
     # @return [String] The formatted string.
-    def humanize_list(ary, **options, &block)
+    def humanize_list(ary, **options, &)
       require_array! ary
 
       return '' if ary.empty?
 
       size = ary.size
-      ary  = ary.map(&block) if block_given?
+      ary  = ary.map(&) if block_given?
 
       return ary[0].to_s if size == 1
 
       separator, last_separator =
-        options_for_humanize_list(size: size, **options)
+        options_for_humanize_list(size:, **options)
 
       return "#{ary[0]}#{last_separator}#{ary[1]}" if size == 2
 

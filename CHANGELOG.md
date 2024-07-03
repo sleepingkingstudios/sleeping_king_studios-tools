@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0
+
+Ended support for Ruby 2.7 and 3.0.
+
+### Inflector
+
+Fixed behavior of `Inflector#camelize` for certain mixed-case strings.
+
 ## 1.1.1
 
 Fixed support for keyword parameters in `ObjectTools#apply` in Ruby 3.2.

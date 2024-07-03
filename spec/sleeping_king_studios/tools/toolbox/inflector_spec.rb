@@ -11,7 +11,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Inflector do
     describe 'with custom rules' do
       let(:rules) { described_class::Rules.new }
       let(:constructor_options) do
-        super().merge(rules: rules)
+        super().merge(rules:)
       end
 
       it { expect(inflector.rules).to be rules }

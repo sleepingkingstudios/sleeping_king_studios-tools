@@ -162,7 +162,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:kwargs) { { first: 'Who', second: 'What', third: "I Don't Know" } }
       let(:proc) do
         lambda do |first: nil, second: nil, third: nil|
-          instance_method(first: first, second: second, third: third)
+          instance_method(first:, second:, third:)
         end
       end
 
@@ -232,9 +232,9 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
             baz,
             wibble,
             wobble,
-            first:  first,
-            second: second,
-            third:  third
+            first:,
+            second:,
+            third:
           )
         end
       end

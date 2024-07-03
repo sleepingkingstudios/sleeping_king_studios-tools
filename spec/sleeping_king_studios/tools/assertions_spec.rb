@@ -9,12 +9,12 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
   shared_context 'with as: value' do
     let(:as)      { 'named_value' }
-    let(:options) { super().merge(as: as) }
+    let(:options) { super().merge(as:) }
   end
 
   shared_context 'with error_class: value' do
     let(:error_class) { ArgumentError }
-    let(:options)     { super().merge(error_class: error_class) }
+    let(:options)     { super().merge(error_class:) }
   end
 
   shared_context 'with message: value' do
@@ -334,7 +334,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     let(:error_message) { "value is not an instance of #{expected}" }
 
     def assert
-      assertions.assert_instance_of(value, expected: expected, **options)
+      assertions.assert_instance_of(value, expected:, **options)
     end
 
     it 'should define the method' do
@@ -554,7 +554,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
 
     def assert
-      assertions.assert_matches(value, expected: expected, **options)
+      assertions.assert_matches(value, expected:, **options)
     end
 
     it 'should define the method' do
@@ -1576,7 +1576,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     let(:error_message) { "value is not an instance of #{expected}" }
 
     def assert
-      assertions.validate_instance_of(value, expected: expected, **options)
+      assertions.validate_instance_of(value, expected:, **options)
     end
 
     it 'should define the method' do
@@ -1771,7 +1771,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
 
     def assert
-      assertions.validate_matches(value, expected: expected, **options)
+      assertions.validate_matches(value, expected:, **options)
     end
 
     it 'should define the method' do

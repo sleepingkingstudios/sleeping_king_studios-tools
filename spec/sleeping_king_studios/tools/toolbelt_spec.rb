@@ -35,7 +35,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbelt do
       let(:inflector) do
         instance_double(SleepingKingStudios::Tools::Toolbox::Inflector)
       end
-      let(:instance) { described_class.new(inflector: inflector) }
+      let(:instance) { described_class.new(inflector:) }
 
       it 'should pass the inflector to #string_tools' do
         expect(instance.string_tools.inflector)

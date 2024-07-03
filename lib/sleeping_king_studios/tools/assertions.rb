@@ -180,7 +180,7 @@ module SleepingKingStudios::Tools
     def validate(message: nil, &block)
       assert(
         error_class: ArgumentError,
-        message:     message,
+        message:,
         &block
       )
     end
@@ -195,9 +195,9 @@ module SleepingKingStudios::Tools
     def validate_boolean(value, as: 'value', message: nil)
       assert_boolean(
         value,
-        as:          as,
+        as:,
         error_class: ArgumentError,
-        message:     message
+        message:
       )
     end
 
@@ -211,9 +211,9 @@ module SleepingKingStudios::Tools
     def validate_class(value, as: 'value', message: nil)
       assert_class(
         value,
-        as:          as,
+        as:,
         error_class: ArgumentError,
-        message:     message
+        message:
       )
     end
 
@@ -237,11 +237,11 @@ module SleepingKingStudios::Tools
     )
       assert_instance_of(
         value,
-        as:          as,
+        as:,
         error_class: ArgumentError,
-        expected:    expected,
-        message:     message,
-        optional:    optional
+        expected:,
+        message:,
+        optional:
       )
     end
 
@@ -263,11 +263,11 @@ module SleepingKingStudios::Tools
     )
       assert_matches(
         value,
-        as:          as,
+        as:,
         error_class: ArgumentError,
-        expected:    expected,
-        message:     message,
-        optional:    optional
+        expected:,
+        message:,
+        optional:
       )
     end
 
@@ -288,10 +288,10 @@ module SleepingKingStudios::Tools
     )
       assert_name(
         value,
-        as:          as,
+        as:,
         error_class: ArgumentError,
-        message:     message,
-        optional:    optional
+        message:,
+        optional:
       )
     end
 

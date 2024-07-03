@@ -83,7 +83,7 @@ module SleepingKingStudios::Tools
     #
     # @return [Integer] The number of digits.
     def count_digits(integer, base: 10)
-      digits(integer.abs, base: base).count
+      digits(integer.abs, base:).count
     end
 
     # Decomposes the given integer into its digits when represented in the
@@ -165,7 +165,7 @@ module SleepingKingStudios::Tools
         .reverse
         .map
         .with_index do |digit, index|
-          romanize_digit(additive: additive, digit: digit.to_i, tens: index)
+          romanize_digit(additive:, digit: digit.to_i, tens: index)
         end
         .reverse
         .join

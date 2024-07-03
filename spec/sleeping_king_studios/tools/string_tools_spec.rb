@@ -12,10 +12,10 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     let(:inflector) do
       instance_double(
         SleepingKingStudios::Tools::Toolbox::Inflector,
-        rules: rules
+        rules:
       )
     end
-    let(:instance) { described_class.new(inflector: inflector) }
+    let(:instance) { described_class.new(inflector:) }
   end
 
   shared_examples 'should delegate to the inflector' \
@@ -36,7 +36,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
       let(:inflector) do
         instance_double(SleepingKingStudios::Tools::Toolbox::Inflector)
       end
-      let(:instance) { described_class.new(inflector: inflector) }
+      let(:instance) { described_class.new(inflector:) }
 
       it { expect(instance.inflector).to be inflector }
     end
