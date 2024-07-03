@@ -178,11 +178,11 @@ module SleepingKingStudios::Tools
     #
     # @raise ArgumentError if the block does not return a truthy value.
     def validate(message: nil, &block)
-      return if block.call
-
-      raise ArgumentError,
-        message || 'block returned a falsy value',
-        caller(1..-1)
+      assert(
+        error_class: ArgumentError,
+        message:     message,
+        &block
+      )
     end
 
     # Asserts that the value is either true or false.
@@ -193,11 +193,12 @@ module SleepingKingStudios::Tools
     #
     # @raise AssertionError if the value is not a Class.
     def validate_boolean(value, as: 'value', message: nil)
-      return if value.equal?(true) || value.equal?(false)
-
-      raise ArgumentError,
-        message || "#{as} must be true or false",
-        caller(1..-1)
+      assert_boolean(
+        value,
+        as:          as,
+        error_class: ArgumentError,
+        message:     message
+      )
     end
 
     # Asserts that the value is a Class.
@@ -208,11 +209,12 @@ module SleepingKingStudios::Tools
     #
     # @raise ArgumentError if the value is not a Class.
     def validate_class(value, as: 'value', message: nil)
-      return if value.is_a?(Class)
-
-      raise ArgumentError,
-        message || "#{as} is not a Class",
-        caller(1..-1)
+      assert_class(
+        value,
+        as:          as,
+        error_class: ArgumentError,
+        message:     message
+      )
     end
 
     # Asserts that the value is an example of the given Class.
@@ -233,16 +235,14 @@ module SleepingKingStudios::Tools
       message:  nil,
       optional: false
     )
-      unless expected.is_a?(Class)
-        raise ArgumentError, 'expected must be a Class'
-      end
-
-      return if optional && value.nil?
-      return if value.is_a?(expected)
-
-      raise ArgumentError,
-        message || "#{as} is not an instance of #{class_name(expected)}",
-        caller(1..-1)
+      assert_instance_of(
+        value,
+        as:          as,
+        error_class: ArgumentError,
+        expected:    expected,
+        message:     message,
+        optional:    optional
+      )
     end
 
     # Asserts that the value matches the expected object using #===.
@@ -254,29 +254,21 @@ module SleepingKingStudios::Tools
     # @param optional [true, false] If true, allows nil values.
     #
     # @raise ArgumentError if the value does not match the expected object.
-    def validate_matches( # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
+    def validate_matches(
       value,
       expected:,
       as:       'value',
       message:  nil,
       optional: false
     )
-      return if optional && value.nil?
-      return if expected === value # rubocop:disable Style/CaseEquality
-
-      message ||=
-        case expected
-        when Module
-          "#{as} is not an instance of #{class_name(expected)}"
-        when Proc
-          "#{as} does not match the Proc"
-        when Regexp
-          "#{as} does not match the pattern #{expected.inspect}"
-        else
-          "#{as} does not match the expected value"
-        end
-
-      raise ArgumentError, message, caller(1..-1)
+      assert_matches(
+        value,
+        as:          as,
+        error_class: ArgumentError,
+        expected:    expected,
+        message:     message,
+        optional:    optional
+      )
     end
 
     # Asserts that the value is a non-empty String or Symbol.
@@ -288,27 +280,19 @@ module SleepingKingStudios::Tools
     #
     # @raise ArgumentError if the value is not a String or a Symbol, or if the
     #   value is empty.
-    def validate_name( # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+    def validate_name(
       value,
       as:       'value',
       message:  nil,
       optional: false
     )
-      if value.nil?
-        return if optional
-
-        raise ArgumentError, message || "#{as} can't be blank", caller(1..-1)
-      end
-
-      unless value.is_a?(String) || value.is_a?(Symbol)
-        raise ArgumentError,
-          message || "#{as} is not a String or a Symbol",
-          caller(1..-1)
-      end
-
-      return unless value.empty?
-
-      raise ArgumentError, message || "#{as} can't be blank", caller(1..-1)
+      assert_name(
+        value,
+        as:          as,
+        error_class: ArgumentError,
+        message:     message,
+        optional:    optional
+      )
     end
 
     private
