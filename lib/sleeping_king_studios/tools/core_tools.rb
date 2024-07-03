@@ -59,8 +59,8 @@ module SleepingKingStudios::Tools
       send(
         :"deprecate_as_#{deprecation_strategy}",
         *args,
-        format:  format,
-        message: message
+        format:,
+        message:
       )
     end
 

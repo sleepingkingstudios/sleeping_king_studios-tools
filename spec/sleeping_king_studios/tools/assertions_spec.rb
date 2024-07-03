@@ -9,12 +9,12 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
   shared_context 'with as: value' do
     let(:as)      { 'named_value' }
-    let(:options) { super().merge(as: as) }
+    let(:options) { super().merge(as:) }
   end
 
   shared_context 'with error_class: value' do
     let(:error_class) { ArgumentError }
-    let(:options)     { super().merge(error_class: error_class) }
+    let(:options)     { super().merge(error_class:) }
   end
 
   shared_context 'with message: value' do
@@ -111,6 +111,125 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         let(:block) { -> { :ok } }
 
         include_examples 'should not raise an exception'
+      end
+    end
+  end
+
+  describe '#assert_blank' do
+    let(:error_message) { 'value must be nil or empty' }
+
+    def assert
+      assertions.assert_blank(value, **options)
+    end
+
+    it 'should define the method' do
+      expect(assertions)
+        .to respond_to(:assert_blank)
+        .with(1).argument
+        .and_keywords(:as, :error_class, :message)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should not raise an exception'
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      include_examples 'should raise an exception'
+    end
+
+    describe 'with an empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+      include_examples 'should not raise an exception'
+    end
+
+    describe 'with a non-empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+      include_examples 'should raise an exception'
+    end
+
+    wrap_context 'with as: value' do
+      let(:error_message) { "#{as} must be nil or empty" }
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with a non-empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+        include_examples 'should raise an exception'
+      end
+    end
+
+    wrap_context 'with error_class: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with a non-empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+        include_examples 'should raise an exception'
+      end
+    end
+
+    wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with a non-empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+        include_examples 'should raise an exception'
       end
     end
   end
@@ -334,7 +453,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     let(:error_message) { "value is not an instance of #{expected}" }
 
     def assert
-      assertions.assert_instance_of(value, expected: expected, **options)
+      assertions.assert_instance_of(value, expected:, **options)
     end
 
     it 'should define the method' do
@@ -554,7 +673,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
 
     def assert
-      assertions.assert_matches(value, expected: expected, **options)
+      assertions.assert_matches(value, expected:, **options)
     end
 
     it 'should define the method' do
@@ -1357,6 +1476,125 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
   end
 
+  describe '#assert_presence' do
+    let(:error_message) { "value can't be blank" }
+
+    def assert
+      assertions.assert_presence(value, **options)
+    end
+
+    it 'should define the method' do
+      expect(assertions)
+        .to respond_to(:assert_presence)
+        .with(1).argument
+        .and_keywords(:as, :error_class, :message)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should raise an exception'
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      include_examples 'should not raise an exception'
+    end
+
+    describe 'with an empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+      include_examples 'should raise an exception'
+    end
+
+    describe 'with a non-empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+      include_examples 'should not raise an exception'
+    end
+
+    wrap_context 'with as: value' do
+      let(:error_message) { "#{as} can't be blank" }
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a non-empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with error_class: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a non-empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with message: value' do # rubocop:disable RSpec/RepeatedExampleGroupBody
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a non-empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+  end
+
   describe '#validate' do
     let(:error_class)   { ArgumentError }
     let(:error_message) { 'block returned a falsy value' }
@@ -1396,6 +1634,100 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         let(:block) { -> { :ok } }
 
         include_examples 'should not raise an exception'
+      end
+    end
+  end
+
+  describe '#validate_blank' do
+    let(:error_class)   { ArgumentError }
+    let(:error_message) { 'value must be nil or empty' }
+
+    def assert
+      assertions.validate_blank(value, **options)
+    end
+
+    it 'should define the method' do
+      expect(assertions)
+        .to respond_to(:validate_blank)
+        .with(1).argument
+        .and_keywords(:as, :message)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should not raise an exception'
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      include_examples 'should raise an exception'
+    end
+
+    describe 'with an empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+      include_examples 'should not raise an exception'
+    end
+
+    describe 'with a non-empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+      include_examples 'should raise an exception'
+    end
+
+    wrap_context 'with as: value' do
+      let(:error_message) { "#{as} must be nil or empty" }
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with a non-empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+        include_examples 'should raise an exception'
+      end
+    end
+
+    wrap_context 'with message: value' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with a non-empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+        include_examples 'should raise an exception'
       end
     end
   end
@@ -1576,7 +1908,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     let(:error_message) { "value is not an instance of #{expected}" }
 
     def assert
-      assertions.validate_instance_of(value, expected: expected, **options)
+      assertions.validate_instance_of(value, expected:, **options)
     end
 
     it 'should define the method' do
@@ -1771,7 +2103,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
 
     def assert
-      assertions.validate_matches(value, expected: expected, **options)
+      assertions.validate_matches(value, expected:, **options)
     end
 
     it 'should define the method' do
@@ -2460,6 +2792,100 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
       describe 'with a Symbol' do
         let(:value) { :symbol }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+  end
+
+  describe '#validate_presence' do
+    let(:error_class)   { ArgumentError }
+    let(:error_message) { "value can't be blank" }
+
+    def assert
+      assertions.validate_presence(value, **options)
+    end
+
+    it 'should define the method' do
+      expect(assertions)
+        .to respond_to(:validate_presence)
+        .with(1).argument
+        .and_keywords(:as, :message)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should raise an exception'
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      include_examples 'should not raise an exception'
+    end
+
+    describe 'with an empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+      include_examples 'should raise an exception'
+    end
+
+    describe 'with a non-empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+      include_examples 'should not raise an exception'
+    end
+
+    wrap_context 'with as: value' do
+      let(:error_message) { "#{as} can't be blank" }
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a non-empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with message: value' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+        include_examples 'should raise an exception'
+      end
+
+      describe 'with a non-empty value' do
+        let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
 
         include_examples 'should not raise an exception'
       end

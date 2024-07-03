@@ -64,7 +64,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         let(:error_message) { "#{object_string} #{message}" }
 
         it 'should raise an error' do
-          expect { instance.deprecate object, message: message }
+          expect { instance.deprecate object, message: }
             .to raise_error described_class::DeprecationError, error_message
         end
       end
@@ -126,7 +126,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         end
 
         it 'should print a deprecation warning' do
-          instance.deprecate object, message: message
+          instance.deprecate(object, message:)
 
           expect(Kernel).to have_received(:warn).with(formatted_warning)
         end

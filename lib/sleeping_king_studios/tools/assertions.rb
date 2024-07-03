@@ -25,6 +25,29 @@ module SleepingKingStudios::Tools
         caller(1..-1)
     end
 
+    # Asserts that the value is either nil or empty.
+    #
+    # @param value [Object] The value to assert on.
+    # @param as [String] The name of the asserted value.
+    # @param error_class [Class] The exception class to raise on a failure.
+    # @param message [String] The exception message to raise on a failure.
+    #
+    # @raise AssertionError if the value is not nil and either does not respond
+    #   to #empty? or value.empty returns false.
+    def assert_blank(
+      value,
+      as:          'value',
+      error_class: AssertionError,
+      message:     nil
+    )
+      return if value.nil?
+      return if value.respond_to?(:empty?) && value.empty?
+
+      raise error_class,
+        message || "#{as} must be nil or empty",
+        caller(1..-1)
+    end
+
     # Asserts that the value is either true or false.
     #
     # @param value [Object] The value to assert on.
@@ -169,6 +192,30 @@ module SleepingKingStudios::Tools
       raise error_class, message || "#{as} can't be blank", caller(1..-1)
     end
 
+    # Asserts that the value is not nil and not empty.
+    #
+    # @param value [Object] The value to assert on.
+    # @param as [String] The name of the asserted value.
+    # @param error_class [Class] The exception class to raise on a failure.
+    # @param message [String] The exception message to raise on a failure.
+    #
+    # @raise AssertionError if the value is nil, or if the value responds to
+    #   #empty? and value.empty is true.
+    def assert_presence(
+      value,
+      as:          'value',
+      error_class: AssertionError,
+      message: nil
+    )
+      if value.nil?
+        raise error_class, message || "#{as} can't be blank", caller(1..-1)
+      end
+
+      return unless value.respond_to?(:empty?) && value.empty?
+
+      raise error_class, message || "#{as} can't be blank", caller(1..-1)
+    end
+
     # Asserts that the block returns a truthy value.
     #
     # @param message [String] The exception message to raise on a failure.
@@ -178,11 +225,28 @@ module SleepingKingStudios::Tools
     #
     # @raise ArgumentError if the block does not return a truthy value.
     def validate(message: nil, &block)
-      return if block.call
+      assert(
+        error_class: ArgumentError,
+        message:,
+        &block
+      )
+    end
 
-      raise ArgumentError,
-        message || 'block returned a falsy value',
-        caller(1..-1)
+    # Asserts that the value is either nil or empty.
+    #
+    # @param value [Object] The value to assert on.
+    # @param as [String] The name of the asserted value.
+    # @param message [String] The exception message to raise on a failure.
+    #
+    # @raise ArgumentError if the value is not nil and either does not respond
+    #   to #empty? or value.empty returns false.
+    def validate_blank(value, as: 'value', message: nil)
+      assert_blank(
+        value,
+        as:,
+        error_class: ArgumentError,
+        message:
+      )
     end
 
     # Asserts that the value is either true or false.
@@ -191,13 +255,14 @@ module SleepingKingStudios::Tools
     # @param as [String] The name of the asserted value.
     # @param message [String] The exception message to raise on a failure.
     #
-    # @raise AssertionError if the value is not a Class.
+    # @raise ArgumentError if the value is not a Class.
     def validate_boolean(value, as: 'value', message: nil)
-      return if value.equal?(true) || value.equal?(false)
-
-      raise ArgumentError,
-        message || "#{as} must be true or false",
-        caller(1..-1)
+      assert_boolean(
+        value,
+        as:,
+        error_class: ArgumentError,
+        message:
+      )
     end
 
     # Asserts that the value is a Class.
@@ -208,11 +273,12 @@ module SleepingKingStudios::Tools
     #
     # @raise ArgumentError if the value is not a Class.
     def validate_class(value, as: 'value', message: nil)
-      return if value.is_a?(Class)
-
-      raise ArgumentError,
-        message || "#{as} is not a Class",
-        caller(1..-1)
+      assert_class(
+        value,
+        as:,
+        error_class: ArgumentError,
+        message:
+      )
     end
 
     # Asserts that the value is an example of the given Class.
@@ -223,8 +289,7 @@ module SleepingKingStudios::Tools
     # @param message [String] The exception message to raise on a failure.
     # @param optional [true, false] If true, allows nil values.
     #
-    # @raise ArgumentError if the expected class is not a Class.
-    # @raise AssertionError if the value is not an instance of the expected
+    # @raise ArgumentError if the value is not an instance of the expected
     #   class.
     def validate_instance_of(
       value,
@@ -233,16 +298,14 @@ module SleepingKingStudios::Tools
       message:  nil,
       optional: false
     )
-      unless expected.is_a?(Class)
-        raise ArgumentError, 'expected must be a Class'
-      end
-
-      return if optional && value.nil?
-      return if value.is_a?(expected)
-
-      raise ArgumentError,
-        message || "#{as} is not an instance of #{class_name(expected)}",
-        caller(1..-1)
+      assert_instance_of(
+        value,
+        as:,
+        error_class: ArgumentError,
+        expected:,
+        message:,
+        optional:
+      )
     end
 
     # Asserts that the value matches the expected object using #===.
@@ -254,29 +317,21 @@ module SleepingKingStudios::Tools
     # @param optional [true, false] If true, allows nil values.
     #
     # @raise ArgumentError if the value does not match the expected object.
-    def validate_matches( # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
+    def validate_matches(
       value,
       expected:,
       as:       'value',
       message:  nil,
       optional: false
     )
-      return if optional && value.nil?
-      return if expected === value # rubocop:disable Style/CaseEquality
-
-      message ||=
-        case expected
-        when Module
-          "#{as} is not an instance of #{class_name(expected)}"
-        when Proc
-          "#{as} does not match the Proc"
-        when Regexp
-          "#{as} does not match the pattern #{expected.inspect}"
-        else
-          "#{as} does not match the expected value"
-        end
-
-      raise ArgumentError, message, caller(1..-1)
+      assert_matches(
+        value,
+        as:,
+        error_class: ArgumentError,
+        expected:,
+        message:,
+        optional:
+      )
     end
 
     # Asserts that the value is a non-empty String or Symbol.
@@ -288,27 +343,36 @@ module SleepingKingStudios::Tools
     #
     # @raise ArgumentError if the value is not a String or a Symbol, or if the
     #   value is empty.
-    def validate_name( # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+    def validate_name(
       value,
       as:       'value',
       message:  nil,
       optional: false
     )
-      if value.nil?
-        return if optional
+      assert_name(
+        value,
+        as:,
+        error_class: ArgumentError,
+        message:,
+        optional:
+      )
+    end
 
-        raise ArgumentError, message || "#{as} can't be blank", caller(1..-1)
-      end
-
-      unless value.is_a?(String) || value.is_a?(Symbol)
-        raise ArgumentError,
-          message || "#{as} is not a String or a Symbol",
-          caller(1..-1)
-      end
-
-      return unless value.empty?
-
-      raise ArgumentError, message || "#{as} can't be blank", caller(1..-1)
+    # Asserts that the value is not nil and not empty.
+    #
+    # @param value [Object] The value to assert on.
+    # @param as [String] The name of the asserted value.
+    # @param message [String] The exception message to raise on a failure.
+    #
+    # @raise ArgumentError if the value is nil, or if the value responds to
+    #   #empty? and value.empty is true.
+    def validate_presence(value, as: 'value', message: nil)
+      assert_presence(
+        value,
+        as:,
+        error_class: ArgumentError,
+        message:
+      )
     end
 
     private

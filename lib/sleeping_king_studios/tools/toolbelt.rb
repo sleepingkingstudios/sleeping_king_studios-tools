@@ -19,14 +19,13 @@ module SleepingKingStudios::Tools
     def initialize(deprecation_strategy: nil, inflector: nil)
       @array_tools   = ::SleepingKingStudios::Tools::ArrayTools.new
       @assertions    = ::SleepingKingStudios::Tools::Assertions.new
-      @core_tools    = ::SleepingKingStudios::Tools::CoreTools.new(
-        deprecation_strategy: deprecation_strategy
-      )
+      @core_tools    =
+        ::SleepingKingStudios::Tools::CoreTools.new(deprecation_strategy:)
       @hash_tools    = ::SleepingKingStudios::Tools::HashTools.new
       @integer_tools = ::SleepingKingStudios::Tools::IntegerTools.new
       @object_tools  = ::SleepingKingStudios::Tools::ObjectTools.new
       @string_tools  =
-        ::SleepingKingStudios::Tools::StringTools.new(inflector: inflector)
+        ::SleepingKingStudios::Tools::StringTools.new(inflector:)
     end
 
     attr_reader :array_tools

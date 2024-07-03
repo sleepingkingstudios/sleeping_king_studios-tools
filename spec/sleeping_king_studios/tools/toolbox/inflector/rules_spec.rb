@@ -12,7 +12,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Inflector::Rules do
       let(:irregular_words) { { 'goose' => 'geese' } }
       let(:reversed)        { { 'geese' => 'goose' } }
       let(:constructor_options) do
-        super().merge(irregular_words: irregular_words)
+        super().merge(irregular_words:)
       end
 
       it { expect(rules.irregular_words).to be == irregular_words }
@@ -28,7 +28,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Inflector::Rules do
         ]
       end
       let(:constructor_options) do
-        super().merge(plural_rules: plural_rules)
+        super().merge(plural_rules:)
       end
 
       it { expect(rules.plural_rules).to be == plural_rules }
@@ -41,7 +41,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Inflector::Rules do
         ]
       end
       let(:constructor_options) do
-        super().merge(singular_rules: singular_rules)
+        super().merge(singular_rules:)
       end
 
       it { expect(rules.singular_rules).to be == singular_rules }
@@ -50,7 +50,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Inflector::Rules do
     describe 'with uncountable_words: Array' do
       let(:uncountable_words) { %w[metadata] }
       let(:constructor_options) do
-        super().merge(uncountable_words: uncountable_words)
+        super().merge(uncountable_words:)
       end
 
       it { expect(rules.uncountable_words).to be_a Set }

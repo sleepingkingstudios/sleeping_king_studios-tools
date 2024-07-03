@@ -204,6 +204,30 @@ It accepts the following options:
 - `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
 - `message`: The error message to display.
 
+#### `#assert_blank`
+
+Raises an exception unless the given value is `nil` or `#empty?`.
+
+```ruby
+Assertions.assert_blank(nil)
+#=> does not raise an exception
+
+Assertions.assert_blank(Object.new)
+#=> raises an AssertionError with message 'value must be nil or empty'
+
+Assertions.assert_blank([])
+#=> does not raise an exception
+
+Assertions.assert_blank([1, 2, 3])
+#=> raises an AssertionError with message 'value must be nil or empty'
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
+- `message`: The error message to display.
+
 #### `#assert_boolean`
 
 Raises an exception unless the given value is either `true` or `false`.
@@ -313,6 +337,30 @@ It accepts the following options:
 - `message`: The error message to display.
 - `optional`: If true, accepts `nil` values as well as valid Symbols and Strings.
 
+#### `#assert_presence`
+
+Raises an exception if the given value is `nil` or `#empty?`.
+
+```ruby
+Assertions.assert_presence(nil)
+#=> raises an AssertionError with message "can't be blank"
+
+Assertions.assert_presence(Object.new)
+#=> does not raise an exception
+
+Assertions.assert_presence([])
+#=> raises an AssertionError with message "can't be blank"
+
+Assertions.assert_presence([1, 2, 3])
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
+- `message`: The error message to display.
+
 #### `#validate`
 
 Raises an `ArgumentError` unless the given block returns a truthy value.
@@ -327,6 +375,29 @@ Assertions.validate { true == true }
 
 It accepts the following options:
 
+- `message`: The error message to display.
+
+#### `#validate_blank`
+
+Raises an exception unless the given value is `nil` or `#empty?`.
+
+```ruby
+Assertions.validate_blank(nil)
+#=> does not raise an exception
+
+Assertions.validate_blank(Object.new)
+#=> raises an ArgumentError with message 'value must be nil or empty'
+
+Assertions.validate_blank([])
+#=> does not raise an exception
+
+Assertions.validate_blank([1, 2, 3])
+#=> raises an ArgumentError with message 'value must be nil or empty'
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `message`: The error message to display.
 
 #### `#validate_boolean`
@@ -432,6 +503,29 @@ It accepts the following options:
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `message`: The error message to display.
 - `optional`: If true, accepts `nil` values as well as valid Symbols and Strings.
+
+#### `#validate_presence`
+
+Raises an exception if the given value is `nil` or `#empty?`.
+
+```ruby
+Assertions.validate_presence(nil)
+#=> raises an ArgumentError with message "can't be blank"
+
+Assertions.validate_presence(Object.new)
+#=> does not raise an exception
+
+Assertions.validate_presence([])
+#=> raises an ArgumentError with message "can't be blank"
+
+Assertions.validate_presence([1, 2, 3])
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `message`: The error message to display.
 
 ### Core Tools
 
