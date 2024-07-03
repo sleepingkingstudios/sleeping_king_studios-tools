@@ -25,6 +25,29 @@ module SleepingKingStudios::Tools
         caller(1..-1)
     end
 
+    # Asserts that the value is either nil or empty.
+    #
+    # @param value [Object] The value to assert on.
+    # @param as [String] The name of the asserted value.
+    # @param error_class [Class] The exception class to raise on a failure.
+    # @param message [String] The exception message to raise on a failure.
+    #
+    # @raise AssertionError if the value is not nil and either does not respond
+    #   to #empty? or value.empty returns false.
+    def assert_blank(
+      value,
+      as:          'value',
+      error_class: AssertionError,
+      message:     nil
+    )
+      return if value.nil?
+      return if value.respond_to?(:empty?) && value.empty?
+
+      raise error_class,
+        message || "#{as} must be nil or empty",
+        caller(1..-1)
+    end
+
     # Asserts that the value is either true or false.
     #
     # @param value [Object] The value to assert on.
@@ -169,6 +192,30 @@ module SleepingKingStudios::Tools
       raise error_class, message || "#{as} can't be blank", caller(1..-1)
     end
 
+    # Asserts that the value is not nil and not empty.
+    #
+    # @param value [Object] The value to assert on.
+    # @param as [String] The name of the asserted value.
+    # @param error_class [Class] The exception class to raise on a failure.
+    # @param message [String] The exception message to raise on a failure.
+    #
+    # @raise AssertionError if the value is nil, or if the value responds to
+    #   #empty? and value.empty is true.
+    def assert_presence(
+      value,
+      as:          'value',
+      error_class: AssertionError,
+      message: nil
+    )
+      if value.nil?
+        raise error_class, message || "#{as} can't be blank", caller(1..-1)
+      end
+
+      return unless value.respond_to?(:empty?) && value.empty?
+
+      raise error_class, message || "#{as} can't be blank", caller(1..-1)
+    end
+
     # Asserts that the block returns a truthy value.
     #
     # @param message [String] The exception message to raise on a failure.
@@ -185,13 +232,30 @@ module SleepingKingStudios::Tools
       )
     end
 
+    # Asserts that the value is either nil or empty.
+    #
+    # @param value [Object] The value to assert on.
+    # @param as [String] The name of the asserted value.
+    # @param message [String] The exception message to raise on a failure.
+    #
+    # @raise ArgumentError if the value is not nil and either does not respond
+    #   to #empty? or value.empty returns false.
+    def validate_blank(value, as: 'value', message: nil)
+      assert_blank(
+        value,
+        as:,
+        error_class: ArgumentError,
+        message:
+      )
+    end
+
     # Asserts that the value is either true or false.
     #
     # @param value [Object] The value to assert on.
     # @param as [String] The name of the asserted value.
     # @param message [String] The exception message to raise on a failure.
     #
-    # @raise AssertionError if the value is not a Class.
+    # @raise ArgumentError if the value is not a Class.
     def validate_boolean(value, as: 'value', message: nil)
       assert_boolean(
         value,
@@ -225,8 +289,7 @@ module SleepingKingStudios::Tools
     # @param message [String] The exception message to raise on a failure.
     # @param optional [true, false] If true, allows nil values.
     #
-    # @raise ArgumentError if the expected class is not a Class.
-    # @raise AssertionError if the value is not an instance of the expected
+    # @raise ArgumentError if the value is not an instance of the expected
     #   class.
     def validate_instance_of(
       value,
@@ -292,6 +355,23 @@ module SleepingKingStudios::Tools
         error_class: ArgumentError,
         message:,
         optional:
+      )
+    end
+
+    # Asserts that the value is not nil and not empty.
+    #
+    # @param value [Object] The value to assert on.
+    # @param as [String] The name of the asserted value.
+    # @param message [String] The exception message to raise on a failure.
+    #
+    # @raise ArgumentError if the value is nil, or if the value responds to
+    #   #empty? and value.empty is true.
+    def validate_presence(value, as: 'value', message: nil)
+      assert_presence(
+        value,
+        as:,
+        error_class: ArgumentError,
+        message:
       )
     end
 

@@ -8,6 +8,15 @@ Ended support for Ruby 2.7 and 3.0.
 
 Fixed behavior of `Inflector#camelize` for certain mixed-case strings.
 
+### Tools
+
+Added the following methods to `SleepingKingStudios::Tools::Assertions`.
+
+- `#assert_blank`
+- `#assert_presence`
+- `#validate_blank`
+- `#validate_presence`
+
 ## 1.1.1
 
 Fixed support for keyword parameters in `ObjectTools#apply` in Ruby 3.2.
