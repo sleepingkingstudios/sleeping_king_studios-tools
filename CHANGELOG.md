@@ -13,9 +13,13 @@ Fixed behavior of `Inflector#camelize` for certain mixed-case strings.
 Added the following methods to `SleepingKingStudios::Tools::Assertions`.
 
 - `#assert_blank`
+- `#assert_group`
 - `#assert_presence`
 - `#validate_blank`
+- `#validate_group`
 - `#validate_presence`
+
+Implemented `SleepingKingStudios::Tools::Assertions::Aggregator`.
 
 ## 1.1.1
 

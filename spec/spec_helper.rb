@@ -18,8 +18,10 @@ Dir[File.join File.dirname(__FILE__), 'support', '**', '*.rb']
   .each { |f| require f }
 
 RSpec.configure do |config|
+  config.extend RSpec::SleepingKingStudios::Concerns::ExampleConstants
   config.extend RSpec::SleepingKingStudios::Concerns::FocusExamples
   config.extend RSpec::SleepingKingStudios::Concerns::WrapExamples
+  config.include RSpec::SleepingKingStudios::Examples::PropertyExamples
 
   # Limit a spec run to individual examples or groups you care about by tagging
   # them with `:focus` metadata.
