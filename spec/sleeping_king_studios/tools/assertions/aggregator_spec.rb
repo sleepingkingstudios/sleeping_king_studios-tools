@@ -69,6 +69,39 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     end
   end
 
+  shared_examples 'should append multiple failure messages' do
+    it 'should append the failure messages', :aggregate_failures do
+      expect { call_assertion }
+        .to change(aggregator, :count)
+        .by(expected_messages.count)
+
+      expect(aggregator.each.to_a).to be == expected_messages
+    end
+
+    describe 'with message: value' do
+      let(:options) { super().merge(message: 'something went wrong') }
+
+      it 'should append a failure message', :aggregate_failures do
+        expect { call_assertion }
+          .to change(aggregator, :count)
+          .by(1)
+
+        expect(aggregator.each.to_a.last).to be == options[:message]
+      end
+    end
+
+    wrap_context 'when the aggregator has many failures' do
+      it 'should append the failure messages', :aggregate_failures do
+        expect { call_assertion }
+          .to change(aggregator, :count)
+          .by(expected_messages.count)
+
+        expect(aggregator.each.to_a[-expected_messages.count...])
+          .to be == expected_messages
+      end
+    end
+  end
+
   describe '#assert' do
     let(:block)   { -> {} }
     let(:options) { {} }
@@ -227,6 +260,179 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       let(:value) { Class.new }
 
       include_examples 'should not append a failure message'
+    end
+  end
+
+  describe '#assert_group' do
+    let(:block)   { ->(_) {} }
+    let(:options) { {} }
+
+    def call_assertion
+      aggregator.assert_group(**options, &block)
+    end
+
+    it 'should define the method' do
+      expect(aggregator)
+        .to respond_to(:assert_group)
+        .with(0).arguments
+        .and_keywords(:error_class, :message)
+        .and_a_block
+    end
+
+    it 'should alias the method' do
+      expect(aggregator).to have_aliased_method(:assert_group).as(:aggregate)
+    end
+
+    describe 'without a block' do
+      let(:error_message) { 'no block given' }
+
+      it 'should raise an exception' do
+        expect { aggregator.assert_group }
+          .to raise_error ArgumentError, error_message
+      end
+    end
+
+    describe 'with a block that raises an exception' do
+      let(:label) { nil }
+      let(:block) do
+        lambda do |aggregator|
+          aggregator.assert_instance_of(label, as: 'label')
+        end
+      end
+      let(:error_message) { 'missing keyword: :expected' }
+
+      it 'should raise an exception' do
+        expect { aggregator.assert_group(&block) }
+          .to raise_error ArgumentError, error_message
+      end
+    end
+
+    describe 'with a block with no assertions' do
+      let(:block) { ->(_) {} }
+
+      include_examples 'should not append a failure message'
+    end
+
+    describe 'with a block with a failing assertion' do
+      let(:value) { Object.new.freeze }
+      let(:expected_message) do
+        'value is not a String or a Symbol'
+      end
+      let(:block) do
+        lambda do |aggregator|
+          aggregator.assert_name(value)
+        end
+      end
+
+      include_examples 'should append a failure message', as: false
+    end
+
+    describe 'with a block with a passing assertion' do
+      let(:value) { 'ok' }
+      let(:block) do
+        lambda do |aggregator|
+          aggregator.assert_name(value)
+        end
+      end
+
+      include_examples 'should not append a failure message'
+    end
+
+    describe 'with a block with many failing assertions' do
+      let(:label) { nil }
+      let(:value) { Object.new.freeze }
+      let(:expected_messages) do
+        [
+          'value is not a String or a Symbol',
+          'label is not an instance of String',
+          'something went wrong'
+        ]
+      end
+      let(:block) do
+        lambda do |aggregator|
+          aggregator.assert_name(value)
+          aggregator.assert_instance_of(label, expected: String, as: 'label')
+          aggregator.validate(message: 'something went wrong') { false }
+        end
+      end
+
+      include_examples 'should append multiple failure messages'
+    end
+
+    describe 'with a block with many passing assertions' do
+      let(:label) { 'self-sealing stem bolts' }
+      let(:value) { 'Quantity: 1,000' }
+      let(:block) do
+        lambda do |aggregator|
+          aggregator.assert_name(value)
+          aggregator.assert_instance_of(label, expected: String, as: 'label')
+          aggregator.validate(message: 'something went wrong') { true }
+        end
+      end
+
+      include_examples 'should not append a failure message'
+    end
+
+    describe 'with a block with nested aggregations' do
+      let(:quantity) { nil }
+      let(:label)    { nil }
+      let(:expected_messages) do
+        [
+          'label is not an instance of String',
+          "label can't be blank",
+          'quantity is not an instance of Integer'
+        ]
+      end
+      let(:block) do
+        lambda do |aggregator|
+          aggregator.assert_group do |inner|
+            inner.assert_instance_of(label, expected: String, as: 'label')
+            inner.assert_presence(label, as: 'label')
+          end
+
+          aggregator
+            .assert_instance_of(quantity, expected: Integer, as: 'quantity')
+        end
+      end
+
+      include_examples 'should append multiple failure messages'
+    end
+
+    describe 'with a block with nested aggregations and message: value' do
+      let(:quantity) { nil }
+      let(:label)    { nil }
+      let(:expected_messages) do
+        [
+          'label is invalid',
+          'quantity is not an instance of Integer'
+        ]
+      end
+      let(:block) do
+        lambda do |aggregator|
+          aggregator.assert_group(message: 'label is invalid') do |inner|
+            inner.assert_instance_of(label, expected: String, as: 'label')
+            inner.assert_presence(label, as: 'label')
+          end
+
+          aggregator
+            .assert_instance_of(quantity, expected: Integer, as: 'quantity')
+        end
+      end
+
+      include_examples 'should append multiple failure messages'
+    end
+
+    describe 'with message: value' do
+      let(:message) { 'something went wrong' }
+
+      describe 'without a block' do
+        let(:error_message) { 'no block given' }
+
+        it 'should raise an exception' do
+          expect { aggregator.assert_group(message:) }
+            .to raise_error ArgumentError, error_message
+        end
+      end
     end
   end
 
@@ -669,6 +875,175 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       let(:value) { Class.new }
 
       include_examples 'should not append a failure message'
+    end
+  end
+
+  describe '#validate_group' do
+    let(:block)   { ->(_) {} }
+    let(:options) { {} }
+
+    def call_assertion
+      aggregator.validate_group(**options, &block)
+    end
+
+    it 'should define the method' do
+      expect(aggregator)
+        .to respond_to(:validate_group)
+        .with(0).arguments
+        .and_keywords(:message)
+        .and_a_block
+    end
+
+    describe 'without a block' do
+      let(:error_message) { 'no block given' }
+
+      it 'should raise an exception' do
+        expect { aggregator.validate_group }
+          .to raise_error ArgumentError, error_message
+      end
+    end
+
+    describe 'with a block that raises an exception' do
+      let(:label) { nil }
+      let(:block) do
+        lambda do |aggregator|
+          aggregator.assert_instance_of(label, as: 'label')
+        end
+      end
+      let(:error_message) { 'missing keyword: :expected' }
+
+      it 'should raise an exception' do
+        expect { aggregator.validate_group(&block) }
+          .to raise_error ArgumentError, error_message
+      end
+    end
+
+    describe 'with a block with no assertions' do
+      let(:block) { ->(_) {} }
+
+      include_examples 'should not append a failure message'
+    end
+
+    describe 'with a block with a failing assertion' do
+      let(:value) { Object.new.freeze }
+      let(:expected_message) do
+        'value is not a String or a Symbol'
+      end
+      let(:block) do
+        lambda do |aggregator|
+          aggregator.assert_name(value)
+        end
+      end
+
+      include_examples 'should append a failure message', as: false
+    end
+
+    describe 'with a block with a passing assertion' do
+      let(:value) { 'ok' }
+      let(:block) do
+        lambda do |aggregator|
+          aggregator.assert_name(value)
+        end
+      end
+
+      include_examples 'should not append a failure message'
+    end
+
+    describe 'with a block with many failing assertions' do
+      let(:label) { nil }
+      let(:value) { Object.new.freeze }
+      let(:expected_messages) do
+        [
+          'value is not a String or a Symbol',
+          'label is not an instance of String',
+          'something went wrong'
+        ]
+      end
+      let(:block) do
+        lambda do |aggregator|
+          aggregator.assert_name(value)
+          aggregator.assert_instance_of(label, expected: String, as: 'label')
+          aggregator.validate(message: 'something went wrong') { false }
+        end
+      end
+
+      include_examples 'should append multiple failure messages'
+    end
+
+    describe 'with a block with many passing assertions' do
+      let(:label) { 'self-sealing stem bolts' }
+      let(:value) { 'Quantity: 1,000' }
+      let(:block) do
+        lambda do |aggregator|
+          aggregator.assert_name(value)
+          aggregator.assert_instance_of(label, expected: String, as: 'label')
+          aggregator.validate(message: 'something went wrong') { true }
+        end
+      end
+
+      include_examples 'should not append a failure message'
+    end
+
+    describe 'with a block with nested aggregations' do
+      let(:quantity) { nil }
+      let(:label)    { nil }
+      let(:expected_messages) do
+        [
+          'label is not an instance of String',
+          "label can't be blank",
+          'quantity is not an instance of Integer'
+        ]
+      end
+      let(:block) do
+        lambda do |aggregator|
+          aggregator.assert_group do |inner|
+            inner.assert_instance_of(label, expected: String, as: 'label')
+            inner.assert_presence(label, as: 'label')
+          end
+
+          aggregator
+            .assert_instance_of(quantity, expected: Integer, as: 'quantity')
+        end
+      end
+
+      include_examples 'should append multiple failure messages'
+    end
+
+    describe 'with a block with nested aggregations and message: value' do
+      let(:quantity) { nil }
+      let(:label)    { nil }
+      let(:expected_messages) do
+        [
+          'label is invalid',
+          'quantity is not an instance of Integer'
+        ]
+      end
+      let(:block) do
+        lambda do |aggregator|
+          aggregator.assert_group(message: 'label is invalid') do |inner|
+            inner.assert_instance_of(label, expected: String, as: 'label')
+            inner.assert_presence(label, as: 'label')
+          end
+
+          aggregator
+            .assert_instance_of(quantity, expected: Integer, as: 'quantity')
+        end
+      end
+
+      include_examples 'should append multiple failure messages'
+    end
+
+    describe 'with message: value' do
+      let(:message) { 'something went wrong' }
+
+      describe 'without a block' do
+        let(:error_message) { 'no block given' }
+
+        it 'should raise an exception' do
+          expect { aggregator.validate_group(message:) }
+            .to raise_error ArgumentError, error_message
+        end
+      end
     end
   end
 

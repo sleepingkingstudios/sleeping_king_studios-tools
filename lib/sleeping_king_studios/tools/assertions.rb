@@ -23,6 +23,16 @@ module SleepingKingStudios::Tools
         :empty?,
         :size
 
+      # (see SleepingKingStudios::Tools::Assertions#assert_group)
+      def assert_group(error_class: AssertionError, message: nil, &assertions)
+        return super if message
+
+        raise ArgumentError, 'no block given' unless block_given?
+
+        assertions.call(self)
+      end
+      alias aggregate assert_group
+
       # @return [String] the combined messages for each failed assertion.
       def failure_message
         failures.join(', ')
@@ -123,6 +133,30 @@ module SleepingKingStudios::Tools
 
       handle_error(error_class:, message:)
     end
+
+    # Evaluates a series of assertions and combines all failures.
+    #
+    # @param error_class [Class] the exception class to raise on a failure.
+    # @param message [String] the exception message to raise on a failure.
+    #
+    # @yield the assertions to evaluate.
+    # @yieldparam [Aggregator] the aggregator object.
+    #
+    # @raise AssertionError if any of the assertions fail.
+    def assert_group(error_class: AssertionError, message: nil, &assertions)
+      raise ArgumentError, 'no block given' unless block_given?
+
+      aggregator = Aggregator.new
+
+      assertions.call(aggregator)
+
+      return if aggregator.empty?
+
+      message ||= aggregator.failure_message
+
+      handle_error(error_class:, message:)
+    end
+    alias aggregate assert_group
 
     # Asserts that the value is an example of the given Class.
     #
@@ -320,6 +354,23 @@ module SleepingKingStudios::Tools
         as:,
         error_class: ArgumentError,
         message:
+      )
+    end
+
+    # Evaluates a series of validations and combines all failures.
+    #
+    # @param error_class [Class] the exception class to raise on a failure.
+    # @param message [String] the exception message to raise on a failure.
+    #
+    # @yield the validations to evaluate.
+    # @yieldparam [Aggregator] the aggregator object.
+    #
+    # @raise ArgumentError if any of the validations fail.
+    def validate_group(message: nil, &validations)
+      assert_group(
+        error_class: ArgumentError,
+        message:,
+        &validations
       )
     end
 
