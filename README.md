@@ -270,6 +270,23 @@ It accepts the following options:
 - `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
 - `message`: The error message to display.
 
+#### `#assert_group`
+
+Raises an exception if any of the assertions in the block fail, and aggregates the failure messages of all failing assertions.
+
+```ruby
+Assertions.assert_group do |group|
+  group.assert_name(nil, as: 'label')
+  group.assert_instance_of(0.0, expected: Integer, as: 'quantity')
+end
+# raises an AssertionError with message: "label can't be blank, quantity is not an instance of Integer"
+```
+
+It accepts the following options:
+
+- `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
+- `message`: The error message to display.
+
 #### `#assert_instance_of`
 
 Raises an exception unless the given value is an instance of the expected Class or Module.
@@ -440,6 +457,24 @@ It accepts the following options:
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `message`: The error message to display.
 
+#### `#validate_group`
+
+Raises an `ArgumentERror` if any of the assertions in the block fail, and aggregates the failure messages of all failing assertions.
+
+```ruby
+Assertions.validate_group do |group|
+  group.validate_name(nil, as: 'label')
+  group.validate_instance_of(0.0, expected: Integer, as: 'quantity')
+end
+# raises an ArgumentError with message: "label can't be blank, quantity is not an instance of Integer"
+```
+
+It accepts the following options:
+
+- `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
+- `message`: The error message to display.
+
+
 #### `#validate_instance_of`
 
 Raises an `ArgumentError` unless the given value is an instance of the expected Class or Module.
@@ -526,6 +561,40 @@ It accepts the following options:
 
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `message`: The error message to display.
+
+#### Assertions::Aggregator
+
+The `Assertions::Aggregator` class implements the same methods as the `Assertions` class. However, instead of raising an exception on a failed assertion, an aggregator stores the failure messages. This allows the user to run multiple assertions and combine the results.
+
+The aggregator is used internally by the `#assert_group` and `#validate_group` methods.
+
+```ruby
+aggregator = SleepingKingStudios::Tools::Assertions::Aggregator.new
+
+aggregator.count     #=> 0
+aggregator.empty?    #=> true
+aggregator.each.to_a #=> []
+
+aggregator.validate_name('label')
+aggregator.validate_boolean(nil, as: 'optional')
+aggregator.validate_presence('', as: 'details')
+
+aggregator.count #=> 2
+aggregator.empty? #=> false
+aggregator.each.to_a #=> ['optional must be true or false', "details can't be blank"]
+```
+
+##### `#count`
+
+Returns the number of failures stored in the aggregator.
+
+##### `#each`
+
+Yields each failure stored in the aggregator.
+
+##### `#empty?`
+
+Returns `true` if the aggregator does not store any failure; otherwise returns `false`.
 
 ### Core Tools
 

@@ -359,7 +359,6 @@ module SleepingKingStudios::Tools
 
     # Evaluates a series of validations and combines all failures.
     #
-    # @param error_class [Class] the exception class to raise on a failure.
     # @param message [String] the exception message to raise on a failure.
     #
     # @yield the validations to evaluate.
