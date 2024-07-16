@@ -52,6 +52,11 @@ module SleepingKingStudios::Tools
     # Error class for handling a failed assertion.
     class AssertionError < StandardError; end
 
+    # @return [Class] the class used to aggregate grouped assertion failures.
+    def aggregator_class
+      Aggregator
+    end
+
     # Asserts that the block returns a truthy value.
     #
     # @param error_class [Class] the exception class to raise on a failure.
@@ -146,7 +151,7 @@ module SleepingKingStudios::Tools
     def assert_group(error_class: AssertionError, message: nil, &assertions)
       raise ArgumentError, 'no block given' unless block_given?
 
-      aggregator = Aggregator.new
+      aggregator = aggregator_class.new
 
       assertions.call(aggregator)
 

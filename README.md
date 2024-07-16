@@ -187,6 +187,10 @@ Accepts an array, a start value, a number of items to delete, and zero or more i
 
 Tools for validating the current application state.
 
+#### `#aggregator_class`
+
+Helper for defining an aggregator for grouped assertion failures. By default, returns `SleepingKingStudios::Tools::Assertions::Aggregator`. Subclasses can overwrite this method to return a custom aggregator implementation.
+
 #### `#assert`
 
 Raises an exception unless the given block returns a truthy value.
