@@ -59,6 +59,12 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
   end
 
+  describe '#aggregator_class' do
+    it { expect(assertions).to respond_to(:aggregator_class).with(0).arguments }
+
+    it { expect(assertions.aggregator_class).to be described_class::Aggregator }
+  end
+
   describe '#assert' do
     let(:error_message) { 'block returned a falsy value' }
 
