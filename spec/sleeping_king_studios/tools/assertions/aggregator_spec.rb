@@ -102,6 +102,30 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     end
   end
 
+  describe '#<<' do
+    let(:message) { 'something went wrong' }
+
+    it { expect(aggregator).to respond_to(:<<).with(1).argument }
+
+    it 'should append the message', :aggregate_failures do
+      expect { aggregator << message }
+        .to change(aggregator, :count)
+        .by(1)
+
+      expect(aggregator.each.to_a.last).to be == message
+    end
+
+    wrap_context 'when the aggregator has many failures' do
+      it 'should append the message', :aggregate_failures do
+        expect { aggregator << message }
+          .to change(aggregator, :count)
+          .by(1)
+
+        expect(aggregator.each.to_a.last).to be == message
+      end
+    end
+  end
+
   describe '#assert' do
     let(:block)   { -> {} }
     let(:options) { {} }
@@ -650,6 +674,16 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       let(:value) { { ok: true } }
 
       include_examples 'should not append a failure message'
+    end
+  end
+
+  describe '#clear' do
+    it { expect(aggregator).to respond_to(:clear).with(0).arguments }
+
+    it { expect { aggregator.clear }.not_to change(aggregator, :count) }
+
+    wrap_context 'when the aggregator has many failures' do
+      it { expect { aggregator.clear }.to change(aggregator, :count).to be 0 }
     end
   end
 

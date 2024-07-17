@@ -588,6 +588,14 @@ aggregator.empty? #=> false
 aggregator.each.to_a #=> ['optional must be true or false', "details can't be blank"]
 ```
 
+##### `#<<`
+
+Appends a failure message to the aggregator.
+
+##### `#clear`
+
+Removes all failures from the aggregator.
+
 ##### `#count`
 
 Returns the number of failures stored in the aggregator.

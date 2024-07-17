@@ -18,6 +18,8 @@ module SleepingKingStudios::Tools
       end
 
       def_delegators :@failures,
+        :<<,
+        :clear,
         :count,
         :each,
         :empty?,
