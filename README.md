@@ -382,6 +382,21 @@ It accepts the following options:
 - `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
 - `message`: The error message to display.
 
+#### `#error_message_for`
+
+Generates an error message for the given scope and options.
+
+```ruby
+scope = 'sleeping_king_studios.tools.assertions.blank'
+
+assertions.error_message_for(scope)
+#=> 'value must be nil or empty'
+assertions.error_message_for(scope, as: false)
+#=> 'must be nil or empty'
+assertions.error_message_for(scope, as: 'item')
+#=> 'item must be nil or empty'
+```
+
 #### `#validate`
 
 Raises an `ArgumentError` unless the given block returns a truthy value.
