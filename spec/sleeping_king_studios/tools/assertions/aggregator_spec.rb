@@ -24,12 +24,30 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
   end
 
   shared_examples 'should append a failure message' do |**example_options|
+    let(:message_options) do
+      hsh = defined?(super()) ? super() : options
+      hsh = hsh.merge(as: false) unless example_options.fetch(:as, true)
+      hsh
+    end
+    let(:generated_message) do
+      scope =
+        "sleeping_king_studios.tools.assertions.#{example_options[:scope]}"
+
+      aggregator.error_message_for(scope, **message_options)
+    end
+
     it 'should append a failure message', :aggregate_failures do
       expect { call_assertion }
         .to change(aggregator, :count)
         .by(1)
 
       expect(aggregator.each.to_a.last).to be == expected_message
+    end
+
+    it 'should match the generated error message' do
+      call_assertion
+
+      expect(aggregator.each.to_a.last).to be == generated_message
     end
 
     if example_options.fetch(:as, true)
@@ -148,7 +166,9 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
         'block returned a falsy value'
       end
 
-      include_examples 'should append a failure message', as: false
+      include_examples 'should append a failure message',
+        as:    false,
+        scope: 'block'
     end
 
     describe 'with a block that returns a truthy value' do
@@ -185,7 +205,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with an Object' do
       let(:value) { Object.new.freeze }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'blank'
     end
 
     describe 'with an empty value' do
@@ -197,7 +217,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with a non-empty value' do
       let(:value) { { ok: true } }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'blank'
     end
   end
 
@@ -222,13 +242,13 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with nil' do
       let(:value) { nil }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'boolean'
     end
 
     describe 'with an Object' do
       let(:value) { Object.new.freeze }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'boolean'
     end
 
     describe 'with false' do
@@ -265,19 +285,19 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with nil' do
       let(:value) { nil }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'class'
     end
 
     describe 'with an Object' do
       let(:value) { Object.new.freeze }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'class'
     end
 
     describe 'with a Module' do
       let(:value) { Module.new }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'class'
     end
 
     describe 'with a Class' do
@@ -339,8 +359,8 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
 
     describe 'with a block with a failing assertion' do
       let(:value) { Object.new.freeze }
-      let(:expected_message) do
-        'value is not a String or a Symbol'
+      let(:expected_messages) do
+        ['value is not a String or a Symbol']
       end
       let(:block) do
         lambda do |aggregator|
@@ -348,7 +368,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
         end
       end
 
-      include_examples 'should append a failure message', as: false
+      include_examples 'should append multiple failure messages'
     end
 
     describe 'with a block with a passing assertion' do
@@ -463,13 +483,13 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
   describe '#assert_instance_of' do
     let(:value)    { nil }
     let(:expected) { StandardError }
-    let(:options)  { {} }
+    let(:options)  { { expected: } }
     let(:expected_message) do
       "#{options.fetch(:as, 'value')} is not an instance of #{expected}"
     end
 
     def call_assertion
-      aggregator.assert_instance_of(value, expected:, **options)
+      aggregator.assert_instance_of(value, **options)
     end
 
     it 'should define the method' do
@@ -482,13 +502,13 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with nil' do
       let(:value) { nil }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'instance_of'
     end
 
     describe 'with an Object' do
       let(:value) { Object.new.freeze }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'instance_of'
     end
 
     describe 'with an instance of the class' do
@@ -517,7 +537,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
   describe '#assert_matches' do
     let(:value)    { nil }
     let(:expected) { Spec::ExampleMatcher.new('expected') }
-    let(:options)  { {} }
+    let(:options)  { { expected: } }
     let(:expected_message) do
       "#{options.fetch(:as, 'value')} does not match the expected value"
     end
@@ -527,7 +547,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     end
 
     def call_assertion
-      aggregator.assert_matches(value, expected:, **options)
+      aggregator.assert_matches(value, **options)
     end
 
     it 'should define the method' do
@@ -540,13 +560,13 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with nil' do
       let(:value) { nil }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'matches'
     end
 
     describe 'with a non-matching value' do
       let(:value) { 'actual' }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'matches'
     end
 
     describe 'with a matching value' do
@@ -587,7 +607,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with nil' do
       let(:value) { nil }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'presence'
     end
 
     describe 'with an Object' do
@@ -596,19 +616,19 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
         "#{options.fetch(:as, 'value')} is not a String or a Symbol"
       end
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'name'
     end
 
     describe 'with an empty String' do
       let(:value) { '' }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'presence'
     end
 
     describe 'with an empty Symbol' do
       let(:value) { :'' }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'presence'
     end
 
     describe 'with a non-empty String' do
@@ -655,7 +675,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with nil' do
       let(:value) { nil }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'presence'
     end
 
     describe 'with an Object' do
@@ -667,7 +687,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with an empty value' do
       let(:value) { {} }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'presence'
     end
 
     describe 'with a non-empty value' do
@@ -773,7 +793,9 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
         'block returned a falsy value'
       end
 
-      include_examples 'should append a failure message', as: false
+      include_examples 'should append a failure message',
+        as:    false,
+        scope: 'block'
     end
 
     describe 'with a block that returns a truthy value' do
@@ -810,7 +832,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with an Object' do
       let(:value) { Object.new.freeze }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'blank'
     end
 
     describe 'with an empty value' do
@@ -822,7 +844,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with a non-empty value' do
       let(:value) { { ok: true } }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'blank'
     end
   end
 
@@ -847,13 +869,13 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with nil' do
       let(:value) { nil }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'boolean'
     end
 
     describe 'with an Object' do
       let(:value) { Object.new.freeze }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'boolean'
     end
 
     describe 'with false' do
@@ -890,19 +912,19 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with nil' do
       let(:value) { nil }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'class'
     end
 
     describe 'with an Object' do
       let(:value) { Object.new.freeze }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'class'
     end
 
     describe 'with a Module' do
       let(:value) { Module.new }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'class'
     end
 
     describe 'with a Class' do
@@ -960,8 +982,8 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
 
     describe 'with a block with a failing assertion' do
       let(:value) { Object.new.freeze }
-      let(:expected_message) do
-        'value is not a String or a Symbol'
+      let(:expected_messages) do
+        ['value is not a String or a Symbol']
       end
       let(:block) do
         lambda do |aggregator|
@@ -969,7 +991,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
         end
       end
 
-      include_examples 'should append a failure message', as: false
+      include_examples 'should append multiple failure messages'
     end
 
     describe 'with a block with a passing assertion' do
@@ -1084,13 +1106,13 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
   describe '#validate_instance_of' do
     let(:value)    { nil }
     let(:expected) { StandardError }
-    let(:options)  { {} }
+    let(:options)  { { expected: } }
     let(:expected_message) do
       "#{options.fetch(:as, 'value')} is not an instance of #{expected}"
     end
 
     def call_assertion
-      aggregator.validate_instance_of(value, expected:, **options)
+      aggregator.validate_instance_of(value, **options)
     end
 
     it 'should define the method' do
@@ -1103,13 +1125,13 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with nil' do
       let(:value) { nil }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'instance_of'
     end
 
     describe 'with an Object' do
       let(:value) { Object.new.freeze }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'instance_of'
     end
 
     describe 'with an instance of the class' do
@@ -1122,6 +1144,59 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       let(:value) { RuntimeError.new }
 
       include_examples 'should not append a failure message'
+    end
+
+    describe 'with expected: nil' do
+      it 'should raise an exception' do
+        expect { aggregator.assert_instance_of(nil, expected: nil) }
+          .to raise_error ArgumentError, 'expected must be a Class'
+      end
+    end
+
+    describe 'with expected: an Object' do
+      it 'should raise an exception' do
+        expect do
+          aggregator.assert_instance_of(nil, expected: Object.new.freeze)
+        end
+          .to raise_error ArgumentError, 'expected must be a Class'
+      end
+    end
+
+    describe 'with expected: an anonymous subclass' do
+      let(:expected) { Class.new(StandardError) }
+      let(:message_options) do
+        options.merge(parent: StandardError)
+      end
+      let(:expected_message) do
+        "#{options.fetch(:as, 'value')} is not an instance of #{expected} " \
+          '(StandardError)'
+      end
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should append a failure message',
+          scope: 'instance_of_anonymous'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should append a failure message',
+          scope: 'instance_of_anonymous'
+      end
+
+      describe 'with an instance of the class' do
+        let(:value) { expected.new }
+
+        include_examples 'should not append a failure message'
+      end
+
+      describe 'with an instance of a subclass of the class' do
+        let(:value) { Class.new(expected).new }
+
+        include_examples 'should not append a failure message'
+      end
     end
 
     describe 'with optional: true' do
@@ -1161,13 +1236,13 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with nil' do
       let(:value) { nil }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'matches'
     end
 
     describe 'with a non-matching value' do
       let(:value) { 'actual' }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'matches'
     end
 
     describe 'with a matching value' do
@@ -1208,7 +1283,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with nil' do
       let(:value) { nil }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'presence'
     end
 
     describe 'with an Object' do
@@ -1217,19 +1292,19 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
         "#{options.fetch(:as, 'value')} is not a String or a Symbol"
       end
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'name'
     end
 
     describe 'with an empty String' do
       let(:value) { '' }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'presence'
     end
 
     describe 'with an empty Symbol' do
       let(:value) { :'' }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'presence'
     end
 
     describe 'with a non-empty String' do
@@ -1276,7 +1351,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with nil' do
       let(:value) { nil }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'presence'
     end
 
     describe 'with an Object' do
@@ -1288,7 +1363,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with an empty value' do
       let(:value) { {} }
 
-      include_examples 'should append a failure message'
+      include_examples 'should append a failure message', scope: 'presence'
     end
 
     describe 'with a non-empty value' do

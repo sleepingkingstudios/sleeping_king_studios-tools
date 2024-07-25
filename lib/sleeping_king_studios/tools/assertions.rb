@@ -7,6 +7,38 @@ require 'sleeping_king_studios/tools'
 module SleepingKingStudios::Tools
   # Methods for asserting on the state of a function or application.
   class Assertions < Base # rubocop:disable Metrics/ClassLength
+    # rubocop:disable Layout/HashAlignment
+    ERROR_MESSAGES =
+      {
+        'blank' =>
+          'must be nil or empty',
+        'block' =>
+          'block returned a falsy value',
+        'boolean' =>
+          'must be true or false',
+        'class' =>
+          'is not a Class',
+        'instance_of' =>
+          'is not an instance of %<expected>s',
+        'instance_of_anonymous' =>
+          'is not an instance of %<expected>s (%<parent>s)',
+        'matches' =>
+          'does not match the expected value',
+        'matches_proc' =>
+          'does not match the Proc',
+        'matches_regexp' =>
+          'does not match the pattern %<pattern>s',
+        'name' =>
+          'is not a String or a Symbol',
+        # @note: This value will be changed in a future version.
+        'presence' =>
+          "can't be blank"
+      }
+      .transform_keys { |key| "sleeping_king_studios.tools.assertions.#{key}" }
+      .freeze
+    private_constant :ERROR_MESSAGES
+    # rubocop:enable Layout/HashAlignment
+
     # Utility for grouping multiple assertion statements.
     class Aggregator < Assertions
       extend Forwardable
@@ -71,7 +103,10 @@ module SleepingKingStudios::Tools
     def assert(error_class: AssertionError, message: nil, &block)
       return if block.call
 
-      message ||= 'block returned a falsy value'
+      message ||= error_message_for(
+        'sleeping_king_studios.tools.assertions.block',
+        as: false
+      )
 
       handle_error(error_class:, message:)
     end
@@ -94,7 +129,10 @@ module SleepingKingStudios::Tools
       return if value.nil?
       return if value.respond_to?(:empty?) && value.empty?
 
-      message ||= "#{as} must be nil or empty"
+      message ||= error_message_for(
+        'sleeping_king_studios.tools.assertions.blank',
+        as:
+      )
 
       handle_error(error_class:, message:)
     end
@@ -115,7 +153,10 @@ module SleepingKingStudios::Tools
     )
       return if value.equal?(true) || value.equal?(false)
 
-      message ||= "#{as} must be true or false"
+      message ||= error_message_for(
+        'sleeping_king_studios.tools.assertions.boolean',
+        as:
+      )
 
       handle_error(error_class:, message:)
     end
@@ -136,7 +177,10 @@ module SleepingKingStudios::Tools
     )
       return if value.is_a?(Class)
 
-      message ||= "#{as} is not a Class"
+      message ||= error_message_for(
+        'sleeping_king_studios.tools.assertions.class',
+        as:
+      )
 
       handle_error(error_class:, message:)
     end
@@ -192,7 +236,7 @@ module SleepingKingStudios::Tools
       return if optional && value.nil?
       return if value.is_a?(expected)
 
-      message ||= "#{as} is not an instance of #{class_name(expected)}"
+      message ||= error_message_for_instance_of(as:, expected:)
 
       handle_error(error_class:, message:)
     end
@@ -207,7 +251,7 @@ module SleepingKingStudios::Tools
     # @param optional [true, false] if true, allows nil values.
     #
     # @raise AssertionError if the value does not match the expected object.
-    def assert_matches( # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/ParameterLists
+    def assert_matches( # rubocop:disable Metrics/ParameterLists
       value,
       expected:,
       as:          'value',
@@ -218,17 +262,7 @@ module SleepingKingStudios::Tools
       return if optional && value.nil?
       return if expected === value # rubocop:disable Style/CaseEquality
 
-      message ||=
-        case expected
-        when Module
-          "#{as} is not an instance of #{class_name(expected)}"
-        when Proc
-          "#{as} does not match the Proc"
-        when Regexp
-          "#{as} does not match the pattern #{expected.inspect}"
-        else
-          "#{as} does not match the expected value"
-        end
+      message ||= error_message_for_matches(as:, expected:)
 
       handle_error(error_class:, message:)
     end
@@ -253,20 +287,29 @@ module SleepingKingStudios::Tools
       if value.nil?
         return if optional
 
-        message ||= "#{as} can't be blank"
+        message ||= error_message_for(
+          'sleeping_king_studios.tools.assertions.presence',
+          as:
+        )
 
         return handle_error(error_class:, message:)
       end
 
       unless value.is_a?(String) || value.is_a?(Symbol)
-        message ||= "#{as} is not a String or a Symbol"
+        message ||= error_message_for(
+          'sleeping_king_studios.tools.assertions.name',
+          as:
+        )
 
         return handle_error(error_class:, message:)
       end
 
       return unless value.empty?
 
-      message ||= "#{as} can't be blank"
+      message ||= error_message_for(
+        'sleeping_king_studios.tools.assertions.presence',
+        as:
+      )
 
       handle_error(error_class:, message:)
     end
@@ -294,9 +337,31 @@ module SleepingKingStudios::Tools
 
       return unless value.respond_to?(:empty?) && value.empty?
 
-      message ||= "#{as} can't be blank"
+      message ||= error_message_for(
+        'sleeping_king_studios.tools.assertions.presence',
+        as:
+      )
 
       handle_error(error_class:, message:)
+    end
+
+    # Generates an error message for a failed validation.
+    #
+    # @param scope [String] the message scope.
+    # @param options [Hash] additional options for generating the message.
+    #
+    # @option options as [String] the name of the validated property. Defaults
+    #   to 'value'.
+    # @option options expected [Object] the expected object, if any.
+    #
+    # @return [String] the generated error message.
+    def error_message_for(scope, as: 'value', **options)
+      message =
+        ERROR_MESSAGES
+        .fetch(scope.to_s) { return "Error message missing: #{scope}" }
+        .then { |raw| format(raw, **options) }
+
+      join_error_message(as:, message:)
     end
 
     # Asserts that the block returns a truthy value.
@@ -476,14 +541,54 @@ module SleepingKingStudios::Tools
 
     private
 
-    def class_name(expected)
-      return expected.name if expected.name
+    def error_message_for_instance_of(expected:, **options) # rubocop:disable Metrics/MethodLength
+      if expected.name
+        return error_message_for(
+          'sleeping_king_studios.tools.assertions.instance_of',
+          expected:,
+          **options
+        )
+      end
 
-      "#{expected.inspect} (#{expected.ancestors.find(&:name).name})"
+      error_message_for(
+        'sleeping_king_studios.tools.assertions.instance_of_anonymous',
+        expected:,
+        parent:   expected.ancestors.find(&:name),
+        **options
+      )
+    end
+
+    def error_message_for_matches(expected:, **options) # rubocop:disable Metrics/MethodLength
+      case expected
+      when Module
+        error_message_for_instance_of(expected:, **options)
+      when Proc
+        error_message_for(
+          'sleeping_king_studios.tools.assertions.matches_proc',
+          **options
+        )
+      when Regexp
+        error_message_for(
+          'sleeping_king_studios.tools.assertions.matches_regexp',
+          pattern: expected.inspect,
+          **options
+        )
+      else
+        error_message_for(
+          'sleeping_king_studios.tools.assertions.matches',
+          **options
+        )
+      end
     end
 
     def handle_error(error_class:, message:)
       raise error_class, message, caller(2..)
+    end
+
+    def join_error_message(as:, message:)
+      return message unless as
+
+      "#{as} #{message}"
     end
   end
 end
