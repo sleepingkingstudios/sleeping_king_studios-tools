@@ -44,7 +44,8 @@ Layout/HashAlignment:
   EnforcedColonStyle: table
 
 Layout/LineLength:
-  Enabled: true
+  AllowedPatterns:
+    - '\A\s*#'
   Max: 80
 
 Metrics/BlockLength:
