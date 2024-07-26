@@ -1345,6 +1345,96 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
   end
 
+  describe '#assert_nil' do
+    let(:error_message) do
+      "#{options.fetch(:as, 'value')} must be nil"
+    end
+
+    def assert
+      assertions.assert_nil(value, **options)
+    end
+
+    it 'should define the method' do
+      expect(assertions)
+        .to respond_to(:assert_nil)
+        .with(1).argument
+        .and_keywords(:as, :error_class, :message)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should not raise an exception'
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      include_examples 'should raise an exception with the failure message',
+        scope: 'nil'
+    end
+
+    wrap_context 'with error_class: value' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception with the failure message',
+          scope: 'nil'
+      end
+    end
+  end
+
+  describe '#assert_not_nil' do
+    let(:error_message) do
+      "#{options.fetch(:as, 'value')} must not be nil"
+    end
+
+    def assert
+      assertions.assert_not_nil(value, **options)
+    end
+
+    it 'should define the method' do
+      expect(assertions)
+        .to respond_to(:assert_not_nil)
+        .with(1).argument
+        .and_keywords(:as, :error_class, :message)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should raise an exception with the failure message',
+        scope: 'not_nil'
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      include_examples 'should not raise an exception'
+    end
+
+    wrap_context 'with error_class: value' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception with the failure message',
+          scope: 'not_nil'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+  end
+
   describe '#assert_presence' do
     let(:error_message) do
       "#{options.fetch(:as, 'value')} can't be blank"
@@ -2448,6 +2538,68 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
         include_examples 'should not raise an exception'
       end
+    end
+  end
+
+  describe '#validate_nil' do
+    let(:error_class) { ArgumentError }
+    let(:error_message) do
+      "#{options.fetch(:as, 'value')} must be nil"
+    end
+
+    def assert
+      assertions.validate_nil(value, **options)
+    end
+
+    it 'should define the method' do
+      expect(assertions)
+        .to respond_to(:validate_nil)
+        .with(1).argument
+        .and_keywords(:as, :message)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should not raise an exception'
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      include_examples 'should raise an exception with the failure message',
+        scope: 'nil'
+    end
+  end
+
+  describe '#validate_not_nil' do
+    let(:error_class) { ArgumentError }
+    let(:error_message) do
+      "#{options.fetch(:as, 'value')} must not be nil"
+    end
+
+    def assert
+      assertions.validate_not_nil(value, **options)
+    end
+
+    it 'should define the method' do
+      expect(assertions)
+        .to respond_to(:validate_not_nil)
+        .with(1).argument
+        .and_keywords(:as, :message)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should raise an exception with the failure message',
+        scope: 'not_nil'
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      include_examples 'should not raise an exception'
     end
   end
 

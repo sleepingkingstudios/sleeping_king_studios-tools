@@ -332,7 +332,7 @@ It accepts the following options:
 
 #### `#assert_name`
 
-Raises an exception unless the given value is non-empty a String or Symbol.
+Raises an exception unless the given value is a non-empty String or Symbol.
 
 ```ruby
 Assertions.assert_name(nil)
@@ -357,6 +357,42 @@ It accepts the following options:
 - `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
 - `message`: The error message to display.
 - `optional`: If true, accepts `nil` values as well as valid Symbols and Strings.
+
+#### `#assert_nil`
+
+Raises an exception unless the given value is `nil`.
+
+```ruby
+Assertions.assert_nil(nil)
+#=> does not raise an exception
+
+Assertions.assert_nil(Object.new)
+#=> raises an AssertionError with message 'value must be nil'
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
+- `message`: The error message to display.
+
+#### `#assert_not_nil`
+
+Raises an exception if the given value is `nil`.
+
+```ruby
+Assertions.assert_not_nil(nil)
+#=> raises an AssertionError with message 'value must not be nil'
+
+Assertions.assert_not_nil(Object.new)
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
+- `message`: The error message to display.
 
 #### `#assert_presence`
 
@@ -533,7 +569,7 @@ It accepts the following options:
 
 #### `#validate_name`
 
-Raises an `ArgumentError` unless the given value is non-empty a String or Symbol.
+Raises an `ArgumentError` unless the given value is a non-empty String or Symbol.
 
 ```ruby
 Assertions.validate_name(nil)
@@ -557,6 +593,40 @@ It accepts the following options:
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `message`: The error message to display.
 - `optional`: If true, accepts `nil` values as well as valid Symbols and Strings.
+
+#### `#validate_nil`
+
+Raises an exception unless the given value is `nil`.
+
+```ruby
+Assertions.validate_nil(nil)
+#=> does not raise an exception
+
+Assertions.validate_nil(Object.new)
+#=> raises an ArgumentError with message 'value must be nil'
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `message`: The error message to display.
+
+#### `#validate_not_nil`
+
+Raises an exception unless the given value is `nil`.
+
+```ruby
+Assertions.validate_not_nil(nil)
+#=> raises an ArgumentError with message 'value must not be nil'
+
+Assertions.validate_not_nil(Object.new)
+#=> does not raise an exception
+```
+
+It accepts the following options:
+
+- `as:` A short descriptor of the given value. Defaults to `"value"`.
+- `message`: The error message to display.
 
 #### `#validate_presence`
 

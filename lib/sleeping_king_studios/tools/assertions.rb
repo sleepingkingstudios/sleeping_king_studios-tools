@@ -30,6 +30,10 @@ module SleepingKingStudios::Tools
           'does not match the pattern %<pattern>s',
         'name' =>
           'is not a String or a Symbol',
+        'nil' =>
+          'must be nil',
+        'not_nil' =>
+          'must not be nil',
         # @note: This value will be changed in a future version.
         'presence' =>
           "can't be blank"
@@ -144,7 +148,7 @@ module SleepingKingStudios::Tools
     # @param error_class [Class] the exception class to raise on a failure.
     # @param message [String] the exception message to raise on a failure.
     #
-    # @raise AssertionError if the value is not a Class.
+    # @raise AssertionError if the value is not true or false.
     def assert_boolean(
       value,
       as:          'value',
@@ -314,6 +318,54 @@ module SleepingKingStudios::Tools
       handle_error(error_class:, message:)
     end
 
+    # Asserts that the value is nil.
+    #
+    # @param value [Object] the value to assert on.
+    # @param as [String] the name of the asserted value.
+    # @param error_class [Class] the exception class to raise on a failure.
+    # @param message [String] the exception message to raise on a failure.
+    #
+    # @raise AssertionError if the value is not nil.
+    def assert_nil(
+      value,
+      as:          'value',
+      error_class: AssertionError,
+      message:     nil
+    )
+      return if value.nil?
+
+      message ||= error_message_for(
+        'sleeping_king_studios.tools.assertions.nil',
+        as:
+      )
+
+      handle_error(error_class:, message:)
+    end
+
+    # Asserts that the value is not nil.
+    #
+    # @param value [Object] the value to assert on.
+    # @param as [String] the name of the asserted value.
+    # @param error_class [Class] the exception class to raise on a failure.
+    # @param message [String] the exception message to raise on a failure.
+    #
+    # @raise AssertionError if the value is nil.
+    def assert_not_nil(
+      value,
+      as:          'value',
+      error_class: AssertionError,
+      message:     nil
+    )
+      return unless value.nil?
+
+      message ||= error_message_for(
+        'sleeping_king_studios.tools.assertions.not_nil',
+        as:
+      )
+
+      handle_error(error_class:, message:)
+    end
+
     # Asserts that the value is not nil and not empty.
     #
     # @param value [Object] the value to assert on.
@@ -323,14 +375,17 @@ module SleepingKingStudios::Tools
     #
     # @raise AssertionError if the value is nil, or if the value responds to
     #   #empty? and value.empty is true.
-    def assert_presence(
+    def assert_presence( # rubocop:disable Metrics/MethodLength
       value,
       as:          'value',
       error_class: AssertionError,
-      message: nil
+      message:     nil
     )
       if value.nil?
-        message ||= "#{as} can't be blank"
+        message ||= error_message_for(
+          'sleeping_king_studios.tools.assertions.presence',
+          as:
+        )
 
         handle_error(error_class:, message:)
       end
@@ -403,7 +458,7 @@ module SleepingKingStudios::Tools
     # @param as [String] the name of the asserted value.
     # @param message [String] the exception message to raise on a failure.
     #
-    # @raise ArgumentError if the value is not a Class.
+    # @raise ArgumentError if the value is not true or false.
     def validate_boolean(value, as: 'value', message: nil)
       assert_boolean(
         value,
@@ -519,6 +574,46 @@ module SleepingKingStudios::Tools
         error_class: ArgumentError,
         message:,
         optional:
+      )
+    end
+
+    # Asserts that the value is nil.
+    #
+    # @param value [Object] the value to assert on.
+    # @param as [String] the name of the asserted value.
+    # @param message [String] the exception message to raise on a failure.
+    #
+    # @raise ArgumentError if the value is not nil.
+    def validate_nil(
+      value,
+      as:      'value',
+      message: nil
+    )
+      assert_nil(
+        value,
+        as:,
+        error_class: ArgumentError,
+        message:
+      )
+    end
+
+    # Asserts that the value is not nil.
+    #
+    # @param value [Object] the value to assert on.
+    # @param as [String] the name of the asserted value.
+    # @param message [String] the exception message to raise on a failure.
+    #
+    # @raise ArgumentError if the value is nil.
+    def validate_not_nil(
+      value,
+      as:      'value',
+      message: nil
+    )
+      assert_not_nil(
+        value,
+        as:,
+        error_class: ArgumentError,
+        message:
       )
     end
 
