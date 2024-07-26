@@ -14,9 +14,14 @@ Added the following methods to `SleepingKingStudios::Tools::Assertions`.
 
 - `#assert_blank`
 - `#assert_group`
+- `#assert_nil`
+- `#assert_not_nil`
 - `#assert_presence`
+- `#error_message_for`
 - `#validate_blank`
 - `#validate_group`
+- `#validate_nil`
+- `#validate_not_nil`
 - `#validate_presence`
 
 Implemented `SleepingKingStudios::Tools::Assertions::Aggregator`.

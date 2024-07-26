@@ -654,6 +654,68 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     end
   end
 
+  describe '#assert_nil' do
+    let(:value)   { nil }
+    let(:options) { {} }
+    let(:expected_message) do
+      "#{options.fetch(:as, 'value')} must be nil"
+    end
+
+    def call_assertion
+      aggregator.assert_nil(value, **options)
+    end
+
+    it 'should define the method' do
+      expect(aggregator)
+        .to respond_to(:assert_nil)
+        .with(1).arguments
+        .and_keywords(:as, :error_class, :message)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should not append a failure message'
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      include_examples 'should append a failure message', scope: 'nil'
+    end
+  end
+
+  describe '#assert_not_nil' do
+    let(:value)   { nil }
+    let(:options) { {} }
+    let(:expected_message) do
+      "#{options.fetch(:as, 'value')} must not be nil"
+    end
+
+    def call_assertion
+      aggregator.assert_not_nil(value, **options)
+    end
+
+    it 'should define the method' do
+      expect(aggregator)
+        .to respond_to(:assert_not_nil)
+        .with(1).arguments
+        .and_keywords(:as, :error_class, :message)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should append a failure message', scope: 'not_nil'
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      include_examples 'should not append a failure message'
+    end
+  end
+
   describe '#assert_presence' do
     let(:value)   { nil }
     let(:options) { {} }
@@ -1327,6 +1389,68 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
 
         include_examples 'should not append a failure message'
       end
+    end
+  end
+
+  describe '#validate_nil' do
+    let(:value)   { nil }
+    let(:options) { {} }
+    let(:expected_message) do
+      "#{options.fetch(:as, 'value')} must be nil"
+    end
+
+    def call_assertion
+      aggregator.validate_nil(value, **options)
+    end
+
+    it 'should define the method' do
+      expect(aggregator)
+        .to respond_to(:validate_nil)
+        .with(1).arguments
+        .and_keywords(:as, :message)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should not append a failure message'
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      include_examples 'should append a failure message', scope: 'nil'
+    end
+  end
+
+  describe '#validate_not_nil' do
+    let(:value)   { nil }
+    let(:options) { {} }
+    let(:expected_message) do
+      "#{options.fetch(:as, 'value')} must not be nil"
+    end
+
+    def call_assertion
+      aggregator.validate_not_nil(value, **options)
+    end
+
+    it 'should define the method' do
+      expect(aggregator)
+        .to respond_to(:validate_not_nil)
+        .with(1).arguments
+        .and_keywords(:as, :message)
+    end
+
+    describe 'with nil' do
+      let(:value) { nil }
+
+      include_examples 'should append a failure message', scope: 'not_nil'
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      include_examples 'should not append a failure message'
     end
   end
 
