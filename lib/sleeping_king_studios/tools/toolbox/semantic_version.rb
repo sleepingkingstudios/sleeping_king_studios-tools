@@ -47,7 +47,7 @@ module SleepingKingStudios::Tools::Toolbox
     #
     # @raise InvalidVersionError If MAJOR, MINOR, or PATCH is undefined.
     def to_gem_version
-      str = +"#{const_fetch :MAJOR}.#{const_fetch :MINOR}.#{const_fetch :PATCH}"
+      str = "#{const_fetch :MAJOR}.#{const_fetch :MINOR}.#{const_fetch :PATCH}"
 
       prerelease = const_fetch(:PRERELEASE, nil)
       str << ".#{prerelease}" unless prerelease.nil? || prerelease.empty?
@@ -82,7 +82,7 @@ module SleepingKingStudios::Tools::Toolbox
     #
     # @raise InvalidVersionError If MAJOR, MINOR, or PATCH is undefined.
     def to_version
-      str = +"#{const_fetch :MAJOR}.#{const_fetch :MINOR}.#{const_fetch :PATCH}"
+      str = "#{const_fetch :MAJOR}.#{const_fetch :MINOR}.#{const_fetch :PATCH}"
 
       prerelease = const_fetch(:PRERELEASE, nil)
       str << "-#{prerelease}" unless prerelease.nil? || prerelease.empty?

@@ -147,14 +147,18 @@ module SleepingKingStudios::Tools
     # @param as [String] the name of the asserted value.
     # @param error_class [Class] the exception class to raise on a failure.
     # @param message [String] the exception message to raise on a failure.
+    # @param optional [true, false] if true, allows nil values.
     #
     # @raise AssertionError if the value is not true or false.
     def assert_boolean(
       value,
       as:          'value',
       error_class: AssertionError,
-      message:     nil
+      message:     nil,
+      optional:    false
     )
+      return if optional && value.nil?
+
       return if value.equal?(true) || value.equal?(false)
 
       message ||= error_message_for(
@@ -171,14 +175,18 @@ module SleepingKingStudios::Tools
     # @param as [String] the name of the asserted value.
     # @param error_class [Class] the exception class to raise on a failure.
     # @param message [String] the exception message to raise on a failure.
+    # @param optional [true, false] if true, allows nil values.
     #
     # @raise AssertionError if the value is not a Class.
     def assert_class(
       value,
       as:          'value',
       error_class: AssertionError,
-      message:     nil
+      message:     nil,
+      optional:    false
     )
+      return if optional && value.nil?
+
       return if value.is_a?(Class)
 
       message ||= error_message_for(
@@ -372,6 +380,7 @@ module SleepingKingStudios::Tools
     # @param as [String] the name of the asserted value.
     # @param error_class [Class] the exception class to raise on a failure.
     # @param message [String] the exception message to raise on a failure.
+    # @param optional [true, false] if true, allows nil values.
     #
     # @raise AssertionError if the value is nil, or if the value responds to
     #   #empty? and value.empty is true.
@@ -379,9 +388,12 @@ module SleepingKingStudios::Tools
       value,
       as:          'value',
       error_class: AssertionError,
-      message:     nil
+      message:     nil,
+      optional:    false
     )
       if value.nil?
+        return if optional
+
         message ||= error_message_for(
           'sleeping_king_studios.tools.assertions.presence',
           as:
@@ -457,14 +469,16 @@ module SleepingKingStudios::Tools
     # @param value [Object] the value to assert on.
     # @param as [String] the name of the asserted value.
     # @param message [String] the exception message to raise on a failure.
+    # @param optional [true, false] if true, allows nil values.
     #
     # @raise ArgumentError if the value is not true or false.
-    def validate_boolean(value, as: 'value', message: nil)
+    def validate_boolean(value, as: 'value', message: nil, optional: false)
       assert_boolean(
         value,
         as:,
         error_class: ArgumentError,
-        message:
+        message:,
+        optional:
       )
     end
 
@@ -473,14 +487,16 @@ module SleepingKingStudios::Tools
     # @param value [Object] the value to assert on.
     # @param as [String] the name of the asserted value.
     # @param message [String] the exception message to raise on a failure.
+    # @param optional [true, false] if true, allows nil values.
     #
     # @raise ArgumentError if the value is not a Class.
-    def validate_class(value, as: 'value', message: nil)
+    def validate_class(value, as: 'value', message: nil, optional: false)
       assert_class(
         value,
         as:,
         error_class: ArgumentError,
-        message:
+        message:,
+        optional:
       )
     end
 
@@ -622,15 +638,17 @@ module SleepingKingStudios::Tools
     # @param value [Object] the value to assert on.
     # @param as [String] the name of the asserted value.
     # @param message [String] the exception message to raise on a failure.
+    # @param optional [true, false] if true, allows nil values.
     #
     # @raise ArgumentError if the value is nil, or if the value responds to
     #   #empty? and value.empty is true.
-    def validate_presence(value, as: 'value', message: nil)
+    def validate_presence(value, as: 'value', message: nil, optional: false)
       assert_presence(
         value,
         as:,
         error_class: ArgumentError,
-        message:
+        message:,
+        optional:
       )
     end
 

@@ -255,6 +255,7 @@ It accepts the following options:
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
 - `message`: The error message to display.
+- `optional`: If true, accepts `nil` values as well as `true` or `false`.
 
 #### `#assert_class`
 
@@ -273,6 +274,7 @@ It accepts the following options:
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
 - `message`: The error message to display.
+- `optional`: If true, accepts `nil` values as well as `Class` instances.
 
 #### `#assert_group`
 
@@ -417,6 +419,7 @@ It accepts the following options:
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `error_class:` The class of exception to raise. Defaults to `SleepingKingStudios::Tools::Assertions::AssertionError`.
 - `message`: The error message to display.
+- `optional`: If true, accepts `nil` values as well as non-`#empty?` objects.
 
 #### `#error_message_for`
 
@@ -494,6 +497,7 @@ It accepts the following options:
 
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `message`: The error message to display.
+- `optional`: If true, accepts `nil` values as well as `true` or `false`.
 
 #### `#validate_class`
 
@@ -511,6 +515,7 @@ It accepts the following options:
 
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `message`: The error message to display.
+- `optional`: If true, accepts `nil` values as well as `Class` instances.
 
 #### `#validate_group`
 
@@ -650,6 +655,7 @@ It accepts the following options:
 
 - `as:` A short descriptor of the given value. Defaults to `"value"`.
 - `message`: The error message to display.
+- `optional`: If true, accepts `nil` values as well as non-`#empty?` objects.
 
 #### Assertions::Aggregator
 

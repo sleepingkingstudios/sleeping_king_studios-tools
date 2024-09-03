@@ -225,7 +225,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       expect(assertions)
         .to respond_to(:assert_boolean)
         .with(1).argument
-        .and_keywords(:as, :error_class, :message)
+        .and_keywords(:as, :error_class, :message, :optional)
     end
 
     describe 'with nil' do
@@ -281,6 +281,23 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         include_examples 'should not raise an exception'
       end
     end
+
+    wrap_context 'with optional: false' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception with the failure message',
+          scope: 'boolean'
+      end
+    end
+
+    wrap_context 'with optional: true' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
+    end
   end
 
   describe '#assert_class' do
@@ -296,7 +313,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       expect(assertions)
         .to respond_to(:assert_class)
         .with(1).argument
-        .and_keywords(:as, :error_class, :message)
+        .and_keywords(:as, :error_class, :message, :optional)
     end
 
     describe 'with nil' do
@@ -350,6 +367,23 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
       describe 'with a Class' do
         let(:value) { Class.new }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with optional: false' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception with the failure message',
+          scope: 'class'
+      end
+    end
+
+    wrap_context 'with optional: true' do
+      describe 'with nil' do
+        let(:value) { nil }
 
         include_examples 'should not raise an exception'
       end
@@ -1448,7 +1482,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       expect(assertions)
         .to respond_to(:assert_presence)
         .with(1).argument
-        .and_keywords(:as, :error_class, :message)
+        .and_keywords(:as, :error_class, :message, :optional)
     end
 
     describe 'with nil' do
@@ -1500,6 +1534,23 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
       describe 'with a non-empty value' do
         let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    wrap_context 'with optional: false' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception with the failure message',
+          scope: 'presence'
+      end
+    end
+
+    wrap_context 'with optional: true' do
+      describe 'with nil' do
+        let(:value) { nil }
 
         include_examples 'should not raise an exception'
       end
@@ -1683,7 +1734,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       expect(assertions)
         .to respond_to(:validate_boolean)
         .with(1).argument
-        .and_keywords(:as, :message)
+        .and_keywords(:as, :message, :optional)
     end
 
     describe 'with nil' do
@@ -1711,6 +1762,23 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
       include_examples 'should not raise an exception'
     end
+
+    wrap_context 'with optional: false' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception with the failure message',
+          scope: 'boolean'
+      end
+    end
+
+    wrap_context 'with optional: true' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
+    end
   end
 
   describe '#validate_class' do
@@ -1727,7 +1795,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       expect(assertions)
         .to respond_to(:validate_class)
         .with(1).argument
-        .and_keywords(:as, :message)
+        .and_keywords(:as, :message, :optional)
     end
 
     describe 'with nil' do
@@ -1755,6 +1823,23 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       let(:value) { Class.new }
 
       include_examples 'should not raise an exception'
+    end
+
+    wrap_context 'with optional: false' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception with the failure message',
+          scope: 'class'
+      end
+    end
+
+    wrap_context 'with optional: true' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
     end
   end
 
@@ -2617,7 +2702,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       expect(assertions)
         .to respond_to(:validate_presence)
         .with(1).argument
-        .and_keywords(:as, :message)
+        .and_keywords(:as, :message, :optional)
     end
 
     describe 'with nil' do
@@ -2644,6 +2729,23 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
 
       include_examples 'should not raise an exception'
+    end
+
+    wrap_context 'with optional: false' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception with the failure message',
+          scope: 'presence'
+      end
+    end
+
+    wrap_context 'with optional: true' do
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should not raise an exception'
+      end
     end
   end
 end
