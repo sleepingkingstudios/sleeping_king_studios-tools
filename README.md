@@ -1,10 +1,10 @@
-# SleepingKingStudios::Tools [![Build Status](https://travis-ci.org/sleepingkingstudios/sleeping_king_studios-tools.svg?branch=master)](https://travis-ci.org/sleepingkingstudios/sleeping_king_studios-tools)
+# SleepingKingStudios::Tools
 
 A library of utility services and concerns to expand the functionality of core classes without polluting the global namespace.
 
 ## About
 
-SleepingKingStudios::Tools is tested against MRI Ruby 3.1 through 3.3.
+SleepingKingStudios::Tools is tested against MRI Ruby 3.1 through 3.4.
 
 ### Documentation
 
