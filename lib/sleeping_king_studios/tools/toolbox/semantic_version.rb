@@ -21,6 +21,9 @@ module SleepingKingStudios::Tools::Toolbox
   #
   # @see http://semver.org
   module SemanticVersion
+    UNDEFINED = Object.new.freeze
+    private_constant :UNDEFINED
+
     # Error class for handling missing constants in a version definition.
     class InvalidVersionError < StandardError; end
 
@@ -95,12 +98,10 @@ module SleepingKingStudios::Tools::Toolbox
 
     private
 
-    FETCH_DEFAULT = Object.new.freeze
-
-    def const_fetch(name, default = FETCH_DEFAULT)
+    def const_fetch(name, default = UNDEFINED)
       return const_get(name).to_s if const_defined?(name)
 
-      return nil unless default == FETCH_DEFAULT
+      return nil unless default == UNDEFINED
 
       raise InvalidVersionError,
         "undefined constant for #{name.downcase} version"
