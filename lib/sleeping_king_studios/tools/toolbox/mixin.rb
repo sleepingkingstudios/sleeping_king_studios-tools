@@ -5,25 +5,39 @@ require 'sleeping_king_studios/tools/toolbox'
 module SleepingKingStudios::Tools::Toolbox
   # Implements recursive inheritance of both class and instance methods.
   module Mixin
-    # @api private
-    def self.mixin?(mod)
-      return false unless mod.is_a?(Module)
+    # Checks if the given module is itself a Mixin.
+    #
+    # @param othermod [Object] the object or module to inspect.
+    #
+    # @return [true, false] true if the other object is a Module that extends
+    #   Mixin; otherwise false.
+    def self.mixin?(othermod)
+      return false unless othermod.is_a?(Module)
 
-      mod.singleton_class.include?(self)
+      othermod.singleton_class.include?(self)
     end
 
-    # @private
-    def included(other)
+    private
+
+    # @api public
+    #
+    # Callback invoked whenever the receiver is included in another module.
+    #
+    # @param othermod [Module] the other class or module in which the mixin is
+    #   included.
+    #
+    # @return [void]
+    def included(othermod)
       return super unless defined?(self::ClassMethods)
 
-      if SleepingKingStudios::Tools::Toolbox::Mixin.mixin?(other)
-        unless other.constants(false).include?(:ClassMethods)
-          other.const_set(:ClassMethods, Module.new)
+      if SleepingKingStudios::Tools::Toolbox::Mixin.mixin?(othermod)
+        unless othermod.constants(false).include?(:ClassMethods)
+          othermod.const_set(:ClassMethods, Module.new)
         end
 
-        other::ClassMethods.include(self::ClassMethods)
+        othermod::ClassMethods.include(self::ClassMethods)
       else
-        other.extend self::ClassMethods
+        othermod.extend self::ClassMethods
       end
 
       super
