@@ -1,0 +1,30 @@
+---
+collections:
+  classes:
+    output: false
+  constants:
+    output: false
+  methods:
+    output: false
+  modules:
+    output: false
+  namespaces:
+    output: false
+defaults:
+- scope:
+    path: ''
+    type: 'pages'
+  values:
+    encoding: 'utf-8'
+    layout: 'default'
+    title: 'SleepingKingStudios::Tools'
+description: |
+  A library of utility services and concerns.
+exclude:
+  - /vendor
+github:
+  repository_url: https://github.com/sleepingkingstudios/sleeping_king_studios-docs
+markdown: kramdown
+repository: sleepingkingstudios/sleeping_king_studios-tools
+theme: jekyll-theme-dinky
+title: Tools
