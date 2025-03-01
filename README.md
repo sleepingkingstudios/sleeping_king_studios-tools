@@ -1295,7 +1295,7 @@ Returns an array containing the values of the defined constants, similar to `Has
 
     require 'sleeping_king_studios/tools/toolbox/mixin'
 
-Implements module-based inheritance for both instance- and class-level methods, similar to the (in)famous ActiveSupport::Concern. When a Mixin is included into a class, the class will be extended with any methods defined in the special ClassMethods module, even if the Mixin is being included indirectly via one or more intermediary Mixins.
+Implements module-based inheritance for both instance- and class-level methods, similar to ActiveSupport::Concern. When a Mixin is included or prepended into a class, the class will be extended with any methods defined in the special ClassMethods module, even if the Mixin is being included indirectly via one or more intermediary Mixins.
 
     Widget = Struct.new(:widget_type)
 

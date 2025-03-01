@@ -104,6 +104,87 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Mixin do
     end
   end
 
+  describe '.included' do
+    before(:example) { Spec::BaseClass.include(Spec::ExampleMixin) }
+
+    it 'should add the class methods to the singleton class' do
+      expect(described_class.singleton_class)
+        .to be < Spec::ExampleMixin::ClassMethods
+    end
+
+    describe '.example_class_method' do
+      let(:expected) { %w[Spec::ExampleMixin Spec::BaseClass] }
+
+      it { expect(described_class.example_class_method).to be == expected }
+
+      context 'when the class includes multiple mixins' do
+        let(:expected) do
+          %w[Spec::ExampleMixin Spec::AdditionalMixin Spec::BaseClass]
+        end
+
+        before(:example) { Spec::BaseClass.include(Spec::AdditionalMixin) }
+
+        it { expect(described_class.example_class_method).to be == expected }
+      end
+
+      context 'when the mixin includes other mixins' do
+        let(:expected) do
+          %w[Spec::AdditionalMixin Spec::ExampleMixin Spec::BaseClass]
+        end
+
+        before(:example) { Spec::ExampleMixin.include(Spec::AdditionalMixin) }
+
+        it { expect(described_class.example_class_method).to be == expected }
+      end
+
+      context 'when the mixin prepends other mixins' do
+        let(:expected) do
+          %w[Spec::ExampleMixin Spec::AdditionalMixin Spec::BaseClass]
+        end
+
+        before(:example) { Spec::ExampleMixin.prepend(Spec::AdditionalMixin) }
+
+        it { expect(described_class.example_class_method).to be == expected }
+      end
+    end
+
+    describe '#example_instance_method' do
+      let(:expected) { %w[Spec::ExampleMixin Spec::BaseClass] }
+
+      it { expect(instance.example_instance_method).to be == expected }
+
+      context 'when the class includes multiple mixins' do
+        let(:expected) do
+          %w[Spec::ExampleMixin Spec::AdditionalMixin Spec::BaseClass]
+        end
+
+        before(:example) { Spec::BaseClass.include(Spec::AdditionalMixin) }
+
+        it { expect(instance.example_instance_method).to be == expected }
+      end
+
+      context 'when the mixin includes other mixins' do
+        let(:expected) do
+          %w[Spec::AdditionalMixin Spec::ExampleMixin Spec::BaseClass]
+        end
+
+        before(:example) { Spec::ExampleMixin.include(Spec::AdditionalMixin) }
+
+        it { expect(instance.example_instance_method).to be == expected }
+      end
+
+      context 'when the mixin prepends other mixins' do
+        let(:expected) do
+          %w[Spec::ExampleMixin Spec::AdditionalMixin Spec::BaseClass]
+        end
+
+        before(:example) { Spec::ExampleMixin.prepend(Spec::AdditionalMixin) }
+
+        it { expect(instance.example_instance_method).to be == expected }
+      end
+    end
+  end
+
   describe '.mixin?' do
     it { expect(mixin_module).to respond_to(:mixin?).with(1).argument }
 
@@ -142,8 +223,8 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Mixin do
     end
   end
 
-  describe '.included' do
-    before(:example) { Spec::BaseClass.include(Spec::ExampleMixin) }
+  describe '.prepended' do
+    before(:example) { Spec::BaseClass.prepend(Spec::ExampleMixin) }
 
     it 'should add the class methods to the singleton class' do
       expect(described_class.singleton_class)
@@ -151,52 +232,72 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Mixin do
     end
 
     describe '.example_class_method' do
-      let(:expected) { %w[Spec::ExampleMixin Spec::BaseClass] }
+      let(:expected) { %w[Spec::BaseClass Spec::ExampleMixin] }
 
       it { expect(described_class.example_class_method).to be == expected }
 
       context 'when the class includes multiple mixins' do
         let(:expected) do
-          %w[Spec::ExampleMixin Spec::AdditionalMixin Spec::BaseClass]
+          %w[Spec::BaseClass Spec::ExampleMixin Spec::AdditionalMixin]
         end
 
-        before(:example) { Spec::BaseClass.include(Spec::AdditionalMixin) }
+        before(:example) { Spec::BaseClass.prepend(Spec::AdditionalMixin) }
 
         it { expect(described_class.example_class_method).to be == expected }
       end
 
       context 'when the mixin includes other mixins' do
         let(:expected) do
-          %w[Spec::AdditionalMixin Spec::ExampleMixin Spec::BaseClass]
+          %w[Spec::BaseClass Spec::AdditionalMixin Spec::ExampleMixin]
         end
 
         before(:example) { Spec::ExampleMixin.include(Spec::AdditionalMixin) }
+
+        it { expect(described_class.example_class_method).to be == expected }
+      end
+
+      context 'when the mixin prepends other mixins' do
+        let(:expected) do
+          %w[Spec::BaseClass Spec::ExampleMixin Spec::AdditionalMixin]
+        end
+
+        before(:example) { Spec::ExampleMixin.prepend(Spec::AdditionalMixin) }
 
         it { expect(described_class.example_class_method).to be == expected }
       end
     end
 
     describe '#example_instance_method' do
-      let(:expected) { %w[Spec::ExampleMixin Spec::BaseClass] }
+      let(:expected) { %w[Spec::BaseClass Spec::ExampleMixin] }
 
       it { expect(instance.example_instance_method).to be == expected }
 
       context 'when the class includes multiple mixins' do
         let(:expected) do
-          %w[Spec::ExampleMixin Spec::AdditionalMixin Spec::BaseClass]
+          %w[Spec::BaseClass Spec::ExampleMixin Spec::AdditionalMixin]
         end
 
-        before(:example) { Spec::BaseClass.include(Spec::AdditionalMixin) }
+        before(:example) { Spec::BaseClass.prepend(Spec::AdditionalMixin) }
 
         it { expect(instance.example_instance_method).to be == expected }
       end
 
       context 'when the mixin includes other mixins' do
         let(:expected) do
-          %w[Spec::AdditionalMixin Spec::ExampleMixin Spec::BaseClass]
+          %w[Spec::BaseClass Spec::AdditionalMixin Spec::ExampleMixin]
         end
 
         before(:example) { Spec::ExampleMixin.include(Spec::AdditionalMixin) }
+
+        it { expect(instance.example_instance_method).to be == expected }
+      end
+
+      context 'when the mixin prepends other mixins' do
+        let(:expected) do
+          %w[Spec::BaseClass Spec::ExampleMixin Spec::AdditionalMixin]
+        end
+
+        before(:example) { Spec::ExampleMixin.prepend(Spec::AdditionalMixin) }
 
         it { expect(instance.example_instance_method).to be == expected }
       end

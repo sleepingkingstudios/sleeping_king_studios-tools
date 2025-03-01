@@ -26,6 +26,10 @@ Added the following methods to `SleepingKingStudios::Tools::Assertions`.
 
 Implemented `SleepingKingStudios::Tools::Assertions::Aggregator`.
 
+### Toolbox
+
+Added `.prepended` support to `SleepingKingStudios::Tools::Toolbox::Mixin`.
+
 ## 1.1.1
 
 Fixed support for keyword parameters in `ObjectTools#apply` in Ruby 3.2.

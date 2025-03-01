@@ -42,5 +42,29 @@ module SleepingKingStudios::Tools::Toolbox
 
       super
     end
+
+    # @api public
+    #
+    # Callback invoked whenever the receiver is prepended into another module.
+    #
+    # @param othermod [Module] the other class or module in which the mixin is
+    #   prepended.
+    #
+    # @return [void]
+    def prepended(othermod)
+      return super unless defined?(self::ClassMethods)
+
+      if SleepingKingStudios::Tools::Toolbox::Mixin.mixin?(othermod)
+        unless othermod.constants(false).include?(:ClassMethods)
+          othermod.const_set(:ClassMethods, Module.new)
+        end
+
+        othermod::ClassMethods.prepend(self::ClassMethods)
+      else
+        othermod.singleton_class.prepend(self::ClassMethods)
+      end
+
+      super
+    end
   end
 end
