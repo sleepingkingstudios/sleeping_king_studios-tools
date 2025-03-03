@@ -58,8 +58,16 @@ module SleepingKingStudios::Tools
         :romanize
     end
 
-    # Returns the number of digits in the given integer when represented in the
-    # specified base. Ignores minus sign for negative numbers.
+    # Returns the number of digits in the given integer and base.
+    #
+    # This method ignores minus sign for negative numbers. You can use the :base
+    # parameter to configure the numeric base for the string representation.
+    #
+    # @param integer [Integer] the integer to analyze.
+    # @param base [Integer] the numeric base to represent the integer in.
+    #   Defaults to 10.
+    #
+    # @return [Integer] the number of digits.
     #
     # @example With a positive number.
     #   IntegerTools.count_digits(31)
@@ -76,18 +84,18 @@ module SleepingKingStudios::Tools
     # @example With a hexadecimal number.
     #   IntegerTools.count_digits(16724838, :base => 16)
     #   #=> 6
-    #
-    # @param [Integer] integer The integer to analyze.
-    # @param [Integer] base The numeric base to represent the integer in.
-    #   Defaults to 10.
-    #
-    # @return [Integer] The number of digits.
     def count_digits(integer, base: 10)
       digits(integer.abs, base:).count
     end
 
-    # Decomposes the given integer into its digits when represented in the
-    # given base.
+    # Decomposes the given integer into its digits in the given base.
+    #
+    # @param integer [Integer] the integer to decompose.
+    # @param base [Integer] the numeric base to represent the integer in.
+    #   Defaults to 10.
+    #
+    # @return [Array<String>] the digits of the decomposed integer,
+    #   represented as a bigendian array of strings.
     #
     # @example With a number in base 10.
     #   IntegerTools.digits(15926)
@@ -100,39 +108,47 @@ module SleepingKingStudios::Tools
     # @example With a hexadecimal number.
     #   IntegerTools.digits(16724838)
     #   #=> ['f', 'f', '3', '3', '6', '6']
-    #
-    # @param [Integer] integer The integer to decompose.
-    # @param [Integer] base The numeric base to represent the integer in.
-    #   Defaults to 10.
-    #
-    # @return [Array<String>] The digits of the decomposed integer,
-    #   represented as a bigendian array of strings.
     def digits(integer, base: 10)
       integer.to_s(base).chars
     end
 
     # Returns true if the object is an Integer.
     #
-    # @param int [Object] The object to test.
+    # @param int [Object] the object to test.
     #
-    # @return [Boolean] True if the object is an Integer, otherwise false.
+    # @return [Boolean] true if the object is an Integer, otherwise false.
+    #
+    # @example
+    #   IntegerTools.integer?(nil)
+    #   #=> false
+    #   IntegerTools.integer?([])
+    #   #=> false
+    #   IntegerTools.integer?({})
+    #   #=> false
+    #   IntegerTools.integer?(1)
+    #   #=> true
     def integer?(int)
       int.is_a?(Integer)
     end
 
-    # Returns the singular or the plural value, depending on the provided
-    # item count.
+    # Returns the singular or the plural value, depending on the provided count.
     #
-    # @example
-    #   "There are four #{StringTools.pluralize 4, 'light', 'lights'}!"
-    #   #=> 'There are four lights!'
+    # If the plural form is not given, passes the singular form to
+    # StringTools#pluralize.
     #
-    # @param [Integer] count The number of items.
-    # @param [String] single The singular form of the word or phrase.
-    # @param [String] plural The plural form of the word or phrase.
+    # @param count [Integer] the number of items.
+    # @param single [String] the singular form of the word or phrase.
+    # @param plural [String] the plural form of the word or phrase.
     #
     # @return [String] The single form if count == 1; otherwise the plural
     #   form.
+    #
+    # @example
+    #   IntegerTools.pluralize 4, 'light'
+    #   #=> 'lights'
+    #
+    #   IntegerTools.pluralize 3, 'cow', 'kine'
+    #   #=> 'kine'
     def pluralize(count, single, plural = nil)
       plural ||= StringTools.pluralize(single)
 
@@ -140,6 +156,15 @@ module SleepingKingStudios::Tools
     end
 
     # Represents an integer between 1 and 4999 (inclusive) as a Roman numeral.
+    #
+    # @param integer [Integer] the integer to convert.
+    # @param additive [Boolean] if true, then uses only additive Roman numerals
+    #   (e.g. four will be converted to IIII instead of IV, and nine will be
+    #   converted to VIIII instead of IX). Defaults to false.
+    #
+    # @return [String] the representation of the integer as a Roman numeral.
+    #
+    # @raise [RangeError] if the integer is less than 1 or greater than 4999.
     #
     # @example
     #   IntegerTools.romanize(4) #=> 'IV'
@@ -149,15 +174,6 @@ module SleepingKingStudios::Tools
     #
     # @example
     #   IntegerTools.romanize(499) #=> 'CDXCIX'
-    #
-    # @param [Integer] integer The integer to convert.
-    # @param [Boolean] additive If true, then uses only additive Roman numerals
-    #   (e.g. four will be converted to IIII instead of IV, and nine will be
-    #   converted to VIIII instead of IX). Defaults to false.
-    #
-    # @return [String] The representation of the integer as a Roman numeral.
-    #
-    # @raise [RangeError] If the integer is less than 1 or greater than 4999.
     def romanize(integer, additive: false)
       check_romanize_range(integer)
 
