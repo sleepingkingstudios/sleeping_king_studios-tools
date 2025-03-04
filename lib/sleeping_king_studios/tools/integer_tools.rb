@@ -114,7 +114,7 @@ module SleepingKingStudios::Tools
 
     # Returns true if the object is an Integer.
     #
-    # @param int [Object] the object to test.
+    # @param obj [Object] the object to test.
     #
     # @return [Boolean] true if the object is an Integer, otherwise false.
     #
@@ -127,8 +127,8 @@ module SleepingKingStudios::Tools
     #   #=> false
     #   IntegerTools.integer?(1)
     #   #=> true
-    def integer?(int)
-      int.is_a?(Integer)
+    def integer?(obj)
+      obj.is_a?(Integer)
     end
 
     # Returns the singular or the plural value, depending on the provided count.

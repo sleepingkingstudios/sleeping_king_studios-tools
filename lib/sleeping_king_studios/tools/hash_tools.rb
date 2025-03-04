@@ -43,7 +43,7 @@ module SleepingKingStudios::Tools
     #   hsh
     #   #=> { :odd => { :one => 1, :three => 3 }, :even => { :two => 2, :four => 4 } }
     def convert_keys_to_strings(hsh)
-      require_hash! hsh
+      require_hash!(hsh)
 
       hsh.each.with_object({}) do |(key, value), cpy|
         sym = key.to_s
@@ -74,7 +74,7 @@ module SleepingKingStudios::Tools
     #   hsh
     #   #=> { 'odd' => { 'one' => 1, 'three' => 3 }, 'even' => { 'two' => 2, 'four' => 4 } }
     def convert_keys_to_symbols(hsh)
-      require_hash! hsh
+      require_hash!(hsh)
 
       hsh.each.with_object({}) do |(key, value), cpy|
         sym = key.to_s.intern
@@ -106,7 +106,7 @@ module SleepingKingStudios::Tools
     #   hsh
     #   #=> { :one => 'one', :two => 'two', :three => 'three' }
     def deep_dup(hsh)
-      require_hash! hsh
+      require_hash!(hsh)
 
       hsh.each.with_object({}) do |(key, value), copy|
         copy[ObjectTools.deep_dup key] = ObjectTools.deep_dup(value)
@@ -117,7 +117,7 @@ module SleepingKingStudios::Tools
     #
     # @param hsh [Hash] the hash to freeze.
     #
-    # @return [self]
+    # @return [Hash] the frozen hash.
     #
     # @raise [ArgumentError] if the first argument is not an Hash-like object.
     #
@@ -130,7 +130,7 @@ module SleepingKingStudios::Tools
     #   hsh[:one].frozen?
     #   #=> true
     def deep_freeze(hsh)
-      require_hash! hsh
+      require_hash!(hsh)
 
       hsh.freeze
 
@@ -158,7 +158,7 @@ module SleepingKingStudios::Tools
     #   binding.eval('one')
     #   #=> 'one'
     def generate_binding(hsh)
-      require_hash! hsh
+      require_hash!(hsh)
 
       CoreTools.empty_binding.tap do |binding|
         hsh.each do |key, value|
@@ -173,7 +173,7 @@ module SleepingKingStudios::Tools
     # method will define all of the the #[], #count, #each, #each_key, and
     # #each_value methods.
     #
-    # @param hsh [Object] the object to test.
+    # @param obj [Object] the object to test.
     #
     # @return [Boolean] true if the object is a Hash, otherwise false.
     #
@@ -184,11 +184,11 @@ module SleepingKingStudios::Tools
     #   #=> false
     #   HashTools.hash?({})
     #   #=> true
-    def hash?(hsh)
-      return true if hsh.is_a?(Hash)
+    def hash?(obj)
+      return true if obj.is_a?(Hash)
 
       HASH_METHODS.each do |method_name|
-        return false unless hsh.respond_to?(method_name)
+        return false unless obj.respond_to?(method_name)
       end
 
       true
@@ -219,7 +219,7 @@ module SleepingKingStudios::Tools
     #   HashTools.immutable?({ :id => 0, :title => 'The Ramayana' }.freeze)
     #   #=> true
     def immutable?(hsh)
-      require_hash! hsh
+      require_hash!(hsh)
 
       return false unless hsh.frozen?
 

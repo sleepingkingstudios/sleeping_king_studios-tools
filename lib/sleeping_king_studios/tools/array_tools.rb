@@ -31,7 +31,7 @@ module SleepingKingStudios::Tools
     # method will define all of the the #[], #count, and #each methods, and
     # neither of the #each_key or #each_pair methods.
     #
-    # @param ary [Object] the object to test.
+    # @param obj [Object] the object to test.
     #
     # @return [Boolean] true if the object is an Array, otherwise false.
     #
@@ -44,15 +44,15 @@ module SleepingKingStudios::Tools
     #
     #   ArrayTools.array?({})
     #   #=> false
-    def array?(ary)
-      return true if ary.is_a?(Array)
+    def array?(obj)
+      return true if obj.is_a?(Array)
 
       ARRAY_METHODS.each do |method_name|
-        return false unless ary.respond_to?(method_name)
+        return false unless obj.respond_to?(method_name)
       end
 
       OTHER_METHODS.each do |method_name|
-        return false if ary.respond_to?(method_name)
+        return false if obj.respond_to?(method_name)
       end
 
       true
@@ -178,7 +178,7 @@ module SleepingKingStudios::Tools
     #
     # @param ary [Array] the object to freeze.
     #
-    # @return [self] the array.
+    # @return [Array] the frozen array.
     #
     # @raise [ArgumentError] if the first argument is not an Array-like object.
     #
