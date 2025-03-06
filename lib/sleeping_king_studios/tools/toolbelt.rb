@@ -11,16 +11,26 @@ module SleepingKingStudios::Tools
       @instance ||= new
     end
 
-    # @param deprecation_strategy [String] The name of the strategy used when
+    # @param deprecation_caller_depth [Integer] the number of backtrace lines to
+    #   display when outputting a deprecation warning.
+    # @param deprecation_strategy [String] the name of the strategy used when
     #   deprecated code is called. Must be 'ignore', 'raise', or 'warn'.
-    # @param inflector [Object] An object that conforms to the interface used
-    #   by SleepingKingStudios::Tools::Toolbox::Inflector, such as
-    #   ActiveSupport::Inflector .
-    def initialize(deprecation_strategy: nil, inflector: nil)
+    # @param inflector [Object] service object for inflecting strings. The
+    #   inflector must be an object that conforms to the interface used by
+    #   by SleepingKingStudios::Tools::Toolbox::Inflector, such as an instance
+    #   of ActiveSupport::Inflector .
+    def initialize( # rubocop:disable Metrics/MethodLength
+      deprecation_caller_depth: nil,
+      deprecation_strategy:     nil,
+      inflector:                nil
+    )
       @array_tools   = ::SleepingKingStudios::Tools::ArrayTools.new
       @assertions    = ::SleepingKingStudios::Tools::Assertions.new
       @core_tools    =
-        ::SleepingKingStudios::Tools::CoreTools.new(deprecation_strategy:)
+        ::SleepingKingStudios::Tools::CoreTools.new(
+          deprecation_caller_depth:,
+          deprecation_strategy:
+        )
       @hash_tools    = ::SleepingKingStudios::Tools::HashTools.new
       @integer_tools = ::SleepingKingStudios::Tools::IntegerTools.new
       @object_tools  = ::SleepingKingStudios::Tools::ObjectTools.new
