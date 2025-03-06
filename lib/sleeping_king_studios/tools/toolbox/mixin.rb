@@ -4,6 +4,46 @@ require 'sleeping_king_studios/tools/toolbox'
 
 module SleepingKingStudios::Tools::Toolbox
   # Implements recursive inheritance of both class and instance methods.
+  #
+  # @example Defining A Mixin
+  #   module Widgets
+  #     extend SleepingKingStudios::Tools::Toolbox::Mixin
+  #
+  #     module ClassMethods
+  #       def widget_types
+  #         %w(gadget doohickey thingamabob)
+  #       end
+  #     end
+  #
+  #     def widget?(widget_type)
+  #       self.class.widget_types.include?(widget_type)
+  #     end
+  #   end
+  #
+  # @example Including A Mixin
+  #   module WidgetBuilding
+  #     extend  SleepingKingStudios::Tools::Toolbox::Mixin
+  #     include Widgets
+  #
+  #     def build_widget(widget_type)
+  #       raise ArgumentError, 'not a widget', caller unless widget?(widget_type)
+  #
+  #       Widget.new(widget_type)
+  #     end
+  #   end
+  #
+  # @example Using A Mixin
+  #   class WidgetFactory
+  #     include WidgetBuilding
+  #   end
+  #
+  #   factory = WidgetFactory.new
+  #
+  #   factory.build_widget('gadget')
+  #   #=> Widget
+  #
+  #   WidgetFactory.widget_types
+  #   #=> ['gadget', 'doohickey', 'thingamabob']
   module Mixin
     # Checks if the given module is itself a Mixin.
     #
@@ -17,10 +57,6 @@ module SleepingKingStudios::Tools::Toolbox
       othermod.singleton_class.include?(self)
     end
 
-    private
-
-    # @api public
-    #
     # Callback invoked whenever the receiver is included in another module.
     #
     # @param othermod [Module] the other class or module in which the mixin is
@@ -43,8 +79,6 @@ module SleepingKingStudios::Tools::Toolbox
       super
     end
 
-    # @api public
-    #
     # Callback invoked whenever the receiver is prepended into another module.
     #
     # @param othermod [Module] the other class or module in which the mixin is
