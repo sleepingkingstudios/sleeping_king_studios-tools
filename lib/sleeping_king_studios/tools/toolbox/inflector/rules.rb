@@ -7,14 +7,13 @@ require 'sleeping_king_studios/tools/toolbox'
 class SleepingKingStudios::Tools::Toolbox::Inflector
   # Rules for inflecting words.
   class Rules
-    # @param irregular_words [Hash<String, String>] Hash of irregular word
-    #   pairs in singular => plural order, e.g. "child" => "children".
-    # @param plural_rules [Array<Array<(Regexp, String)>>] Rules for
+    # @param irregular_words [Hash<String, String>] irregular word pairs in
+    #   singular => plural order, e.g. "child" => "children".
+    # @param plural_rules [Array<Array<(Regexp, String)>>] rules for
     #   pluralizing words.
-    # @param singular_rules [Array<Array<(Regexp, String)>>] Rules for
+    # @param singular_rules [Array<Array<(Regexp, String)>>] rules for
     #   singularizing words.
-    # @param uncountable_words [Array<String>] List of uncountable words,
-    #   e.g. "data".
+    # @param uncountable_words [Array<String>] uncountable words e.g. "data".
     def initialize(
       irregular_words:   nil,
       plural_rules:      nil,
@@ -30,29 +29,29 @@ class SleepingKingStudios::Tools::Toolbox::Inflector
       @irregular_words_reversed = reverse_hash(@irregular_words)
     end
 
-    # @return [Array<Array<(String, String)>] Hash of irregular word pairs in
+    # @return [Array<Array<(String, String)>>] irregular word pairs in
     #   singular => plural order.
     attr_reader :irregular_words
 
-    # @return [Array<Array<(String, String)>] Hash of irregular word pairs in
-    #   plural => singular order.
+    # @return [Array<Array<(String, String)>>] irregular word pairs in plural =>
+    #   singular order.
     attr_reader :irregular_words_reversed
 
-    # @return [Array<Array<(Regexp, String)>>] Rules for pluralizing words.
+    # @return [Array<Array<(Regexp, String)>>] rules for pluralizing words.
     attr_reader :plural_rules
 
-    # @return [Array<Array<(Regexp, String)>>] Rules for singularizing words.
+    # @return [Array<Array<(Regexp, String)>>] rules for singularizing words.
     attr_reader :singular_rules
 
-    # @return [Array<String>] List of uncountable words.
+    # @return [Array<String>] uncountable words.
     attr_reader :uncountable_words
 
     # Defines an irregular word pair.
     #
-    # @param singular [String] The singular form of the word.
-    # @param plural [String] The plural form of the word.
+    # @param singular [String] the singular form of the word.
+    # @param plural [String] the plural form of the word.
     #
-    # @return [Rules] The rules object.
+    # @return [self] the rules object.
     def define_irregular_word(singular, plural)
       validate_string(singular)
       validate_string(plural)
@@ -65,10 +64,10 @@ class SleepingKingStudios::Tools::Toolbox::Inflector
 
     # Defines a pluralization rule.
     #
-    # @param pattern [Regexp] The pattern to match.
-    # @param replace [String] The string to replace.
+    # @param pattern [Regexp] the pattern to match.
+    # @param replace [String] the string to replace.
     #
-    # @return [Rules] The rules object.
+    # @return [self] the rules object.
     def define_plural_rule(pattern, replace)
       validate_pattern(pattern)
       validate_string(replace, as: 'replace')
@@ -80,10 +79,10 @@ class SleepingKingStudios::Tools::Toolbox::Inflector
 
     # Defines a singularization rule.
     #
-    # @param pattern [Regexp] The pattern to match.
-    # @param replace [String] The string to replace.
+    # @param pattern [Regexp] the pattern to match.
+    # @param replace [String] the string to replace.
     #
-    # @return [Rules] The rules object.
+    # @return [self] the rules object.
     def define_singular_rule(pattern, replace)
       validate_pattern(pattern)
       validate_string(replace, as: 'replace')
@@ -95,9 +94,9 @@ class SleepingKingStudios::Tools::Toolbox::Inflector
 
     # Defines an uncountable word.
     #
-    # @param word [String] The uncountable word.
+    # @param word [String] the uncountable word.
     #
-    # @return [Rules] The rules object.
+    # @return [self] the rules object.
     def define_uncountable_word(word)
       validate_string(word)
 
@@ -106,7 +105,7 @@ class SleepingKingStudios::Tools::Toolbox::Inflector
       self
     end
 
-    # @return [String] A human-readable representation of the rules object.
+    # @return [String] a human-readable representation of the rules object.
     def inspect
       "#<SleepingKingStudios::Tools::Toolbox::Inflector::Rules:#{object_id}>"
     end
