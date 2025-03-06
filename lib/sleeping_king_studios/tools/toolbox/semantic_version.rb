@@ -3,8 +3,7 @@
 require 'sleeping_king_studios/tools/toolbox'
 
 module SleepingKingStudios::Tools::Toolbox
-  # Helper for generating semantic version strings with optional prerelease and
-  # build parameters.
+  # Helper for generating semantic version strings.
   #
   # @example
   #   module Version
@@ -15,9 +14,13 @@ module SleepingKingStudios::Tools::Toolbox
   #     PATCH = 4
   #     PRERELEASE = 'beta'
   #     BUILD = 1
-  #   end # module
+  #   end
+  #
+  #   VERSION = Version.to_version
+  #   #=> '3.1.4-beta+1'
   #
   #   VERSION = Version.to_gem_version
+  #   #=> '3.1.4.beta.1'
   #
   # @see http://semver.org
   module SemanticVersion
@@ -27,6 +30,8 @@ module SleepingKingStudios::Tools::Toolbox
     # Error class for handling missing constants in a version definition.
     class InvalidVersionError < StandardError; end
 
+    # Generates a RubyGems-compatible version string.
+    #
     # Concatenates the MAJOR, MINOR, and PATCH constant values with PRERELEASE
     # and BUILD (if available) to generate a modified semantic version string
     # compatible with Rubygems. The major, minor, patch, prerelease, and build
@@ -41,14 +46,15 @@ module SleepingKingStudios::Tools::Toolbox
     #     PATCH = 4
     #     PRERELEASE = 'beta'
     #     BUILD = 1
-    #   end # module
+    #   end
     #
     #   VERSION = Version.to_gem_version
     #   #=> '3.1.4.beta.1'
     #
-    # @return [String] The modified semantic version string.
+    # @return [String] the modified semantic version string.
     #
-    # @raise InvalidVersionError If MAJOR, MINOR, or PATCH is undefined.
+    # @raise [SleepingKingStudios::Tools::Toolbox::SemanticVersion::InvalidVersionError]
+    #   if MAJOR, MINOR, or PATCH is undefined.
     def to_gem_version
       str = "#{const_fetch :MAJOR}.#{const_fetch :MINOR}.#{const_fetch :PATCH}"
 
@@ -61,6 +67,8 @@ module SleepingKingStudios::Tools::Toolbox
       str
     end
 
+    # Generates a standard Semver version string.
+    #
     # Concatenates the MAJOR, MINOR, and PATCH constant values with PRERELEASE
     # and BUILD (if available) to generate a semantic version string. The
     # major, minor, and patch values are separated by dots (.), then the
@@ -76,14 +84,15 @@ module SleepingKingStudios::Tools::Toolbox
     #     PATCH = 4
     #     PRERELEASE = 'beta'
     #     BUILD = 1
-    #   end # module
+    #   end
     #
     #   VERSION = Version.to_version
     #   #=> '3.1.4-beta+1'
     #
-    # @return [String] The semantic version string.
+    # @return [String] the semantic version string.
     #
-    # @raise InvalidVersionError If MAJOR, MINOR, or PATCH is undefined.
+    # @raise [SleepingKingStudios::Tools::Toolbox::SemanticVersion::InvalidVersionError]
+    #   if MAJOR, MINOR, or PATCH is undefined.
     def to_version
       str = "#{const_fetch :MAJOR}.#{const_fetch :MINOR}.#{const_fetch :PATCH}"
 
