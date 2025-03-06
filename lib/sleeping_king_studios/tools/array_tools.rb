@@ -27,26 +27,54 @@ module SleepingKingStudios::Tools
 
     # Returns true if the object is or appears to be an Array.
     #
-    # @param ary [Object] The object to test.
+    # This method checks for the method signatures of the object. An Array-like
+    # method will define all of the the #[], #count, and #each methods, and
+    # neither of the #each_key or #each_pair methods.
     #
-    # @return [Boolean] True if the object is an Array, otherwise false.
-    def array?(ary)
-      return true if ary.is_a?(Array)
+    # @param obj [Object] the object to test.
+    #
+    # @return [Boolean] true if the object is an Array, otherwise false.
+    #
+    # @example
+    #   ArrayTools.array?(nil)
+    #   #=> false
+    #
+    #   ArrayTools.array?([])
+    #   #=> true
+    #
+    #   ArrayTools.array?({})
+    #   #=> false
+    def array?(obj)
+      return true if obj.is_a?(Array)
 
       ARRAY_METHODS.each do |method_name|
-        return false unless ary.respond_to?(method_name)
+        return false unless obj.respond_to?(method_name)
       end
 
       OTHER_METHODS.each do |method_name|
-        return false if ary.respond_to?(method_name)
+        return false if obj.respond_to?(method_name)
       end
 
       true
     end
 
+    # Partitions the array into matching and non-matching items.
+    #
     # Separates the array into two arrays, the first containing all items in the
     # original array that matches the provided block, and the second containing
     # all items in the original array that do not match the provided block.
+    #
+    # @param ary [Array<Object>] the array to bisect.
+    #
+    # @yieldparam item [Object] an item in the array to matched.
+    #
+    # @yieldreturn [Boolean] true if the item matches the criteria, otherwise
+    #   false.
+    #
+    # @return [Array<Array<Object>>] an array containing two arrays.
+    #
+    # @raise [ArgumentError] if the first argument is not an Array-like object,
+    #   or if no block is given.
     #
     # @example
     #   selected, rejected = ArrayTools.bisect([*0...10]) { |item| item.even? }
@@ -54,20 +82,8 @@ module SleepingKingStudios::Tools
     #   #=> [0, 2, 4, 6, 8]
     #   rejected
     #   #=> [1, 3, 5, 7, 9]
-    #
-    # @param [Array<Object>] ary The array to bisect.
-    #
-    # @yieldparam item [Object] An item in the array to matched.
-    #
-    # @yieldreturn [Boolean] True if the item matches the criteria, otherwise
-    #   false.
-    #
-    # @raise ArgumentError If the first argument is not an Array-like object or
-    #   if no block is given.
-    #
-    # @return [Array<Array<Object>>] An array containing two arrays.
     def bisect(ary)
-      require_array! ary
+      require_array!(ary)
 
       raise ArgumentError, 'no block given' unless block_given?
 
@@ -81,38 +97,41 @@ module SleepingKingStudios::Tools
       [selected, rejected]
     end
 
+    # Counts the number of times each item or result appears in the object.
+    #
     # @overload count_values(ary)
     #   Counts the number of times each value appears in the enumerable object.
+    #
+    #   @param ary [Array<Object>] the values to count.
+    #
+    #   @return [Hash{Object, Integer}] The number of times each value appears
+    #     in the enumerable object.
+    #
+    #   @raise [ArgumentError] if the first argument is not an Array-like
+    #     object.
     #
     #   @example
     #     ArrayTools.count_values([1, 1, 1, 2, 2, 3])
     #     #=> { 1 => 3, 2 => 2, 3 => 1 }
     #
-    #   @param [Array<Object>] ary The values to count.
-    #
-    #   @raise ArgumentError If the first argument is not an Array-like object.
-    #
-    #   @return [Hash{Object, Integer}] The number of times each value appears
-    #     in the enumerable object.
-    #
     # @overload count_values(ary, &block)
-    #   Calls the block with each item and counts the number of times each
-    #   result appears.
+    #   Calls the block and counts the number of times each result appears.
+    #
+    #   @param ary [Array<Object>] the values to count.
+    #
+    #   @yieldparam item [Object] an item in the array to matched.
+    #
+    #   @return [Hash{Object, Integer}] the number of times each result
+    #     appears.
+    #
+    #   @raise [ArgumentError] if the first argument is not an Array-like
+    #     object.
     #
     #   @example
     #     ArrayTools.count_values([1, 1, 1, 2, 2, 3]) { |i| i ** 2 }
     #     #=> { 1 => 3, 4 => 2, 9 => 1 }
-    #
-    #   @param [Array<Object>] ary The values to count.
-    #
-    #   @yieldparam item [Object] An item in the array to matched.
-    #
-    #   @raise ArgumentError If the first argument is not an Array-like object.
-    #
-    #   @return [Hash{Object, Integer}] The number of times each result
-    #     appears.
     def count_values(ary, &block)
-      require_array! ary
+      require_array!(ary)
 
       ary.each.with_object({}) do |item, hsh|
         value = block_given? ? block.call(item) : item
@@ -122,31 +141,84 @@ module SleepingKingStudios::Tools
     end
     alias tally count_values
 
-    # Creates a deep copy of the object by returning a new Array with deep
-    # copies of each array item.
+    # Creates a deep copy of the object.
     #
-    # @param [Array<Object>] ary The array to copy.
+    # Iterates over the array and returns a new Array with deep copies of each
+    # array item.
     #
-    # @return [Array] The copy of the array.
+    # @param ary [Array<Object>] the array to copy.
+    #
+    # @return [Array] the copy of the array.
+    #
+    # @raise [ArgumentError] if the first argument is not an Array-like object.
+    #
+    # @see ObjectTools#deep_dup.
+    #
+    # @example
+    #   ary = ['one', 'two', 'three']
+    #   cpy = ArrayTools.deep_dup ary
+    #
+    #   cpy << 'four'
+    #   #=> ['one', 'two', 'three', 'four']
+    #   ary
+    #   #=> ['one', 'two', 'three']
+    #
+    #   cpy.first.sub!(/on/, 'vu')
+    #   cpy
+    #   #=> ['vun', 'two', 'three', 'four']
+    #   ary
+    #   #=> ['one', 'two', 'three']
     def deep_dup(ary)
-      require_array! ary
+      require_array!(ary)
 
       ary.map { |obj| ObjectTools.deep_dup obj }
     end
 
     # Freezes the array and performs a deep freeze on each array item.
     #
-    # @param [Array] ary The object to freeze.
+    # @param ary [Array] the object to freeze.
+    #
+    # @return [Array] the frozen array.
+    #
+    # @raise [ArgumentError] if the first argument is not an Array-like object.
+    #
+    # @see ObjectTools#deep_freeze.
+    #
+    # @example
+    #   ary = ['one', 'two', 'three']
+    #   ArrayTools.deep_freeze ary
+    #
+    #   ary.frozen?
+    #   #=> true
+    #   ary.first.frozen?
+    #   #=> true
     def deep_freeze(ary)
-      require_array! ary
+      require_array!(ary)
 
       ary.freeze
 
       ary.each { |obj| ObjectTools.deep_freeze obj }
     end
 
+    # Generates a human-readable string representation of the list items.
+    #
     # Accepts a list of values and returns a human-readable string of the
     # values, with the format based on the number of items.
+    #
+    # @param ary [Array<String>] the list of values to format. Will be
+    #   coerced to strings using #to_s.
+    # @param options [Hash] optional configuration hash.
+    # @option options [String] :last_separator the value to use to separate
+    #   the final pair of values. Defaults to " and " (note the leading and
+    #   trailing spaces). Will be combined with the :separator for lists of
+    #   length 3 or greater.
+    # @option options [String] :separator the value to use to separate pairs
+    #   of values before the last in lists of length 3 or greater. Defaults to
+    #   ", " (note the trailing space).
+    #
+    # @return [String] the formatted string.
+    #
+    # @raise [ArgumentError] if the first argument is not an Array-like object.
     #
     # @example With Zero Items
     #   ArrayTools.humanize_list([])
@@ -170,23 +242,8 @@ module SleepingKingStudios::Tools
     #     :last_separator => ' or '
     #   )
     #   #=> 'spam, eggs, bacon, or spam'
-    #
-    # @param [Array<String>] ary The list of values to format. Will be
-    #   coerced to strings using #to_s.
-    # @param [Hash] options Optional configuration hash.
-    # @option options [String] :last_separator The value to use to separate
-    #   the final pair of values. Defaults to " and " (note the leading and
-    #   trailing spaces). Will be combined with the :separator for lists of
-    #   length 3 or greater.
-    # @option options [String] :separator The value to use to separate pairs
-    #   of values before the last in lists of length 3 or greater. Defaults to
-    #   ", " (note the trailing space).
-    #
-    # @raise ArgumentError If the first argument is not an Array-like object.
-    #
-    # @return [String] The formatted string.
     def humanize_list(ary, **options, &)
-      require_array! ary
+      require_array!(ary)
 
       return '' if ary.empty?
 
@@ -203,16 +260,38 @@ module SleepingKingStudios::Tools
       "#{ary[0...-1].join(separator)}#{last_separator}#{ary.last}"
     end
 
-    # Returns true if the array is immutable, i.e. the array is frozen and each
-    # array item is immutable.
+    # Checks if the array and its contents are immutable.
     #
-    # @param ary [Array] The array to test.
+    # An array is considered immutable if the array itself is frozen and each
+    # item in the array is immutable.
     #
-    # @return [Boolean] True if the array is immutable, otherwise false.
+    # @param ary [Array] the array to test.
+    #
+    # @return [Boolean] true if the array is immutable, otherwise false.
+    #
+    # @raise [ArgumentError] if the first argument is not an Array-like object.
+    #
+    # @see ArrayTools#mutable?
     #
     # @see ObjectTools#immutable?
+    #
+    # @example
+    #   ArrayTools.immutable?([1, 2, 3])
+    #   #=> false
+    #
+    #   ArrayTools.immutable?([1, 2, 3].freeze)
+    #   #=> true
+    #
+    #   ArrayTools.immutable?([+'ichi', +'ni', +'san'])
+    #   #=> false
+    #
+    #   ArrayTools.immutable?([+'ichi', +'ni', +'san'].freeze)
+    #   #=> false
+    #
+    #   ArrayTools.immutable?(['ichi', 'ni', 'san'].freeze)
+    #   #=> true
     def immutable?(ary)
-      require_array! ary
+      require_array!(ary)
 
       return false unless ary.frozen?
 
@@ -221,21 +300,32 @@ module SleepingKingStudios::Tools
       true
     end
 
-    # Returns true if the array is mutable.
+    # Checks if the array or any of its contents are mutable.
     #
-    # @param ary [Array] The array to test.
+    # @param ary [Array] the array to test.
     #
-    # @return [Boolean] True if the array is mutable, otherwise false.
+    # @return [Boolean] true if the array or any of its items are mutable,
+    #   otherwise false.
+    #
+    # @raise [ArgumentError] if the first argument is not an Array-like object.
     #
     # @see #immutable?
     def mutable?(ary)
       !immutable?(ary)
     end
 
-    # Accepts an array, a start value, a number of items to delete, and zero or
-    # more items to insert at that index. Deletes the specified number of items,
-    # then inserts the given items at the index and returns the array of deleted
-    # items.
+    # Replaces a range of items in the array with the given items.
+    #
+    # @param ary [Array<Object>] the array to splice.
+    # @param start [Integer] the starting index to delete or insert values from
+    #   or into. If negative, counts backward from the end of the array.
+    # @param delete_count [Integer] the number of items to delete.
+    # @param insert [Array<Object>] the items to insert, if any.
+    #
+    # @return [Array<Object>] the deleted items, or an empty array if no items
+    #   were deleted.
+    #
+    # @raise [ArgumentError] if the first argument is not an Array-like object.
     #
     # @example Deleting items from an Array
     #   values = %w(katana wakizashi tachi daito shoto)
@@ -257,19 +347,8 @@ module SleepingKingStudios::Tools
     #   #=> ['crossbow']
     #   values
     #   #=> ['shortbow', 'longbow', 'arbalest', 'chu-ko-nu']
-    #
-    # @param [Array<Object>] ary The array to splice.
-    # @param [Integer] start The starting index to delete or insert values from
-    #   or into. If negative, counts backward from the end of the array.
-    # @param [Integer] delete_count The number of items to delete.
-    # @param [Array<Object>] insert The items to insert, if any.
-    #
-    # @raise ArgumentError If the first argument is not an Array-like object.
-    #
-    # @return [Array<Object>] The deleted items, or an empty array if no items
-    #   were deleted.
     def splice(ary, start, delete_count, *insert)
-      require_array! ary
+      require_array!(ary)
 
       start  += ary.count if start.negative?
       range   = start...(start + delete_count)

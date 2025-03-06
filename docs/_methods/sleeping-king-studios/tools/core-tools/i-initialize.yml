@@ -1,0 +1,27 @@
+---
+name: SleepingKingStudios::Tools::CoreTools#initialize
+parent_path: sleeping-king-studios/tools/core-tools
+signature: 'initialize(deprecation_caller_depth: nil, deprecation_strategy: nil)'
+slug: initialize
+constructor: true
+data_path: sleeping-king-studios/tools/core-tools/i-initialize
+params:
+- description: |-
+    the number of backtrace lines to
+    display when outputting a deprecation warning.
+  name: deprecation_caller_depth
+  type:
+  - name: Integer
+  default: nil
+- description: |-
+    the name of the strategy used when
+    deprecated code is called. Must be 'ignore', 'raise', or 'warn'.
+  name: deprecation_strategy
+  type:
+  - name: String
+  default: nil
+returns:
+- description: a new instance of CoreTools
+  type:
+  - name: CoreTools
+version: "*"

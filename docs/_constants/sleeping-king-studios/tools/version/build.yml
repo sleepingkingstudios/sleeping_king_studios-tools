@@ -1,0 +1,8 @@
+---
+name: SleepingKingStudios::Tools::Version::BUILD
+parent_path: sleeping-king-studios/tools/version
+slug: build
+short_description: Build metadata.
+value: nil
+data_path: sleeping-king-studios/tools/version/build
+version: "*"

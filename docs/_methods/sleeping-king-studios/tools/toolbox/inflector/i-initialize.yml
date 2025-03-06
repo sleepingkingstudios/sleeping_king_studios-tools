@@ -1,0 +1,20 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Inflector#initialize
+parent_path: sleeping-king-studios/tools/toolbox/inflector
+signature: 'initialize(rules: nil)'
+slug: initialize
+constructor: true
+data_path: sleeping-king-studios/tools/toolbox/inflector/i-initialize
+params:
+- description: |-
+    an
+    object defining the transformation rules.
+  name: rules
+  type:
+  - name: SleepingKingStudios::Tools::Toobox::Inflector::Rules
+  default: nil
+returns:
+- description: a new instance of Inflector
+  type:
+  - name: Inflector
+version: "*"

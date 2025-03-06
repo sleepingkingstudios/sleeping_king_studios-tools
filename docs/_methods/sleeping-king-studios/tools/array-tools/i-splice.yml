@@ -1,0 +1,67 @@
+---
+name: SleepingKingStudios::Tools::ArrayTools#splice
+parent_path: sleeping-king-studios/tools/array-tools
+signature: splice(ary, start, delete_count, *insert)
+slug: splice
+constructor: false
+data_path: sleeping-king-studios/tools/array-tools/i-splice
+metadata:
+  examples:
+  - name: Deleting items from an Array
+    text: |-
+      values = %w(katana wakizashi tachi daito shoto)
+      ArrayTools.splice values, 1, 2
+      #=> ['wakizashi', 'tachi']
+      values
+      #=> ['katana', 'daito', 'shoto']
+  - name: Inserting items into an Array
+    text: |-
+      values = %w(longsword broadsword claymore)
+      ArrayTools.splice values, 1, 0, 'zweihander'
+      #=> []
+      values
+      #=> ['longsword', 'zweihander', 'broadsword', 'claymore']
+  - name: Inserting and deleting items
+    text: |-
+      values = %w(shortbow longbow crossbow)
+      ArrayTools.splice values, 2, 1, 'arbalest', 'chu-ko-nu'
+      #=> ['crossbow']
+      values
+      #=> ['shortbow', 'longbow', 'arbalest', 'chu-ko-nu']
+params:
+- description: the array to splice.
+  name: ary
+  type:
+  - name: Array
+    items:
+    - name: Object
+- description: |-
+    the starting index to delete or insert values from
+    or into. If negative, counts backward from the end of the array.
+  name: start
+  type:
+  - name: Integer
+- description: the number of items to delete.
+  name: delete_count
+  type:
+  - name: Integer
+- description: the items to insert, if any.
+  name: insert
+  type:
+  - name: Array
+    items:
+    - name: Object
+raises:
+- description: if the first argument is not an Array-like object.
+  type:
+  - name: ArgumentError
+returns:
+- description: |-
+    the deleted items, or an empty array if no items
+    were deleted.
+  type:
+  - name: Array
+    items:
+    - name: Object
+short_description: Replaces a range of items in the array with the given items.
+version: "*"

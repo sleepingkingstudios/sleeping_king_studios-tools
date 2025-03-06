@@ -1,0 +1,42 @@
+---
+name: SleepingKingStudios::Tools::IntegerTools#pluralize
+parent_path: sleeping-king-studios/tools/integer-tools
+signature: pluralize(count, single, plural = nil)
+slug: pluralize
+constructor: false
+data_path: sleeping-king-studios/tools/integer-tools/i-pluralize
+description: |-
+  If the plural form is not given, passes the singular form to
+  StringTools#pluralize.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      IntegerTools.pluralize 4, 'light'
+      #=> 'lights'
+
+      IntegerTools.pluralize 3, 'cow', 'kine'
+      #=> 'kine'
+params:
+- description: the number of items.
+  name: count
+  type:
+  - name: Integer
+- description: the singular form of the word or phrase.
+  name: single
+  type:
+  - name: String
+- description: the plural form of the word or phrase.
+  name: plural
+  type:
+  - name: String
+  default: nil
+returns:
+- description: |-
+    The single form if count == 1; otherwise the plural
+    form.
+  type:
+  - name: String
+short_description: Returns the singular or the plural value, depending on the provided
+  count.
+version: "*"

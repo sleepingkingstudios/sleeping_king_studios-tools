@@ -1,0 +1,39 @@
+---
+name: SleepingKingStudios::Tools::ObjectTools#object?
+parent_path: sleeping-king-studios/tools/object-tools
+signature: object?(obj)
+slug: object?
+constructor: false
+data_path: sleeping-king-studios/tools/object-tools/i-object?
+description: |-
+  This should return false only for objects that have an alternate
+  inheritance chain from BasicObject, such as a Proxy.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      ObjectTools.object?(nil)
+      #=> true
+
+      ObjectTools.object?([])
+      #=> true
+
+      ObjectTools.object?({})
+      #=> true
+
+      ObjectTools.object?(1)
+      #=> true
+
+      ObjectTools.object?(BasicObject.new)
+      #=> false
+params:
+- description: the object to test.
+  name: obj
+  type:
+  - name: Object
+returns:
+- description: true if the object is an Object, otherwise false.
+  type:
+  - name: Boolean
+short_description: Returns true if the object is an Object.
+version: "*"

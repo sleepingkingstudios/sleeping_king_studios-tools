@@ -1,0 +1,41 @@
+---
+name: SleepingKingStudios::Tools::StringTools#indent
+parent_path: sleeping-king-studios/tools/string-tools
+signature: indent(str, count = 2)
+slug: indent
+constructor: false
+data_path: sleeping-king-studios/tools/string-tools/i-indent
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      string = 'The Hobbit'
+      StringTools.indent(string)
+      #=> '  The Hobbit'
+
+      titles = [
+        "The Fellowship of the Ring",
+        "The Two Towers",
+        "The Return of the King"
+      ]
+      string = titles.join "\n"
+      StringTools.indent(string, 4)
+      #=> "    The Fellowship of the Ring\n"\
+          "    The Two Towers\n"\
+          "    The Return of the King"
+params:
+- description: the string to indent.
+  name: str
+  type:
+  - name: String
+- description: the number of spaces to add. Defaults to 2.
+  name: count
+  type:
+  - name: Integer
+  default: '2'
+returns:
+- description: the indented string.
+  type:
+  - name: String
+short_description: Adds the specified number of spaces to the start of each line.
+version: "*"

@@ -1,0 +1,68 @@
+---
+name: SleepingKingStudios::Tools::ObjectTools#immutable?
+parent_path: sleeping-king-studios/tools/object-tools
+signature: immutable?(obj)
+slug: immutable?
+constructor: false
+data_path: sleeping-king-studios/tools/object-tools/i-immutable?
+description: |-
+  - nil, false, and true are always immutable, as are instances of Numeric
+    and Symbol.
+  - Strings are immutable if frozen, such as strings defined in a file with
+    a frozen_string_literal pragma.
+  - Arrays are immutable if the array is frozen and each array item is
+    immutable.
+  - Hashes are immutable if the hash is frozen and each hash key and hash
+    value are immutable.
+  - Otherwise, objects are immutable if they are frozen.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      ObjectTools.immutable?(nil)
+      #=> true
+
+      ObjectTools.immutable?(false)
+      #=> true
+
+      ObjectTools.immutable?(0)
+      #=> true
+
+      ObjectTools.immutable?(:hello)
+      #=> true
+
+      ObjectTools.immutable?('Greetings, programs!')
+      #=> true
+
+      ObjectTools.immutable?(+'Greetings, programs!')
+      #=> false
+
+      ObjectTools.immutable?([1, 2, 3])
+      #=> false
+
+      ObjectTools.immutable?([1, 2, 3].freeze)
+      #=> false
+  see:
+  - label: "#mutable?"
+    path: sleeping-king-studios/tools/object-tools#instance-method-mutable?
+    text:
+    type: reference
+  - label: ArrayTools#immutable?
+    path:
+    text:
+    type: reference
+  - label: HashTools#immutable?
+    path:
+    text:
+    type: reference
+params:
+- description: the object to test.
+  name: obj
+  type:
+  - name: Object
+returns:
+- description: true if the object is immutable, otherwise false.
+  type:
+  - name: Boolean
+short_description: Checks if the object is immutable.
+version: "*"

@@ -22,13 +22,28 @@ module SleepingKingStudios::Tools
         :symbolize_keys
     end
 
-    # Returns a copy of the hash with the keys converted to strings.
+    # Returns a deep copy of the hash with the keys converted to strings.
     #
-    # @param [Hash] hsh The hash to convert.
+    # @param hsh [Hash] the hash to convert.
     #
-    # @return [Hash] The converted copy of the hash.
+    # @return [Hash] the converted copy of the hash.
+    #
+    # @raise [ArgumentError] if the first argument is not an Hash-like object.
+    #
+    # @example
+    #   hsh = { :one => 1, :two => 2, :three => 3 }
+    #   cpy = HashTools.convert_keys_to_strings(hsh)
+    #   #=> { 'one' => 1, 'two' => 2, 'three' => 3 }
+    #   hsh
+    #   #=> { :one => 1, :two => 2, :three => 3 }
+    #
+    #   hsh = { :odd => { :one => 1, :three => 3 }, :even => { :two => 2, :four => 4 } }
+    #   cpy = HashTools.convert_keys_to_strings(hsh)
+    #   #=> { 'odd' => { 'one' => 1, 'three' => 3 }, 'even' => { 'two' => 2, 'four' => 4 } }
+    #   hsh
+    #   #=> { :odd => { :one => 1, :three => 3 }, :even => { :two => 2, :four => 4 } }
     def convert_keys_to_strings(hsh)
-      require_hash! hsh
+      require_hash!(hsh)
 
       hsh.each.with_object({}) do |(key, value), cpy|
         sym = key.to_s
@@ -38,13 +53,28 @@ module SleepingKingStudios::Tools
     end
     alias stringify_keys convert_keys_to_strings
 
-    # Returns a copy of the hash with the keys converted to symbols.
+    # Returns a deep copy of the hash with the keys converted to symbols.
     #
-    # @param [Hash] hsh The hash to convert.
+    # @param hsh [Hash] the hash to convert.
     #
-    # @return [Hash] The converted copy of the hash.
+    # @return [Hash] the converted copy of the hash.
+    #
+    # @raise [ArgumentError] if the first argument is not an Hash-like object.
+    #
+    # @example
+    #   hsh = { 'one' => 1, 'two' => 2, 'three' => 3 }
+    #   cpy = HashTools.convert_keys_to_symbols(hsh)
+    #   #=> { :one => 1, :two => 2, :three => 3 }
+    #   hsh
+    #   #=> { 'one' => 1, 'two' => 2, 'three' => 3 }
+    #
+    #   hsh = { 'odd' => { 'one' => 1, 'three' => 3 }, 'even' => { 'two' => 2, 'four' => 4 } }
+    #   cpy = HashTools.convert_keys_to_strings(hsh)
+    #   #=> { :odd => { :one => 1, :three => 3 }, :even => { :two => 2, :four => 4 } }
+    #   hsh
+    #   #=> { 'odd' => { 'one' => 1, 'three' => 3 }, 'even' => { 'two' => 2, 'four' => 4 } }
     def convert_keys_to_symbols(hsh)
-      require_hash! hsh
+      require_hash!(hsh)
 
       hsh.each.with_object({}) do |(key, value), cpy|
         sym = key.to_s.intern
@@ -54,26 +84,53 @@ module SleepingKingStudios::Tools
     end
     alias symbolize_keys convert_keys_to_symbols
 
-    # Creates a deep copy of the object by returning a new Hash with deep
-    # copies of each key and value.
+    # Creates a deep copy of the Hash.
     #
-    # @param [Hash<Object>] hsh The hash to copy.
+    # @param hsh [Hash<Object>] the hash to copy.
     #
-    # @return [Hash] The copy of the hash.
+    # @return [Hash] the copy of the hash.
+    #
+    # @raise [ArgumentError] if the first argument is not an Hash-like object.
+    #
+    # @example
+    #   hsh = { :one => 'one', :two => 'two', :three => 'three' }
+    #   cpy = HashTools.deep_dup hsh
+    #
+    #   cpy.update :four => 'four'
+    #   #=> { :one => 'one', :two => 'two', :three => 'three', :four => 'four' }
+    #   hsh
+    #   #=> { :one => 'one', :two => 'two', :three => 'three' }
+    #
+    #   cpy[:one].sub!(/on/, 'vu'); cpy
+    #   #=> { :one => 'vun', :two => 'two', :three => 'three', :four => 'four' }
+    #   hsh
+    #   #=> { :one => 'one', :two => 'two', :three => 'three' }
     def deep_dup(hsh)
-      require_hash! hsh
+      require_hash!(hsh)
 
       hsh.each.with_object({}) do |(key, value), copy|
         copy[ObjectTools.deep_dup key] = ObjectTools.deep_dup(value)
       end
     end
 
-    # Freezes the hash and performs a deep freeze on each hash key and
-    # value.
+    # Freezes the hash and performs a deep freeze on each hash key and value.
     #
-    # @param [Hash] hsh The object to freeze.
+    # @param hsh [Hash] the hash to freeze.
+    #
+    # @return [Hash] the frozen hash.
+    #
+    # @raise [ArgumentError] if the first argument is not an Hash-like object.
+    #
+    # @example
+    #   hsh = { :one => 'one', :two => 'two', :three => 'three' }
+    #   HashTools.deep_freeze hsh
+    #
+    #   hsh.frozen?
+    #   #=> true
+    #   hsh[:one].frozen?
+    #   #=> true
     def deep_freeze(hsh)
-      require_hash! hsh
+      require_hash!(hsh)
 
       hsh.freeze
 
@@ -83,12 +140,25 @@ module SleepingKingStudios::Tools
       end
     end
 
-    # Generates a Binding object with an Object as the receiver and the hash
-    # key-value pairs set as local variables.
+    # Generates a Binding with the hash values as local variables.
     #
-    # @return [Binding] The binding object.
+    # @return [Binding] the binding object.
+    #
+    # @raise [ArgumentError] if the first argument is not an Hash-like object.
+    #
+    # @example
+    #   hsh     = { :one => 'one', :two => 'two', :three => 'three' }
+    #   binding = HashTools.generate_binding(hsh)
+    #   #=> Binding
+    #
+    #   binding.local_variable_defined?(:one)
+    #   #=> true
+    #   binding.local_variable_get(:one)
+    #   #=> 'one'
+    #   binding.eval('one')
+    #   #=> 'one'
     def generate_binding(hsh)
-      require_hash! hsh
+      require_hash!(hsh)
 
       CoreTools.empty_binding.tap do |binding|
         hsh.each do |key, value|
@@ -99,27 +169,57 @@ module SleepingKingStudios::Tools
 
     # Returns true if the object is or appears to be a Hash.
     #
-    # @param hsh [Object] The object to test.
+    # This method checks for the method signatures of the object. A Hash-like
+    # method will define all of the the #[], #count, #each, #each_key, and
+    # #each_value methods.
     #
-    # @return [Boolean] True if the object is a Hash, otherwise false.
-    def hash?(hsh)
-      return true if hsh.is_a?(Hash)
+    # @param obj [Object] the object to test.
+    #
+    # @return [Boolean] true if the object is a Hash, otherwise false.
+    #
+    # @example
+    #   HashTools.hash?(nil)
+    #   #=> false
+    #   HashTools.hash?([])
+    #   #=> false
+    #   HashTools.hash?({})
+    #   #=> true
+    def hash?(obj)
+      return true if obj.is_a?(Hash)
 
       HASH_METHODS.each do |method_name|
-        return false unless hsh.respond_to?(method_name)
+        return false unless obj.respond_to?(method_name)
       end
 
       true
     end
 
-    # Returns true if the hash is immutable, i.e. if the hash is frozen and each
-    # hash key and hash value are immutable.
+    # Returns true if the hash is immutable.
     #
-    # @param hsh [Hash] The hash to test.
+    # A hash is considered immutable if the hash itself is frozen and each
+    # key and value in the hash is immutable.
     #
-    # @return [Boolean] True if the hash is immutable, otherwise false.
+    # @param hsh [Hash] the hash to test.
+    #
+    # @return [Boolean] true if the hash is immutable, otherwise false.
+    #
+    # @raise [ArgumentError] if the first argument is not an Hash-like object.
+    #
+    # @see HashTools#mutable?
+    #
+    # @see ObjectTools#immutable?
+    #
+    # @example
+    #   HashTools.immutable?({ :id => 0, :title => 'The Ramayana' })
+    #   #=> false
+    #
+    #   HashTools.immutable?({ :id => 0, :title => +'The Ramayana' }.freeze)
+    #   #=> false
+    #
+    #   HashTools.immutable?({ :id => 0, :title => 'The Ramayana' }.freeze)
+    #   #=> true
     def immutable?(hsh)
-      require_hash! hsh
+      require_hash!(hsh)
 
       return false unless hsh.frozen?
 
@@ -132,13 +232,15 @@ module SleepingKingStudios::Tools
       true
     end
 
-    # Returns true if the hash is mutable.
+    # Returns true if the hash or any of its contents are mutable.
     #
-    # @param hsh [Array] The hash to test.
+    # @param hsh [Hash] the hash to test.
     #
-    # @return [Boolean] True if the hash is mutable, otherwise false.
+    # @return [Boolean] true if the hash is mutable, otherwise false.
     #
-    # @see #immutable?
+    # @raise [ArgumentError] if the first argument is not an Hash-like object.
+    #
+    # @see HashTools#immutable?
     def mutable?(hsh)
       !immutable?(hsh)
     end

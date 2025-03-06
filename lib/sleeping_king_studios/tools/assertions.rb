@@ -44,6 +44,19 @@ module SleepingKingStudios::Tools
     # rubocop:enable Layout/HashAlignment
 
     # Utility for grouping multiple assertion statements.
+    #
+    # @example
+    #   rocket = Struct.new(:fuel, :launched).new(0.0, true)
+    #   aggregator = SleepingKingStudios::Tools::Assertions::Aggregator.new
+    #   aggregator.empty?
+    #   #=> true
+    #
+    #   aggregator.assert(message: 'is out of fuel') { rocket.fuel > 0 }
+    #   aggregator.assert(message: 'has already launched') { !rocket.launched }
+    #   aggregator.empty?
+    #   #=> false
+    #   aggregator.failure_message
+    #   #=> 'is out of fuel, has already launched'
     class Aggregator < Assertions
       extend Forwardable
 
@@ -53,6 +66,60 @@ module SleepingKingStudios::Tools
         @failures = []
       end
 
+      # @!method <<(message)
+      #   Appends the message to the failure messages.
+      #
+      #   @param message [String] the message to append.
+      #
+      #   @return [Array] the updated failure messages.
+      #
+      #   @see Array#<<.
+
+      # @!method clear
+      #   Removes all items from the failure messages.
+      #
+      #   @return [Array] the empty failure messages.
+      #
+      #   @see Array#clear.
+
+      # @!method count
+      #   Returns a count of the failure message.
+      #
+      #   @return [Integer] the number of failure messages.
+      #
+      #   @see Array#count.
+
+      # @!method each
+      #   Iterates over the failure messages.
+      #
+      #   @overload each
+      #     Returns an enumerator that iterates over the failure messages.
+      #
+      #     @return [Enumerator] an enumerator over the messages.
+      #
+      #     @see Enumerable#each.
+      #
+      #   @overload each(&block)
+      #     Yields each failure message to the block.
+      #
+      #     @yieldparam message [String] the current failure message.
+      #
+      #     @see Enumerable#each.
+
+      # @!method empty?
+      #   Checks if there are any failure messages.
+      #
+      #   @return [true, false] true if there are no failure messages; otherwise
+      #     false.
+      #
+      #   @see Enumerable#empty?
+
+      # @!method size
+      #   Returns a count of the failure message.
+      #
+      #   @return [Integer] the number of failure messages.
+      #
+      #   @see Array#size.
       def_delegators :@failures,
         :<<,
         :clear,
@@ -71,7 +138,23 @@ module SleepingKingStudios::Tools
       end
       alias aggregate assert_group
 
+      # Generates a combined failure message from the configured messages.
+      #
       # @return [String] the combined messages for each failed assertion.
+      #
+      # @example With an empty aggregator.
+      #   aggregator = SleepingKingStudios::Tools::Assertions::Aggregator.new
+      #
+      #   aggregator.failure_message
+      #   #=> ''
+      #
+      # @example With an aggregator with failure messages.
+      #   aggregator = SleepingKingStudios::Tools::Assertions::Aggregator.new
+      #   aggrgator << 'rocket is out of fuel'
+      #   aggrgator << 'rocket is not pointed toward space'
+      #
+      #   aggregator.failure_message
+      #   #=> 'rocket is out of fuel, rocket is not pointed toward space'
       def failure_message
         failures.join(', ')
       end
@@ -100,10 +183,19 @@ module SleepingKingStudios::Tools
     # @param error_class [Class] the exception class to raise on a failure.
     # @param message [String] the exception message to raise on a failure.
     #
-    # @yield The block to evaluate.
+    # @yield the block to evaluate.
     # @yieldreturn [Object] the returned value of the block.
     #
-    # @raise AssertionError if the block does not return a truthy value.
+    # @return [void]
+    #
+    # @raise [AssertionError] if the block does not return a truthy value.
+    #
+    # @example
+    #   Assertions.assert { true == false }
+    #   #=> raises an AssertionError with message 'block returned a falsy value'
+    #
+    #   Assertions.assert { true == true }
+    #   #=> does not raise an exception
     def assert(error_class: AssertionError, message: nil, &block)
       return if block.call
 
@@ -122,8 +214,23 @@ module SleepingKingStudios::Tools
     # @param error_class [Class] the exception class to raise on a failure.
     # @param message [String] the exception message to raise on a failure.
     #
-    # @raise AssertionError if the value is not nil and either does not respond
+    # @return [void]
+    #
+    # @raise [AssertionError] if the value is not nil and either does not respond
     #   to #empty? or value.empty returns false.
+    #
+    # @example
+    #   Assertions.assert_blank(nil)
+    #   #=> does not raise an exception
+    #
+    #   Assertions.assert_blank(Object.new)
+    #   #=> raises an AssertionError with message 'value must be nil or empty'
+    #
+    #   Assertions.assert_blank([])
+    #   #=> does not raise an exception
+    #
+    #   Assertions.assert_blank([1, 2, 3])
+    #   #=> raises an AssertionError with message 'value must be nil or empty'
     def assert_blank(
       value,
       as:          'value',
@@ -149,7 +256,22 @@ module SleepingKingStudios::Tools
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
     #
-    # @raise AssertionError if the value is not true or false.
+    # @return [void]
+    #
+    # @raise [AssertionError] if the value is not true or false.
+    #
+    # @example
+    #   Assertions.assert_boolean(nil)
+    #   #=> raises an AssertionError with message 'value must be true or false'
+    #
+    #   Assertions.assert_boolean(Object.new)
+    #   #=> raises an AssertionError with message 'value must be true or false'
+    #
+    #   Assertions.assert_boolean(false)
+    #   #=> does not raise an exception
+    #
+    #   Assertions.assert_boolean(true)
+    #   #=> does not raise an exception
     def assert_boolean(
       value,
       as:          'value',
@@ -177,7 +299,16 @@ module SleepingKingStudios::Tools
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
     #
-    # @raise AssertionError if the value is not a Class.
+    # @return [void]
+    #
+    # @raise [AssertionError] if the value is not a Class.
+    #
+    # @example
+    #   Assertions.assert_class(Object.new)
+    #   #=> raises an AssertionError with message 'value is not a class'
+    #
+    #   Assertions.assert_class(String)
+    #   #=> does not raise an exception
     def assert_class(
       value,
       as:          'value',
@@ -203,9 +334,18 @@ module SleepingKingStudios::Tools
     # @param message [String] the exception message to raise on a failure.
     #
     # @yield the assertions to evaluate.
-    # @yieldparam [Aggregator] the aggregator object.
+    # @yieldparam aggregator [Aggregator] the aggregator object.
     #
-    # @raise AssertionError if any of the assertions fail.
+    # @return [void]
+    #
+    # @raise [AssertionError] if any of the assertions fail.
+    #
+    # @example
+    #   Assertions.assert_group do |group|
+    #     group.assert_name(nil, as: 'label')
+    #     group.assert_instance_of(0.0, expected: Integer, as: 'quantity')
+    #   end
+    #   # raises an AssertionError with message: "label can't be blank, quantity is not an instance of Integer"
     def assert_group(error_class: AssertionError, message: nil, &assertions)
       raise ArgumentError, 'no block given' unless block_given?
 
@@ -230,9 +370,18 @@ module SleepingKingStudios::Tools
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
     #
-    # @raise ArgumentError if the expected class is not a Class.
-    # @raise AssertionError if the value is not an instance of the expected
+    # @return [void]
+    #
+    # @raise [ArgumentError] if the expected class is not a Class.
+    # @raise [AssertionError] if the value is not an instance of the expected
     #   class.
+    #
+    # @example
+    #   Assertions.assert_instance_of(:foo, expected: String)
+    #   #=> raises an AssertionError with message 'value is not an instance of String'
+    #
+    #   Assertions.assert_instance_of('foo', expected: String)
+    #   #=> does not raise an exception
     def assert_instance_of( # rubocop:disable Metrics/ParameterLists
       value,
       expected:,
@@ -262,7 +411,16 @@ module SleepingKingStudios::Tools
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
     #
-    # @raise AssertionError if the value does not match the expected object.
+    # @return [void]
+    #
+    # @raise [AssertionError] if the value does not match the expected object.
+    #
+    # @example
+    #   Assertions.assert_matches('bar', expected: /foo/)
+    #   #=> raises an AssertionError with message 'value does not match the pattern /foo/'
+    #
+    #   Assertions.assert_matches('foo', expected: /foo/)
+    #   #=> does not raise an exception
     def assert_matches( # rubocop:disable Metrics/ParameterLists
       value,
       expected:,
@@ -287,8 +445,26 @@ module SleepingKingStudios::Tools
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
     #
-    # @raise AssertionError if the value is not a String or a Symbol, or if the
-    #   value is empty.
+    # @return [void]
+    #
+    # @raise [AssertionError] if the value is not a String or a Symbol, or if
+    #   the value is empty.
+    #
+    # @example
+    #   Assertions.assert_name(nil)
+    #   #=> raises an AssertionError with message "value can't be blank"
+    #
+    #   Assertions.assert_name(Object.new)
+    #   #=> raises an AssertionError with message 'value is not a String or a Symbol'
+    #
+    #   Assertions.assert_name('')
+    #   #=> raises an AssertionError with message "value can't be blank"
+    #
+    #   Assertions.assert_name('foo')
+    #   #=> does not raise an exception
+    #
+    #   Assertions.assert_name(:bar)
+    #   #=> does not raise an exception
     def assert_name( # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
       value,
       as:          'value',
@@ -333,7 +509,16 @@ module SleepingKingStudios::Tools
     # @param error_class [Class] the exception class to raise on a failure.
     # @param message [String] the exception message to raise on a failure.
     #
-    # @raise AssertionError if the value is not nil.
+    # @return [void]
+    #
+    # @raise [AssertionError] if the value is not nil.
+    #
+    # @example
+    #   Assertions.assert_nil(nil)
+    #   #=> does not raise an exception
+    #
+    #   Assertions.assert_nil(Object.new)
+    #   #=> raises an AssertionError with message 'value must be nil'
     def assert_nil(
       value,
       as:          'value',
@@ -357,7 +542,16 @@ module SleepingKingStudios::Tools
     # @param error_class [Class] the exception class to raise on a failure.
     # @param message [String] the exception message to raise on a failure.
     #
-    # @raise AssertionError if the value is nil.
+    # @return [void]
+    #
+    # @raise [AssertionError] if the value is nil.
+    #
+    # @example
+    #   Assertions.assert_not_nil(nil)
+    #   #=> raises an AssertionError with message 'value must not be nil'
+    #
+    #   Assertions.assert_not_nil(Object.new)
+    #   #=> does not raise an exception
     def assert_not_nil(
       value,
       as:          'value',
@@ -382,8 +576,23 @@ module SleepingKingStudios::Tools
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
     #
-    # @raise AssertionError if the value is nil, or if the value responds to
+    # @return [void]
+    #
+    # @raise [AssertionError] if the value is nil, or if the value responds to
     #   #empty? and value.empty is true.
+    #
+    # @example
+    #   Assertions.assert_presence(nil)
+    #   #=> raises an AssertionError with message "can't be blank"
+    #
+    #   Assertions.assert_presence(Object.new)
+    #   #=> does not raise an exception
+    #
+    #   Assertions.assert_presence([])
+    #   #=> raises an AssertionError with message "can't be blank"
+    #
+    #   Assertions.assert_presence([1, 2, 3])
+    #   #=> does not raise an exception
     def assert_presence( # rubocop:disable Metrics/MethodLength
       value,
       as:          'value',
@@ -422,6 +631,16 @@ module SleepingKingStudios::Tools
     # @option options expected [Object] the expected object, if any.
     #
     # @return [String] the generated error message.
+    #
+    # @example
+    #   scope = 'sleeping_king_studios.tools.assertions.blank'
+    #
+    #   assertions.error_message_for(scope)
+    #   #=> 'value must be nil or empty'
+    #   assertions.error_message_for(scope, as: false)
+    #   #=> 'must be nil or empty'
+    #   assertions.error_message_for(scope, as: 'item')
+    #   #=> 'item must be nil or empty'
     def error_message_for(scope, as: 'value', **options)
       message =
         ERROR_MESSAGES
@@ -438,7 +657,16 @@ module SleepingKingStudios::Tools
     # @yield The block to evaluate.
     # @yieldreturn [Object] the returned value of the block.
     #
-    # @raise ArgumentError if the block does not return a truthy value.
+    # @return [void]
+    #
+    # @raise [ArgumentError] if the block does not return a truthy value.
+    #
+    # @example
+    #   Assertions.validate { true == false }
+    #   #=> raises an ArgumentError with message 'block returned a falsy value'
+    #
+    #   Assertions.validate { true == true }
+    #   #=> does not raise an exception
     def validate(message: nil, &block)
       assert(
         error_class: ArgumentError,
@@ -453,8 +681,23 @@ module SleepingKingStudios::Tools
     # @param as [String] the name of the asserted value.
     # @param message [String] the exception message to raise on a failure.
     #
-    # @raise ArgumentError if the value is not nil and either does not respond
+    # @return [void]
+    #
+    # @raise [ArgumentError] if the value is not nil and either does not respond
     #   to #empty? or value.empty returns false.
+    #
+    # @example
+    #   Assertions.validate_blank(nil)
+    #   #=> does not raise an exception
+    #
+    #   Assertions.validate_blank(Object.new)
+    #   #=> raises an ArgumentError with message 'value must be nil or empty'
+    #
+    #   Assertions.validate_blank([])
+    #   #=> does not raise an exception
+    #
+    #   Assertions.validate_blank([1, 2, 3])
+    #   #=> raises an ArgumentError with message 'value must be nil or empty'
     def validate_blank(value, as: 'value', message: nil)
       assert_blank(
         value,
@@ -471,7 +714,22 @@ module SleepingKingStudios::Tools
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
     #
-    # @raise ArgumentError if the value is not true or false.
+    # @return [void]
+    #
+    # @raise [ArgumentError] if the value is not true or false.
+    #
+    # @example
+    #   Assertions.validate_boolean(nil)
+    #   #=> raises an ArgumentError with message 'value must be true or false'
+    #
+    #   Assertions.validate_boolean(Object.new)
+    #   #=> raises an ArgumentError with message 'value must be true or false'
+    #
+    #   Assertions.validate_boolean(false)
+    #   #=> does not raise an exception
+    #
+    #   Assertions.validate_boolean(true)
+    #   #=> does not raise an exception
     def validate_boolean(value, as: 'value', message: nil, optional: false)
       assert_boolean(
         value,
@@ -489,7 +747,16 @@ module SleepingKingStudios::Tools
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
     #
-    # @raise ArgumentError if the value is not a Class.
+    # @return [void]
+    #
+    # @raise [ArgumentError] if the value is not a Class.
+    #
+    # @example
+    #   Assertions.validate_class(Object.new)
+    #   #=> raises an ArgumentError with message 'value is not a class'
+    #
+    #   Assertions.validate_class(String)
+    #   #=> does not raise an exception
     def validate_class(value, as: 'value', message: nil, optional: false)
       assert_class(
         value,
@@ -505,9 +772,18 @@ module SleepingKingStudios::Tools
     # @param message [String] the exception message to raise on a failure.
     #
     # @yield the validations to evaluate.
-    # @yieldparam [Aggregator] the aggregator object.
+    # @yieldparam aggregator [Aggregator] the aggregator object.
     #
-    # @raise ArgumentError if any of the validations fail.
+    # @return [void]
+    #
+    # @raise [ArgumentError] if any of the validations fail.
+    #
+    # @example
+    #   Assertions.validate_group do |group|
+    #     group.validate_name(nil, as: 'label')
+    #     group.validate_instance_of(0.0, expected: Integer, as: 'quantity')
+    #   end
+    #   # raises an ArgumentError with message: "label can't be blank, quantity is not an instance of Integer"
     def validate_group(message: nil, &validations)
       assert_group(
         error_class: ArgumentError,
@@ -524,8 +800,17 @@ module SleepingKingStudios::Tools
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
     #
-    # @raise ArgumentError if the value is not an instance of the expected
+    # @return [void]
+    #
+    # @raise [ArgumentError] if the value is not an instance of the expected
     #   class.
+    #
+    # @example
+    #   Assertions.validate_instance_of(:foo, expected: String)
+    #   #=> raises an AssertionError with message 'value is not an instance of String'
+    #
+    #   Assertions.validate_instance_of('foo', expected: String)
+    #   #=> does not raise an exception
     def validate_instance_of(
       value,
       expected:,
@@ -551,7 +836,16 @@ module SleepingKingStudios::Tools
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
     #
-    # @raise ArgumentError if the value does not match the expected object.
+    # @return [void]
+    #
+    # @raise [ArgumentError] if the value does not match the expected object.
+    #
+    # @example
+    #   Assertions.validate_matches('bar', expected: /foo/)
+    #   #=> raises an ArgumentError with message 'value does not match the pattern /foo/'
+    #
+    #   Assertions.validate_matches('foo', expected: /foo/)
+    #   #=> does not raise an exception
     def validate_matches(
       value,
       expected:,
@@ -576,8 +870,26 @@ module SleepingKingStudios::Tools
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
     #
-    # @raise ArgumentError if the value is not a String or a Symbol, or if the
+    # @return [void]
+    #
+    # @raise [ArgumentError] if the value is not a String or a Symbol, or if the
     #   value is empty.
+    #
+    # @example
+    #   Assertions.validate_name(nil)
+    #   #=> raises an ArgumentError with message "value can't be blank"
+    #
+    #   Assertions.validate_name(Object.new)
+    #   #=> raises an AssertionError with message 'value is not a String or a Symbol'
+    #
+    #   Assertions.validate_name('')
+    #   #=> raises an ArgumentError with message "value can't be blank"
+    #
+    #   Assertions.validate_name('foo')
+    #   #=> does not raise an exception
+    #
+    #   Assertions.validate_name(:bar)
+    #   #=> does not raise an exception
     def validate_name(
       value,
       as:       'value',
@@ -599,7 +911,16 @@ module SleepingKingStudios::Tools
     # @param as [String] the name of the asserted value.
     # @param message [String] the exception message to raise on a failure.
     #
-    # @raise ArgumentError if the value is not nil.
+    # @return [void]
+    #
+    # @raise [ArgumentError] if the value is not nil.
+    #
+    # @example
+    #   Assertions.validate_nil(nil)
+    #   #=> does not raise an exception
+    #
+    #   Assertions.validate_nil(Object.new)
+    #   #=> raises an ArgumentError with message 'value must be nil'
     def validate_nil(
       value,
       as:      'value',
@@ -619,7 +940,16 @@ module SleepingKingStudios::Tools
     # @param as [String] the name of the asserted value.
     # @param message [String] the exception message to raise on a failure.
     #
-    # @raise ArgumentError if the value is nil.
+    # @return [void]
+    #
+    # @raise [ArgumentError] if the value is nil.
+    #
+    # @example
+    #   Assertions.validate_not_nil(nil)
+    #   #=> raises an ArgumentError with message 'value must not be nil'
+    #
+    #   Assertions.validate_not_nil(Object.new)
+    #   #=> does not raise an exception
     def validate_not_nil(
       value,
       as:      'value',
@@ -640,8 +970,23 @@ module SleepingKingStudios::Tools
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
     #
-    # @raise ArgumentError if the value is nil, or if the value responds to
+    # @return [void]
+    #
+    # @raise [ArgumentError] if the value is nil, or if the value responds to
     #   #empty? and value.empty is true.
+    #
+    # @example
+    #   Assertions.validate_presence(nil)
+    #   #=> raises an ArgumentError with message "can't be blank"
+    #
+    #   Assertions.validate_presence(Object.new)
+    #   #=> does not raise an exception
+    #
+    #   Assertions.validate_presence([])
+    #   #=> raises an ArgumentError with message "can't be blank"
+    #
+    #   Assertions.validate_presence([1, 2, 3])
+    #   #=> does not raise an exception
     def validate_presence(value, as: 'value', message: nil, optional: false)
       assert_presence(
         value,

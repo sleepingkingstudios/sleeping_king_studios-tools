@@ -5,9 +5,17 @@ require 'forwardable'
 require 'sleeping_king_studios/tools/toolbox'
 
 module SleepingKingStudios::Tools::Toolbox
-  # Transforms words (e.g. from singular to plural).
+  # Service object for transforming strings.
   #
-  # Should maintain the same interface as ActiveSupport::Inflector.
+  # Internally, an instance of this class is used to StringTools to perform
+  # string transformations.
+  #
+  # This class should define a compatible interface with
+  # ActiveSupport::Inflector, i.e. all methods defined on Toolbox::Inflector
+  # should have a corresponding method on ActiveSupport::Inflector with a
+  # superset of the parameters. (The reverse is *not* true).
+  #
+  # @see SleepingKingStudios::Tools::StringTools.
   class Inflector
     extend Forwardable
 
@@ -27,21 +35,23 @@ module SleepingKingStudios::Tools::Toolbox
       :singular_rules,
       :uncountable_words
 
-    # @return [Rules] An object defining the transformation rules.
+    # @param rules [SleepingKingStudios::Tools::Toobox::Inflector::Rules] an
+    #   object defining the transformation rules.
     def initialize(rules: nil)
       @rules = rules || Rules.new
     end
 
-    # @return [Rules] The defined rules object for the inflector.
+    # @return [SleepingKingStudios::Tools::Toobox::Inflector::Rules] an object
+    #   defining the transformation rules.
     attr_reader :rules
 
-    # Transforms the word to CamelCase.
+    # Converts a lowercase, underscore-separated string to CamelCase.
     #
-    # @param word [String] The word to transform.
-    # @param uppercase_first_letter [Boolean] If true, the first letter is
+    # @param word [String] the word to transform.
+    # @param uppercase_first_letter [Boolean] if true, the first letter is
     #   capitalized. Defaults to true.
     #
-    # @return [String] The word in CamelCase.
+    # @return [String] the word in CamelCase.
     def camelize(word, uppercase_first_letter = true) # rubocop:disable Style/OptionalBooleanParameter
       return '' if word.nil? || word.empty?
 
@@ -54,15 +64,12 @@ module SleepingKingStudios::Tools::Toolbox
       (uppercase_first_letter ? word[0].upcase : word[0].downcase) + word[1..]
     end
 
-    # rubocop:disable Metrics/AbcSize
-    # rubocop:disable Metrics/CyclomaticComplexity
-
     # Transforms the word to a plural, lowercase form.
     #
-    # @param word [String] The word to transform.
+    # @param word [String] the word to transform.
     #
-    # @return [String] The word in plural form.
-    def pluralize(word)
+    # @return [String] the word in plural form.
+    def pluralize(word) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
       return '' if word.nil? || word.empty?
 
       normalized = word.to_s.strip.downcase
@@ -81,14 +88,12 @@ module SleepingKingStudios::Tools::Toolbox
 
       word
     end
-    # rubocop:enable Metrics/AbcSize
-    # rubocop:enable Metrics/CyclomaticComplexity
 
     # Transforms the word to a singular, lowercase form.
     #
-    # @param word [String] The word to transform.
+    # @param word [String] the word to transform.
     #
-    # @return [String] The word in singular form.
+    # @return [String] the word in singular form.
     def singularize(word) # rubocop:disable Metrics/MethodLength
       return '' if word.nil? || word.empty?
 
@@ -113,7 +118,7 @@ module SleepingKingStudios::Tools::Toolbox
     #
     # @param word [String] the word to transform.
     #
-    # @return [String] The word in underscored form.
+    # @return [String] the word in underscored form.
     def underscore(word)
       return '' if word.nil? || word.empty?
 

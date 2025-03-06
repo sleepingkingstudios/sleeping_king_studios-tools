@@ -5,8 +5,7 @@ require 'sleeping_king_studios/tools'
 module SleepingKingStudios::Tools
   # Tools for working with an application or working environment.
   class CoreTools < Base
-    # Exception class used when deprecated code is called and the deprecation
-    # strategy is 'raise'.
+    # Exception raised when deprecated code is called with strategy 'raise'.
     class DeprecationError < StandardError; end
 
     class << self
@@ -16,9 +15,9 @@ module SleepingKingStudios::Tools
         :require_each
     end
 
-    # @param deprecation_caller_depth [Integer] The number of backtrace lines to
+    # @param deprecation_caller_depth [Integer] the number of backtrace lines to
     #   display when outputting a deprecation warning.
-    # @param deprecation_strategy [String] The name of the strategy used when
+    # @param deprecation_strategy [String] the name of the strategy used when
     #   deprecated code is called. Must be 'ignore', 'raise', or 'warn'.
     def initialize(
       deprecation_caller_depth: nil,
@@ -40,20 +39,55 @@ module SleepingKingStudios::Tools
     # @return [String] the current deprecation strategy.
     attr_reader :deprecation_strategy
 
-    # @overload deprecate(name, message: nil)
-    #   Prints a deprecation warning.
+    # Prints a deprecation warning or raises an exception.
     #
-    #   @param name [String] The name of the object, method, or feature that
+    # The behavior of this method depends on the configured deprecation
+    # strategy, which can be passed to the constructor or configured using the
+    # DEPRECATION_STRATEGY environment variable.
+    #
+    # - If the strategy is 'warn' (the default), the formatted message is passed
+    #   to Kernel.warn, which prints the message to $stderr.
+    # - If the strategy is 'raise', raises a DeprecationError with the message.
+    # - If the strategy is 'ignore', this method does nothing.
+    #
+    # @example
+    #   CoreTools.deprecate 'ObjectTools#old_method'
+    #   #=> prints to stderr:
+    #   #
+    #   #   [WARNING] ObjectTools#old_method is deprecated.
+    #   #       called from /path/to/file.rb:4: in something_or_other
+    #
+    # @example With An Additional Message
+    #   CoreTools.deprecate 'ObjectTools#old_method',
+    #     'Use #new_method instead.'
+    #   #=> prints to stderr:
+    #   #
+    #   #   [WARNING] ObjectTools#old_method is deprecated. Use #new_method instead.
+    #   #     called from /path/to/file.rb:4: in something_or_other
+    #
+    # @example With A Format String
+    #   CoreTools.deprecate 'ObjectTools#old_method',
+    #     '0.1.0',
+    #     format: '%s was deprecated in version %s.'
+    #   #=> prints to stderr:
+    #   #
+    #   #   ObjectTools#old_method was deprecated in version 0.1.0.
+    #   #     called from /path/to/file.rb:4: in something_or_other
+    #
+    # @overload deprecate(name, message: nil)
+    #   Prints a deprecation warning or raises an exception.
+    #
+    #   @param name [String] the name of the object, method, or feature that
     #     has been deprecated.
-    #   @param message [String] An optional message to print after the formatted
+    #   @param message [String] an optional message to print after the formatted
     #     string. Defaults to nil.
     #
     # @overload deprecate(*args, format:, message: nil)
-    #   Prints a deprecation warning with the specified format.
+    #   Prints a deprecation warning with the specified format or raises.
     #
-    #   @param args [Array] The arguments to pass into the format string.
-    #   @param format [String] The format string.
-    #   @param message [String] An optional message to print after the formatted
+    #   @param args [Array] the arguments to pass into the format string.
+    #   @param format [String] the format string.
+    #   @param message [String] an optional message to print after the formatted
     #     string. Defaults to nil.
     def deprecate(*args, format: nil, message: nil)
       send(

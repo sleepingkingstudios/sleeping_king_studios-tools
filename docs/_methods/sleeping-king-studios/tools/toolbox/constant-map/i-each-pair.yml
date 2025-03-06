@@ -1,0 +1,20 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::ConstantMap#each_pair
+parent_path: sleeping-king-studios/tools/toolbox/constant-map
+signature: each_pair
+slug: each-pair
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/constant-map/i-each-pair
+short_description: |-
+  Iterates through the defined constants, yielding the name and value of
+  each constant to the block.
+yield_params:
+- description: the name of the constant.
+  name: key
+  type:
+  - name: Symbol
+- description: the value of the constant.
+  name: value
+  type:
+  - name: Object
+version: "*"

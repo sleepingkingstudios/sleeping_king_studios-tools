@@ -4,6 +4,8 @@
 
 Ended support for Ruby 2.7 and 3.0.
 
+Added live documentation support.
+
 ### Inflector
 
 Fixed behavior of `Inflector#camelize` for certain mixed-case strings.

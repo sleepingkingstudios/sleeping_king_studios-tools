@@ -23,21 +23,30 @@ module SleepingKingStudios::Tools
         :try
     end
 
-    # Takes a proc or lambda and invokes it with the given object as
-    # receiver, with any additional arguments or block provided.
+    # Calls a Proc or lambda on the given receiver with the given parameters.
     #
-    # @param [Object] receiver The receiver. The proc will be called in the
+    # Unlike calling #instance_exec with the block, ObjectTools#apply allows you
+    # to specify a block parameter.
+    #
+    # @param receiver [Object] The receiver. the proc will be called in the
     #   context of this object.
-    # @param [Proc] proc The proc or lambda to call.
-    # @param [Array] args Optional. Additional arguments to pass in to the proc
+    # @param proc [Proc] the proc or lambda to call.
+    # @param args [Array] optional. Additional arguments to pass in to the proc
     #   or lambda.
-    # @param [Hash] kwargs Optional. Additional keywords to pass in to the proc
+    # @param kwargs [Hash] optional. Additional keywords to pass in to the proc
     #   or lambda.
-    # @param [block] block Optional. If present, will be passed in to proc or
+    # @param block [block] optional. If present, will be passed in to proc or
     #   lambda.
     #
-    # @return The result of calling the proc or lambda with the given
+    # @return the result of calling the proc or lambda with the given
     #   receiver and any additional arguments or block.
+    #
+    # @example
+    #   my_object = double('object', :to_s => 'A mock object')
+    #   my_proc   = ->() { puts %{#{self.to_s} says "Greetings, programs!"} }
+    #
+    #   ObjectTools.apply my_object, my_proc
+    #   #=> Writes 'A mock object says "Greetings, programs!"' to STDOUT.
     def apply(receiver, proc, *args, **kwargs, &block)
       return receiver.instance_exec(*args, **kwargs, &proc) unless block_given?
 
@@ -49,14 +58,50 @@ module SleepingKingStudios::Tools
       end
     end
 
-    # Creates a deep copy of the object. If the object is an Array, returns a
-    # new Array with deep copies of each array item. If the object is a Hash,
-    # returns a new Hash with deep copies of each hash key and value. Otherwise,
-    # returns Object#dup.
+    # Creates a deep copy of the object.
     #
-    # @param [Object] obj The object to copy.
+    # If the object is an Array, returns a new Array with deep copies of each
+    # array item. If the object is a Hash, returns a new Hash with deep copies
+    # of each hash key and value. Otherwise, returns Object#dup.
     #
-    # @return The copy of the object.
+    # @param obj [Object] the object to copy.
+    #
+    # @return the copy of the object.
+    #
+    # @see ArrayTools#deep_copy
+    #
+    # @see HashTools#deep_copy
+    #
+    # @example
+    #   data = {
+    #     :songs = [
+    #       {
+    #         :name   => 'Welcome to the Jungle',
+    #         :artist => "Guns N' Roses",
+    #         :album  => 'Appetite for Destruction'
+    #       },
+    #       {
+    #         :name   => 'Hells Bells',
+    #         :artist => 'AC/DC',
+    #         :album  => 'Back in Black'
+    #       },
+    #       {
+    #         :name   => "Knockin' on Heaven's Door",
+    #         :artist => 'Bob Dylan',
+    #         :album  => 'Pat Garrett & Billy The Kid'
+    #       }
+    #     ]
+    #   }
+    #
+    #   copy = ObjectTools.deep_dup data
+    #
+    #   copy[:songs] << { :name => 'Sympathy for the Devil', :artist => 'The Rolling Stones', :album => 'Beggars Banquet' }
+    #   data[:songs].count
+    #   #=> 3
+    #
+    #   copy[:songs][1][:name] = 'Shoot to Thrill'
+    #   data[:songs][1]
+    #   #=> { :name => 'Hells Bells', :artist => 'AC/DC', :album => 'Back in Black' }
     def deep_dup(obj)
       case obj
       when FalseClass, Integer, Float, NilClass, Symbol, TrueClass
@@ -70,12 +115,46 @@ module SleepingKingStudios::Tools
       end
     end
 
-    # Performs a deep freeze of the object. If the object is an Array, freezes
-    # the array and performs a deep freeze on each array item. If the object is
-    # a hash, freezes the hash and performs a deep freeze on each hash key and
-    # value. Otherwise, calls Object#freeze.
+    # Performs a deep freeze of the object.
     #
-    # @param [Object] obj The object to freeze.
+    # If the object is an Array, freezes the array and performs a deep freeze on
+    # each array item. If the object is a hash, freezes the hash and performs a
+    # deep freeze on each hash key and value. Otherwise, calls Object#freeze.
+    #
+    # @param obj [Object] The object to freeze.
+    #
+    # @return [Object] the frozen object.
+    #
+    # @example
+    #   data = {
+    #     :songs = [
+    #       {
+    #         :name   => 'Welcome to the Jungle',
+    #         :artist => "Guns N' Roses",
+    #         :album  => 'Appetite for Destruction'
+    #       },
+    #       {
+    #         :name   => 'Hells Bells',
+    #         :artist => 'AC/DC',
+    #         :album  => 'Back in Black'
+    #       },
+    #       {
+    #         :name   => "Knockin' on Heaven's Door",
+    #         :artist => 'Bob Dylan',
+    #         :album  => 'Pat Garrett & Billy The Kid'
+    #       }
+    #     ]
+    #   }
+    #   ObjectTools.deep_freeze(data)
+    #
+    #   data.frozen?
+    #   #=> true
+    #   data[:songs].frozen?
+    #   #=> true
+    #   data[:songs][0].frozen?
+    #   #=> true
+    #   data[:songs][0].name.frozen?
+    #   #=> true
     def deep_freeze(obj)
       case obj
       when FalseClass, Integer, Float, NilClass, Symbol, TrueClass
@@ -89,96 +168,160 @@ module SleepingKingStudios::Tools
       end
     end
 
-    # Accesses deeply nested attributes by calling the first named method on the
-    # given object, and each subsequent method on the result of the previous
-    # method call. If the object does not respond to the method name, nil is
-    # returned instead of calling the method.
+    # Accesses deeply nested attributes on an object.
     #
-    # @param [Object] object The object to dig.
-    # @param [Array] method_names The names of the methods to call.
+    # This method calls the first named method on the given object, and then
+    # each subsequent method on the result of the previous method call. If the
+    # object does not respond to the method name, nil is returned instead of
+    # calling the method.
     #
-    # @return [Object] The result of the last method call, or nil if the last
-    #   object does not respond to the last method.
-    def dig(object, *method_names)
-      method_names.reduce(object) do |memo, method_name|
+    # @param obj [Object] the object to dig.
+    # @param method_names [Array] the names of the methods to call.
+    #
+    # @return [Object, nil] the result of the last method call, or nil if the
+    #   last object does not respond to the last method.
+    #
+    # @example
+    #   ObjectTools.dig my_object, :first_method, :second_method, :third_method
+    #   #=> my_object.first_method.second_method.third_method
+    def dig(obj, *method_names)
+      method_names.reduce(obj) do |memo, method_name|
         memo.respond_to?(method_name) ? memo.send(method_name) : nil
       end
     end
 
-    # @!method metaclass(object)
-    #   Returns the object's singleton class.
-    #
-    #   @param [Object] object The object for which an eigenclass is required.
-    #
-    #   @return [Class] The object's eigenclass.
-
     # Returns the object's eigenclass.
     #
-    # @param [Object] object The object for which an eigenclass is required.
+    # @param obj [Object] the object for which an eigenclass is required.
     #
-    # @return [Class] The object's singleton class.
-    def eigenclass(object)
-      object.singleton_class
+    # @return [Class] the object's singleton class.
+    def eigenclass(obj)
+      obj.singleton_class
     end
     alias metaclass eigenclass
 
-    # Returns true if the object is immutable. Values of nil, false, and true
-    # are always immutable, as are instances of Numeric and Symbol. Arrays are
-    # immutable if the array is frozen and each array item is immutable. Hashes
-    # are immutable if the hash is frozen and each hash key and hash value are
-    # immutable. Otherwise, objects are immutable if they are frozen.
+    # Checks if the object is immutable.
     #
-    # @param obj [Object] The object to test.
+    # - nil, false, and true are always immutable, as are instances of Numeric
+    #   and Symbol.
+    # - Strings are immutable if frozen, such as strings defined in a file with
+    #   a frozen_string_literal pragma.
+    # - Arrays are immutable if the array is frozen and each array item is
+    #   immutable.
+    # - Hashes are immutable if the hash is frozen and each hash key and hash
+    #   value are immutable.
+    # - Otherwise, objects are immutable if they are frozen.
     #
-    # @return [Boolean] True if the object is immutable, otherwise false.
+    # @param obj [Object] the object to test.
+    #
+    # @return [Boolean] true if the object is immutable, otherwise false.
+    #
+    # @example
+    #   ObjectTools.immutable?(nil)
+    #   #=> true
+    #
+    #   ObjectTools.immutable?(false)
+    #   #=> true
+    #
+    #   ObjectTools.immutable?(0)
+    #   #=> true
+    #
+    #   ObjectTools.immutable?(:hello)
+    #   #=> true
+    #
+    #   ObjectTools.immutable?('Greetings, programs!')
+    #   #=> true
+    #
+    #   ObjectTools.immutable?(+'Greetings, programs!')
+    #   #=> false
+    #
+    #   ObjectTools.immutable?([1, 2, 3])
+    #   #=> false
+    #
+    #   ObjectTools.immutable?([1, 2, 3].freeze)
+    #   #=> false
+    #
+    # @see #mutable?
+    #
+    # @see ArrayTools#immutable?
+    #
+    # @see HashTools#immutable?
     def immutable?(obj)
       case obj
       when NilClass, FalseClass, TrueClass, Numeric, Symbol
         true
       when ->(_) { ArrayTools.array?(obj) }
-        ArrayTools.immutable? obj
+        ArrayTools.immutable?(obj)
       when ->(_) { HashTools.hash?(obj) }
-        HashTools.immutable? obj
+        HashTools.immutable?(obj)
       else
         obj.frozen?
       end
     end
 
-    # Returns true if the object is mutable.
+    # Checks if the object is mutable.
     #
-    # @param obj [Object] The object to test.
+    # @param obj [Object] the object to test.
     #
-    # @return [Boolean] True if the object is mutable, otherwise false.
+    # @return [Boolean] true if the object is mutable, otherwise false.
     #
     # @see #immutable?
     def mutable?(obj)
       !immutable?(obj)
     end
 
-    # Returns true if the object is an Object. This should return true only for
-    # objects that have an alternate inheritance chain from BasicObject, such as
-    # a Proxy.
+    # Returns true if the object is an Object.
     #
-    # @param obj [Object] The object to test.
+    # This should return false only for objects that have an alternate
+    # inheritance chain from BasicObject, such as a Proxy.
     #
-    # @return [Boolean] True if the object is an Object, otherwise false.
+    # @param obj [Object] the object to test.
+    #
+    # @return [Boolean] true if the object is an Object, otherwise false.
+    #
+    # @example
+    #   ObjectTools.object?(nil)
+    #   #=> true
+    #
+    #   ObjectTools.object?([])
+    #   #=> true
+    #
+    #   ObjectTools.object?({})
+    #   #=> true
+    #
+    #   ObjectTools.object?(1)
+    #   #=> true
+    #
+    #   ObjectTools.object?(BasicObject.new)
+    #   #=> false
     def object?(obj)
       Object.instance_method(:is_a?).bind(obj).call(Object)
     end
 
     # As #send, but returns nil if the object does not respond to the method.
     #
-    # @param [Object] object The receiver of the message.
-    # @param [String, Symbol] method_name The name of the method to call.
-    # @param [Array] args The arguments to the message.
+    # This method relies on #respond_to?, so methods defined with method_missing
+    # will not be called.
     #
-    # @see ActiveSupport::CoreExt::Object#try.
-    def try(object, method_name, *args)
-      return object.try(method_name, *args) if object.respond_to?(:try)
+    # @param obj [Object] the receiver of the message.
+    # @param method_name [String, Symbol] the name of the method to call.
+    # @param args [Array] the arguments to the message.
+    #
+    # @return [Object, nil] the return value of the called method, or nil if the
+    #   object does not respond to the method.
+    #
+    # @example
+    #   ObjectTools.try(%w(ichi ni san), :count)
+    #   #=> 3
+    #
+    #   ObjectTools.try(nil, :count)
+    #   #=> nil
+    def try(obj, method_name, *args)
+      return obj.try(method_name, *args) if obj.respond_to?(:try)
 
-      return nil unless object.respond_to?(method_name)
+      return nil unless obj.respond_to?(method_name)
 
-      object.send method_name, *args
+      obj.send(method_name, *args)
     end
 
     private
@@ -193,6 +336,3 @@ module SleepingKingStudios::Tools
     end
   end
 end
-
-require 'sleeping_king_studios/tools/array_tools'
-require 'sleeping_king_studios/tools/hash_tools'

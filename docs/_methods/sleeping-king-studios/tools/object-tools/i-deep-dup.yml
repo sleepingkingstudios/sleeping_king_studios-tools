@@ -1,0 +1,63 @@
+---
+name: SleepingKingStudios::Tools::ObjectTools#deep_dup
+parent_path: sleeping-king-studios/tools/object-tools
+signature: deep_dup(obj)
+slug: deep-dup
+constructor: false
+data_path: sleeping-king-studios/tools/object-tools/i-deep-dup
+description: |-
+  If the object is an Array, returns a new Array with deep copies of each
+  array item. If the object is a Hash, returns a new Hash with deep copies
+  of each hash key and value. Otherwise, returns Object#dup.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      data = {
+        :songs = [
+          {
+            :name   => 'Welcome to the Jungle',
+            :artist => "Guns N' Roses",
+            :album  => 'Appetite for Destruction'
+          },
+          {
+            :name   => 'Hells Bells',
+            :artist => 'AC/DC',
+            :album  => 'Back in Black'
+          },
+          {
+            :name   => "Knockin' on Heaven's Door",
+            :artist => 'Bob Dylan',
+            :album  => 'Pat Garrett & Billy The Kid'
+          }
+        ]
+      }
+
+      copy = ObjectTools.deep_dup data
+
+      copy[:songs] << { :name => 'Sympathy for the Devil', :artist => 'The Rolling Stones', :album => 'Beggars Banquet' }
+      data[:songs].count
+      #=> 3
+
+      copy[:songs][1][:name] = 'Shoot to Thrill'
+      data[:songs][1]
+      #=> { :name => 'Hells Bells', :artist => 'AC/DC', :album => 'Back in Black' }
+  see:
+  - label: ArrayTools#deep_copy
+    path:
+    text:
+    type: reference
+  - label: HashTools#deep_copy
+    path:
+    text:
+    type: reference
+params:
+- description: the object to copy.
+  name: obj
+  type:
+  - name: Object
+returns:
+- description: the copy of the object.
+  type: []
+short_description: Creates a deep copy of the object.
+version: "*"

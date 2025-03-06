@@ -7,11 +7,29 @@ require 'sleeping_king_studios/tools/toolbox'
 
 module SleepingKingStudios::Tools::Toolbox
   # Provides an enumerable interface for defining a group of constants.
+  #
+  # @example
+  #   UserRoles = ConstantMap.new(
+  #     {
+  #       GUEST: 'guest',
+  #       USER:  'user',
+  #       ADMIN: 'admin'
+  #     }
+  #   )
+  #
+  #   UserRoles::GUEST
+  #   #=> 'guest'
+  #
+  #   UserRoles.user
+  #   #=> 'user'
+  #
+  #   UserRoles.all
+  #   #=> { :GUEST => 'guest', :USER => 'user', :ADMIN => 'admin' }
   class ConstantMap < Module
     extend  Forwardable
     include Enumerable
 
-    # @param constants [Hash] The constants to define.
+    # @param constants [Hash] the constants to define.
     def initialize(constants)
       super()
 
@@ -36,27 +54,27 @@ module SleepingKingStudios::Tools::Toolbox
     #   Iterates through the defined constants, yielding the name and value of
     #   each constant to the block.
     #
-    #   @yieldparam key [Symbol] The name of the constant.
-    #   @yieldparam value [Object] The value of the constant.
+    #   @yieldparam key [Symbol] the name of the constant.
+    #   @yieldparam value [Object] the value of the constant.
 
     # @!method each_key
     #   Iterates through the defined constants, yielding the name of each
     #   constant to the block.
     #
-    #   @yieldparam key [Symbol] The name of the constant.
+    #   @yieldparam key [Symbol] the name of the constant.
 
     # @!method each_pair
     #   Iterates through the defined constants, yielding the name and value of
     #   each constant to the block.
     #
-    #   @yieldparam key [Symbol] The name of the constant.
-    #   @yieldparam value [Object] The value of the constant.
+    #   @yieldparam key [Symbol] the name of the constant.
+    #   @yieldparam value [Object] the value of the constant.
 
     # @!method each_value
     #   Iterates through the defined constants, yielding the value of each
     #   constant to the block.
     #
-    #   @yieldparam value [Object] The value of the constant.
+    #   @yieldparam value [Object] the value of the constant.
 
     # @!method keys
     #   @return [Array] the names of the defined constants.
@@ -68,10 +86,11 @@ module SleepingKingStudios::Tools::Toolbox
     attr_reader :to_h
     alias all to_h
 
-    # Freezes the constant map and recursively freezes every constant value
-    # using ObjectTools#deep_freeze.
+    # Freezes the constant map and recursively freezes every constant value.
     #
-    # @see ObjectTools#deep_freeze
+    # @return [self] the constant map.
+    #
+    # @see SleepingKingStudios::Tools::ObjectTools#deep_freeze
     def freeze
       super
 

@@ -1,0 +1,36 @@
+---
+name: SleepingKingStudios::Tools::ObjectTools#dig
+parent_path: sleeping-king-studios/tools/object-tools
+signature: dig(obj, *method_names)
+slug: dig
+constructor: false
+data_path: sleeping-king-studios/tools/object-tools/i-dig
+description: |-
+  This method calls the first named method on the given object, and then
+  each subsequent method on the result of the previous method call. If the
+  object does not respond to the method name, nil is returned instead of
+  calling the method.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      ObjectTools.dig my_object, :first_method, :second_method, :third_method
+      #=> my_object.first_method.second_method.third_method
+params:
+- description: the object to dig.
+  name: obj
+  type:
+  - name: Object
+- description: the names of the methods to call.
+  name: method_names
+  type:
+  - name: Array
+returns:
+- description: |-
+    the result of the last method call, or nil if the
+    last object does not respond to the last method.
+  type:
+  - name: Object
+  - name: nil
+short_description: Accesses deeply nested attributes on an object.
+version: "*"

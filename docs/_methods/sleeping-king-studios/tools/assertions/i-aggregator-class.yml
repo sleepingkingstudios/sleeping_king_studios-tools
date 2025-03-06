@@ -1,0 +1,12 @@
+---
+name: SleepingKingStudios::Tools::Assertions#aggregator_class
+parent_path: sleeping-king-studios/tools/assertions
+signature: aggregator_class
+slug: aggregator-class
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-aggregator-class
+returns:
+- description: the class used to aggregate grouped assertion failures.
+  type:
+  - name: Class
+version: "*"

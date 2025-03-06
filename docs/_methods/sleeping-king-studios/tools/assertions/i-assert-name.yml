@@ -1,0 +1,64 @@
+---
+name: SleepingKingStudios::Tools::Assertions#assert_name
+parent_path: sleeping-king-studios/tools/assertions
+signature: 'assert_name(value, as: ''value'', error_class: AssertionError, message:
+  nil, optional: false)'
+slug: assert-name
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-assert-name
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      Assertions.assert_name(nil)
+      #=> raises an AssertionError with message "value can't be blank"
+
+      Assertions.assert_name(Object.new)
+      #=> raises an AssertionError with message 'value is not a String or a Symbol'
+
+      Assertions.assert_name('')
+      #=> raises an AssertionError with message "value can't be blank"
+
+      Assertions.assert_name('foo')
+      #=> does not raise an exception
+
+      Assertions.assert_name(:bar)
+      #=> does not raise an exception
+params:
+- description: the value to assert on.
+  name: value
+  type:
+  - name: Object
+- description: the name of the asserted value.
+  name: as
+  type:
+  - name: String
+  default: "'value'"
+- description: the exception class to raise on a failure.
+  name: error_class
+  type:
+  - name: Class
+  default: AssertionError
+- description: the exception message to raise on a failure.
+  name: message
+  type:
+  - name: String
+  default: nil
+- description: if true, allows nil values.
+  name: optional
+  type:
+  - name: 'true'
+  - name: 'false'
+  default: 'false'
+raises:
+- description: |-
+    if the value is not a String or a Symbol, or if
+    the value is empty.
+  type:
+  - name: AssertionError
+returns:
+- description: ''
+  type:
+  - name: void
+short_description: Asserts that the value is a non-empty String or Symbol.
+version: "*"

@@ -1,0 +1,49 @@
+---
+name: SleepingKingStudios::Tools::Assertions#validate_blank
+parent_path: sleeping-king-studios/tools/assertions
+signature: 'validate_blank(value, as: ''value'', message: nil)'
+slug: validate-blank
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-validate-blank
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      Assertions.validate_blank(nil)
+      #=> does not raise an exception
+
+      Assertions.validate_blank(Object.new)
+      #=> raises an ArgumentError with message 'value must be nil or empty'
+
+      Assertions.validate_blank([])
+      #=> does not raise an exception
+
+      Assertions.validate_blank([1, 2, 3])
+      #=> raises an ArgumentError with message 'value must be nil or empty'
+params:
+- description: the value to assert on.
+  name: value
+  type:
+  - name: Object
+- description: the name of the asserted value.
+  name: as
+  type:
+  - name: String
+  default: "'value'"
+- description: the exception message to raise on a failure.
+  name: message
+  type:
+  - name: String
+  default: nil
+raises:
+- description: |-
+    if the value is not nil and either does not respond
+    to #empty? or value.empty returns false.
+  type:
+  - name: ArgumentError
+returns:
+- description: ''
+  type:
+  - name: void
+short_description: Asserts that the value is either nil or empty.
+version: "*"

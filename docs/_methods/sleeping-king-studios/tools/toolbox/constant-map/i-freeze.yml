@@ -1,0 +1,20 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::ConstantMap#freeze
+parent_path: sleeping-king-studios/tools/toolbox/constant-map
+signature: freeze
+slug: freeze
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/constant-map/i-freeze
+metadata:
+  see:
+  - label: SleepingKingStudios::Tools::ObjectTools#deep_freeze
+    path: sleeping-king-studios/tools/object-tools#instance-method-deep-freeze
+    text:
+    type: reference
+returns:
+- description: the constant map.
+  type:
+  - name: self
+short_description: Freezes the constant map and recursively freezes every constant
+  value.
+version: "*"

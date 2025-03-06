@@ -1,0 +1,52 @@
+---
+name: SleepingKingStudios::Tools::Assertions#validate_matches
+parent_path: sleeping-king-studios/tools/assertions
+signature: 'validate_matches(value, expected:, as: ''value'', message: nil, optional:
+  false)'
+slug: validate-matches
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-validate-matches
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      Assertions.validate_matches('bar', expected: /foo/)
+      #=> raises an ArgumentError with message 'value does not match the pattern /foo/'
+
+      Assertions.validate_matches('foo', expected: /foo/)
+      #=> does not raise an exception
+params:
+- description: the value to assert on.
+  name: value
+  type:
+  - name: Object
+- description: the name of the asserted value.
+  name: as
+  type:
+  - name: String
+  default: "'value'"
+- description: the expected object.
+  name: expected
+  type:
+  - name: "#==="
+- description: the exception message to raise on a failure.
+  name: message
+  type:
+  - name: String
+  default: nil
+- description: if true, allows nil values.
+  name: optional
+  type:
+  - name: 'true'
+  - name: 'false'
+  default: 'false'
+raises:
+- description: if the value does not match the expected object.
+  type:
+  - name: ArgumentError
+returns:
+- description: ''
+  type:
+  - name: void
+short_description: 'Asserts that the value matches the expected object using #===.'
+version: "*"

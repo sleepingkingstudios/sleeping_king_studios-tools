@@ -1,0 +1,66 @@
+---
+name: SleepingKingStudios::Tools::ArrayTools
+slug: array-tools
+type: class
+files:
+- lib/sleeping_king_studios/tools/array_tools.rb
+parent_path: sleeping-king-studios/tools
+short_description: Tools for working with array-like enumerable objects.
+class_methods:
+- name: instance
+  path: sleeping-king-studios/tools/base/c-instance
+  slug: instance
+  inherited: true
+constants:
+- name: ARRAY_METHODS
+  path: sleeping-king-studios/tools/array-tools/array-methods
+  slug: array-methods
+  inherited: false
+- name: OTHER_METHODS
+  path: sleeping-king-studios/tools/array-tools/other-methods
+  slug: other-methods
+  inherited: false
+instance_methods:
+- name: array?
+  path: sleeping-king-studios/tools/array-tools/i-array?
+  slug: array?
+  inherited: false
+- name: bisect
+  path: sleeping-king-studios/tools/array-tools/i-bisect
+  slug: bisect
+  inherited: false
+- name: count_values
+  path: sleeping-king-studios/tools/array-tools/i-count-values
+  slug: count-values
+  inherited: false
+- name: deep_dup
+  path: sleeping-king-studios/tools/array-tools/i-deep-dup
+  slug: deep-dup
+  inherited: false
+- name: deep_freeze
+  path: sleeping-king-studios/tools/array-tools/i-deep-freeze
+  slug: deep-freeze
+  inherited: false
+- name: humanize_list
+  path: sleeping-king-studios/tools/array-tools/i-humanize-list
+  slug: humanize-list
+  inherited: false
+- name: immutable?
+  path: sleeping-king-studios/tools/array-tools/i-immutable?
+  slug: immutable?
+  inherited: false
+- name: mutable?
+  path: sleeping-king-studios/tools/array-tools/i-mutable?
+  slug: mutable?
+  inherited: false
+- name: splice
+  path: sleeping-king-studios/tools/array-tools/i-splice
+  slug: splice
+  inherited: false
+data_path: sleeping-king-studios/tools/array-tools
+constructor: false
+inherited_classes:
+- name: SleepingKingStudios::Tools::Base
+  slug: base
+  path: sleeping-king-studios/tools/base
+version: "*"

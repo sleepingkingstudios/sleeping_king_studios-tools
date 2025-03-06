@@ -1,0 +1,58 @@
+---
+name: SleepingKingStudios::Tools::HashTools
+slug: hash-tools
+type: class
+files:
+- lib/sleeping_king_studios/tools/hash_tools.rb
+parent_path: sleeping-king-studios/tools
+short_description: Tools for working with hash-like enumerable objects.
+class_methods:
+- name: instance
+  path: sleeping-king-studios/tools/base/c-instance
+  slug: instance
+  inherited: true
+constants:
+- name: HASH_METHODS
+  path: sleeping-king-studios/tools/hash-tools/hash-methods
+  slug: hash-methods
+  inherited: false
+instance_methods:
+- name: convert_keys_to_strings
+  path: sleeping-king-studios/tools/hash-tools/i-convert-keys-to-strings
+  slug: convert-keys-to-strings
+  inherited: false
+- name: convert_keys_to_symbols
+  path: sleeping-king-studios/tools/hash-tools/i-convert-keys-to-symbols
+  slug: convert-keys-to-symbols
+  inherited: false
+- name: deep_dup
+  path: sleeping-king-studios/tools/hash-tools/i-deep-dup
+  slug: deep-dup
+  inherited: false
+- name: deep_freeze
+  path: sleeping-king-studios/tools/hash-tools/i-deep-freeze
+  slug: deep-freeze
+  inherited: false
+- name: generate_binding
+  path: sleeping-king-studios/tools/hash-tools/i-generate-binding
+  slug: generate-binding
+  inherited: false
+- name: hash?
+  path: sleeping-king-studios/tools/hash-tools/i-hash?
+  slug: hash?
+  inherited: false
+- name: immutable?
+  path: sleeping-king-studios/tools/hash-tools/i-immutable?
+  slug: immutable?
+  inherited: false
+- name: mutable?
+  path: sleeping-king-studios/tools/hash-tools/i-mutable?
+  slug: mutable?
+  inherited: false
+data_path: sleeping-king-studios/tools/hash-tools
+constructor: false
+inherited_classes:
+- name: SleepingKingStudios::Tools::Base
+  slug: base
+  path: sleeping-king-studios/tools/base
+version: "*"

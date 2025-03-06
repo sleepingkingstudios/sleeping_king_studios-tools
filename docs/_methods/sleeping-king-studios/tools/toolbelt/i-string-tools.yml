@@ -1,0 +1,17 @@
+---
+name: SleepingKingStudios::Tools::Toolbelt#string_tools
+parent_path: sleeping-king-studios/tools/toolbelt
+signature: string_tools
+slug: string-tools
+aliases:
+- str
+constructor: false
+data_path: sleeping-king-studios/tools/toolbelt/i-string-tools
+returns:
+- description: |-
+    tools for working with
+    strings.
+  type:
+  - name: SleepingKingStudios::Tools::ObjectTools
+    path: sleeping-king-studios/tools/object-tools
+version: "*"

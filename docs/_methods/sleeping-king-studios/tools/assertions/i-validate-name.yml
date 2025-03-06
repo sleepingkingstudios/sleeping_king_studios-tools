@@ -1,0 +1,58 @@
+---
+name: SleepingKingStudios::Tools::Assertions#validate_name
+parent_path: sleeping-king-studios/tools/assertions
+signature: 'validate_name(value, as: ''value'', message: nil, optional: false)'
+slug: validate-name
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-validate-name
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      Assertions.validate_name(nil)
+      #=> raises an ArgumentError with message "value can't be blank"
+
+      Assertions.validate_name(Object.new)
+      #=> raises an AssertionError with message 'value is not a String or a Symbol'
+
+      Assertions.validate_name('')
+      #=> raises an ArgumentError with message "value can't be blank"
+
+      Assertions.validate_name('foo')
+      #=> does not raise an exception
+
+      Assertions.validate_name(:bar)
+      #=> does not raise an exception
+params:
+- description: the value to assert on.
+  name: value
+  type:
+  - name: Object
+- description: the name of the asserted value.
+  name: as
+  type:
+  - name: String
+  default: "'value'"
+- description: the exception message to raise on a failure.
+  name: message
+  type:
+  - name: String
+  default: nil
+- description: if true, allows nil values.
+  name: optional
+  type:
+  - name: 'true'
+  - name: 'false'
+  default: 'false'
+raises:
+- description: |-
+    if the value is not a String or a Symbol, or if the
+    value is empty.
+  type:
+  - name: ArgumentError
+returns:
+- description: ''
+  type:
+  - name: void
+short_description: Asserts that the value is a non-empty String or Symbol.
+version: "*"

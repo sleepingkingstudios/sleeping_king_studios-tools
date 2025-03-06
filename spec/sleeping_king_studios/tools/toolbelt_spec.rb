@@ -22,6 +22,14 @@ RSpec.describe SleepingKingStudios::Tools::Toolbelt do
   end
 
   describe '.new' do
+    describe 'with deprecation_caller_depth: value' do
+      let(:instance) { described_class.new(deprecation_caller_depth: 10) }
+
+      it 'should pass the strategy to #core_tools' do
+        expect(instance.core_tools.deprecation_caller_depth).to be 10
+      end
+    end
+
     describe 'with deprecation_strategy: value' do
       let(:instance) { described_class.new(deprecation_strategy: 'panic') }
 

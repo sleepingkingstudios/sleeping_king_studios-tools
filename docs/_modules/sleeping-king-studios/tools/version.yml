@@ -1,0 +1,50 @@
+---
+name: SleepingKingStudios::Tools::Version
+slug: version
+type: module
+files:
+- lib/sleeping_king_studios/tools/version.rb
+parent_path: sleeping-king-studios/tools
+short_description: SleepingKingStudios::Tools uses semantic versioning.
+class_methods:
+- name: to_gem_version
+  path: sleeping-king-studios/tools/toolbox/semantic-version/i-to-gem-version
+  slug: to-gem-version
+  inherited: true
+- name: to_version
+  path: sleeping-king-studios/tools/toolbox/semantic-version/i-to-version
+  slug: to-version
+  inherited: true
+constants:
+- name: BUILD
+  path: sleeping-king-studios/tools/version/build
+  slug: build
+  inherited: false
+- name: MAJOR
+  path: sleeping-king-studios/tools/version/major
+  slug: major
+  inherited: false
+- name: MINOR
+  path: sleeping-king-studios/tools/version/minor
+  slug: minor
+  inherited: false
+- name: PATCH
+  path: sleeping-king-studios/tools/version/patch
+  slug: patch
+  inherited: false
+- name: PRERELEASE
+  path: sleeping-king-studios/tools/version/prerelease
+  slug: prerelease
+  inherited: false
+data_path: sleeping-king-studios/tools/version
+extended_modules:
+- name: SleepingKingStudios::Tools::Toolbox::SemanticVersion
+  slug: semantic-version
+  path: sleeping-king-studios/tools/toolbox/semantic-version
+metadata:
+  see:
+  - label: http://semver.org
+    path: http://semver.org
+    text:
+    type: link
+version: "*"
