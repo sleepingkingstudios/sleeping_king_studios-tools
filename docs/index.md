@@ -1,7 +1,4 @@
 ---
-breadcrumbs:
-  - name: Documentation
-    path: './'
 ---
 
 # SleepingKingStudios::Tools
@@ -18,5 +15,3 @@ This is the documentation for the [current development build](https://github.com
 ## Reference
 
 For a full list of defined classes and objects, see [Reference](./reference).
-
-{% include breadcrumbs.md %}
