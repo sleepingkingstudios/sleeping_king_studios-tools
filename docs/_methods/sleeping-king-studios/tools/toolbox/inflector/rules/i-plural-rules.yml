@@ -1,0 +1,18 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Inflector::Rules#plural_rules
+parent_path: sleeping-king-studios/tools/toolbox/inflector/rules
+signature: plural_rules
+slug: plural-rules
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/inflector/rules/i-plural-rules
+returns:
+- description: rules for pluralizing words.
+  type:
+  - name: Array
+    items:
+    - name: Array
+      items:
+      - name: Regexp
+      - name: String
+      ordered: true
+version: "*"

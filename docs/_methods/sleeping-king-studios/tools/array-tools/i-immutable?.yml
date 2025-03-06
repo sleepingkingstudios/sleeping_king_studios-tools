@@ -1,0 +1,52 @@
+---
+name: SleepingKingStudios::Tools::ArrayTools#immutable?
+parent_path: sleeping-king-studios/tools/array-tools
+signature: immutable?(ary)
+slug: immutable?
+constructor: false
+data_path: sleeping-king-studios/tools/array-tools/i-immutable?
+description: |-
+  An array is considered immutable if the array itself is frozen and each
+  item in the array is immutable.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      ArrayTools.immutable?([1, 2, 3])
+      #=> false
+
+      ArrayTools.immutable?([1, 2, 3].freeze)
+      #=> true
+
+      ArrayTools.immutable?([+'ichi', +'ni', +'san'])
+      #=> false
+
+      ArrayTools.immutable?([+'ichi', +'ni', +'san'].freeze)
+      #=> false
+
+      ArrayTools.immutable?(['ichi', 'ni', 'san'].freeze)
+      #=> true
+  see:
+  - label: ArrayTools#mutable?
+    path: "#instance-method-mutable?"
+    text:
+    type: reference
+  - label: ObjectTools#immutable?
+    path:
+    text:
+    type: reference
+params:
+- description: the array to test.
+  name: ary
+  type:
+  - name: Array
+raises:
+- description: if the first argument is not an Array-like object.
+  type:
+  - name: ArgumentError
+returns:
+- description: true if the array is immutable, otherwise false.
+  type:
+  - name: Boolean
+short_description: Checks if the array and its contents are immutable.
+version: "*"

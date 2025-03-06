@@ -1,0 +1,24 @@
+---
+name: SleepingKingStudios::Tools::ObjectTools#mutable?
+parent_path: sleeping-king-studios/tools/object-tools
+signature: mutable?(obj)
+slug: mutable?
+constructor: false
+data_path: sleeping-king-studios/tools/object-tools/i-mutable?
+metadata:
+  see:
+  - label: "#immutable?"
+    path: sleeping-king-studios/tools/object-tools#instance-method-immutable?
+    text:
+    type: reference
+params:
+- description: the object to test.
+  name: obj
+  type:
+  - name: Object
+returns:
+- description: true if the object is mutable, otherwise false.
+  type:
+  - name: Boolean
+short_description: Checks if the object is mutable.
+version: "*"

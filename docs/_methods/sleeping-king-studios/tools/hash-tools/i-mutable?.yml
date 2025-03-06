@@ -1,0 +1,28 @@
+---
+name: SleepingKingStudios::Tools::HashTools#mutable?
+parent_path: sleeping-king-studios/tools/hash-tools
+signature: mutable?(hsh)
+slug: mutable?
+constructor: false
+data_path: sleeping-king-studios/tools/hash-tools/i-mutable?
+metadata:
+  see:
+  - label: HashTools#immutable?
+    path: "#instance-method-immutable?"
+    text:
+    type: reference
+params:
+- description: the hash to test.
+  name: hsh
+  type:
+  - name: Hash
+raises:
+- description: if the first argument is not an Hash-like object.
+  type:
+  - name: ArgumentError
+returns:
+- description: true if the hash is mutable, otherwise false.
+  type:
+  - name: Boolean
+short_description: Returns true if the hash or any of its contents are mutable.
+version: "*"

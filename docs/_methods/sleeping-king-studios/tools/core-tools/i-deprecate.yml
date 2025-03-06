@@ -1,0 +1,87 @@
+---
+name: SleepingKingStudios::Tools::CoreTools#deprecate
+parent_path: sleeping-king-studios/tools/core-tools
+signature: 'deprecate(*args, format: nil, message: nil)'
+slug: deprecate
+constructor: false
+data_path: sleeping-king-studios/tools/core-tools/i-deprecate
+description: |-
+  The behavior of this method depends on the configured deprecation
+  strategy, which can be passed to the constructor or configured using the
+  DEPRECATION_STRATEGY environment variable.
+
+  - If the strategy is 'warn' (the default), the formatted message is passed
+    to Kernel.warn, which prints the message to $stderr.
+  - If the strategy is 'raise', raises a DeprecationError with the message.
+  - If the strategy is 'ignore', this method does nothing.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      CoreTools.deprecate 'ObjectTools#old_method'
+      #=> prints to stderr:
+      #
+      #   [WARNING] ObjectTools#old_method is deprecated.
+      #       called from /path/to/file.rb:4: in something_or_other
+  - name: With An Additional Message
+    text: |-
+      CoreTools.deprecate 'ObjectTools#old_method',
+        'Use #new_method instead.'
+      #=> prints to stderr:
+      #
+      #   [WARNING] ObjectTools#old_method is deprecated. Use #new_method instead.
+      #     called from /path/to/file.rb:4: in something_or_other
+  - name: With A Format String
+    text: |-
+      CoreTools.deprecate 'ObjectTools#old_method',
+        '0.1.0',
+        format: '%s was deprecated in version %s.'
+      #=> prints to stderr:
+      #
+      #   ObjectTools#old_method was deprecated in version 0.1.0.
+      #     called from /path/to/file.rb:4: in something_or_other
+overloads:
+- name: SleepingKingStudios::Tools::CoreTools#deprecate
+  parent_path: sleeping-king-studios/tools/core-tools
+  signature: 'deprecate(name, message: nil)'
+  slug: deprecate
+  constructor: false
+  params:
+  - description: |-
+      the name of the object, method, or feature that
+      has been deprecated.
+    name: name
+    type:
+    - name: String
+  - description: |-
+      an optional message to print after the formatted
+      string. Defaults to nil.
+    name: message
+    type:
+    - name: String
+    default: nil
+  short_description: Prints a deprecation warning or raises an exception.
+- name: SleepingKingStudios::Tools::CoreTools#deprecate
+  parent_path: sleeping-king-studios/tools/core-tools
+  signature: 'deprecate(*args, format:, message: nil)'
+  slug: deprecate
+  constructor: false
+  params:
+  - description: the arguments to pass into the format string.
+    name: args
+    type:
+    - name: Array
+  - description: the format string.
+    name: format
+    type:
+    - name: String
+  - description: |-
+      an optional message to print after the formatted
+      string. Defaults to nil.
+    name: message
+    type:
+    - name: String
+    default: nil
+  short_description: Prints a deprecation warning with the specified format or raises.
+short_description: Prints a deprecation warning or raises an exception.
+version: "*"

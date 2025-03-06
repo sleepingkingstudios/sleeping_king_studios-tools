@@ -1,0 +1,34 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Subclass
+slug: subclass
+type: module
+files:
+- lib/sleeping_king_studios/tools/toolbox/subclass.rb
+parent_path: sleeping-king-studios/tools/toolbox
+short_description: Mixin for partially applying constructor parameters.
+instance_methods:
+- name: subclass
+  path: sleeping-king-studios/tools/toolbox/subclass/i-subclass
+  slug: subclass
+  inherited: false
+data_path: sleeping-king-studios/tools/toolbox/subclass
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      class Character
+        extend SleepingKingStudios::Tools::Toolbox::Subclass
+
+        def initialize(*traits)
+          @traits = traits
+        end
+
+        attr_reader :traits
+      end
+
+      Bard = Character.subclass(:charismatic, :musical)
+
+      aoife = Bard.new(:sorcerous)
+      aoife.traits
+      #=> [:charismatic, :musical, :sorcerous]
+version: "*"

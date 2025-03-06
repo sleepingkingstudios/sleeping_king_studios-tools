@@ -1,0 +1,47 @@
+---
+name: SleepingKingStudios::Tools::Assertions#error_message_for
+parent_path: sleeping-king-studios/tools/assertions
+signature: 'error_message_for(scope, as: ''value'', **options)'
+slug: error-message-for
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-error-message-for
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      scope = 'sleeping_king_studios.tools.assertions.blank'
+
+      assertions.error_message_for(scope)
+      #=> 'value must be nil or empty'
+      assertions.error_message_for(scope, as: false)
+      #=> 'must be nil or empty'
+      assertions.error_message_for(scope, as: 'item')
+      #=> 'item must be nil or empty'
+options:
+- name: options
+  opts:
+  - description: |-
+      the name of the validated property. Defaults
+      to 'value'.
+    name: as
+    type:
+    - name: String
+  - description: the expected object, if any.
+    name: expected
+    type:
+    - name: Object
+params:
+- description: the message scope.
+  name: scope
+  type:
+  - name: String
+- description: additional options for generating the message.
+  name: options
+  type:
+  - name: Hash
+returns:
+- description: the generated error message.
+  type:
+  - name: String
+short_description: Generates an error message for a failed validation.
+version: "*"

@@ -1,0 +1,46 @@
+---
+name: SleepingKingStudios::Tools::IntegerTools#count_digits
+parent_path: sleeping-king-studios/tools/integer-tools
+signature: 'count_digits(integer, base: 10)'
+slug: count-digits
+constructor: false
+data_path: sleeping-king-studios/tools/integer-tools/i-count-digits
+description: |-
+  This method ignores minus sign for negative numbers. You can use the :base
+  parameter to configure the numeric base for the string representation.
+metadata:
+  examples:
+  - name: With a positive number.
+    text: |-
+      IntegerTools.count_digits(31)
+      #=> 2
+  - name: With a negative number.
+    text: |-
+      IntegerTools.count_digits(-141)
+      #=> 3
+  - name: With a binary number.
+    text: |-
+      IntegerTools.count_digits(189, :base => 2)
+      #=> 8
+  - name: With a hexadecimal number.
+    text: |-
+      IntegerTools.count_digits(16724838, :base => 16)
+      #=> 6
+params:
+- description: the integer to analyze.
+  name: integer
+  type:
+  - name: Integer
+- description: |-
+    the numeric base to represent the integer in.
+    Defaults to 10.
+  name: base
+  type:
+  - name: Integer
+  default: '10'
+returns:
+- description: the number of digits.
+  type:
+  - name: Integer
+short_description: Returns the number of digits in the given integer and base.
+version: "*"

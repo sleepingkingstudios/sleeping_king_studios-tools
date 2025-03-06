@@ -1,0 +1,22 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Inflector::Rules#define_plural_rule
+parent_path: sleeping-king-studios/tools/toolbox/inflector/rules
+signature: define_plural_rule(pattern, replace)
+slug: define-plural-rule
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/inflector/rules/i-define-plural-rule
+params:
+- description: the pattern to match.
+  name: pattern
+  type:
+  - name: Regexp
+- description: the string to replace.
+  name: replace
+  type:
+  - name: String
+returns:
+- description: the rules object.
+  type:
+  - name: self
+short_description: Defines a pluralization rule.
+version: "*"

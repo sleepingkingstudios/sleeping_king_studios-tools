@@ -1,0 +1,37 @@
+---
+name: SleepingKingStudios::Tools::Toolbelt#initialize
+parent_path: sleeping-king-studios/tools/toolbelt
+signature: 'initialize(deprecation_caller_depth: nil, deprecation_strategy: nil, inflector:
+  nil)'
+slug: initialize
+constructor: true
+data_path: sleeping-king-studios/tools/toolbelt/i-initialize
+params:
+- description: |-
+    the number of backtrace lines to
+    display when outputting a deprecation warning.
+  name: deprecation_caller_depth
+  type:
+  - name: Integer
+  default: nil
+- description: |-
+    the name of the strategy used when
+    deprecated code is called. Must be 'ignore', 'raise', or 'warn'.
+  name: deprecation_strategy
+  type:
+  - name: String
+  default: nil
+- description: |-
+    service object for inflecting strings. The
+    inflector must be an object that conforms to the interface used by
+    by SleepingKingStudios::Tools::Toolbox::Inflector, such as an instance
+    of ActiveSupport::Inflector .
+  name: inflector
+  type:
+  - name: Object
+  default: nil
+returns:
+- description: a new instance of Toolbelt
+  type:
+  - name: Toolbelt
+version: "*"

@@ -1,0 +1,39 @@
+---
+name: SleepingKingStudios::Tools::HashTools#convert_keys_to_symbols
+parent_path: sleeping-king-studios/tools/hash-tools
+signature: convert_keys_to_symbols(hsh)
+slug: convert-keys-to-symbols
+aliases:
+- symbolize_keys
+constructor: false
+data_path: sleeping-king-studios/tools/hash-tools/i-convert-keys-to-symbols
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      hsh = { 'one' => 1, 'two' => 2, 'three' => 3 }
+      cpy = HashTools.convert_keys_to_symbols(hsh)
+      #=> { :one => 1, :two => 2, :three => 3 }
+      hsh
+      #=> { 'one' => 1, 'two' => 2, 'three' => 3 }
+
+      hsh = { 'odd' => { 'one' => 1, 'three' => 3 }, 'even' => { 'two' => 2, 'four' => 4 } }
+      cpy = HashTools.convert_keys_to_strings(hsh)
+      #=> { :odd => { :one => 1, :three => 3 }, :even => { :two => 2, :four => 4 } }
+      hsh
+      #=> { 'odd' => { 'one' => 1, 'three' => 3 }, 'even' => { 'two' => 2, 'four' => 4 } }
+params:
+- description: the hash to convert.
+  name: hsh
+  type:
+  - name: Hash
+raises:
+- description: if the first argument is not an Hash-like object.
+  type:
+  - name: ArgumentError
+returns:
+- description: the converted copy of the hash.
+  type:
+  - name: Hash
+short_description: Returns a deep copy of the hash with the keys converted to symbols.
+version: "*"

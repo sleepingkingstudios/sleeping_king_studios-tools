@@ -1,0 +1,30 @@
+---
+name: SleepingKingStudios::Tools::StringTools#string?
+parent_path: sleeping-king-studios/tools/string-tools
+signature: string?(str)
+slug: string?
+constructor: false
+data_path: sleeping-king-studios/tools/string-tools/i-string?
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      StringTools.string?(nil)
+      #=> false
+      StringTools.string?([])
+      #=> false
+      StringTools.string?('Greetings, programs!')
+      #=> true
+      StringTools.string?(:greetings_starfighter)
+      #=> false
+params:
+- description: the object to test.
+  name: str
+  type:
+  - name: Object
+returns:
+- description: true if the object is a String, otherwise false.
+  type:
+  - name: Boolean
+short_description: Returns true if the object is a String.
+version: "*"

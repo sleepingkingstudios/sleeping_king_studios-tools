@@ -1,0 +1,12 @@
+---
+name: SleepingKingStudios::Tools::StringTools#inflector
+parent_path: sleeping-king-studios/tools/string-tools
+signature: inflector
+slug: inflector
+constructor: false
+data_path: sleeping-king-studios/tools/string-tools/i-inflector
+returns:
+- description: service object for inflecting strings.
+  type:
+  - name: Object
+version: "*"

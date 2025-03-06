@@ -1,0 +1,14 @@
+---
+name: SleepingKingStudios::Tools::CoreTools#deprecation_caller_depth
+parent_path: sleeping-king-studios/tools/core-tools
+signature: deprecation_caller_depth
+slug: deprecation-caller-depth
+constructor: false
+data_path: sleeping-king-studios/tools/core-tools/i-deprecation-caller-depth
+returns:
+- description: |-
+    the number of backtrace lines to display when outputting
+    a deprecation warning.
+  type:
+  - name: Integer
+version: "*"

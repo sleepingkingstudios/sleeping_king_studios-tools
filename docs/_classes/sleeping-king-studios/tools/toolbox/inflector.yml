@@ -1,0 +1,61 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Inflector
+slug: inflector
+type: class
+files:
+- lib/sleeping_king_studios/tools/toolbox/inflector.rb
+- lib/sleeping_king_studios/tools/toolbox/inflector/rules.rb
+parent_path: sleeping-king-studios/tools/toolbox
+short_description: Service object for transforming strings.
+defined_classes:
+- name: Rules
+  slug: rules
+instance_attributes:
+- name: rules
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbox/inflector/i-rules
+  slug: rules
+  inherited: false
+instance_methods:
+- name: camelize
+  path: sleeping-king-studios/tools/toolbox/inflector/i-camelize
+  slug: camelize
+  inherited: false
+- name: initialize
+  path: sleeping-king-studios/tools/toolbox/inflector/i-initialize
+  slug: initialize
+  inherited: false
+  constructor: true
+- name: pluralize
+  path: sleeping-king-studios/tools/toolbox/inflector/i-pluralize
+  slug: pluralize
+  inherited: false
+- name: singularize
+  path: sleeping-king-studios/tools/toolbox/inflector/i-singularize
+  slug: singularize
+  inherited: false
+- name: underscore
+  path: sleeping-king-studios/tools/toolbox/inflector/i-underscore
+  slug: underscore
+  inherited: false
+data_path: sleeping-king-studios/tools/toolbox/inflector
+description: |-
+  Internally, an instance of this class is used to StringTools to perform
+  string transformations.
+
+  This class should define a compatible interface with
+  ActiveSupport::Inflector, i.e. all methods defined on Toolbox::Inflector
+  should have a corresponding method on ActiveSupport::Inflector with a
+  superset of the parameters. (The reverse is *not* true).
+extended_modules:
+- name: Forwardable
+  slug: forwardable
+metadata:
+  see:
+  - label: SleepingKingStudios::Tools::StringTools
+    path: sleeping-king-studios/tools/string-tools
+    text:
+    type: reference
+constructor: true
+version: "*"

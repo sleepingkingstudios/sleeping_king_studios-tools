@@ -1,0 +1,19 @@
+---
+name: SleepingKingStudios::Tools::Assertions::Aggregator#count
+parent_path: sleeping-king-studios/tools/assertions/aggregator
+signature: count
+slug: count
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/aggregator/i-count
+metadata:
+  see:
+  - label: Array#count
+    path:
+    text:
+    type: reference
+returns:
+- description: the number of failure messages.
+  type:
+  - name: Integer
+short_description: Returns a count of the failure message.
+version: "*"

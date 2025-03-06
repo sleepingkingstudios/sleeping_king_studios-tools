@@ -1,0 +1,171 @@
+---
+name: SleepingKingStudios::Tools::Assertions::Aggregator
+slug: aggregator
+type: class
+files:
+- lib/sleeping_king_studios/tools/assertions.rb
+parent_path: sleeping-king-studios/tools/assertions
+short_description: Utility for grouping multiple assertion statements.
+class_methods:
+- name: instance
+  path: sleeping-king-studios/tools/base/c-instance
+  slug: instance
+  inherited: true
+instance_methods:
+- name: !!str '<<'
+  path: sleeping-king-studios/tools/assertions/aggregator/i-<<
+  slug: !!str '<<'
+  inherited: false
+- name: aggregator_class
+  path: sleeping-king-studios/tools/assertions/i-aggregator-class
+  slug: aggregator-class
+  inherited: true
+- name: assert
+  path: sleeping-king-studios/tools/assertions/i-assert
+  slug: assert
+  inherited: true
+- name: assert_blank
+  path: sleeping-king-studios/tools/assertions/i-assert-blank
+  slug: assert-blank
+  inherited: true
+- name: assert_boolean
+  path: sleeping-king-studios/tools/assertions/i-assert-boolean
+  slug: assert-boolean
+  inherited: true
+- name: assert_class
+  path: sleeping-king-studios/tools/assertions/i-assert-class
+  slug: assert-class
+  inherited: true
+- name: assert_group
+  path: sleeping-king-studios/tools/assertions/aggregator/i-assert-group
+  slug: assert-group
+  inherited: false
+- name: assert_instance_of
+  path: sleeping-king-studios/tools/assertions/i-assert-instance-of
+  slug: assert-instance-of
+  inherited: true
+- name: assert_matches
+  path: sleeping-king-studios/tools/assertions/i-assert-matches
+  slug: assert-matches
+  inherited: true
+- name: assert_name
+  path: sleeping-king-studios/tools/assertions/i-assert-name
+  slug: assert-name
+  inherited: true
+- name: assert_nil
+  path: sleeping-king-studios/tools/assertions/i-assert-nil
+  slug: assert-nil
+  inherited: true
+- name: assert_not_nil
+  path: sleeping-king-studios/tools/assertions/i-assert-not-nil
+  slug: assert-not-nil
+  inherited: true
+- name: assert_presence
+  path: sleeping-king-studios/tools/assertions/i-assert-presence
+  slug: assert-presence
+  inherited: true
+- name: clear
+  path: sleeping-king-studios/tools/assertions/aggregator/i-clear
+  slug: clear
+  inherited: false
+- name: count
+  path: sleeping-king-studios/tools/assertions/aggregator/i-count
+  slug: count
+  inherited: false
+- name: each
+  path: sleeping-king-studios/tools/assertions/aggregator/i-each
+  slug: each
+  inherited: false
+- name: empty?
+  path: sleeping-king-studios/tools/assertions/aggregator/i-empty?
+  slug: empty?
+  inherited: false
+- name: error_message_for
+  path: sleeping-king-studios/tools/assertions/i-error-message-for
+  slug: error-message-for
+  inherited: true
+- name: failure_message
+  path: sleeping-king-studios/tools/assertions/aggregator/i-failure-message
+  slug: failure-message
+  inherited: false
+- name: initialize
+  path: sleeping-king-studios/tools/assertions/aggregator/i-initialize
+  slug: initialize
+  inherited: false
+  constructor: true
+- name: size
+  path: sleeping-king-studios/tools/assertions/aggregator/i-size
+  slug: size
+  inherited: false
+- name: validate
+  path: sleeping-king-studios/tools/assertions/i-validate
+  slug: validate
+  inherited: true
+- name: validate_blank
+  path: sleeping-king-studios/tools/assertions/i-validate-blank
+  slug: validate-blank
+  inherited: true
+- name: validate_boolean
+  path: sleeping-king-studios/tools/assertions/i-validate-boolean
+  slug: validate-boolean
+  inherited: true
+- name: validate_class
+  path: sleeping-king-studios/tools/assertions/i-validate-class
+  slug: validate-class
+  inherited: true
+- name: validate_group
+  path: sleeping-king-studios/tools/assertions/i-validate-group
+  slug: validate-group
+  inherited: true
+- name: validate_instance_of
+  path: sleeping-king-studios/tools/assertions/i-validate-instance-of
+  slug: validate-instance-of
+  inherited: true
+- name: validate_matches
+  path: sleeping-king-studios/tools/assertions/i-validate-matches
+  slug: validate-matches
+  inherited: true
+- name: validate_name
+  path: sleeping-king-studios/tools/assertions/i-validate-name
+  slug: validate-name
+  inherited: true
+- name: validate_nil
+  path: sleeping-king-studios/tools/assertions/i-validate-nil
+  slug: validate-nil
+  inherited: true
+- name: validate_not_nil
+  path: sleeping-king-studios/tools/assertions/i-validate-not-nil
+  slug: validate-not-nil
+  inherited: true
+- name: validate_presence
+  path: sleeping-king-studios/tools/assertions/i-validate-presence
+  slug: validate-presence
+  inherited: true
+data_path: sleeping-king-studios/tools/assertions/aggregator
+extended_modules:
+- name: Forwardable
+  slug: forwardable
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      rocket = Struct.new(:fuel, :launched).new(0.0, true)
+      aggregator = SleepingKingStudios::Tools::Assertions::Aggregator.new
+      aggregator.empty?
+      #=> true
+
+      aggregator.assert(message: 'is out of fuel') { rocket.fuel > 0 }
+      aggregator.assert(message: 'has already launched') { !rocket.launched }
+      aggregator.empty?
+      #=> false
+      aggregator.failure_message
+      #=> 'is out of fuel, has already launched'
+constructor: true
+inherited_classes:
+- name: SleepingKingStudios::Tools::Assertions
+  slug: assertions
+  path: sleeping-king-studios/tools/assertions
+- name: SleepingKingStudios::Tools::Base
+  slug: base
+  path: sleeping-king-studios/tools/base
+version: "*"

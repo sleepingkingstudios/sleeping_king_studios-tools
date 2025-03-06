@@ -1,0 +1,39 @@
+---
+name: SleepingKingStudios::Tools::Assertions#validate_group
+parent_path: sleeping-king-studios/tools/assertions
+signature: 'validate_group(message: nil, &validations)'
+slug: validate-group
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-validate-group
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      Assertions.validate_group do |group|
+        group.validate_name(nil, as: 'label')
+        group.validate_instance_of(0.0, expected: Integer, as: 'quantity')
+      end
+      # raises an ArgumentError with message: "label can't be blank, quantity is not an instance of Integer"
+params:
+- description: the exception message to raise on a failure.
+  name: message
+  type:
+  - name: String
+  default: nil
+raises:
+- description: if any of the validations fail.
+  type:
+  - name: ArgumentError
+returns:
+- description: ''
+  type:
+  - name: void
+short_description: Evaluates a series of validations and combines all failures.
+yield_params:
+- description: the aggregator object.
+  name: aggregator
+  type:
+  - name: Aggregator
+yields:
+- description: the validations to evaluate.
+version: "*"

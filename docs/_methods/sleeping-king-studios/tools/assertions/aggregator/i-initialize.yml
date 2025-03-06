@@ -1,0 +1,12 @@
+---
+name: SleepingKingStudios::Tools::Assertions::Aggregator#initialize
+parent_path: sleeping-king-studios/tools/assertions/aggregator
+signature: initialize
+slug: initialize
+constructor: true
+data_path: sleeping-king-studios/tools/assertions/aggregator/i-initialize
+returns:
+- description: a new instance of Aggregator
+  type:
+  - name: Aggregator
+version: "*"

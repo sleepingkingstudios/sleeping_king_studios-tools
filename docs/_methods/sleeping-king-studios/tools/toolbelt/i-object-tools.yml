@@ -1,0 +1,17 @@
+---
+name: SleepingKingStudios::Tools::Toolbelt#object_tools
+parent_path: sleeping-king-studios/tools/toolbelt
+signature: object_tools
+slug: object-tools
+aliases:
+- obj
+constructor: false
+data_path: sleeping-king-studios/tools/toolbelt/i-object-tools
+returns:
+- description: |-
+    low-level tools for
+    working with objects.
+  type:
+  - name: SleepingKingStudios::Tools::ObjectTools
+    path: sleeping-king-studios/tools/object-tools
+version: "*"
