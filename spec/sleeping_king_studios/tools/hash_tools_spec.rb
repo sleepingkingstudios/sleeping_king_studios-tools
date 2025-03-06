@@ -370,6 +370,25 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
     describe 'with a non-empty hash' do
       it { expect(described_class.hash?({ greetings: 'programs' })).to be true }
     end
+
+    describe 'with a hash-like object' do
+      let(:hash_like) do
+        Spec::ExampleHash.new({ greetings: 'programs' })
+      end
+
+      example_class 'Spec::ExampleHash', Struct.new(:data) do |klass|
+        klass.extend Forwardable
+
+        klass.def_delegators :data,
+          :[],
+          :count,
+          :each,
+          :each_key,
+          :each_pair
+      end
+
+      it { expect(described_class.hash?(hash_like)).to be true }
+    end
   end
 
   describe '#immutable?' do

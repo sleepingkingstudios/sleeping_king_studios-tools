@@ -9,52 +9,8 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Mixin do
 
   subject(:instance) { described_class.new }
 
-  shared_context 'when the mixin includes another mixin' do
-    example_constant 'Spec::IncludedMixin' do
-      Module.new do
-        extend SleepingKingStudios::Tools::Toolbox::Mixin
-
-        const_set(
-          :ClassMethods,
-          Module.new do
-            define_method :included_class_method do
-              { receiver: 'Spec::IncludedMixin' }
-            end
-          end
-        )
-
-        define_method :included_instance_method do
-          { receiver: 'Spec::IncludedMixin' }
-        end
-      end
-    end
-
-    before(:example) do
-      Spec::ExampleMixin.include(Spec::IncludedMixin)
-    end
-  end
-
   let(:mixin_module)    { SleepingKingStudios::Tools::Toolbox::Mixin } # rubocop:disable RSpec/DescribedClass
   let(:described_class) { Spec::BaseClass }
-
-  example_constant 'Spec::FirstMixin' do
-    Module.new do
-      extend SleepingKingStudios::Tools::Toolbox::Mixin
-
-      const_set(
-        :ClassMethods,
-        Module.new do
-          define_method :first_class_method do
-            :ichi
-          end
-        end
-      )
-
-      define_method :first_instance_method do
-        :ichi
-      end
-    end
-  end
 
   example_class 'Spec::BaseClass' do |klass|
     klass.define_singleton_method :example_class_method do
