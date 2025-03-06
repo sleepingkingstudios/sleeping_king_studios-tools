@@ -24,14 +24,14 @@ module SleepingKingStudios::Tools::Toolbox
   module Subclass
     # Creates a subclass with partially applied constructor parameters.
     #
-    # @param class_arguments [Array] The arguments, if any, to apply to the
+    # @param class_arguments [Array] the arguments, if any, to apply to the
     #   constructor. These arguments will be added before any args passed
     #   directly to the constructor.
-    # @param class_keywords [Hash] The keywords, if any, to apply to the
+    # @param class_keywords [Hash] the keywords, if any, to apply to the
     #   constructor. These keywords will be added before any kwargs passed
     #   directly to the constructor.
     #
-    # @yield The block, if any, to pass to the constructor. This will be
+    # @yield the block, if any, to pass to the constructor. This will be
     #   overriden by a block passed directly to the constructor.
     #
     # @return [Class] the generated subclass.
