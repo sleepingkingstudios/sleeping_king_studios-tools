@@ -262,6 +262,10 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Inflector do
       include_examples 'should underscore', 'BasicObject', 'basic_object'
     end
 
+    describe 'with an ordinal number' do
+      include_examples 'should underscore', '11thHour', '11th_hour'
+    end
+
     describe 'with a mixed-case string with underscores' do
       include_examples 'should underscore',
         'be_a_BasicObject',
@@ -278,10 +282,34 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::Inflector do
         'version_3_point_3'
     end
 
+    describe 'with an underscore-separated string with consecutive digits' do
+      include_examples 'should underscore',
+        'version_33_point_33',
+        'version_33_point_33'
+    end
+
     describe 'with a mixed-case string with digits' do
       include_examples 'should underscore',
         'Version3Point3',
         'version_3_point_3'
+    end
+
+    describe 'with a mixed-case string with consecutive digits' do
+      include_examples 'should underscore',
+        'Version33Point33',
+        'version_33_point_33'
+    end
+
+    describe 'with a space-separated string with digits' do
+      include_examples 'should underscore',
+        'Version 3 Point 3',
+        'version 3 point 3'
+    end
+
+    describe 'with a space-separated string with consecutive digits' do
+      include_examples 'should underscore',
+        'Version 33 Point 33',
+        'version 33 point 33'
     end
 
     describe 'with a mixed-case string with consecutive capitals' do

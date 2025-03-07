@@ -125,7 +125,8 @@ module SleepingKingStudios::Tools::Toolbox
       word
         .to_s
         .gsub(/([A-Z0-9\d]+)([A-Z][a-z])/, '\1_\2')
-        .gsub(/([a-z\d])([A-Z0-9])/, '\1_\2')
+        .gsub(/([a-z])([A-Z\d])/, '\1_\2')
+        .gsub(/(\d)([A-Z])/, '\1_\2')
         .gsub(/\A_+|_+\z/, '')
         .tr('-', '_')
         .downcase
