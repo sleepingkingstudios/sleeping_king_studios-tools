@@ -17,9 +17,9 @@ module SleepingKingStudios
       # Patch version.
       PATCH = 0
       # Prerelease version.
-      PRERELEASE = :alpha
+      PRERELEASE = :rc
       # Build metadata.
-      BUILD = nil
+      BUILD = 0
     end
 
     # The current version of the gem.
