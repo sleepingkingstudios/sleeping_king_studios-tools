@@ -19,7 +19,7 @@ module SleepingKingStudios
       # Prerelease version.
       PRERELEASE = :rc
       # Build metadata.
-      BUILD = 0
+      BUILD = 1
     end
 
     # The current version of the gem.
