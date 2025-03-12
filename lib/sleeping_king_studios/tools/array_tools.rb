@@ -104,7 +104,7 @@ module SleepingKingStudios::Tools
     #
     #   @param ary [Array<Object>] the values to count.
     #
-    #   @return [Hash{Object, Integer}] The number of times each value appears
+    #   @return [Hash{Object=>Integer}] The number of times each value appears
     #     in the enumerable object.
     #
     #   @raise [ArgumentError] if the first argument is not an Array-like
@@ -121,7 +121,7 @@ module SleepingKingStudios::Tools
     #
     #   @yieldparam item [Object] an item in the array to matched.
     #
-    #   @return [Hash{Object, Integer}] the number of times each result
+    #   @return [Hash{Object=>Integer}] the number of times each result
     #     appears.
     #
     #   @raise [ArgumentError] if the first argument is not an Array-like

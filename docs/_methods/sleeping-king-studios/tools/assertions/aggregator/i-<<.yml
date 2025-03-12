@@ -1,0 +1,24 @@
+---
+name: SleepingKingStudios::Tools::Assertions::Aggregator#<<
+parent_path: sleeping-king-studios/tools/assertions/aggregator
+signature: "<<(message)"
+slug: !!str '<<'
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/aggregator/i-<<
+metadata:
+  see:
+  - label: Array#<<
+    path:
+    text:
+    type: reference
+params:
+- description: the message to append.
+  name: message
+  type:
+  - name: String
+returns:
+- description: the updated failure messages.
+  type:
+  - name: Array
+short_description: Appends the message to the failure messages.
+version: "*"
