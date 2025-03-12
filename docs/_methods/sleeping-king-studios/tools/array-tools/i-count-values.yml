@@ -1,0 +1,92 @@
+---
+name: SleepingKingStudios::Tools::ArrayTools#count_values
+parent_path: sleeping-king-studios/tools/array-tools
+signature: count_values(ary, &block)
+slug: count-values
+aliases:
+- tally
+constructor: false
+data_path: sleeping-king-studios/tools/array-tools/i-count-values
+overloads:
+- name: SleepingKingStudios::Tools::ArrayTools#count_values
+  parent_path: sleeping-king-studios/tools/array-tools
+  signature: count_values(ary)
+  slug: count-values
+  aliases:
+  - tally
+  constructor: false
+  metadata:
+    examples:
+    - name: ''
+      text: |-
+        ArrayTools.count_values([1, 1, 1, 2, 2, 3])
+        #=> { 1 => 3, 2 => 2, 3 => 1 }
+  params:
+  - description: the values to count.
+    name: ary
+    type:
+    - name: Array
+      items:
+      - name: Object
+  raises:
+  - description: |-
+      if the first argument is not an Array-like
+      object.
+    type:
+    - name: ArgumentError
+  returns:
+  - description: |-
+      The number of times each value appears
+      in the enumerable object.
+    type:
+    - name: Hash
+      keys:
+      - name: Object
+      values:
+      - name: Integer
+  short_description: Counts the number of times each value appears in the enumerable
+    object.
+- name: SleepingKingStudios::Tools::ArrayTools#count_values
+  parent_path: sleeping-king-studios/tools/array-tools
+  signature: count_values(ary, &block)
+  slug: count-values
+  aliases:
+  - tally
+  constructor: false
+  metadata:
+    examples:
+    - name: ''
+      text: |-
+        ArrayTools.count_values([1, 1, 1, 2, 2, 3]) { |i| i ** 2 }
+        #=> { 1 => 3, 4 => 2, 9 => 1 }
+  params:
+  - description: the values to count.
+    name: ary
+    type:
+    - name: Array
+      items:
+      - name: Object
+  raises:
+  - description: |-
+      if the first argument is not an Array-like
+      object.
+    type:
+    - name: ArgumentError
+  returns:
+  - description: |-
+      the number of times each result
+      appears.
+    type:
+    - name: Hash
+      keys:
+      - name: Object
+      values:
+      - name: Integer
+  short_description: Calls the block and counts the number of times each result appears.
+  yield_params:
+  - description: an item in the array to matched.
+    name: item
+    type:
+    - name: Object
+short_description: Counts the number of times each item or result appears in the object.
+version: "*"
