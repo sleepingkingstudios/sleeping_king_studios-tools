@@ -1,0 +1,81 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::ConstantMap
+slug: constant-map
+type: class
+files:
+- lib/sleeping_king_studios/tools/toolbox/constant_map.rb
+parent_path: sleeping-king-studios/tools/toolbox
+short_description: Provides an enumerable interface for defining a group of constants.
+instance_attributes:
+- name: to_h
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbox/constant-map/i-to-h
+  slug: to-h
+  inherited: false
+instance_methods:
+- name: each
+  path: sleeping-king-studios/tools/toolbox/constant-map/i-each
+  slug: each
+  inherited: false
+- name: each_key
+  path: sleeping-king-studios/tools/toolbox/constant-map/i-each-key
+  slug: each-key
+  inherited: false
+- name: each_pair
+  path: sleeping-king-studios/tools/toolbox/constant-map/i-each-pair
+  slug: each-pair
+  inherited: false
+- name: each_value
+  path: sleeping-king-studios/tools/toolbox/constant-map/i-each-value
+  slug: each-value
+  inherited: false
+- name: freeze
+  path: sleeping-king-studios/tools/toolbox/constant-map/i-freeze
+  slug: freeze
+  inherited: false
+- name: initialize
+  path: sleeping-king-studios/tools/toolbox/constant-map/i-initialize
+  slug: initialize
+  inherited: false
+  constructor: true
+- name: keys
+  path: sleeping-king-studios/tools/toolbox/constant-map/i-keys
+  slug: keys
+  inherited: false
+- name: values
+  path: sleeping-king-studios/tools/toolbox/constant-map/i-values
+  slug: values
+  inherited: false
+data_path: sleeping-king-studios/tools/toolbox/constant-map
+extended_modules:
+- name: Forwardable
+  slug: forwardable
+included_modules:
+- name: Enumerable
+  slug: enumerable
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      UserRoles = ConstantMap.new(
+        {
+          GUEST: 'guest',
+          USER:  'user',
+          ADMIN: 'admin'
+        }
+      )
+
+      UserRoles::GUEST
+      #=> 'guest'
+
+      UserRoles.user
+      #=> 'user'
+
+      UserRoles.all
+      #=> { :GUEST => 'guest', :USER => 'user', :ADMIN => 'admin' }
+constructor: true
+inherited_classes:
+- name: Module
+  slug: module
+version: '1.2'

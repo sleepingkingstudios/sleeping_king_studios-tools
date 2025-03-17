@@ -1,0 +1,34 @@
+---
+name: SleepingKingStudios::Tools::HashTools#deep_freeze
+parent_path: sleeping-king-studios/tools/hash-tools
+signature: deep_freeze(hsh)
+slug: deep-freeze
+constructor: false
+data_path: sleeping-king-studios/tools/hash-tools/i-deep-freeze
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      hsh = { :one => 'one', :two => 'two', :three => 'three' }
+      HashTools.deep_freeze hsh
+
+      hsh.frozen?
+      #=> true
+      hsh[:one].frozen?
+      #=> true
+params:
+- description: the hash to freeze.
+  name: hsh
+  type:
+  - name: Hash
+raises:
+- description: if the first argument is not an Hash-like object.
+  type:
+  - name: ArgumentError
+returns:
+- description: the frozen hash.
+  type:
+  - name: Hash
+short_description: Freezes the hash and performs a deep freeze on each hash key and
+  value.
+version: '1.2'

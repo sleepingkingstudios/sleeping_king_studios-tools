@@ -1,0 +1,30 @@
+---
+name: SleepingKingStudios::Tools::ArrayTools#mutable?
+parent_path: sleeping-king-studios/tools/array-tools
+signature: mutable?(ary)
+slug: mutable?
+constructor: false
+data_path: sleeping-king-studios/tools/array-tools/i-mutable?
+metadata:
+  see:
+  - label: "#immutable?"
+    path: sleeping-king-studios/tools/array-tools#instance-method-immutable?
+    text:
+    type: reference
+params:
+- description: the array to test.
+  name: ary
+  type:
+  - name: Array
+raises:
+- description: if the first argument is not an Array-like object.
+  type:
+  - name: ArgumentError
+returns:
+- description: |-
+    true if the array or any of its items are mutable,
+    otherwise false.
+  type:
+  - name: Boolean
+short_description: Checks if the array or any of its contents are mutable.
+version: '1.2'

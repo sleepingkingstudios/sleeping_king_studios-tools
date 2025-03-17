@@ -1,0 +1,82 @@
+---
+name: SleepingKingStudios::Tools::Toolbelt
+slug: toolbelt
+type: class
+files:
+- lib/sleeping_king_studios/tools/toolbelt.rb
+parent_path: sleeping-king-studios/tools
+short_description: Helper object for quick access to all available tools.
+class_methods:
+- name: instance
+  path: sleeping-king-studios/tools/toolbelt/c-instance
+  slug: instance
+  inherited: false
+instance_attributes:
+- name: array_tools
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbelt/i-array-tools
+  slug: array-tools
+  inherited: false
+- name: assertions
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbelt/i-assertions
+  slug: assertions
+  inherited: false
+- name: core_tools
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbelt/i-core-tools
+  slug: core-tools
+  inherited: false
+- name: hash_tools
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbelt/i-hash-tools
+  slug: hash-tools
+  inherited: false
+- name: integer_tools
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbelt/i-integer-tools
+  slug: integer-tools
+  inherited: false
+- name: object_tools
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbelt/i-object-tools
+  slug: object-tools
+  inherited: false
+- name: string_tools
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbelt/i-string-tools
+  slug: string-tools
+  inherited: false
+instance_methods:
+- name: initialize
+  path: sleeping-king-studios/tools/toolbelt/i-initialize
+  slug: initialize
+  inherited: false
+  constructor: true
+- name: inspect
+  path: sleeping-king-studios/tools/toolbelt/i-inspect
+  slug: inspect
+  inherited: false
+data_path: sleeping-king-studios/tools/toolbelt
+description: |-
+  Specific tools can be accessed by name. For example, to access the
+  configured instance of ArrayTools, call Toolbelt#array_tools. Certain tools
+  also define a shorthand - for example, the array_tools instance can also be
+  accessed using Toolbelt#ary.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      toolbelt = SleepingKingStudios::Tools::Toolbelt.new
+
+      toolbelt.array_tools.pluralize('light')
+      #=> 'lights'
+constructor: true
+version: '1.2'

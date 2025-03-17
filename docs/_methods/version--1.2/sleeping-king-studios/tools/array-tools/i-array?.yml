@@ -1,0 +1,34 @@
+---
+name: SleepingKingStudios::Tools::ArrayTools#array?
+parent_path: sleeping-king-studios/tools/array-tools
+signature: array?(obj)
+slug: array?
+constructor: false
+data_path: sleeping-king-studios/tools/array-tools/i-array?
+description: |-
+  This method checks for the method signatures of the object. An Array-like
+  method will define all of the the #[], #count, and #each methods, and
+  neither of the #each_key or #each_pair methods.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      ArrayTools.array?(nil)
+      #=> false
+
+      ArrayTools.array?([])
+      #=> true
+
+      ArrayTools.array?({})
+      #=> false
+params:
+- description: the object to test.
+  name: obj
+  type:
+  - name: Object
+returns:
+- description: true if the object is an Array, otherwise false.
+  type:
+  - name: Boolean
+short_description: Returns true if the object is or appears to be an Array.
+version: '1.2'

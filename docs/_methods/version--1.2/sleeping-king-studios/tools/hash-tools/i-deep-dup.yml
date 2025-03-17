@@ -1,0 +1,40 @@
+---
+name: SleepingKingStudios::Tools::HashTools#deep_dup
+parent_path: sleeping-king-studios/tools/hash-tools
+signature: deep_dup(hsh)
+slug: deep-dup
+constructor: false
+data_path: sleeping-king-studios/tools/hash-tools/i-deep-dup
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      hsh = { :one => 'one', :two => 'two', :three => 'three' }
+      cpy = HashTools.deep_dup hsh
+
+      cpy.update :four => 'four'
+      #=> { :one => 'one', :two => 'two', :three => 'three', :four => 'four' }
+      hsh
+      #=> { :one => 'one', :two => 'two', :three => 'three' }
+
+      cpy[:one].sub!(/on/, 'vu'); cpy
+      #=> { :one => 'vun', :two => 'two', :three => 'three', :four => 'four' }
+      hsh
+      #=> { :one => 'one', :two => 'two', :three => 'three' }
+params:
+- description: the hash to copy.
+  name: hsh
+  type:
+  - name: Hash
+    items:
+    - name: Object
+raises:
+- description: if the first argument is not an Hash-like object.
+  type:
+  - name: ArgumentError
+returns:
+- description: the copy of the hash.
+  type:
+  - name: Hash
+short_description: Creates a deep copy of the Hash.
+version: '1.2'

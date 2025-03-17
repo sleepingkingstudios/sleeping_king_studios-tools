@@ -1,0 +1,57 @@
+---
+name: SleepingKingStudios::Tools::Assertions#assert_matches
+parent_path: sleeping-king-studios/tools/assertions
+signature: 'assert_matches(value, expected:, as: ''value'', error_class: AssertionError,
+  message: nil, optional: false)'
+slug: assert-matches
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-assert-matches
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      Assertions.assert_matches('bar', expected: /foo/)
+      #=> raises an AssertionError with message 'value does not match the pattern /foo/'
+
+      Assertions.assert_matches('foo', expected: /foo/)
+      #=> does not raise an exception
+params:
+- description: the value to assert on.
+  name: value
+  type:
+  - name: Object
+- description: the name of the asserted value.
+  name: as
+  type:
+  - name: String
+  default: "'value'"
+- description: the exception class to raise on a failure.
+  name: error_class
+  type:
+  - name: Class
+  default: AssertionError
+- description: the expected object.
+  name: expected
+  type:
+  - name: "#==="
+- description: the exception message to raise on a failure.
+  name: message
+  type:
+  - name: String
+  default: nil
+- description: if true, allows nil values.
+  name: optional
+  type:
+  - name: 'true'
+  - name: 'false'
+  default: 'false'
+raises:
+- description: if the value does not match the expected object.
+  type:
+  - name: AssertionError
+returns:
+- description: ''
+  type:
+  - name: void
+short_description: 'Asserts that the value matches the expected object using #===.'
+version: '1.2'

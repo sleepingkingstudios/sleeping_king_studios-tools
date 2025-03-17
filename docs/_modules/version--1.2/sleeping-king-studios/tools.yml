@@ -1,0 +1,52 @@
+---
+name: SleepingKingStudios::Tools
+slug: tools
+type: module
+files:
+- lib/sleeping_king_studios/tools.rb
+- lib/sleeping_king_studios/tools/base.rb
+- lib/sleeping_king_studios/tools/toolbox.rb
+- lib/sleeping_king_studios/tools/version.rb
+- lib/sleeping_king_studios/tools/toolbelt.rb
+- lib/sleeping_king_studios/tools/assertions.rb
+- lib/sleeping_king_studios/tools/core_tools.rb
+- lib/sleeping_king_studios/tools/hash_tools.rb
+- lib/sleeping_king_studios/tools/array_tools.rb
+- lib/sleeping_king_studios/tools/object_tools.rb
+- lib/sleeping_king_studios/tools/string_tools.rb
+- lib/sleeping_king_studios/tools/integer_tools.rb
+parent_path: sleeping-king-studios
+short_description: |-
+  A library of utility services and concerns to expand the functionality of
+  core classes without polluting the global namespace.
+constants:
+- name: VERSION
+  path: sleeping-king-studios/tools/version
+  slug: version
+  inherited: false
+defined_classes:
+- name: ArrayTools
+  slug: array-tools
+- name: Assertions
+  slug: assertions
+- name: Base
+  slug: base
+- name: CoreTools
+  slug: core-tools
+- name: HashTools
+  slug: hash-tools
+- name: IntegerTools
+  slug: integer-tools
+- name: ObjectTools
+  slug: object-tools
+- name: StringTools
+  slug: string-tools
+- name: Toolbelt
+  slug: toolbelt
+defined_modules:
+- name: Toolbox
+  slug: toolbox
+- name: Version
+  slug: version
+data_path: sleeping-king-studios/tools
+version: '1.2'

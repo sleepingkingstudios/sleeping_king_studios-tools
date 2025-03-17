@@ -1,0 +1,49 @@
+---
+name: SleepingKingStudios::Tools::ArrayTools#deep_dup
+parent_path: sleeping-king-studios/tools/array-tools
+signature: deep_dup(ary)
+slug: deep-dup
+constructor: false
+data_path: sleeping-king-studios/tools/array-tools/i-deep-dup
+description: |-
+  Iterates over the array and returns a new Array with deep copies of each
+  array item.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      ary = ['one', 'two', 'three']
+      cpy = ArrayTools.deep_dup ary
+
+      cpy << 'four'
+      #=> ['one', 'two', 'three', 'four']
+      ary
+      #=> ['one', 'two', 'three']
+
+      cpy.first.sub!(/on/, 'vu')
+      cpy
+      #=> ['vun', 'two', 'three', 'four']
+      ary
+      #=> ['one', 'two', 'three']
+  see:
+  - label: ObjectTools#deep_dup
+    path:
+    text:
+    type: reference
+params:
+- description: the array to copy.
+  name: ary
+  type:
+  - name: Array
+    items:
+    - name: Object
+raises:
+- description: if the first argument is not an Array-like object.
+  type:
+  - name: ArgumentError
+returns:
+- description: the copy of the array.
+  type:
+  - name: Array
+short_description: Creates a deep copy of the object.
+version: '1.2'

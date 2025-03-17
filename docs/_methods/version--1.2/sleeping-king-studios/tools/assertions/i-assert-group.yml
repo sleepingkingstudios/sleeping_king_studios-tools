@@ -1,0 +1,46 @@
+---
+name: SleepingKingStudios::Tools::Assertions#assert_group
+parent_path: sleeping-king-studios/tools/assertions
+signature: 'assert_group(error_class: AssertionError, message: nil, &assertions)'
+slug: assert-group
+aliases:
+- aggregate
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-assert-group
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      Assertions.assert_group do |group|
+        group.assert_name(nil, as: 'label')
+        group.assert_instance_of(0.0, expected: Integer, as: 'quantity')
+      end
+      # raises an AssertionError with message: "label can't be blank, quantity is not an instance of Integer"
+params:
+- description: the exception class to raise on a failure.
+  name: error_class
+  type:
+  - name: Class
+  default: AssertionError
+- description: the exception message to raise on a failure.
+  name: message
+  type:
+  - name: String
+  default: nil
+raises:
+- description: if any of the assertions fail.
+  type:
+  - name: AssertionError
+returns:
+- description: ''
+  type:
+  - name: void
+short_description: Evaluates a series of assertions and combines all failures.
+yield_params:
+- description: the aggregator object.
+  name: aggregator
+  type:
+  - name: Aggregator
+yields:
+- description: the assertions to evaluate.
+version: '1.2'

@@ -1,0 +1,19 @@
+---
+name: SleepingKingStudios::Tools::Assertions::Aggregator#clear
+parent_path: sleeping-king-studios/tools/assertions/aggregator
+signature: clear
+slug: clear
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/aggregator/i-clear
+metadata:
+  see:
+  - label: Array#clear
+    path:
+    text:
+    type: reference
+returns:
+- description: the empty failure messages.
+  type:
+  - name: Array
+short_description: Removes all items from the failure messages.
+version: '1.2'

@@ -1,0 +1,15 @@
+---
+name: SleepingKingStudios::Tools::Toolbelt#core_tools
+parent_path: sleeping-king-studios/tools/toolbelt
+signature: core_tools
+slug: core-tools
+constructor: false
+data_path: sleeping-king-studios/tools/toolbelt/i-core-tools
+returns:
+- description: |-
+    tools for working with an
+    application or working environment.
+  type:
+  - name: SleepingKingStudios::Tools::CoreTools
+    path: sleeping-king-studios/tools/core-tools
+version: '1.2'

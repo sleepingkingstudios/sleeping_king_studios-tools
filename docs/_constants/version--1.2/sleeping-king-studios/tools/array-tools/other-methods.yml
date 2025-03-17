@@ -1,0 +1,8 @@
+---
+name: SleepingKingStudios::Tools::ArrayTools::OTHER_METHODS
+parent_path: sleeping-king-studios/tools/array-tools
+slug: other-methods
+short_description: Methods that an Array-like object should *not* implement.
+value: "%i[each_key each_pair].freeze"
+data_path: sleeping-king-studios/tools/array-tools/other-methods
+version: '1.2'

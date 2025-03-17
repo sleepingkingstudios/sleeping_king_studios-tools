@@ -1,0 +1,18 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Inflector#pluralize
+parent_path: sleeping-king-studios/tools/toolbox/inflector
+signature: pluralize(word)
+slug: pluralize
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/inflector/i-pluralize
+params:
+- description: the word to transform.
+  name: word
+  type:
+  - name: String
+returns:
+- description: the word in plural form.
+  type:
+  - name: String
+short_description: Transforms the word to a plural, lowercase form.
+version: '1.2'

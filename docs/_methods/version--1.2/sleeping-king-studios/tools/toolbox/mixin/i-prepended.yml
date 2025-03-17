@@ -1,0 +1,21 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Mixin#prepended
+parent_path: sleeping-king-studios/tools/toolbox/mixin
+signature: prepended(othermod)
+slug: prepended
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/mixin/i-prepended
+params:
+- description: |-
+    the other class or module in which the mixin is
+    prepended.
+  name: othermod
+  type:
+  - name: Module
+returns:
+- description: ''
+  type:
+  - name: void
+short_description: Callback invoked whenever the receiver is prepended into another
+  module.
+version: '1.2'

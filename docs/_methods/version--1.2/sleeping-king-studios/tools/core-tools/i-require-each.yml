@@ -1,0 +1,14 @@
+---
+name: SleepingKingStudios::Tools::CoreTools#require_each
+parent_path: sleeping-king-studios/tools/core-tools
+signature: require_each(*file_patterns)
+slug: require-each
+constructor: false
+data_path: sleeping-king-studios/tools/core-tools/i-require-each
+params:
+- description: The files to require.
+  name: file_patterns
+  type:
+  - name: Array
+short_description: Expands each file pattern and requires each file.
+version: '1.2'

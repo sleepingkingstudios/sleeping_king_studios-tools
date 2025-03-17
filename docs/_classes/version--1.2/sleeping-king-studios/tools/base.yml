@@ -1,0 +1,41 @@
+---
+name: SleepingKingStudios::Tools::Base
+slug: base
+type: class
+files:
+- lib/sleeping_king_studios/tools/base.rb
+parent_path: sleeping-king-studios/tools
+short_description: Abstract base class for Tools classes.
+class_methods:
+- name: instance
+  path: sleeping-king-studios/tools/base/c-instance
+  slug: instance
+  inherited: false
+data_path: sleeping-king-studios/tools/base
+extended_modules:
+- name: Forwardable
+  slug: forwardable
+constructor: false
+direct_subclasses:
+- name: SleepingKingStudios::Tools::ArrayTools
+  slug: array-tools
+  path: sleeping-king-studios/tools/array-tools
+- name: SleepingKingStudios::Tools::Assertions
+  slug: assertions
+  path: sleeping-king-studios/tools/assertions
+- name: SleepingKingStudios::Tools::CoreTools
+  slug: core-tools
+  path: sleeping-king-studios/tools/core-tools
+- name: SleepingKingStudios::Tools::HashTools
+  slug: hash-tools
+  path: sleeping-king-studios/tools/hash-tools
+- name: SleepingKingStudios::Tools::IntegerTools
+  slug: integer-tools
+  path: sleeping-king-studios/tools/integer-tools
+- name: SleepingKingStudios::Tools::ObjectTools
+  slug: object-tools
+  path: sleeping-king-studios/tools/object-tools
+- name: SleepingKingStudios::Tools::StringTools
+  slug: string-tools
+  path: sleeping-king-studios/tools/string-tools
+version: '1.2'

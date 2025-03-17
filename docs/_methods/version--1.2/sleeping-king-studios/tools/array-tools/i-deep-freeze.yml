@@ -1,0 +1,38 @@
+---
+name: SleepingKingStudios::Tools::ArrayTools#deep_freeze
+parent_path: sleeping-king-studios/tools/array-tools
+signature: deep_freeze(ary)
+slug: deep-freeze
+constructor: false
+data_path: sleeping-king-studios/tools/array-tools/i-deep-freeze
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      ary = ['one', 'two', 'three']
+      ArrayTools.deep_freeze ary
+
+      ary.frozen?
+      #=> true
+      ary.first.frozen?
+      #=> true
+  see:
+  - label: ObjectTools#deep_freeze
+    path:
+    text:
+    type: reference
+params:
+- description: the object to freeze.
+  name: ary
+  type:
+  - name: Array
+raises:
+- description: if the first argument is not an Array-like object.
+  type:
+  - name: ArgumentError
+returns:
+- description: the frozen array.
+  type:
+  - name: Array
+short_description: Freezes the array and performs a deep freeze on each array item.
+version: '1.2'

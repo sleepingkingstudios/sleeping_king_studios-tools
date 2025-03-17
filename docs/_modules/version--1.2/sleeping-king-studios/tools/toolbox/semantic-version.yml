@@ -1,0 +1,46 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::SemanticVersion
+slug: semantic-version
+type: module
+files:
+- lib/sleeping_king_studios/tools/toolbox/semantic_version.rb
+parent_path: sleeping-king-studios/tools/toolbox
+short_description: Helper for generating semantic version strings.
+defined_classes:
+- name: InvalidVersionError
+  slug: invalid-version-error
+instance_methods:
+- name: to_gem_version
+  path: sleeping-king-studios/tools/toolbox/semantic-version/i-to-gem-version
+  slug: to-gem-version
+  inherited: false
+- name: to_version
+  path: sleeping-king-studios/tools/toolbox/semantic-version/i-to-version
+  slug: to-version
+  inherited: false
+data_path: sleeping-king-studios/tools/toolbox/semantic-version
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      module Version
+        extend SleepingKingStudios::Tools::SemanticVersion
+
+        MAJOR = 3
+        MINOR = 1
+        PATCH = 4
+        PRERELEASE = 'beta'
+        BUILD = 1
+      end
+
+      VERSION = Version.to_version
+      #=> '3.1.4-beta+1'
+
+      VERSION = Version.to_gem_version
+      #=> '3.1.4.beta.1'
+  see:
+  - label: http://semver.org
+    path: http://semver.org
+    text:
+    type: link
+version: '1.2'

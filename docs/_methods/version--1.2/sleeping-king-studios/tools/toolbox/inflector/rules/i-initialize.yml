@@ -1,0 +1,57 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Inflector::Rules#initialize
+parent_path: sleeping-king-studios/tools/toolbox/inflector/rules
+signature: 'initialize(irregular_words: nil, plural_rules: nil, singular_rules: nil,
+  uncountable_words: nil)'
+slug: initialize
+constructor: true
+data_path: sleeping-king-studios/tools/toolbox/inflector/rules/i-initialize
+params:
+- description: |-
+    irregular word pairs in
+    singular => plural order, e.g. "child" => "children".
+  name: irregular_words
+  type:
+  - name: Hash
+    items:
+    - name: String
+    - name: String
+  default: nil
+- description: |-
+    rules for
+    pluralizing words.
+  name: plural_rules
+  type:
+  - name: Array
+    items:
+    - name: Array
+      items:
+      - name: Regexp
+      - name: String
+      ordered: true
+  default: nil
+- description: |-
+    rules for
+    singularizing words.
+  name: singular_rules
+  type:
+  - name: Array
+    items:
+    - name: Array
+      items:
+      - name: Regexp
+      - name: String
+      ordered: true
+  default: nil
+- description: uncountable words e.g. "data".
+  name: uncountable_words
+  type:
+  - name: Array
+    items:
+    - name: String
+  default: nil
+returns:
+- description: a new instance of Rules
+  type:
+  - name: Rules
+version: '1.2'

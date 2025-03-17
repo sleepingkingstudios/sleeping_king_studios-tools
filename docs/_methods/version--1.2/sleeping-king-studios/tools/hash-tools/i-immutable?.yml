@@ -1,0 +1,46 @@
+---
+name: SleepingKingStudios::Tools::HashTools#immutable?
+parent_path: sleeping-king-studios/tools/hash-tools
+signature: immutable?(hsh)
+slug: immutable?
+constructor: false
+data_path: sleeping-king-studios/tools/hash-tools/i-immutable?
+description: |-
+  A hash is considered immutable if the hash itself is frozen and each
+  key and value in the hash is immutable.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      HashTools.immutable?({ :id => 0, :title => 'The Ramayana' })
+      #=> false
+
+      HashTools.immutable?({ :id => 0, :title => +'The Ramayana' }.freeze)
+      #=> false
+
+      HashTools.immutable?({ :id => 0, :title => 'The Ramayana' }.freeze)
+      #=> true
+  see:
+  - label: HashTools#mutable?
+    path: "#instance-method-mutable?"
+    text:
+    type: reference
+  - label: ObjectTools#immutable?
+    path:
+    text:
+    type: reference
+params:
+- description: the hash to test.
+  name: hsh
+  type:
+  - name: Hash
+raises:
+- description: if the first argument is not an Hash-like object.
+  type:
+  - name: ArgumentError
+returns:
+- description: true if the hash is immutable, otherwise false.
+  type:
+  - name: Boolean
+short_description: Returns true if the hash is immutable.
+version: '1.2'

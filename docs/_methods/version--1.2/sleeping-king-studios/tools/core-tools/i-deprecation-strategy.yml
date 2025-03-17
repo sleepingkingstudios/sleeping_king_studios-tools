@@ -1,0 +1,12 @@
+---
+name: SleepingKingStudios::Tools::CoreTools#deprecation_strategy
+parent_path: sleeping-king-studios/tools/core-tools
+signature: deprecation_strategy
+slug: deprecation-strategy
+constructor: false
+data_path: sleeping-king-studios/tools/core-tools/i-deprecation-strategy
+returns:
+- description: the current deprecation strategy.
+  type:
+  - name: String
+version: '1.2'

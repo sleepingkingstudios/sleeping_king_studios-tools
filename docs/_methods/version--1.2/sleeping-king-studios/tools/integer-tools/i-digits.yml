@@ -1,0 +1,43 @@
+---
+name: SleepingKingStudios::Tools::IntegerTools#digits
+parent_path: sleeping-king-studios/tools/integer-tools
+signature: 'digits(integer, base: 10)'
+slug: digits
+constructor: false
+data_path: sleeping-king-studios/tools/integer-tools/i-digits
+metadata:
+  examples:
+  - name: With a number in base 10.
+    text: |-
+      IntegerTools.digits(15926)
+      #=> ['1', '5', '9', '2', '6']
+  - name: With a binary number.
+    text: |-
+      IntegerTools.digits(189, :base => 2)
+      #=> ['1', '0', '1', '1', '1', '1', '0', '1']
+  - name: With a hexadecimal number.
+    text: |-
+      IntegerTools.digits(16724838)
+      #=> ['f', 'f', '3', '3', '6', '6']
+params:
+- description: the integer to decompose.
+  name: integer
+  type:
+  - name: Integer
+- description: |-
+    the numeric base to represent the integer in.
+    Defaults to 10.
+  name: base
+  type:
+  - name: Integer
+  default: '10'
+returns:
+- description: |-
+    the digits of the decomposed integer,
+    represented as a bigendian array of strings.
+  type:
+  - name: Array
+    items:
+    - name: String
+short_description: Decomposes the given integer into its digits in the given base.
+version: '1.2'

@@ -1,0 +1,55 @@
+---
+name: SleepingKingStudios::Tools::ObjectTools#apply
+parent_path: sleeping-king-studios/tools/object-tools
+signature: apply(receiver, proc, *args, **kwargs, &block)
+slug: apply
+constructor: false
+data_path: sleeping-king-studios/tools/object-tools/i-apply
+description: |-
+  Unlike calling #instance_exec with the block, ObjectTools#apply allows you
+  to specify a block parameter.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      my_object = double('object', :to_s => 'A mock object')
+      my_proc   = ->() { puts %{#{self.to_s} says "Greetings, programs!"} }
+
+      ObjectTools.apply my_object, my_proc
+      #=> Writes 'A mock object says "Greetings, programs!"' to STDOUT.
+params:
+- description: |-
+    The receiver. the proc will be called in the
+    context of this object.
+  name: receiver
+  type:
+  - name: Object
+- description: the proc or lambda to call.
+  name: proc
+  type:
+  - name: Proc
+- description: |-
+    optional. Additional arguments to pass in to the proc
+    or lambda.
+  name: args
+  type:
+  - name: Array
+- description: |-
+    optional. Additional keywords to pass in to the proc
+    or lambda.
+  name: kwargs
+  type:
+  - name: Hash
+- description: |-
+    optional. If present, will be passed in to proc or
+    lambda.
+  name: block
+  type:
+  - name: block
+returns:
+- description: |-
+    the result of calling the proc or lambda with the given
+    receiver and any additional arguments or block.
+  type: []
+short_description: Calls a Proc or lambda on the given receiver with the given parameters.
+version: '1.2'

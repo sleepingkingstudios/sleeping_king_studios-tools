@@ -1,0 +1,32 @@
+---
+name: SleepingKingStudios::Tools::HashTools#hash?
+parent_path: sleeping-king-studios/tools/hash-tools
+signature: hash?(obj)
+slug: hash?
+constructor: false
+data_path: sleeping-king-studios/tools/hash-tools/i-hash?
+description: |-
+  This method checks for the method signatures of the object. A Hash-like
+  method will define all of the the #[], #count, #each, #each_key, and
+  #each_value methods.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      HashTools.hash?(nil)
+      #=> false
+      HashTools.hash?([])
+      #=> false
+      HashTools.hash?({})
+      #=> true
+params:
+- description: the object to test.
+  name: obj
+  type:
+  - name: Object
+returns:
+- description: true if the object is a Hash, otherwise false.
+  type:
+  - name: Boolean
+short_description: Returns true if the object is or appears to be a Hash.
+version: '1.2'
