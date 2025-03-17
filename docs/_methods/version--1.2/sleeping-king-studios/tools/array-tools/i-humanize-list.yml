@@ -1,0 +1,76 @@
+---
+name: SleepingKingStudios::Tools::ArrayTools#humanize_list
+parent_path: sleeping-king-studios/tools/array-tools
+signature: humanize_list(ary, **options, &)
+slug: humanize-list
+constructor: false
+data_path: sleeping-king-studios/tools/array-tools/i-humanize-list
+description: |-
+  Accepts a list of values and returns a human-readable string of the
+  values, with the format based on the number of items.
+metadata:
+  examples:
+  - name: With Zero Items
+    text: |-
+      ArrayTools.humanize_list([])
+      #=> ''
+  - name: With One Item
+    text: |-
+      ArrayTools.humanize_list(['spam'])
+      #=> 'spam'
+  - name: With Two Items
+    text: |-
+      ArrayTools.humanize_list(['spam', 'eggs'])
+      #=> 'spam and eggs'
+  - name: With Three Or More Items
+    text: |-
+      ArrayTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'])
+      #=> 'spam, eggs, bacon, and spam'
+  - name: With Three Or More Items And Options
+    text: |-
+      ArrayTools.humanize_list(
+        ['spam', 'eggs', 'bacon', 'spam'],
+        :last_separator => ' or '
+      )
+      #=> 'spam, eggs, bacon, or spam'
+options:
+- name: options
+  opts:
+  - description: |-
+      the value to use to separate
+      the final pair of values. Defaults to " and " (note the leading and
+      trailing spaces). Will be combined with the :separator for lists of
+      length 3 or greater.
+    name: ":last_separator"
+    type:
+    - name: String
+  - description: |-
+      the value to use to separate pairs
+      of values before the last in lists of length 3 or greater. Defaults to
+      ", " (note the trailing space).
+    name: ":separator"
+    type:
+    - name: String
+params:
+- description: |-
+    the list of values to format. Will be
+    coerced to strings using #to_s.
+  name: ary
+  type:
+  - name: Array
+    items:
+    - name: String
+- description: optional configuration hash.
+  name: options
+  type:
+  - name: Hash
+raises:
+- description: if the first argument is not an Array-like object.
+  type:
+  - name: ArgumentError
+returns:
+- description: the formatted string.
+  type:
+  - name: String
+short_description: Generates a human-readable string representation of the list items.
+version: '1.2'

@@ -1,0 +1,13 @@
+---
+name: SleepingKingStudios::Tools::CoreTools#empty_binding
+parent_path: sleeping-king-studios/tools/core-tools
+signature: empty_binding
+slug: empty-binding
+constructor: false
+data_path: sleeping-king-studios/tools/core-tools/i-empty-binding
+returns:
+- description: The empty binding object.
+  type:
+  - name: Binding
+short_description: Generates an empty Binding object with an Object as the receiver.
+version: '1.2'

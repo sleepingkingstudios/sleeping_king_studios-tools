@@ -1,0 +1,38 @@
+---
+name: SleepingKingStudios::Tools::Assertions#validate
+parent_path: sleeping-king-studios/tools/assertions
+signature: 'validate(message: nil, &block)'
+slug: validate
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-validate
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      Assertions.validate { true == false }
+      #=> raises an ArgumentError with message 'block returned a falsy value'
+
+      Assertions.validate { true == true }
+      #=> does not raise an exception
+params:
+- description: the exception message to raise on a failure.
+  name: message
+  type:
+  - name: String
+  default: nil
+raises:
+- description: if the block does not return a truthy value.
+  type:
+  - name: ArgumentError
+returns:
+- description: ''
+  type:
+  - name: void
+short_description: Asserts that the block returns a truthy value.
+yield_returns:
+- description: the returned value of the block.
+  type:
+  - name: Object
+yields:
+- description: The block to evaluate.
+version: '1.2'

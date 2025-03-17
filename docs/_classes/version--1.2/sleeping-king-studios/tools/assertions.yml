@@ -1,0 +1,126 @@
+---
+name: SleepingKingStudios::Tools::Assertions
+slug: assertions
+type: class
+files:
+- lib/sleeping_king_studios/tools/assertions.rb
+parent_path: sleeping-king-studios/tools
+short_description: Methods for asserting on the state of a function or application.
+class_methods:
+- name: instance
+  path: sleeping-king-studios/tools/base/c-instance
+  slug: instance
+  inherited: true
+defined_classes:
+- name: Aggregator
+  slug: aggregator
+- name: AssertionError
+  slug: assertion-error
+instance_methods:
+- name: aggregator_class
+  path: sleeping-king-studios/tools/assertions/i-aggregator-class
+  slug: aggregator-class
+  inherited: false
+- name: assert
+  path: sleeping-king-studios/tools/assertions/i-assert
+  slug: assert
+  inherited: false
+- name: assert_blank
+  path: sleeping-king-studios/tools/assertions/i-assert-blank
+  slug: assert-blank
+  inherited: false
+- name: assert_boolean
+  path: sleeping-king-studios/tools/assertions/i-assert-boolean
+  slug: assert-boolean
+  inherited: false
+- name: assert_class
+  path: sleeping-king-studios/tools/assertions/i-assert-class
+  slug: assert-class
+  inherited: false
+- name: assert_group
+  path: sleeping-king-studios/tools/assertions/i-assert-group
+  slug: assert-group
+  inherited: false
+- name: assert_instance_of
+  path: sleeping-king-studios/tools/assertions/i-assert-instance-of
+  slug: assert-instance-of
+  inherited: false
+- name: assert_matches
+  path: sleeping-king-studios/tools/assertions/i-assert-matches
+  slug: assert-matches
+  inherited: false
+- name: assert_name
+  path: sleeping-king-studios/tools/assertions/i-assert-name
+  slug: assert-name
+  inherited: false
+- name: assert_nil
+  path: sleeping-king-studios/tools/assertions/i-assert-nil
+  slug: assert-nil
+  inherited: false
+- name: assert_not_nil
+  path: sleeping-king-studios/tools/assertions/i-assert-not-nil
+  slug: assert-not-nil
+  inherited: false
+- name: assert_presence
+  path: sleeping-king-studios/tools/assertions/i-assert-presence
+  slug: assert-presence
+  inherited: false
+- name: error_message_for
+  path: sleeping-king-studios/tools/assertions/i-error-message-for
+  slug: error-message-for
+  inherited: false
+- name: validate
+  path: sleeping-king-studios/tools/assertions/i-validate
+  slug: validate
+  inherited: false
+- name: validate_blank
+  path: sleeping-king-studios/tools/assertions/i-validate-blank
+  slug: validate-blank
+  inherited: false
+- name: validate_boolean
+  path: sleeping-king-studios/tools/assertions/i-validate-boolean
+  slug: validate-boolean
+  inherited: false
+- name: validate_class
+  path: sleeping-king-studios/tools/assertions/i-validate-class
+  slug: validate-class
+  inherited: false
+- name: validate_group
+  path: sleeping-king-studios/tools/assertions/i-validate-group
+  slug: validate-group
+  inherited: false
+- name: validate_instance_of
+  path: sleeping-king-studios/tools/assertions/i-validate-instance-of
+  slug: validate-instance-of
+  inherited: false
+- name: validate_matches
+  path: sleeping-king-studios/tools/assertions/i-validate-matches
+  slug: validate-matches
+  inherited: false
+- name: validate_name
+  path: sleeping-king-studios/tools/assertions/i-validate-name
+  slug: validate-name
+  inherited: false
+- name: validate_nil
+  path: sleeping-king-studios/tools/assertions/i-validate-nil
+  slug: validate-nil
+  inherited: false
+- name: validate_not_nil
+  path: sleeping-king-studios/tools/assertions/i-validate-not-nil
+  slug: validate-not-nil
+  inherited: false
+- name: validate_presence
+  path: sleeping-king-studios/tools/assertions/i-validate-presence
+  slug: validate-presence
+  inherited: false
+data_path: sleeping-king-studios/tools/assertions
+constructor: false
+direct_subclasses:
+- name: SleepingKingStudios::Tools::Assertions::Aggregator
+  slug: aggregator
+  path: sleeping-king-studios/tools/assertions/aggregator
+inherited_classes:
+- name: SleepingKingStudios::Tools::Base
+  slug: base
+  path: sleeping-king-studios/tools/base
+version: '1.2'

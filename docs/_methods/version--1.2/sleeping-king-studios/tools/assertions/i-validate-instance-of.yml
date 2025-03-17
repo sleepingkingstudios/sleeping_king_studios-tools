@@ -1,0 +1,54 @@
+---
+name: SleepingKingStudios::Tools::Assertions#validate_instance_of
+parent_path: sleeping-king-studios/tools/assertions
+signature: 'validate_instance_of(value, expected:, as: ''value'', message: nil, optional:
+  false)'
+slug: validate-instance-of
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-validate-instance-of
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      Assertions.validate_instance_of(:foo, expected: String)
+      #=> raises an AssertionError with message 'value is not an instance of String'
+
+      Assertions.validate_instance_of('foo', expected: String)
+      #=> does not raise an exception
+params:
+- description: the value to assert on.
+  name: value
+  type:
+  - name: Object
+- description: the name of the asserted value.
+  name: as
+  type:
+  - name: String
+  default: "'value'"
+- description: the expected class.
+  name: expected
+  type:
+  - name: Class
+- description: the exception message to raise on a failure.
+  name: message
+  type:
+  - name: String
+  default: nil
+- description: if true, allows nil values.
+  name: optional
+  type:
+  - name: 'true'
+  - name: 'false'
+  default: 'false'
+raises:
+- description: |-
+    if the value is not an instance of the expected
+    class.
+  type:
+  - name: ArgumentError
+returns:
+- description: ''
+  type:
+  - name: void
+short_description: Asserts that the value is an example of the given Class.
+version: '1.2'

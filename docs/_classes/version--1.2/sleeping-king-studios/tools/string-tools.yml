@@ -1,0 +1,73 @@
+---
+name: SleepingKingStudios::Tools::StringTools
+slug: string-tools
+type: class
+files:
+- lib/sleeping_king_studios/tools/string_tools.rb
+parent_path: sleeping-king-studios/tools
+short_description: Tools for working with strings.
+class_methods:
+- name: instance
+  path: sleeping-king-studios/tools/base/c-instance
+  slug: instance
+  inherited: true
+instance_attributes:
+- name: inflector
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/string-tools/i-inflector
+  slug: inflector
+  inherited: false
+instance_methods:
+- name: camelize
+  path: sleeping-king-studios/tools/string-tools/i-camelize
+  slug: camelize
+  inherited: false
+- name: chain
+  path: sleeping-king-studios/tools/string-tools/i-chain
+  slug: chain
+  inherited: false
+- name: indent
+  path: sleeping-king-studios/tools/string-tools/i-indent
+  slug: indent
+  inherited: false
+- name: initialize
+  path: sleeping-king-studios/tools/string-tools/i-initialize
+  slug: initialize
+  inherited: false
+  constructor: true
+- name: map_lines
+  path: sleeping-king-studios/tools/string-tools/i-map-lines
+  slug: map-lines
+  inherited: false
+- name: plural?
+  path: sleeping-king-studios/tools/string-tools/i-plural?
+  slug: plural?
+  inherited: false
+- name: pluralize
+  path: sleeping-king-studios/tools/string-tools/i-pluralize
+  slug: pluralize
+  inherited: false
+- name: singular?
+  path: sleeping-king-studios/tools/string-tools/i-singular?
+  slug: singular?
+  inherited: false
+- name: singularize
+  path: sleeping-king-studios/tools/string-tools/i-singularize
+  slug: singularize
+  inherited: false
+- name: string?
+  path: sleeping-king-studios/tools/string-tools/i-string?
+  slug: string?
+  inherited: false
+- name: underscore
+  path: sleeping-king-studios/tools/string-tools/i-underscore
+  slug: underscore
+  inherited: false
+data_path: sleeping-king-studios/tools/string-tools
+constructor: true
+inherited_classes:
+- name: SleepingKingStudios::Tools::Base
+  slug: base
+  path: sleeping-king-studios/tools/base
+version: '1.2'

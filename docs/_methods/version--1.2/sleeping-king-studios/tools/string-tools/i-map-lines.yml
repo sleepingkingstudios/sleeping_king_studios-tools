@@ -1,0 +1,50 @@
+---
+name: SleepingKingStudios::Tools::StringTools#map_lines
+parent_path: sleeping-king-studios/tools/string-tools
+signature: map_lines(str)
+slug: map-lines
+constructor: false
+data_path: sleeping-king-studios/tools/string-tools/i-map-lines
+description: The results of each line are combined back into a new multi-line string.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      string = 'The Hobbit'
+      StringTools.map_lines(string) { |line| "  #{line}" }
+      #=> '- The Hobbit'
+
+      titles = [
+        "The Fellowship of the Ring",
+        "The Two Towers",
+        "The Return of the King"
+      ]
+      string = titles.join "\n"
+      StringTools.map_lines(string) { |line, index| "#{index}. #{line}" }
+      #=> "0. The Fellowship of the Ring\n"\
+          "1. The Two Towers\n"\
+          "2. The Return of the King"
+params:
+- description: the string to map.
+  name: str
+  type:
+  - name: String
+returns:
+- description: the mapped and recombined string.
+  type:
+  - name: String
+short_description: Yields each line to the provided block and combines the results.
+yield_params:
+- description: the current line.
+  name: line
+  type:
+  - name: String
+- description: the index of the current line.
+  name: index
+  type:
+  - name: Integer
+yield_returns:
+- description: the modified line.
+  type:
+  - name: String
+version: '1.2'

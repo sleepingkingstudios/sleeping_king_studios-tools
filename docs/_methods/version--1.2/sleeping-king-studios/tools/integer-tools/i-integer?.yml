@@ -1,0 +1,30 @@
+---
+name: SleepingKingStudios::Tools::IntegerTools#integer?
+parent_path: sleeping-king-studios/tools/integer-tools
+signature: integer?(obj)
+slug: integer?
+constructor: false
+data_path: sleeping-king-studios/tools/integer-tools/i-integer?
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      IntegerTools.integer?(nil)
+      #=> false
+      IntegerTools.integer?([])
+      #=> false
+      IntegerTools.integer?({})
+      #=> false
+      IntegerTools.integer?(1)
+      #=> true
+params:
+- description: the object to test.
+  name: obj
+  type:
+  - name: Object
+returns:
+- description: true if the object is an Integer, otherwise false.
+  type:
+  - name: Boolean
+short_description: Returns true if the object is an Integer.
+version: '1.2'

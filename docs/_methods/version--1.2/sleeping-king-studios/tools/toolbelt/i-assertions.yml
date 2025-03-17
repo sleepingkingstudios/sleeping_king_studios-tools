@@ -1,0 +1,15 @@
+---
+name: SleepingKingStudios::Tools::Toolbelt#assertions
+parent_path: sleeping-king-studios/tools/toolbelt
+signature: assertions
+slug: assertions
+constructor: false
+data_path: sleeping-king-studios/tools/toolbelt/i-assertions
+returns:
+- description: |-
+    methods for asserting on
+    the state of a function or application.
+  type:
+  - name: SleepingKingStudios::Tools::Assertions
+    path: sleeping-king-studios/tools/assertions
+version: '1.2'

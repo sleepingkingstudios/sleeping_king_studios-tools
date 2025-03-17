@@ -1,0 +1,68 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Inflector::Rules
+slug: rules
+type: class
+files:
+- lib/sleeping_king_studios/tools/toolbox/inflector/rules.rb
+parent_path: sleeping-king-studios/tools/toolbox/inflector
+short_description: Rules for inflecting words.
+instance_attributes:
+- name: irregular_words
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbox/inflector/rules/i-irregular-words
+  slug: irregular-words
+  inherited: false
+- name: irregular_words_reversed
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbox/inflector/rules/i-irregular-words-reversed
+  slug: irregular-words-reversed
+  inherited: false
+- name: plural_rules
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbox/inflector/rules/i-plural-rules
+  slug: plural-rules
+  inherited: false
+- name: singular_rules
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbox/inflector/rules/i-singular-rules
+  slug: singular-rules
+  inherited: false
+- name: uncountable_words
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbox/inflector/rules/i-uncountable-words
+  slug: uncountable-words
+  inherited: false
+instance_methods:
+- name: define_irregular_word
+  path: sleeping-king-studios/tools/toolbox/inflector/rules/i-define-irregular-word
+  slug: define-irregular-word
+  inherited: false
+- name: define_plural_rule
+  path: sleeping-king-studios/tools/toolbox/inflector/rules/i-define-plural-rule
+  slug: define-plural-rule
+  inherited: false
+- name: define_singular_rule
+  path: sleeping-king-studios/tools/toolbox/inflector/rules/i-define-singular-rule
+  slug: define-singular-rule
+  inherited: false
+- name: define_uncountable_word
+  path: sleeping-king-studios/tools/toolbox/inflector/rules/i-define-uncountable-word
+  slug: define-uncountable-word
+  inherited: false
+- name: initialize
+  path: sleeping-king-studios/tools/toolbox/inflector/rules/i-initialize
+  slug: initialize
+  inherited: false
+  constructor: true
+- name: inspect
+  path: sleeping-king-studios/tools/toolbox/inflector/rules/i-inspect
+  slug: inspect
+  inherited: false
+data_path: sleeping-king-studios/tools/toolbox/inflector/rules
+constructor: true
+version: '1.2'

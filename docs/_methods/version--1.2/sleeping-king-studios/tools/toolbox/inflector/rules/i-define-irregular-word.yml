@@ -1,0 +1,22 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Inflector::Rules#define_irregular_word
+parent_path: sleeping-king-studios/tools/toolbox/inflector/rules
+signature: define_irregular_word(singular, plural)
+slug: define-irregular-word
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/inflector/rules/i-define-irregular-word
+params:
+- description: the singular form of the word.
+  name: singular
+  type:
+  - name: String
+- description: the plural form of the word.
+  name: plural
+  type:
+  - name: String
+returns:
+- description: the rules object.
+  type:
+  - name: self
+short_description: Defines an irregular word pair.
+version: '1.2'

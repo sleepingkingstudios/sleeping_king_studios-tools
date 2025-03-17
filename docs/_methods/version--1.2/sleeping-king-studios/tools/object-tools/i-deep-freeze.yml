@@ -1,0 +1,55 @@
+---
+name: SleepingKingStudios::Tools::ObjectTools#deep_freeze
+parent_path: sleeping-king-studios/tools/object-tools
+signature: deep_freeze(obj)
+slug: deep-freeze
+constructor: false
+data_path: sleeping-king-studios/tools/object-tools/i-deep-freeze
+description: |-
+  If the object is an Array, freezes the array and performs a deep freeze on
+  each array item. If the object is a hash, freezes the hash and performs a
+  deep freeze on each hash key and value. Otherwise, calls Object#freeze.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      data = {
+        :songs = [
+          {
+            :name   => 'Welcome to the Jungle',
+            :artist => "Guns N' Roses",
+            :album  => 'Appetite for Destruction'
+          },
+          {
+            :name   => 'Hells Bells',
+            :artist => 'AC/DC',
+            :album  => 'Back in Black'
+          },
+          {
+            :name   => "Knockin' on Heaven's Door",
+            :artist => 'Bob Dylan',
+            :album  => 'Pat Garrett & Billy The Kid'
+          }
+        ]
+      }
+      ObjectTools.deep_freeze(data)
+
+      data.frozen?
+      #=> true
+      data[:songs].frozen?
+      #=> true
+      data[:songs][0].frozen?
+      #=> true
+      data[:songs][0].name.frozen?
+      #=> true
+params:
+- description: The object to freeze.
+  name: obj
+  type:
+  - name: Object
+returns:
+- description: the frozen object.
+  type:
+  - name: Object
+short_description: Performs a deep freeze of the object.
+version: '1.2'

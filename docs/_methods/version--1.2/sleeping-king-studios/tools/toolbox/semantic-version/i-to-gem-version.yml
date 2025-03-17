@@ -1,0 +1,39 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::SemanticVersion#to_gem_version
+parent_path: sleeping-king-studios/tools/toolbox/semantic-version
+signature: to_gem_version
+slug: to-gem-version
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/semantic-version/i-to-gem-version
+description: |-
+  Concatenates the MAJOR, MINOR, and PATCH constant values with PRERELEASE
+  and BUILD (if available) to generate a modified semantic version string
+  compatible with Rubygems. The major, minor, patch, prerelease, and build
+  values (if available) are separated by dots (.).
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      module Version
+        extend SleepingKingStudios::Tools::SemanticVersion
+
+        MAJOR = 3
+        MINOR = 1
+        PATCH = 4
+        PRERELEASE = 'beta'
+        BUILD = 1
+      end
+
+      VERSION = Version.to_gem_version
+      #=> '3.1.4.beta.1'
+raises:
+- description: if MAJOR, MINOR, or PATCH is undefined.
+  type:
+  - name: SleepingKingStudios::Tools::Toolbox::SemanticVersion::InvalidVersionError
+    path: sleeping-king-studios/tools/toolbox/semantic-version/invalid-version-error
+returns:
+- description: the modified semantic version string.
+  type:
+  - name: String
+short_description: Generates a RubyGems-compatible version string.
+version: '1.2'

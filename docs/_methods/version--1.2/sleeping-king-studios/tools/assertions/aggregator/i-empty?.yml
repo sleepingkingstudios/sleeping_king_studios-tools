@@ -1,0 +1,22 @@
+---
+name: SleepingKingStudios::Tools::Assertions::Aggregator#empty?
+parent_path: sleeping-king-studios/tools/assertions/aggregator
+signature: empty?
+slug: empty?
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/aggregator/i-empty?
+metadata:
+  see:
+  - label: Enumerable#empty?
+    path:
+    text:
+    type: reference
+returns:
+- description: |-
+    true if there are no failure messages; otherwise
+    false.
+  type:
+  - name: 'true'
+  - name: 'false'
+short_description: Checks if there are any failure messages.
+version: '1.2'

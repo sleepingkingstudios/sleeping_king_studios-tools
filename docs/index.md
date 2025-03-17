@@ -9,7 +9,7 @@ A library of utility services and concerns to expand the functionality of core c
 
 This is the documentation for the [current development build](https://github.com/sleepingkingstudios/sleeping_king_studios-tools) of SleepingKingStudios::Tools.
 
-<!-- - For the most recent release, see [Version 0.1]({{site.baseurl}}/versions/0.1). -->
+- For the most recent release, see [Version 1.2]({{site.baseurl}}/versions/1.2).
 - For previous releases, see the [Versions]({{site.baseurl}}/versions) page.
 
 ## Reference

@@ -1,0 +1,12 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::ConstantMap#keys
+parent_path: sleeping-king-studios/tools/toolbox/constant-map
+signature: keys
+slug: keys
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/constant-map/i-keys
+returns:
+- description: the names of the defined constants.
+  type:
+  - name: Array
+version: '1.2'

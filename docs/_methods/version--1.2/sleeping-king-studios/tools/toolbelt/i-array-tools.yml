@@ -1,0 +1,17 @@
+---
+name: SleepingKingStudios::Tools::Toolbelt#array_tools
+parent_path: sleeping-king-studios/tools/toolbelt
+signature: array_tools
+slug: array-tools
+aliases:
+- ary
+constructor: false
+data_path: sleeping-king-studios/tools/toolbelt/i-array-tools
+returns:
+- description: |-
+    tools for working with
+    array-like enumerable objects.
+  type:
+  - name: SleepingKingStudios::Tools::ArrayTools
+    path: sleeping-king-studios/tools/array-tools
+version: '1.2'

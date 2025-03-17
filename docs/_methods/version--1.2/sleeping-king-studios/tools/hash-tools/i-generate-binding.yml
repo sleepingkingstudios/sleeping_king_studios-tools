@@ -1,0 +1,31 @@
+---
+name: SleepingKingStudios::Tools::HashTools#generate_binding
+parent_path: sleeping-king-studios/tools/hash-tools
+signature: generate_binding(hsh)
+slug: generate-binding
+constructor: false
+data_path: sleeping-king-studios/tools/hash-tools/i-generate-binding
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      hsh     = { :one => 'one', :two => 'two', :three => 'three' }
+      binding = HashTools.generate_binding(hsh)
+      #=> Binding
+
+      binding.local_variable_defined?(:one)
+      #=> true
+      binding.local_variable_get(:one)
+      #=> 'one'
+      binding.eval('one')
+      #=> 'one'
+raises:
+- description: if the first argument is not an Hash-like object.
+  type:
+  - name: ArgumentError
+returns:
+- description: the binding object.
+  type:
+  - name: Binding
+short_description: Generates a Binding with the hash values as local variables.
+version: '1.2'

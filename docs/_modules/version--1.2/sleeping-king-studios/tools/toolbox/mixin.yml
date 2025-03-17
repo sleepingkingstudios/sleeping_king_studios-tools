@@ -1,0 +1,66 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Mixin
+slug: mixin
+type: module
+files:
+- lib/sleeping_king_studios/tools/toolbox/mixin.rb
+parent_path: sleeping-king-studios/tools/toolbox
+short_description: Implements recursive inheritance of both class and instance methods.
+class_methods:
+- name: mixin?
+  path: sleeping-king-studios/tools/toolbox/mixin/c-mixin?
+  slug: mixin?
+  inherited: false
+instance_methods:
+- name: included
+  path: sleeping-king-studios/tools/toolbox/mixin/i-included
+  slug: included
+  inherited: false
+- name: prepended
+  path: sleeping-king-studios/tools/toolbox/mixin/i-prepended
+  slug: prepended
+  inherited: false
+data_path: sleeping-king-studios/tools/toolbox/mixin
+metadata:
+  examples:
+  - name: Defining A Mixin
+    text: |-
+      module Widgets
+        extend SleepingKingStudios::Tools::Toolbox::Mixin
+
+        module ClassMethods
+          def widget_types
+            %w(gadget doohickey thingamabob)
+          end
+        end
+
+        def widget?(widget_type)
+          self.class.widget_types.include?(widget_type)
+        end
+      end
+  - name: Including A Mixin
+    text: |-
+      module WidgetBuilding
+        extend  SleepingKingStudios::Tools::Toolbox::Mixin
+        include Widgets
+
+        def build_widget(widget_type)
+          raise ArgumentError, 'not a widget', caller unless widget?(widget_type)
+
+          Widget.new(widget_type)
+        end
+      end
+  - name: Using A Mixin
+    text: |-
+      class WidgetFactory
+        include WidgetBuilding
+      end
+
+      factory = WidgetFactory.new
+
+      factory.build_widget('gadget')
+      #=> Widget
+
+      WidgetFactory.widget_types
+      #=> ['gadget', 'doohickey', 'thingamabob']
+version: '1.2'

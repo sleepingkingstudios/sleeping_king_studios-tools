@@ -1,0 +1,17 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::ConstantMap#initialize
+parent_path: sleeping-king-studios/tools/toolbox/constant-map
+signature: initialize(constants)
+slug: initialize
+constructor: true
+data_path: sleeping-king-studios/tools/toolbox/constant-map/i-initialize
+params:
+- description: the constants to define.
+  name: constants
+  type:
+  - name: Hash
+returns:
+- description: a new instance of ConstantMap
+  type:
+  - name: ConstantMap
+version: '1.2'

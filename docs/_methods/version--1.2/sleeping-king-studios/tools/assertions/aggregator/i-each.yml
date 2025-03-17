@@ -1,0 +1,43 @@
+---
+name: SleepingKingStudios::Tools::Assertions::Aggregator#each
+parent_path: sleeping-king-studios/tools/assertions/aggregator
+signature: each
+slug: each
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/aggregator/i-each
+overloads:
+- name: SleepingKingStudios::Tools::Assertions::Aggregator#each
+  parent_path: sleeping-king-studios/tools/assertions/aggregator
+  signature: each
+  slug: each
+  constructor: false
+  metadata:
+    see:
+    - label: Enumerable#each
+      path:
+      text:
+      type: reference
+  returns:
+  - description: an enumerator over the messages.
+    type:
+    - name: Enumerator
+  short_description: Returns an enumerator that iterates over the failure messages.
+- name: SleepingKingStudios::Tools::Assertions::Aggregator#each
+  parent_path: sleeping-king-studios/tools/assertions/aggregator
+  signature: each(&block)
+  slug: each
+  constructor: false
+  metadata:
+    see:
+    - label: Enumerable#each
+      path:
+      text:
+      type: reference
+  short_description: Yields each failure message to the block.
+  yield_params:
+  - description: the current failure message.
+    name: message
+    type:
+    - name: String
+short_description: Iterates over the failure messages.
+version: '1.2'

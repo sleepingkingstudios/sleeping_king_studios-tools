@@ -1,0 +1,35 @@
+---
+name: SleepingKingStudios::Tools::StringTools#plural?
+parent_path: sleeping-king-studios/tools/string-tools
+signature: plural?(word)
+slug: plural?
+constructor: false
+data_path: sleeping-king-studios/tools/string-tools/i-plural?
+description: |-
+  If calling #pluralize(word) is equal to word, the word is considered
+  plural.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      StringTools.plural? 'light'
+      #=> false
+
+      StringTools.plural? 'lights'
+      #=> true
+  see:
+  - label: "#pluralize"
+    path: sleeping-king-studios/tools/string-tools#instance-method-pluralize
+    text:
+    type: reference
+params:
+- description: the word to check.
+  name: word
+  type:
+  - name: String
+returns:
+- description: true if the word is in plural form, otherwise false.
+  type:
+  - name: Boolean
+short_description: Determines whether or not the given word is in plural form.
+version: '1.2'

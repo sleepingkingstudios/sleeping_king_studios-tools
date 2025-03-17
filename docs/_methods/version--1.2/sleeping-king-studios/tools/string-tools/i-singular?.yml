@@ -1,0 +1,35 @@
+---
+name: SleepingKingStudios::Tools::StringTools#singular?
+parent_path: sleeping-king-studios/tools/string-tools
+signature: singular?(word)
+slug: singular?
+constructor: false
+data_path: sleeping-king-studios/tools/string-tools/i-singular?
+description: |-
+  If calling #singularize(word) is equal to word, the word is considered
+  singular.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      StringTools.singular? 'light'
+      #=> true
+
+      StringTools.singular? 'lights'
+      #=> false
+  see:
+  - label: "#singularize"
+    path: sleeping-king-studios/tools/string-tools#instance-method-singularize
+    text:
+    type: reference
+params:
+- description: the word to check.
+  name: word
+  type:
+  - name: String
+returns:
+- description: true if the word is in singular form, otherwise false.
+  type:
+  - name: Boolean
+short_description: Determines whether or not the given word is in singular form.
+version: '1.2'

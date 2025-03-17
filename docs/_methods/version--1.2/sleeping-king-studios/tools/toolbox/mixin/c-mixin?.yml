@@ -1,0 +1,21 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Mixin.mixin?
+parent_path: sleeping-king-studios/tools/toolbox/mixin
+signature: mixin?(othermod)
+slug: mixin?
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/mixin/c-mixin?
+params:
+- description: the object or module to inspect.
+  name: othermod
+  type:
+  - name: Object
+returns:
+- description: |-
+    true if the other object is a Module that extends
+    Mixin; otherwise false.
+  type:
+  - name: 'true'
+  - name: 'false'
+short_description: Checks if the given module is itself a Mixin.
+version: '1.2'

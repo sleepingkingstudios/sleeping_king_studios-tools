@@ -1,0 +1,22 @@
+---
+name: SleepingKingStudios::Tools::StringTools#initialize
+parent_path: sleeping-king-studios/tools/string-tools
+signature: 'initialize(inflector: nil)'
+slug: initialize
+constructor: true
+data_path: sleeping-king-studios/tools/string-tools/i-initialize
+params:
+- description: |-
+    service object for inflecting strings. The
+    inflector must be an object that conforms to the interface used by
+    by SleepingKingStudios::Tools::Toolbox::Inflector, such as an instance
+    of ActiveSupport::Inflector .
+  name: inflector
+  type:
+  - name: Object
+  default: nil
+returns:
+- description: a new instance of StringTools
+  type:
+  - name: StringTools
+version: '1.2'
