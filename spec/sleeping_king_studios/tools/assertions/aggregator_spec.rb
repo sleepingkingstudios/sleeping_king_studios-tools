@@ -148,7 +148,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     let(:block)   { -> {} }
     let(:options) { {} }
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.assert(**options, &block)
     end
 
@@ -185,7 +185,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} must be nil or empty"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.assert_blank(value, **options)
     end
 
@@ -228,7 +228,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} must be true or false"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.assert_boolean(value, **options)
     end
 
@@ -271,7 +271,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} is not a Class"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.assert_class(value, **options)
     end
 
@@ -311,7 +311,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     let(:block)   { ->(_) {} }
     let(:options) { {} }
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.assert_group(**options, &block)
     end
 
@@ -488,7 +488,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} is not an instance of #{expected}"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.assert_instance_of(value, **options)
     end
 
@@ -523,6 +523,77 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       include_examples 'should not append a failure message'
     end
 
+    describe 'with expected: an anonymous subclass' do
+      let(:expected) { Class.new(StandardError) }
+      let(:message_options) do
+        options.merge(parent: StandardError)
+      end
+      let(:expected_message) do
+        "#{options.fetch(:as, 'value')} is not an instance of #{expected} " \
+          '(StandardError)'
+      end
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should append a failure message',
+          scope: 'instance_of_anonymous'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should append a failure message',
+          scope: 'instance_of_anonymous'
+      end
+
+      describe 'with an instance of the class' do
+        let(:value) { expected.new }
+
+        include_examples 'should not append a failure message'
+      end
+
+      describe 'with an instance of a subclass of the class' do
+        let(:value) { Class.new(expected).new }
+
+        include_examples 'should not append a failure message'
+      end
+    end
+
+    describe 'with expected: a module' do
+      let(:expected) { Enumerable }
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should append a failure message', scope: 'instance_of'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should append a failure message', scope: 'instance_of'
+      end
+
+      describe 'with an object extends the Module' do
+        let(:value) { Object.new.extend(Enumerable) }
+
+        include_examples 'should not append a failure message'
+      end
+
+      describe 'with an instance of a class that includes the Module' do
+        let(:value) { [] }
+
+        include_examples 'should not append a failure message'
+      end
+
+      describe 'with an instance of a class that prepends the Module' do
+        let(:value) { Class.new.prepend(Enumerable).new }
+
+        include_examples 'should not append a failure message'
+      end
+    end
+
     describe 'with optional: true' do
       let(:options) { super().merge(optional: true) }
 
@@ -546,7 +617,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       klass.define_method(:===) { |other| other == value }
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.assert_matches(value, **options)
     end
 
@@ -593,7 +664,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} can't be blank"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.assert_name(value, **options)
     end
 
@@ -661,7 +732,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} must be nil"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.assert_nil(value, **options)
     end
 
@@ -692,7 +763,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} must not be nil"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.assert_not_nil(value, **options)
     end
 
@@ -723,7 +794,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} can't be blank"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.assert_presence(value, **options)
     end
 
@@ -837,7 +908,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     let(:block)   { -> {} }
     let(:options) { {} }
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.validate(**options, &block)
     end
 
@@ -874,7 +945,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} must be nil or empty"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.validate_blank(value, **options)
     end
 
@@ -917,7 +988,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} must be true or false"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.validate_boolean(value, **options)
     end
 
@@ -960,7 +1031,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} is not a Class"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.validate_class(value, **options)
     end
 
@@ -1000,7 +1071,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     let(:block)   { ->(_) {} }
     let(:options) { {} }
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.validate_group(**options, &block)
     end
 
@@ -1173,7 +1244,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} is not an instance of #{expected}"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.validate_instance_of(value, **options)
     end
 
@@ -1211,7 +1282,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     describe 'with expected: nil' do
       it 'should raise an exception' do
         expect { aggregator.assert_instance_of(nil, expected: nil) }
-          .to raise_error ArgumentError, 'expected must be a Class'
+          .to raise_error ArgumentError, 'expected must be a Class or Module'
       end
     end
 
@@ -1220,7 +1291,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
         expect do
           aggregator.assert_instance_of(nil, expected: Object.new.freeze)
         end
-          .to raise_error ArgumentError, 'expected must be a Class'
+          .to raise_error ArgumentError, 'expected must be a Class or Module'
       end
     end
 
@@ -1261,6 +1332,40 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       end
     end
 
+    describe 'with expected: a module' do
+      let(:expected) { Enumerable }
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should append a failure message', scope: 'instance_of'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should append a failure message', scope: 'instance_of'
+      end
+
+      describe 'with an object extends the Module' do
+        let(:value) { Object.new.extend(Enumerable) }
+
+        include_examples 'should not append a failure message'
+      end
+
+      describe 'with an instance of a class that includes the Module' do
+        let(:value) { [] }
+
+        include_examples 'should not append a failure message'
+      end
+
+      describe 'with an instance of a class that prepends the Module' do
+        let(:value) { Class.new.prepend(Enumerable).new }
+
+        include_examples 'should not append a failure message'
+      end
+    end
+
     describe 'with optional: true' do
       let(:options) { super().merge(optional: true) }
 
@@ -1284,7 +1389,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       klass.define_method(:===) { |other| other == value }
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.validate_matches(value, expected:, **options)
     end
 
@@ -1331,7 +1436,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} can't be blank"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.validate_name(value, **options)
     end
 
@@ -1399,7 +1504,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} must be nil"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.validate_nil(value, **options)
     end
 
@@ -1430,7 +1535,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} must not be nil"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.validate_not_nil(value, **options)
     end
 
@@ -1461,7 +1566,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       "#{options.fetch(:as, 'value')} can't be blank"
     end
 
-    def call_assertion
+    define_method :call_assertion do
       aggregator.validate_presence(value, **options)
     end
 

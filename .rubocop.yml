@@ -1,7 +1,5 @@
 plugins:
   - rubocop-rspec
-
-require:
   - rubocop-rake
 
 AllCops:
@@ -75,6 +73,9 @@ RSpec/ExampleWording:
 
 RSpec/HookArgument:
   EnforcedStyle: example
+
+RSpec/IncludeExamples:
+  Enabled: false
 
 RSpec/LeadingSubject:
   Enabled: false # Does not support shared contexts/examples before subject.

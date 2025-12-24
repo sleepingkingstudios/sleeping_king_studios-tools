@@ -3,6 +3,6 @@ name: SleepingKingStudios::Tools::Version::MINOR
 parent_path: sleeping-king-studios/tools/version
 slug: minor
 short_description: Minor version.
-value: '2'
+value: '3'
 data_path: sleeping-king-studios/tools/version/minor
 version: "*"

@@ -361,12 +361,12 @@ module SleepingKingStudios::Tools
     end
     alias aggregate assert_group
 
-    # Asserts that the value is an example of the given Class.
+    # Asserts that the value is an example of the given Class or Module.
     #
     # @param value [Object] the value to assert on.
     # @param as [String] the name of the asserted value.
     # @param error_class [Class] the exception class to raise on a failure.
-    # @param expected [Class] the expected class.
+    # @param expected [Class, Module] the expected class or module.
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
     #
@@ -390,8 +390,8 @@ module SleepingKingStudios::Tools
       message:     nil,
       optional:    false
     )
-      unless expected.is_a?(Class)
-        raise ArgumentError, 'expected must be a Class'
+      unless expected.is_a?(Module)
+        raise ArgumentError, 'expected must be a Class or Module'
       end
 
       return if optional && value.nil?
@@ -792,18 +792,18 @@ module SleepingKingStudios::Tools
       )
     end
 
-    # Asserts that the value is an example of the given Class.
+    # Asserts that the value is an example of the given Class or Module.
     #
     # @param value [Object] the value to assert on.
     # @param as [String] the name of the asserted value.
-    # @param expected [Class] the expected class.
+    # @param expected [Class] the expected class or module.
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
     #
     # @return [void]
     #
     # @raise [ArgumentError] if the value is not an instance of the expected
-    #   class.
+    #   class or module.
     #
     # @example
     #   Assertions.validate_instance_of(:foo, expected: String)
