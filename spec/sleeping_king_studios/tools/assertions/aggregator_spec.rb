@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'sleeping_king_studios/tools/assertions'
+require 'sleeping_king_studios/tools/assertions/aggregator'
 
 require 'support/deferred/assertions_examples'
 
