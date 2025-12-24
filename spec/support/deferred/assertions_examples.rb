@@ -486,6 +486,197 @@ module Spec::Support::Deferred
         end
       end
 
+      describe "##{prefix}_inherits_from" do
+        let(:error_key) { 'inherit_from' }
+        let(:expected)  { StandardError }
+        let(:options)   { { expected: } }
+
+        define_method :assert do
+          subject.public_send(:"#{prefix}_inherits_from", value, **options)
+        end
+
+        it 'should define the method' do
+          expect(subject)
+            .to respond_to(:"#{prefix}_inherits_from")
+            .with(1).argument
+            .and_keywords(*default_keywords, :as, :expected, :strict)
+        end
+
+        describe 'with nil' do
+          let(:error_key) { 'class_or_module' }
+          let(:value)     { nil }
+
+          include_deferred 'should fail the assertion', **deferred_options
+        end
+
+        describe 'with an Object' do
+          let(:error_key) { 'class_or_module' }
+          let(:value)     { Object.new.freeze }
+
+          include_deferred 'should fail the assertion', **deferred_options
+        end
+
+        describe 'with a Class that is not a subclass of the expected class' do
+          let(:value) { Class.new }
+
+          include_deferred 'should fail the assertion', **deferred_options
+        end
+
+        describe 'with a Class that is a subclass of the expected class' do
+          let(:value) { RuntimeError }
+
+          include_deferred 'should pass the assertion'
+        end
+
+        describe 'with the expected class' do
+          let(:value) { expected }
+
+          include_deferred 'should pass the assertion'
+        end
+
+        describe 'with expected: nil' do
+          let(:value)    { nil }
+          let(:expected) { nil }
+
+          it 'should raise an exception' do
+            expect { assert }.to raise_error(
+              ArgumentError,
+              'expected must be a Class or Module'
+            )
+          end
+        end
+
+        describe 'with expected: an Object' do
+          let(:value)    { nil }
+          let(:expected) { Object.new.freeze }
+
+          it 'should raise an exception' do
+            expect { assert }.to raise_error(
+              ArgumentError,
+              'expected must be a Class or Module'
+            )
+          end
+        end
+
+        describe 'with expected: a Module' do
+          let(:expected) { Enumerable }
+
+          describe 'with a Class does not inherit from the module' do
+            let(:value) { Class.new }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with a Class that extends the module' do
+            let(:value) { Class.new.extend(Enumerable) }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with a Class that includes the module' do
+            let(:value) { Array }
+
+            include_deferred 'should pass the assertion'
+          end
+
+          describe 'with a Class that prepends the module' do
+            let(:value) { Class.new.prepend(Enumerable) }
+
+            include_deferred 'should pass the assertion'
+          end
+
+          describe 'with the given module' do
+            let(:value) { expected }
+
+            include_deferred 'should pass the assertion'
+          end
+
+          describe 'with a Module that does not inherit from the module' do
+            let(:value) { Module.new }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with a Module that extends the module' do
+            let(:value) { Module.new.extend(Enumerable) }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with a Module that includes the module' do
+            let(:value) { Module.new.include(Enumerable) }
+
+            include_deferred 'should pass the assertion'
+          end
+
+          describe 'with a Module that prepends the module' do
+            let(:value) { Module.new.prepend(Enumerable) }
+
+            include_deferred 'should pass the assertion'
+          end
+        end
+
+        describe 'with strict: false' do
+          let(:options) { super().merge(strict: false) }
+
+          describe 'with a Class that is not a subclass' do
+            let(:value) { Class.new }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with a Class that is a subclass' do
+            let(:value) { RuntimeError }
+
+            include_deferred 'should pass the assertion'
+          end
+
+          describe 'with the expected class' do
+            let(:value) { expected }
+
+            include_deferred 'should pass the assertion'
+          end
+
+          describe 'with expected: a Module' do
+            describe 'with the given module' do
+              let(:value) { expected }
+
+              include_deferred 'should pass the assertion'
+            end
+          end
+        end
+
+        describe 'with strict: true' do
+          let(:options) { super().merge(strict: true) }
+
+          describe 'with a Class that is not a subclass' do
+            let(:value) { Class.new }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with a Class that is a subclass' do
+            let(:value) { RuntimeError }
+
+            include_deferred 'should pass the assertion'
+          end
+
+          describe 'with the expected class' do
+            let(:value) { expected }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with expected: a Module' do
+            describe 'with the given module' do
+              let(:value) { expected }
+
+              include_deferred 'should fail the assertion', **deferred_options
+            end
+          end
+        end
+      end
+
       describe "##{prefix}_instance_of" do
         let(:error_key) { 'instance_of' }
         let(:expected)  { StandardError }

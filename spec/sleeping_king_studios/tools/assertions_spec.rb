@@ -97,6 +97,14 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
   end
 
+  describe '#assert_inherits_from' do
+    it 'should alias the method' do
+      expect(assertions)
+        .to have_aliased_method(:assert_inherits_from)
+        .as(:assert_subclass)
+    end
+  end
+
   describe '#error_message_for' do
     let(:scope)   { nil }
     let(:options) { {} }

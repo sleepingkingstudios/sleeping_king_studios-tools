@@ -128,6 +128,14 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
     end
   end
 
+  describe '#assert_inherits_from' do
+    it 'should alias the method' do
+      expect(aggregator)
+        .to have_aliased_method(:assert_inherits_from)
+        .as(:assert_subclass)
+    end
+  end
+
   describe '#clear' do
     it { expect(aggregator).to respond_to(:clear).with(0).arguments }
 
