@@ -3,6 +3,6 @@ name: SleepingKingStudios::Tools::Version::PRERELEASE
 parent_path: sleeping-king-studios/tools/version
 slug: prerelease
 short_description: Prerelease version.
-value: nil
+value: ":alpha"
 data_path: sleeping-king-studios/tools/version/prerelease
 version: "*"

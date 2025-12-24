@@ -98,7 +98,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
   describe '#assert' do
     let(:error_message) { 'block returned a falsy value' }
 
-    def assert
+    define_method :assert do
       assertions.assert(**options, &block)
     end
 
@@ -146,7 +146,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} must be nil or empty"
     end
 
-    def assert
+    define_method :assert do
       assertions.assert_blank(value, **options)
     end
 
@@ -217,7 +217,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} must be true or false"
     end
 
-    def assert
+    define_method :assert do
       assertions.assert_boolean(value, **options)
     end
 
@@ -305,7 +305,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} is not a Class"
     end
 
-    def assert
+    define_method :assert do
       assertions.assert_class(value, **options)
     end
 
@@ -394,7 +394,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     let(:block)   { ->(_) {} }
     let(:options) { {} }
 
-    def assert
+    define_method :assert do
       assertions.assert_group(**options, &block)
     end
 
@@ -753,7 +753,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} is not an instance of #{expected}"
     end
 
-    def assert
+    define_method :assert do
       assertions.assert_instance_of(value, **options)
     end
 
@@ -821,7 +821,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     describe 'with expected: nil' do
       it 'should raise an exception' do
         expect { assertions.assert_instance_of(nil, expected: nil) }
-          .to raise_error ArgumentError, 'expected must be a Class'
+          .to raise_error ArgumentError, 'expected must be a Class or Module'
       end
     end
 
@@ -830,7 +830,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         expect do
           assertions.assert_instance_of(nil, expected: Object.new.freeze)
         end
-          .to raise_error ArgumentError, 'expected must be a Class'
+          .to raise_error ArgumentError, 'expected must be a Class or Module'
       end
     end
 
@@ -866,6 +866,42 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
       describe 'with an instance of a subclass of the class' do
         let(:value) { Class.new(expected).new }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    describe 'with expected: a module' do
+      let(:expected) { Enumerable }
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception with the failure message',
+          scope: 'instance_of'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception with the failure message',
+          scope: 'instance_of'
+      end
+
+      describe 'with an object extends the Module' do
+        let(:value) { Object.new.extend(Enumerable) }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an instance of a class that includes the Module' do
+        let(:value) { [] }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an instance of a class that prepends the Module' do
+        let(:value) { Class.new.prepend(Enumerable).new }
 
         include_examples 'should not raise an exception'
       end
@@ -940,7 +976,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       klass.define_method(:===) { |other| other == value }
     end
 
-    def assert
+    define_method :assert do
       assertions.assert_matches(value, **options)
     end
 
@@ -1169,7 +1205,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} is not a String or a Symbol"
     end
 
-    def assert
+    define_method :assert do
       assertions.assert_name(value, **options)
     end
 
@@ -1384,7 +1420,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} must be nil"
     end
 
-    def assert
+    define_method :assert do
       assertions.assert_nil(value, **options)
     end
 
@@ -1429,7 +1465,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} must not be nil"
     end
 
-    def assert
+    define_method :assert do
       assertions.assert_not_nil(value, **options)
     end
 
@@ -1474,7 +1510,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} can't be blank"
     end
 
-    def assert
+    define_method :assert do
       assertions.assert_presence(value, **options)
     end
 
@@ -1561,7 +1597,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     let(:scope)   { nil }
     let(:options) { {} }
 
-    def error_message
+    define_method :error_message do
       assertions.error_message_for(scope, **options)
     end
 
@@ -1649,7 +1685,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     let(:error_class)   { ArgumentError }
     let(:error_message) { 'block returned a falsy value' }
 
-    def assert
+    define_method :assert do
       assertions.validate(**options, &block)
     end
 
@@ -1682,7 +1718,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} must be nil or empty"
     end
 
-    def assert
+    define_method :assert do
       assertions.validate_blank(value, **options)
     end
 
@@ -1726,7 +1762,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} must be true or false"
     end
 
-    def assert
+    define_method :assert do
       assertions.validate_boolean(value, **options)
     end
 
@@ -1787,7 +1823,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} is not a Class"
     end
 
-    def assert
+    define_method :assert do
       assertions.validate_class(value, **options)
     end
 
@@ -1848,7 +1884,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     let(:block)       { ->(_) {} }
     let(:options)     { {} }
 
-    def assert
+    define_method :assert do
       assertions.validate_group(**options, &block)
     end
 
@@ -2098,7 +2134,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} is not an instance of #{expected}"
     end
 
-    def assert
+    define_method :assert do
       assertions.validate_instance_of(value, **options)
     end
 
@@ -2138,7 +2174,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     describe 'with expected: nil' do
       it 'should raise an exception' do
         expect { assertions.assert_instance_of(nil, expected: nil) }
-          .to raise_error ArgumentError, 'expected must be a Class'
+          .to raise_error ArgumentError, 'expected must be a Class or Module'
       end
     end
 
@@ -2147,7 +2183,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         expect do
           assertions.assert_instance_of(nil, expected: Object.new.freeze)
         end
-          .to raise_error ArgumentError, 'expected must be a Class'
+          .to raise_error ArgumentError, 'expected must be a Class or Module'
       end
     end
 
@@ -2183,6 +2219,42 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
       describe 'with an instance of a subclass of the class' do
         let(:value) { Class.new(expected).new }
+
+        include_examples 'should not raise an exception'
+      end
+    end
+
+    describe 'with expected: a module' do
+      let(:expected) { Enumerable }
+
+      describe 'with nil' do
+        let(:value) { nil }
+
+        include_examples 'should raise an exception with the failure message',
+          scope: 'instance_of'
+      end
+
+      describe 'with an Object' do
+        let(:value) { Object.new.freeze }
+
+        include_examples 'should raise an exception with the failure message',
+          scope: 'instance_of'
+      end
+
+      describe 'with an object extends the Module' do
+        let(:value) { Object.new.extend(Enumerable) }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an instance of a class that includes the Module' do
+        let(:value) { [] }
+
+        include_examples 'should not raise an exception'
+      end
+
+      describe 'with an instance of a class that prepends the Module' do
+        let(:value) { Class.new.prepend(Enumerable).new }
 
         include_examples 'should not raise an exception'
       end
@@ -2259,7 +2331,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       klass.define_method(:===) { |other| other == value }
     end
 
-    def assert
+    define_method :assert do
       assertions.validate_matches(value, expected:, **options)
     end
 
@@ -2467,7 +2539,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} is not a String or a Symbol"
     end
 
-    def assert
+    define_method :assert do
       assertions.validate_name(value, **options)
     end
 
@@ -2632,7 +2704,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} must be nil"
     end
 
-    def assert
+    define_method :assert do
       assertions.validate_nil(value, **options)
     end
 
@@ -2663,7 +2735,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} must not be nil"
     end
 
-    def assert
+    define_method :assert do
       assertions.validate_not_nil(value, **options)
     end
 
@@ -2694,7 +2766,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       "#{options.fetch(:as, 'value')} can't be blank"
     end
 
-    def assert
+    define_method :assert do
       assertions.validate_presence(value, **options)
     end
 

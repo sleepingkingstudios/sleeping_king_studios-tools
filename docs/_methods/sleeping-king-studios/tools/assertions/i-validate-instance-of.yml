@@ -25,7 +25,7 @@ params:
   type:
   - name: String
   default: "'value'"
-- description: the expected class.
+- description: the expected class or module.
   name: expected
   type:
   - name: Class
@@ -43,12 +43,12 @@ params:
 raises:
 - description: |-
     if the value is not an instance of the expected
-    class.
+    class or module.
   type:
   - name: ArgumentError
 returns:
 - description: ''
   type:
   - name: void
-short_description: Asserts that the value is an example of the given Class.
+short_description: Asserts that the value is an example of the given Class or Module.
 version: "*"

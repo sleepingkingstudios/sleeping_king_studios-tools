@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0
+
+### Tools
+
+Updated `Assertions#assert_instance_of` to accept a `Module` as the expected value.
+
 ## 1.2.0
 
 Ended support for Ruby 2.7 and 3.0.
