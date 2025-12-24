@@ -7,6 +7,8 @@ require 'sleeping_king_studios/tools'
 module SleepingKingStudios::Tools
   # Methods for asserting on the state of a function or application.
   class Assertions < Base # rubocop:disable Metrics/ClassLength
+    autoload :Aggregator, 'sleeping_king_studios/tools/assertions/aggregator'
+
     # rubocop:disable Layout/HashAlignment
     ERROR_MESSAGES =
       {
@@ -18,6 +20,10 @@ module SleepingKingStudios::Tools
           'must be true or false',
         'class' =>
           'is not a Class',
+        'class_or_module' =>
+          'is not a Class or Module',
+        'inherit_from' =>
+          'does not inherit from %<expected>s',
         'instance_of' =>
           'is not an instance of %<expected>s',
         'instance_of_anonymous' =>
@@ -42,133 +48,6 @@ module SleepingKingStudios::Tools
       .freeze
     private_constant :ERROR_MESSAGES
     # rubocop:enable Layout/HashAlignment
-
-    # Utility for grouping multiple assertion statements.
-    #
-    # @example
-    #   rocket = Struct.new(:fuel, :launched).new(0.0, true)
-    #   aggregator = SleepingKingStudios::Tools::Assertions::Aggregator.new
-    #   aggregator.empty?
-    #   #=> true
-    #
-    #   aggregator.assert(message: 'is out of fuel') { rocket.fuel > 0 }
-    #   aggregator.assert(message: 'has already launched') { !rocket.launched }
-    #   aggregator.empty?
-    #   #=> false
-    #   aggregator.failure_message
-    #   #=> 'is out of fuel, has already launched'
-    class Aggregator < Assertions
-      extend Forwardable
-
-      def initialize
-        super
-
-        @failures = []
-      end
-
-      # @!method <<(message)
-      #   Appends the message to the failure messages.
-      #
-      #   @param message [String] the message to append.
-      #
-      #   @return [Array] the updated failure messages.
-      #
-      #   @see Array#<<.
-
-      # @!method clear
-      #   Removes all items from the failure messages.
-      #
-      #   @return [Array] the empty failure messages.
-      #
-      #   @see Array#clear.
-
-      # @!method count
-      #   Returns a count of the failure message.
-      #
-      #   @return [Integer] the number of failure messages.
-      #
-      #   @see Array#count.
-
-      # @!method each
-      #   Iterates over the failure messages.
-      #
-      #   @overload each
-      #     Returns an enumerator that iterates over the failure messages.
-      #
-      #     @return [Enumerator] an enumerator over the messages.
-      #
-      #     @see Enumerable#each.
-      #
-      #   @overload each(&block)
-      #     Yields each failure message to the block.
-      #
-      #     @yieldparam message [String] the current failure message.
-      #
-      #     @see Enumerable#each.
-
-      # @!method empty?
-      #   Checks if there are any failure messages.
-      #
-      #   @return [true, false] true if there are no failure messages; otherwise
-      #     false.
-      #
-      #   @see Enumerable#empty?
-
-      # @!method size
-      #   Returns a count of the failure message.
-      #
-      #   @return [Integer] the number of failure messages.
-      #
-      #   @see Array#size.
-      def_delegators :@failures,
-        :<<,
-        :clear,
-        :count,
-        :each,
-        :empty?,
-        :size
-
-      # (see SleepingKingStudios::Tools::Assertions#assert_group)
-      def assert_group(error_class: AssertionError, message: nil, &assertions)
-        return super if message
-
-        raise ArgumentError, 'no block given' unless block_given?
-
-        assertions.call(self)
-      end
-      alias aggregate assert_group
-
-      # Generates a combined failure message from the configured messages.
-      #
-      # @return [String] the combined messages for each failed assertion.
-      #
-      # @example With an empty aggregator.
-      #   aggregator = SleepingKingStudios::Tools::Assertions::Aggregator.new
-      #
-      #   aggregator.failure_message
-      #   #=> ''
-      #
-      # @example With an aggregator with failure messages.
-      #   aggregator = SleepingKingStudios::Tools::Assertions::Aggregator.new
-      #   aggrgator << 'rocket is out of fuel'
-      #   aggrgator << 'rocket is not pointed toward space'
-      #
-      #   aggregator.failure_message
-      #   #=> 'rocket is out of fuel, rocket is not pointed toward space'
-      def failure_message
-        failures.join(', ')
-      end
-
-      private
-
-      attr_reader :failures
-
-      def handle_error(message:, **_)
-        failures << message
-
-        message
-      end
-    end
 
     # Error class for handling a failed assertion.
     class AssertionError < StandardError; end
@@ -255,6 +134,8 @@ module SleepingKingStudios::Tools
     # @param error_class [Class] the exception class to raise on a failure.
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
+    # @param strict [true, false] if true, fails if the given and expected
+    #   values are the same class or module.
     #
     # @return [void]
     #
@@ -360,6 +241,61 @@ module SleepingKingStudios::Tools
       handle_error(error_class:, message:)
     end
     alias aggregate assert_group
+
+    # Asserts that the value is a class or module with the given ancestor.
+    #
+    # @param value [Object] the value to assert on.
+    # @param as [String] the name of the asserted value.
+    # @param error_class [Class] the exception class to raise on a failure.
+    # @param expected [Class, Module] the expected ancestor.
+    # @param message [String] the exception message to raise on a failure.
+    #
+    # @return [void]
+    #
+    # @raise [AssertionError] if the value is not a class or module or does not
+    #   have the given ancestor.
+    #
+    # @example
+    #   Assertions.assert_inherits_from(:foo, expected: StandardError)
+    #   #=> raises an AssertionError with message 'value is not a Class or Module'
+    #
+    #   Assertions.assert_inherits_from(RuntimeError, expected: StandardError)
+    #   #=> does not raise an exception
+    #
+    #   Assertions.assert_inherits_from(Array, expected: Enumerable)
+    #   #=> does not raise an exception
+    def assert_inherits_from( # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
+      value,
+      expected:,
+      as:          'value',
+      error_class: AssertionError,
+      message:     nil,
+      strict:      false
+    )
+      unless expected.is_a?(Module)
+        raise ArgumentError, 'expected must be a Class or Module'
+      end
+
+      unless value.is_a?(Module)
+        message ||= error_message_for(
+          'sleeping_king_studios.tools.assertions.class_or_module',
+          as:
+        )
+
+        return handle_error(error_class:, message:)
+      end
+
+      return if strict ? value < expected : value <= expected
+
+      message ||= error_message_for(
+        'sleeping_king_studios.tools.assertions.inherit_from',
+        as:,
+        expected:
+      )
+
+      handle_error(error_class:, message:)
+    end
+    alias assert_subclass assert_inherits_from
 
     # Asserts that the value is an example of the given Class or Module.
     #
@@ -791,6 +727,47 @@ module SleepingKingStudios::Tools
         &validations
       )
     end
+
+    # Asserts that the value is a class or module with the given ancestor.
+    #
+    # @param value [Object] the value to assert on.
+    # @param as [String] the name of the asserted value.
+    # @param expected [Class, Module] the expected ancestor.
+    # @param message [String] the exception message to raise on a failure.
+    # @param strict [true, false] if true, fails if the given and expected
+    #   values are the same class or module.
+    #
+    # @return [void]
+    #
+    # @raise [ArgumentError] if the value is not a class or module or does not
+    #   have the given ancestor.
+    #
+    # @example
+    #   Assertions.validate_inherits_from(:foo, expected: StandardError)
+    #   #=> raises an ArgumentError with message 'value is not a Class or Module'
+    #
+    #   Assertions.validate_inherits_from(RuntimeError, expected: StandardError)
+    #   #=> does not raise an exception
+    #
+    #   Assertions.validate_inherits_from(Array, expected: Enumerable)
+    #   #=> does not raise an exception
+    def validate_inherits_from(
+      value,
+      expected:,
+      as:       'value',
+      message:  nil,
+      strict:   false
+    )
+      assert_inherits_from(
+        value,
+        as:,
+        error_class: ArgumentError,
+        expected:,
+        message:,
+        strict:
+      )
+    end
+    alias validate_subclass validate_inherits_from
 
     # Asserts that the value is an example of the given Class or Module.
     #

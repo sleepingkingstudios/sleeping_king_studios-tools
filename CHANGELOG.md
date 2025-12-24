@@ -4,6 +4,11 @@
 
 ### Tools
 
+Added the following methods ot `SleepingKingStudios::Tools::Assertions`.
+
+- `#assert_inherits_from` (aliased as `#assert_subclass`)
+- `#validate_inherits_from` (aliased as `#validate_subclass`)
+
 Updated `Assertions#assert_instance_of` to accept a `Module` as the expected value.
 
 ## 1.2.0

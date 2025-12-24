@@ -41,6 +41,10 @@ instance_methods:
   path: sleeping-king-studios/tools/assertions/i-assert-group
   slug: assert-group
   inherited: false
+- name: assert_inherits_from
+  path: sleeping-king-studios/tools/assertions/i-assert-inherits-from
+  slug: assert-inherits-from
+  inherited: false
 - name: assert_instance_of
   path: sleeping-king-studios/tools/assertions/i-assert-instance-of
   slug: assert-instance-of
@@ -88,6 +92,10 @@ instance_methods:
 - name: validate_group
   path: sleeping-king-studios/tools/assertions/i-validate-group
   slug: validate-group
+  inherited: false
+- name: validate_inherits_from
+  path: sleeping-king-studios/tools/assertions/i-validate-inherits-from
+  slug: validate-inherits-from
   inherited: false
 - name: validate_instance_of
   path: sleeping-king-studios/tools/assertions/i-validate-instance-of

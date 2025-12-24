@@ -15,6 +15,7 @@ files:
 - lib/sleeping_king_studios/tools/object_tools.rb
 - lib/sleeping_king_studios/tools/string_tools.rb
 - lib/sleeping_king_studios/tools/integer_tools.rb
+- lib/sleeping_king_studios/tools/assertions/aggregator.rb
 parent_path: sleeping-king-studios
 short_description: |-
   A library of utility services and concerns to expand the functionality of
