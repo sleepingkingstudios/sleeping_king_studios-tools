@@ -767,6 +767,7 @@ module SleepingKingStudios::Tools
         strict:
       )
     end
+    alias validate_subclass validate_inherits_from
 
     # Asserts that the value is an example of the given Class or Module.
     #

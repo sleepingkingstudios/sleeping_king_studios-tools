@@ -209,4 +209,12 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       it { expect(aggregator.size).to be 3 }
     end
   end
+
+  describe '#validate_inherits_from' do
+    it 'should alias the method' do
+      expect(aggregator)
+        .to have_aliased_method(:validate_inherits_from)
+        .as(:validate_subclass)
+    end
+  end
 end
