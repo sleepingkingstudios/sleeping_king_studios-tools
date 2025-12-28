@@ -349,15 +349,21 @@ module Spec::Support::Deferred
             end
           end
 
-          describe 'when the range is beginless and endless' do
-            let(:expected)   { nil.. }
-            let(:range_expr) { 'unbounded range' }
+          if RUBY_VERSION >= '3.2'
+            describe 'when the range is beginless and endless' do
+              let(:expected)   { nil.. }
+              let(:range_expr) { 'unbounded range' }
 
-            describe 'with a value in the expected range' do
-              let(:value) { 5.0 }
+              describe 'with a value in the expected range' do
+                let(:value) { 5.0 }
 
-              include_deferred 'should fail the assertion', **deferred_options
+                include_deferred 'should fail the assertion', **deferred_options
+              end
             end
+          else
+            # :nocov:
+            pending 'Ruby 3.1 and below does not support unbounded ranges.'
+            # :nocov:
           end
         end
 
