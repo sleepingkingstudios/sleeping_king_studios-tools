@@ -22,6 +22,14 @@ module SleepingKingStudios::Tools
           'is not a Class',
         'class_or_module' =>
           'is not a Class or Module',
+        'exclusion' =>
+          'is one of %<expected>s',
+        'exclusion_range' =>
+          'is within %<range_expr>s',
+        'inclusion' =>
+          'is not one of %<expected>s',
+        'inclusion_range' =>
+          'is outside %<range_expr>s',
         'inherit_from' =>
           'does not inherit from %<expected>s',
         'instance_of' =>
@@ -205,6 +213,55 @@ module SleepingKingStudios::Tools
         'sleeping_king_studios.tools.assertions.class',
         as:
       )
+
+      handle_error(error_class:, message:)
+    end
+
+    # Asserts that the value is not one of the given values.
+    #
+    # @param value [Object] the value to assert on.
+    # @param as [String] the name of the asserted value.
+    # @param error_class [Class] the exception class to raise on a failure.
+    # @param expected [Enumerable] the expected values.
+    # @param message [String] the exception message to raise on a failure.
+    #
+    # @return [void]
+    #
+    # @raise [AssertionError] if the value is one of the expected values.
+    #
+    # @example
+    #   Assertions.assert_exclusion('get', expected: %w[get post put])
+    #   #=> raises an AssertionError with message 'value is is one of "get", "post", "put"'
+    #
+    #   Assertions.assert_exclusion('delete', expected: %w[get post put])
+    #   #=> does not raise an exception
+    def assert_exclusion( # rubocop:disable Metrics/MethodLength
+      value,
+      expected:,
+      as:          'value',
+      error_class: AssertionError,
+      message:     nil
+    )
+      unless expected.is_a?(Enumerable)
+        raise ArgumentError, 'expected must be Enumerable'
+      end
+
+      return unless value_in_expected?(expected:, value:)
+
+      message ||=
+        if expected.is_a?(Range)
+          error_message_for(
+            'sleeping_king_studios.tools.assertions.exclusion_range',
+            as:,
+            range_expr: range_expression(expected)
+          )
+        else
+          error_message_for(
+            'sleeping_king_studios.tools.assertions.exclusion',
+            as:,
+            expected: expected.map(&:inspect).join(', ')
+          )
+        end
 
       handle_error(error_class:, message:)
     end
@@ -703,6 +760,38 @@ module SleepingKingStudios::Tools
       )
     end
 
+    # Asserts that the value is not one of the given values.
+    #
+    # @param value [Object] the value to assert on.
+    # @param as [String] the name of the asserted value.
+    # @param expected [Enumerable] the expected values.
+    # @param message [String] the exception message to raise on a failure.
+    #
+    # @return [void]
+    #
+    # @raise [ArgumentError] if the value is one of the expected values.
+    #
+    # @example
+    #   Assertions.assert_exclusion('get', expected: %w[get post put])
+    #   #=> raises an ArgumentError with message 'value is is one of "get", "post", "put"'
+    #
+    #   Assertions.assert_exclusion('delete', expected: %w[get post put])
+    #   #=> does not raise an exception
+    def validate_exclusion(
+      value,
+      expected:,
+      as:          'value',
+      message:     nil
+    )
+      assert_exclusion(
+        value,
+        as:,
+        error_class: ArgumentError,
+        expected:,
+        message:
+      )
+    end
+
     # Evaluates a series of validations and combines all failures.
     #
     # @param message [String] the exception message to raise on a failure.
@@ -1024,6 +1113,24 @@ module SleepingKingStudios::Tools
       return message unless as
 
       "#{as} #{message}"
+    end
+
+    def range_expression(range)
+      if range.begin && range.end
+        "range from #{range.begin} to #{range.end}"
+      elsif range.begin
+        "range beginning #{range.begin}"
+      elsif range.end
+        "range ending #{range.end}"
+      else
+        'unbounded range'
+      end
+    end
+
+    def value_in_expected?(expected:, value:)
+      return expected.cover?(value) if value.is_a?(Range)
+
+      expected.include?(value)
     end
   end
 end
