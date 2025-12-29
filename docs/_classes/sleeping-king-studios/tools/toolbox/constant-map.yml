@@ -59,11 +59,9 @@ metadata:
   - name: ''
     text: |-
       UserRoles = ConstantMap.new(
-        {
-          GUEST: 'guest',
-          USER:  'user',
-          ADMIN: 'admin'
-        }
+        GUEST: 'guest',
+        USER:  'user',
+        ADMIN: 'admin'
       )
 
       UserRoles::GUEST

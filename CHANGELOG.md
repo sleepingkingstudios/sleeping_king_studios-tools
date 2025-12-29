@@ -20,6 +20,11 @@ Updated `CoreTools` deprecations:
 - Now supports passing `deprecate(message, caller:)` to override displayed backtrace.
 - Initializing `CoreTools` with an invalid deprecation strategy now raises an `ArgumentError`.
 
+### Toolbox
+
+- Added keyword support to `ConstantMap.new`.
+- The value returned by `ConstantMap#to_h` is now immutable.
+
 ## 1.2.1
 
 Added support for Ruby 4.0.

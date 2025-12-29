@@ -28,7 +28,7 @@ module SleepingKingStudios::Tools::Toolbox
     include Enumerable
 
     # @overload initialize(constants)
-    #   @param constants [Hash{String,Symbol=>Object}] the constants to define.
+    #   @param constants [Hash{String, Symbol => Object}] the constants to define.
     #
     # @overload initialize(**constants)
     #   @param constants [Hash{Symbol=>Object}] the constants to define.
