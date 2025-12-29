@@ -15,6 +15,10 @@ Added the following methods ot `SleepingKingStudios::Tools::Assertions`.
 
 Updated `Assertions#assert_instance_of` to accept a `Module` as the expected value.
 
+Updated `CoreTools` deprecations:
+
+- Initializing `CoreTools` with an invalid deprecation strategy now raises an `ArgumentError`.
+
 ## 1.2.1
 
 Added support for Ruby 4.0.

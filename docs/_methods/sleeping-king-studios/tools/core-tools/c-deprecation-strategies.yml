@@ -1,0 +1,12 @@
+---
+name: SleepingKingStudios::Tools::CoreTools.deprecation_strategies
+parent_path: sleeping-king-studios/tools/core-tools
+signature: deprecation_strategies
+slug: deprecation-strategies
+constructor: false
+data_path: sleeping-king-studios/tools/core-tools/c-deprecation-strategies
+returns:
+- description: the permitted deprecation strategies for the tool.
+  type:
+  - name: Set
+version: "*"
