@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+Added support for Ruby 4.0.
+
 ## 1.2.0
 
 Ended support for Ruby 2.7 and 3.0.

@@ -3,6 +3,6 @@ name: SleepingKingStudios::Tools::Version::PATCH
 parent_path: sleeping-king-studios/tools/version
 slug: patch
 short_description: Patch version.
-value: '0'
+value: '1'
 data_path: sleeping-king-studios/tools/version/patch
 version: "*"
