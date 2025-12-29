@@ -10,11 +10,9 @@ module SleepingKingStudios::Tools::Toolbox
   #
   # @example
   #   UserRoles = ConstantMap.new(
-  #     {
-  #       GUEST: 'guest',
-  #       USER:  'user',
-  #       ADMIN: 'admin'
-  #     }
+  #     GUEST: 'guest',
+  #     USER:  'user',
+  #     ADMIN: 'admin'
   #   )
   #
   #   UserRoles::GUEST
@@ -29,13 +27,17 @@ module SleepingKingStudios::Tools::Toolbox
     extend  Forwardable
     include Enumerable
 
-    # @param constants [Hash] the constants to define.
-    def initialize(constants)
+    # @overload initialize(constants)
+    #   @param constants [Hash{String,Symbol=>Object}] the constants to define.
+    #
+    # @overload initialize(**constants)
+    #   @param constants [Hash{Symbol=>Object}] the constants to define.
+    def initialize(constants = {}, **keywords)
       super()
 
-      @to_h = constants.dup
+      @to_h = constants.merge(**keywords).transform_keys(&:to_sym).freeze
 
-      constants.each do |const_name, const_value|
+      @to_h.each do |const_name, const_value|
         const_set(const_name, const_value)
 
         define_reader(const_name)

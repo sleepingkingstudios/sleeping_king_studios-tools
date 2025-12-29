@@ -21,7 +21,12 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
   it { expect(described_class).to be < Enumerable }
 
   describe '::new' do
-    it { expect(described_class).to respond_to(:new).with(1).argument }
+    it 'should define the constructor' do
+      expect(described_class)
+        .to respond_to(:new)
+        .with(0..1).arguments
+        .and_any_keywords
+    end
 
     wrap_context 'when many constants are defined' do
       it { expect(constant_map::GUEST).to be == constants[:GUEST] }
@@ -83,8 +88,34 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
   describe '#constants' do
     it { expect(instance).to have_reader(:constants).with_value(be == []) }
 
-    wrap_context 'when many constants are defined' do
-      it { expect(instance.constants).to match_array(constants.keys) }
+    context 'when the constants are defined as a Hash with String keys' do
+      let(:constants) do
+        {
+          'GUEST'     => 'guest',
+          'PATRON'    => 'patron',
+          'LIBRARIAN' => 'librarian'
+        }
+      end
+      let(:expected) { constants.keys.map(&:to_sym) }
+
+      it { expect(instance.constants).to match_array(expected) }
+    end
+
+    context 'when the constants are defined as a Hash with Symbol keys' do
+      include_context 'when many constants are defined'
+
+      let(:expected) { constants.keys.map(&:to_sym) }
+
+      it { expect(instance.constants).to match_array(expected) }
+    end
+
+    context 'when the constants are defined as keywords' do
+      include_context 'when many constants are defined'
+
+      let(:constant_map) { described_class.new(**constants) }
+      let(:expected)     { constants.keys.map(&:to_sym) }
+
+      it { expect(instance.constants).to match_array(expected) }
     end
   end
 
@@ -285,6 +316,38 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::ConstantMap do
     it { expect(instance).to have_aliased_method(:to_h).as(:all) }
 
     it { expect(instance.to_h).to be == {} }
+
+    it { expect(instance.to_h).to be_frozen }
+
+    context 'when the constants are defined as a Hash with String keys' do
+      let(:constants) do
+        {
+          'GUEST'     => 'guest',
+          'PATRON'    => 'patron',
+          'LIBRARIAN' => 'librarian'
+        }
+      end
+      let(:expected) { constants.transform_keys(&:to_sym) }
+
+      it { expect(instance.to_h).to match_array(expected) }
+    end
+
+    context 'when the constants are defined as a Hash with Symbol keys' do
+      include_context 'when many constants are defined'
+
+      let(:expected) { constants.transform_keys(&:to_sym) }
+
+      it { expect(instance.to_h).to match_array(expected) }
+    end
+
+    context 'when the constants are defined as keywords' do
+      include_context 'when many constants are defined'
+
+      let(:constant_map) { described_class.new(**constants) }
+      let(:expected)     { constants.transform_keys(&:to_sym) }
+
+      it { expect(instance.to_h).to match_array(expected) }
+    end
 
     wrap_context 'when many constants are defined' do
       it { expect(instance.to_h).to be == constants }
