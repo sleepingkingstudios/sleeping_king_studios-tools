@@ -205,6 +205,185 @@ module Spec::Support::Deferred
         end
       end
 
+      describe "##{prefix}_exclusion" do
+        let(:error_key) { 'exclusion' }
+        let(:expected)  { %w[get post put] }
+        let(:options)   { super().merge(expected:) }
+        let(:expected_message) do
+          options[:message] || subject.error_message_for(
+            'sleeping_king_studios.tools.assertions.exclusion',
+            as:       options.fetch(:as, 'value'),
+            expected: expected.map(&:inspect).join(', ')
+          )
+        end
+
+        define_method :assert do
+          subject.public_send(:"#{prefix}_exclusion", value, **options)
+        end
+
+        it 'should define the method' do
+          expect(subject)
+            .to respond_to(:"#{prefix}_exclusion")
+            .with(1).argument
+            .and_keywords(*default_keywords, :as, :expected)
+        end
+
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_deferred 'should pass the assertion'
+        end
+
+        describe 'with an Object' do
+          let(:value) { Object.new.freeze }
+
+          include_deferred 'should pass the assertion'
+        end
+
+        describe 'with a value not in the expected values' do
+          let(:value) { 'delete' }
+
+          include_deferred 'should pass the assertion'
+        end
+
+        describe 'with a value in the expected values' do
+          let(:value) { 'get' }
+
+          include_deferred 'should fail the assertion', **deferred_options
+        end
+
+        describe 'with expected: nil' do
+          let(:value)    { nil }
+          let(:expected) { nil }
+
+          it 'should raise an exception' do
+            expect { assert }.to raise_error(
+              ArgumentError,
+              'expected must be Enumerable'
+            )
+          end
+        end
+
+        describe 'with expected: an Object' do
+          let(:value)    { nil }
+          let(:expected) { Object.new.freeze }
+
+          it 'should raise an exception' do
+            expect { assert }.to raise_error(
+              ArgumentError,
+              'expected must be Enumerable'
+            )
+          end
+        end
+
+        describe 'with expected: an Enumerator' do
+          let(:expected) { { a: 0, b: 1, c: 2 }.each_key }
+
+          describe 'with a value not in the expected values' do
+            let(:value) { :d }
+
+            include_deferred 'should pass the assertion'
+          end
+
+          describe 'with a value in the expected values' do
+            let(:value) { :b }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+        end
+
+        describe 'with expected: a Range' do
+          let(:expected)   { 0.0..10.0 }
+          let(:range_expr) { 'range from 0.0 to 10.0' }
+          let(:expected_message) do
+            subject.error_message_for(
+              'sleeping_king_studios.tools.assertions.exclusion_range',
+              as:         options.fetch(:as, 'value'),
+              range_expr:
+            )
+          end
+
+          describe 'with a value not in the expected range' do
+            let(:value) { -1 }
+
+            include_deferred 'should pass the assertion'
+          end
+
+          describe 'with a value in the expected values' do
+            let(:value) { 3.5 }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'when the range is beginless' do
+            let(:expected)   { ..10.0 }
+            let(:range_expr) { 'range ending 10.0' }
+
+            describe 'with a value not in the expected range' do
+              let(:value) { 10.5 }
+
+              include_deferred 'should pass the assertion'
+            end
+
+            describe 'with a value in the expected range' do
+              let(:value) { 5.0 }
+
+              include_deferred 'should fail the assertion', **deferred_options
+            end
+          end
+
+          describe 'when the range is endless' do
+            let(:expected)   { 0.0.. }
+            let(:range_expr) { 'range beginning 0.0' }
+
+            describe 'with a value not in the expected range' do
+              let(:value) { -1 }
+
+              include_deferred 'should pass the assertion'
+            end
+
+            describe 'with a value in the expected range' do
+              let(:value) { 5.0 }
+
+              include_deferred 'should fail the assertion', **deferred_options
+            end
+          end
+
+          if RUBY_VERSION >= '3.2'
+            describe 'when the range is beginless and endless' do
+              let(:expected)   { nil.. }
+              let(:range_expr) { 'unbounded range' }
+
+              describe 'with a value in the expected range' do
+                let(:value) { 5.0 }
+
+                include_deferred 'should fail the assertion', **deferred_options
+              end
+            end
+          else
+            # :nocov:
+            pending 'Ruby 3.1 and below does not support unbounded ranges.'
+            # :nocov:
+          end
+        end
+
+        describe 'with expected: a Set' do
+          let(:expected) { Set.new(%i[a b c]) }
+
+          describe 'with a value not in the expected values' do
+            let(:value) { :d }
+
+            include_deferred 'should pass the assertion'
+          end
+
+          describe 'with a value in the expected values' do
+            let(:value) { :b }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+        end
+      end
+
       describe "##{prefix}_group" do
         let(:block) { ->(_) {} }
 
@@ -293,7 +472,8 @@ module Spec::Support::Deferred
           end
 
           include_deferred 'should fail the assertion',
-            skip_as: true,
+            multiple_messages: true,
+            skip_as:           true,
             **deferred_options
         end
 
@@ -335,7 +515,8 @@ module Spec::Support::Deferred
           end
 
           include_deferred 'should fail the assertion',
-            skip_as: true,
+            multiple_messages: true,
+            skip_as:           true,
             **deferred_options
         end
 
@@ -358,7 +539,8 @@ module Spec::Support::Deferred
           end
 
           include_deferred 'should fail the assertion',
-            skip_as: true,
+            multiple_messages: true,
+            skip_as:           true,
             **deferred_options
         end
 
@@ -414,7 +596,8 @@ module Spec::Support::Deferred
             let(:expected_message) { message }
 
             include_deferred 'should fail the assertion',
-              skip_as: true,
+              multiple_messages: true,
+              skip_as:           true,
               **deferred_options
           end
 
@@ -456,7 +639,8 @@ module Spec::Support::Deferred
             let(:expected_message) { message }
 
             include_deferred 'should fail the assertion',
-              skip_as: true,
+              multiple_messages: true,
+              skip_as:           true,
               **deferred_options
           end
 
@@ -480,8 +664,244 @@ module Spec::Support::Deferred
             let(:expected_message) { message }
 
             include_deferred 'should fail the assertion',
-              skip_as: true,
+              multiple_messages: true,
+              skip_as:           true,
               **deferred_options
+          end
+        end
+      end
+
+      describe "##{prefix}_inclusion" do
+        let(:error_key) { 'inclusion' }
+        let(:expected)  { %w[get post put] }
+        let(:options)   { super().merge(expected:) }
+        let(:expected_message) do
+          options[:message] || subject.error_message_for(
+            'sleeping_king_studios.tools.assertions.inclusion',
+            as:       options.fetch(:as, 'value'),
+            expected: expected.map(&:inspect).join(', ')
+          )
+        end
+
+        define_method :assert do
+          subject.public_send(:"#{prefix}_inclusion", value, **options)
+        end
+
+        it 'should define the method' do
+          expect(subject)
+            .to respond_to(:"#{prefix}_inclusion")
+            .with(1).argument
+            .and_keywords(*default_keywords, :as, :expected, :optional)
+        end
+
+        describe 'with nil' do
+          let(:value) { nil }
+
+          include_deferred 'should fail the assertion', **deferred_options
+        end
+
+        describe 'with an Object' do
+          let(:value) { Object.new.freeze }
+
+          include_deferred 'should fail the assertion', **deferred_options
+        end
+
+        describe 'with a value not in the expected values' do
+          let(:value) { 'delete' }
+
+          include_deferred 'should fail the assertion', **deferred_options
+        end
+
+        describe 'with a value in the expected values' do
+          let(:value) { 'get' }
+
+          include_deferred 'should pass the assertion'
+        end
+
+        describe 'with expected: nil' do
+          let(:value)    { nil }
+          let(:expected) { nil }
+
+          it 'should raise an exception' do
+            expect { assert }.to raise_error(
+              ArgumentError,
+              'expected must be Enumerable'
+            )
+          end
+        end
+
+        describe 'with expected: an Object' do
+          let(:value)    { nil }
+          let(:expected) { Object.new.freeze }
+
+          it 'should raise an exception' do
+            expect { assert }.to raise_error(
+              ArgumentError,
+              'expected must be Enumerable'
+            )
+          end
+        end
+
+        describe 'with expected: an Enumerator' do
+          let(:expected) { { a: 0, b: 1, c: 2 }.each_key }
+
+          describe 'with a value not in the expected values' do
+            let(:value) { :d }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with a value in the expected values' do
+            let(:value) { :b }
+
+            include_deferred 'should pass the assertion'
+          end
+        end
+
+        describe 'with expected: a Range' do
+          let(:expected)   { 0.0..10.0 }
+          let(:range_expr) { 'range from 0.0 to 10.0' }
+          let(:expected_message) do
+            subject.error_message_for(
+              'sleeping_king_studios.tools.assertions.inclusion_range',
+              as:         options.fetch(:as, 'value'),
+              range_expr:
+            )
+          end
+
+          describe 'with a value not in the expected range' do
+            let(:value) { -1 }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with a value in the expected values' do
+            let(:value) { 3.5 }
+
+            include_deferred 'should pass the assertion'
+          end
+
+          describe 'when the range is beginless' do
+            let(:expected)   { ..10.0 }
+            let(:range_expr) { 'range ending 10.0' }
+
+            describe 'with a value not in the expected range' do
+              let(:value) { 10.5 }
+
+              include_deferred 'should fail the assertion', **deferred_options
+            end
+
+            describe 'with a value in the expected range' do
+              let(:value) { 5.0 }
+
+              include_deferred 'should pass the assertion'
+            end
+          end
+
+          describe 'when the range is endless' do
+            let(:expected)   { 0.0.. }
+            let(:range_expr) { 'range beginning 0.0' }
+
+            describe 'with a value not in the expected range' do
+              let(:value) { -1 }
+
+              include_deferred 'should fail the assertion', **deferred_options
+            end
+
+            describe 'with a value in the expected range' do
+              let(:value) { 5.0 }
+
+              include_deferred 'should pass the assertion'
+            end
+          end
+
+          if RUBY_VERSION >= '3.2'
+            describe 'when the range is beginless and endless' do
+              let(:expected)   { nil.. }
+              let(:range_expr) { 'unbounded range' }
+
+              describe 'with a value in the expected range' do
+                let(:value) { 5.0 }
+
+                include_deferred 'should pass the assertion'
+              end
+            end
+          else
+            # :nocov:
+            pending 'Ruby 3.1 and below does not support unbounded ranges.'
+            # :nocov:
+          end
+        end
+
+        describe 'with expected: a Set' do
+          let(:expected) { Set.new(%i[a b c]) }
+
+          describe 'with a value not in the expected values' do
+            let(:value) { :d }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with a value in the expected values' do
+            let(:value) { :b }
+
+            include_deferred 'should pass the assertion'
+          end
+        end
+
+        describe 'with optional: false' do
+          let(:options) { super().merge(optional: false) }
+
+          describe 'with nil' do
+            let(:value) { nil }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with an Object' do
+            let(:value) { Object.new.freeze }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with a value not in the expected values' do
+            let(:value) { 'delete' }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with a value in the expected values' do
+            let(:value) { 'get' }
+
+            include_deferred 'should pass the assertion'
+          end
+        end
+
+        describe 'with optional: true' do
+          let(:options) { super().merge(optional: true) }
+
+          describe 'with nil' do
+            let(:value) { nil }
+
+            include_deferred 'should pass the assertion'
+          end
+
+          describe 'with an Object' do
+            let(:value) { Object.new.freeze }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with a value not in the expected values' do
+            let(:value) { 'delete' }
+
+            include_deferred 'should fail the assertion', **deferred_options
+          end
+
+          describe 'with a value in the expected values' do
+            let(:value) { 'get' }
+
+            include_deferred 'should pass the assertion'
           end
         end
       end

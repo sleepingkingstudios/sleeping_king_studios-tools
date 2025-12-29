@@ -26,7 +26,13 @@ RSpec.describe SleepingKingStudios::Tools::Assertions::Aggregator do
       hsh
     end
     let(:configured_messages) do
-      next expected_message.split(', ') if defined?(expected_message)
+      if defined?(expected_message)
+        if deferred_options.fetch(:multiple_messages, false)
+          next expected_message.split(', ')
+        end
+
+        next [expected_message]
+      end
 
       scope = "sleeping_king_studios.tools.assertions.#{error_key}"
 
