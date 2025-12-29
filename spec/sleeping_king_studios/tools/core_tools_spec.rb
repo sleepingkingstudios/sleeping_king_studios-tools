@@ -5,31 +5,41 @@ require 'spec_helper'
 require 'sleeping_king_studios/tools/core_tools'
 
 RSpec.describe SleepingKingStudios::Tools::CoreTools do
-  let(:instance) { described_class.instance }
+  subject(:instance) { described_class.new(**constructor_options) }
+
+  let(:constructor_options) { {} }
+
+  describe '.deprecation_strategies' do
+    let(:expected) { Set.new(%w[ignore raise warn]) }
+
+    include_examples 'should define class reader', :deprecation_strategies
+
+    it { expect(described_class.deprecation_strategies).to be == expected }
+
+    it { expect(described_class.deprecation_strategies).to be_frozen }
+  end
 
   describe '.new' do
-    describe 'with deprecation_strategy: value' do
-      let(:instance) do
-        described_class.new(deprecation_strategy: 'panic')
+    describe 'with deprecation_strategy: invalid value' do
+      let(:constructor_options) { super().merge(deprecation_strategy: 'panic') }
+      let(:error_message) do
+        'invalid deprecation strategy "panic" - valid options are ' \
+          '"ignore", "raise", "warn"'
       end
 
-      it 'should set the deprecation strategy' do
-        expect(instance.deprecation_strategy).to be == 'panic'
+      it 'should raise an exception' do
+        expect { described_class.new(**constructor_options) }
+          .to raise_error ArgumentError, error_message
       end
     end
   end
 
   describe '#deprecate' do
-    let(:strategy)      { 'warn' }
-    let(:object)        { 'PHP' }
-    let(:custom_format) { '[WARNING] %s has been deprecated.' }
-    let(:object_string) { Kernel.format(custom_format, object) }
-
-    before(:example) do
-      allow(instance).to receive(:deprecation_strategy).and_return(strategy)
-
-      allow(Kernel).to receive(:warn)
-    end
+    let(:deprecation_strategy) { 'warn' }
+    let(:object)               { 'PHP' }
+    let(:custom_format)        { '[WARNING] %s has been deprecated.' }
+    let(:object_string)        { Kernel.format(custom_format, object) }
+    let(:constructor_options)  { super().merge(deprecation_strategy:) }
 
     it 'should define the method' do
       expect(instance)
@@ -40,7 +50,9 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
     end
 
     context 'when the deprecation strategy is "ignore"' do
-      let(:strategy) { 'ignore' }
+      let(:deprecation_strategy) { 'ignore' }
+
+      before(:example) { allow(Kernel).to receive(:warn) }
 
       it 'should not print a warning' do
         instance.deprecate object
@@ -50,9 +62,9 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
     end
 
     context 'when the deprecation strategy is "raise"' do
-      let(:strategy)      { 'raise' }
-      let(:custom_format) { '%s has been deprecated.' }
-      let(:error_message) { object_string }
+      let(:deprecation_strategy) { 'raise' }
+      let(:custom_format)        { '%s has been deprecated.' }
+      let(:error_message)        { object_string }
 
       it 'should raise an error' do
         expect { instance.deprecate object }
@@ -82,8 +94,8 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
     end
 
     context 'when the deprecation strategy is "warn"' do
-      let(:strategy)      { 'warn' }
-      let(:caller_string) { '/path/to/file.rb:4: in something_or_other' }
+      let(:deprecation_strategy) { 'warn' }
+      let(:caller_string)        { '/path/to/file.rb:4: in something_or_other' }
       let(:caller_lines) do
         [
           '/path/to/sleeping_king_studios-tools/some/internal/code.rb',
@@ -106,7 +118,9 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       end
 
       before(:example) do
-        allow(instance)
+        allow(Kernel).to receive(:warn)
+
+        allow(instance) # rubocop:disable RSpec/SubjectStub
           .to receive(:caller)
           .and_return(caller_lines)
       end
@@ -232,16 +246,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
   end
 
   describe '#deprecation_strategy' do
-    let(:instance) do
-      described_class.new(**constructor_options)
-    end
-    let(:constructor_options) { {} }
-
-    it 'should define the method' do
-      expect(instance).to respond_to(:deprecation_strategy).with(0).arguments
-    end
-
-    context 'when ENV[DEPRECATION_STRATEGY] is not set' do
+    shared_context 'when ENV[DEPRECATION_STRATEGY] is not set' do
       around(:example) do |example|
         previous = ENV.fetch('DEPRECATION_STRATEGY', nil)
 
@@ -251,37 +256,83 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       ensure
         ENV['DEPRECATION_STRATEGY'] = previous
       end
-
-      it { expect(instance.send :deprecation_strategy).to be == 'warn' }
-
-      context 'when initialized with deprecation_strategy: value' do
-        let(:constructor_options) do
-          super().merge(deprecation_strategy: 'raise')
-        end
-
-        it { expect(instance.send :deprecation_strategy).to be == 'raise' }
-      end
     end
 
-    context 'when ENV[DEPRECATION_STRATEGY] is set' do
+    shared_context 'when ENV[DEPRECATION_STRATEGY] is set' \
+    do |configured_strategy|
       around(:example) do |example|
         previous = ENV.fetch('DEPRECATION_STRATEGY', nil)
 
-        ENV['DEPRECATION_STRATEGY'] = 'panic'
+        ENV['DEPRECATION_STRATEGY'] = configured_strategy
 
         example.call
       ensure
         ENV['DEPRECATION_STRATEGY'] = previous
       end
+    end
 
-      it { expect(instance.send :deprecation_strategy).to be == 'panic' }
+    let(:instance) do
+      described_class.new(**constructor_options)
+    end
+    let(:constructor_options) { {} }
 
-      context 'when initialized with deprecation_strategy: value' do
-        let(:constructor_options) do
-          super().merge(deprecation_strategy: 'raise')
-        end
+    it 'should define the method' do
+      expect(instance).to respond_to(:deprecation_strategy).with(0).arguments
+    end
 
-        it { expect(instance.send :deprecation_strategy).to be == 'raise' }
+    wrap_context 'when ENV[DEPRECATION_STRATEGY] is not set' do
+      it { expect(instance.deprecation_strategy).to be == 'warn' }
+    end
+
+    wrap_context 'when ENV[DEPRECATION_STRATEGY] is set', 'raise' do
+      it { expect(instance.deprecation_strategy).to be == 'raise' }
+    end
+
+    context 'when initialized with deprecation_strategy: ignore' do
+      let(:constructor_options) do
+        super().merge(deprecation_strategy: 'ignore')
+      end
+
+      it { expect(instance.deprecation_strategy).to be == 'ignore' }
+
+      wrap_context 'when ENV[DEPRECATION_STRATEGY] is not set' do
+        it { expect(instance.deprecation_strategy).to be == 'ignore' }
+      end
+
+      wrap_context 'when ENV[DEPRECATION_STRATEGY] is set', 'raise' do
+        it { expect(instance.deprecation_strategy).to be == 'ignore' }
+      end
+    end
+
+    context 'when initialized with deprecation_strategy: raise' do
+      let(:constructor_options) do
+        super().merge(deprecation_strategy: 'raise')
+      end
+
+      it { expect(instance.deprecation_strategy).to be == 'raise' }
+
+      wrap_context 'when ENV[DEPRECATION_STRATEGY] is not set' do
+        it { expect(instance.deprecation_strategy).to be == 'raise' }
+      end
+
+      wrap_context 'when ENV[DEPRECATION_STRATEGY] is set', 'warn' do
+        it { expect(instance.deprecation_strategy).to be == 'raise' }
+      end
+    end
+
+    context 'when initialized with deprecation_strategy: warn' do
+      let(:constructor_options) do
+        super().merge(deprecation_strategy: 'warn')
+      end
+
+      it { expect(instance.deprecation_strategy).to be == 'warn' }
+
+      wrap_context 'when ENV[DEPRECATION_STRATEGY] is not set' do
+        it { expect(instance.deprecation_strategy).to be == 'warn' }
+      end
+
+      wrap_context 'when ENV[DEPRECATION_STRATEGY] is set', 'ignore' do
+        it { expect(instance.deprecation_strategy).to be == 'warn' }
       end
     end
   end
