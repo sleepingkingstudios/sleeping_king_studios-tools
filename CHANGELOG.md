@@ -17,6 +17,7 @@ Updated `Assertions#assert_instance_of` to accept a `Module` as the expected val
 
 Updated `CoreTools` deprecations:
 
+- Now supports passing `deprecate(message, caller:)` to override displayed backtrace.
 - Initializing `CoreTools` with an invalid deprecation strategy now raises an `ArgumentError`.
 
 ## 1.2.1
