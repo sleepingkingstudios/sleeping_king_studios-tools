@@ -36,10 +36,18 @@ instance_methods:
   path: sleeping-king-studios/tools/assertions/i-assert-class
   slug: assert-class
   inherited: true
+- name: assert_exclusion
+  path: sleeping-king-studios/tools/assertions/i-assert-exclusion
+  slug: assert-exclusion
+  inherited: true
 - name: assert_group
   path: sleeping-king-studios/tools/assertions/aggregator/i-assert-group
   slug: assert-group
   inherited: false
+- name: assert_inclusion
+  path: sleeping-king-studios/tools/assertions/i-assert-inclusion
+  slug: assert-inclusion
+  inherited: true
 - name: assert_inherits_from
   path: sleeping-king-studios/tools/assertions/i-assert-inherits-from
   slug: assert-inherits-from
@@ -117,9 +125,17 @@ instance_methods:
   path: sleeping-king-studios/tools/assertions/i-validate-class
   slug: validate-class
   inherited: true
+- name: validate_exclusion
+  path: sleeping-king-studios/tools/assertions/i-validate-exclusion
+  slug: validate-exclusion
+  inherited: true
 - name: validate_group
   path: sleeping-king-studios/tools/assertions/i-validate-group
   slug: validate-group
+  inherited: true
+- name: validate_inclusion
+  path: sleeping-king-studios/tools/assertions/i-validate-inclusion
+  slug: validate-inclusion
   inherited: true
 - name: validate_inherits_from
   path: sleeping-king-studios/tools/assertions/i-validate-inherits-from

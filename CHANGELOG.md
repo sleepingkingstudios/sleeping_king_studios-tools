@@ -6,7 +6,11 @@
 
 Added the following methods ot `SleepingKingStudios::Tools::Assertions`.
 
+- `#assert_exclusion`
+- `#assert_inclusion`
 - `#assert_inherits_from` (aliased as `#assert_subclass`)
+- `#validate_exclusion`
+- `#validate_inclusion`
 - `#validate_inherits_from` (aliased as `#validate_subclass`)
 
 Updated `Assertions#assert_instance_of` to accept a `Module` as the expected value.
