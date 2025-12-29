@@ -31,11 +31,11 @@ RSpec.describe SleepingKingStudios::Tools::Toolbelt do
     end
 
     describe 'with deprecation_strategy: value' do
-      let(:instance) { described_class.new(deprecation_strategy: 'panic') }
+      let(:instance) { described_class.new(deprecation_strategy: 'ignore') }
 
       it 'should pass the strategy to #core_tools' do
         expect(instance.core_tools.deprecation_strategy)
-          .to be == 'panic'
+          .to be == 'ignore'
       end
     end
 

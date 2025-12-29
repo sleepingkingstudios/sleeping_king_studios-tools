@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'set'
+
 require 'sleeping_king_studios/tools'
 
 module SleepingKingStudios::Tools
@@ -8,11 +10,17 @@ module SleepingKingStudios::Tools
     # Exception raised when deprecated code is called with strategy 'raise'.
     class DeprecationError < StandardError; end
 
+    DEPRECATION_STRATEGIES = Set.new(%w[ignore raise warn]).freeze
+    private_constant :DEPRECATION_STRATEGIES
+
     class << self
       def_delegators :instance,
         :deprecate,
         :empty_binding,
         :require_each
+
+      # @return [Set] the permitted deprecation strategies for the tool.
+      def deprecation_strategies = DEPRECATION_STRATEGIES
     end
 
     # @param deprecation_caller_depth [Integer] the number of backtrace lines to
@@ -29,7 +37,9 @@ module SleepingKingStudios::Tools
         deprecation_caller_depth ||
         ENV.fetch('DEPRECATION_CALLER_DEPTH', '3').to_i
       @deprecation_strategy =
-        deprecation_strategy || ENV.fetch('DEPRECATION_STRATEGY', 'warn')
+        deprecation_strategy&.to_s || ENV.fetch('DEPRECATION_STRATEGY', 'warn')
+
+      validate_deprecation_strategy(@deprecation_strategy)
     end
 
     # @return [Integer] the number of backtrace lines to display when outputting
@@ -90,12 +100,14 @@ module SleepingKingStudios::Tools
     #   @param message [String] an optional message to print after the formatted
     #     string. Defaults to nil.
     def deprecate(*args, format: nil, message: nil)
-      send(
-        :"deprecate_as_#{deprecation_strategy}",
-        *args,
-        format:,
-        message:
-      )
+      case deprecation_strategy
+      when 'ignore'
+        # Do nothing.
+      when 'raise'
+        deprecate_with_exception(*args, format:, message:)
+      when 'warn'
+        deprecate_with_warning(*args, format:, message:)
+      end
     end
 
     # Generates an empty Binding object with an Object as the receiver.
@@ -122,9 +134,7 @@ module SleepingKingStudios::Tools
 
     private
 
-    def deprecate_as_ignore(*_args, **_kwargs); end
-
-    def deprecate_as_raise(*args, format: nil, message: nil)
+    def deprecate_with_exception(*args, format: nil, message: nil)
       format ||= '%s has been deprecated.'
 
       str = format % args
@@ -133,7 +143,7 @@ module SleepingKingStudios::Tools
       raise DeprecationError, str, caller(2..-1)
     end
 
-    def deprecate_as_warn(*args, format: nil, message: nil)
+    def deprecate_with_warning(*args, format: nil, message: nil)
       format ||= '[WARNING] %s has been deprecated.'
 
       str = format % args
@@ -153,6 +163,15 @@ module SleepingKingStudios::Tools
       lines[start...(start + deprecation_caller_depth)]
         .map { |line| "\n  called from #{line}" }
         .join
+    end
+
+    def validate_deprecation_strategy(strategy)
+      return if self.class.deprecation_strategies.include?(strategy.to_s)
+
+      message =
+        "invalid deprecation strategy #{strategy.inspect} - valid options " \
+        "are #{self.class.deprecation_strategies.map(&:inspect).join(', ')}"
+      raise ArgumentError, message
     end
   end
 end

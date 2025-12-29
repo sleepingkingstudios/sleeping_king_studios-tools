@@ -7,6 +7,10 @@ files:
 parent_path: sleeping-king-studios/tools
 short_description: Tools for working with an application or working environment.
 class_methods:
+- name: deprecation_strategies
+  path: sleeping-king-studios/tools/core-tools/c-deprecation-strategies
+  slug: deprecation-strategies
+  inherited: false
 - name: instance
   path: sleeping-king-studios/tools/base/c-instance
   slug: instance
