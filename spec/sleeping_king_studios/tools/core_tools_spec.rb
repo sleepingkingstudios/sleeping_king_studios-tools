@@ -45,7 +45,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       expect(instance)
         .to respond_to(:deprecate)
         .with(1).argument
-        .and_keywords(:format, :message)
+        .and_keywords(:caller, :format, :message)
         .and_unlimited_arguments
     end
 
@@ -71,6 +71,12 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
           .to raise_error described_class::DeprecationError, error_message
       end
 
+      it 'should truncate the exception backtrace' do
+        instance.deprecate(object)
+      rescue described_class::DeprecationError => exception
+        expect(exception.backtrace.first).to include(__FILE__)
+      end
+
       describe 'with an additional message' do
         let(:message)       { 'You should probably switch to a real language.' }
         let(:error_message) { "#{object_string} #{message}" }
@@ -89,6 +95,27 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         it 'should raise an error' do
           expect { instance.deprecate object, version, format: custom_format }
             .to raise_error described_class::DeprecationError, error_message
+        end
+      end
+
+      describe 'with caller: custom stack' do
+        let(:caller_stack) do
+          [
+            "/custom/stack/first.rb in '<spec>'",
+            "/custom/stack/second.rb in '<spec>'",
+            "/custom/stack/third.rb in '<spec>'"
+          ]
+        end
+
+        it 'should raise an error' do
+          expect { instance.deprecate(object, caller: caller_stack) }
+            .to raise_error described_class::DeprecationError, error_message
+        end
+
+        it 'should set the exception backtrace' do
+          instance.deprecate(object, caller: caller_stack)
+        rescue described_class::DeprecationError => exception
+          expect(exception.backtrace).to be == caller_stack
         end
       end
     end
@@ -158,12 +185,28 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         end
       end
 
-      context 'when initialized with deprecation_caller_depth: 0' do
-        let(:instance) do
-          described_class.new(**constructor_options)
+      describe 'with caller: custom stack' do
+        let(:caller_stack) do
+          [
+            "/custom/stack/first.rb in '<spec>'",
+            "/custom/stack/second.rb in '<spec>'",
+            "/custom/stack/third.rb in '<spec>'"
+          ]
         end
-        let(:constructor_options) { { deprecation_caller_depth: 0 } }
-        let(:formatted_warning)   { object_string }
+        let(:scoped_caller) { caller_stack }
+
+        it 'should print a deprecation warning' do
+          instance.deprecate(object, caller: caller_stack)
+
+          expect(Kernel).to have_received(:warn).with(formatted_warning)
+        end
+      end
+
+      context 'when initialized with deprecation_caller_depth: 0' do
+        let(:constructor_options) do
+          super().merge(deprecation_caller_depth: 0)
+        end
+        let(:formatted_warning) { object_string }
 
         it 'should print a deprecation warning' do
           instance.deprecate object
@@ -173,10 +216,9 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       end
 
       context 'when initialized with deprecation_caller_depth: value' do
-        let(:instance) do
-          described_class.new(**constructor_options)
+        let(:constructor_options) do
+          super().merge(deprecation_caller_depth: 10)
         end
-        let(:constructor_options) { { deprecation_caller_depth: 10 } }
 
         it 'should print a deprecation warning' do
           instance.deprecate object

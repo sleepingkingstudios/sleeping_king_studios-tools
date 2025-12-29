@@ -89,6 +89,8 @@ module SleepingKingStudios::Tools
     #
     #   @param name [String] the name of the object, method, or feature that
     #     has been deprecated.
+    #   @param caller [Array<String>] overrides the displayed call stack, if the
+    #     configured deprecation strategy displays the call stack.
     #   @param message [String] an optional message to print after the formatted
     #     string. Defaults to nil.
     #
@@ -99,14 +101,14 @@ module SleepingKingStudios::Tools
     #   @param format [String] the format string.
     #   @param message [String] an optional message to print after the formatted
     #     string. Defaults to nil.
-    def deprecate(*args, format: nil, message: nil)
+    def deprecate(*args, caller: nil, format: nil, message: nil)
       case deprecation_strategy
       when 'ignore'
         # Do nothing.
       when 'raise'
-        deprecate_with_exception(*args, format:, message:)
+        deprecate_with_exception(*args, caller:, format:, message:)
       when 'warn'
-        deprecate_with_warning(*args, format:, message:)
+        deprecate_with_warning(*args, caller:, format:, message:)
       end
     end
 
@@ -134,27 +136,28 @@ module SleepingKingStudios::Tools
 
     private
 
-    def deprecate_with_exception(*args, format: nil, message: nil)
+    def deprecate_with_exception(*args, caller: nil, format: nil, message: nil)
+      caller ||= self.caller(2..-1)
       format ||= '%s has been deprecated.'
 
       str = format % args
       str << ' ' << message if message
 
-      raise DeprecationError, str, caller(2..-1)
+      raise DeprecationError, str, caller
     end
 
-    def deprecate_with_warning(*args, format: nil, message: nil)
+    def deprecate_with_warning(*args, caller:, format: nil, message: nil)
+      caller ||= self.caller
       format ||= '[WARNING] %s has been deprecated.'
 
       str = format % args
       str << ' ' << message if message
-      str << format_caller
+      str << format_caller(caller)
 
       Kernel.warn str
     end
 
-    def format_caller
-      lines = caller
+    def format_caller(lines)
       start = lines.find_index do |line|
         !line.include?('forwardable.rb') &&
           !line.include?('sleeping_king_studios-tools')

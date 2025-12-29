@@ -34,6 +34,9 @@ Naming/MethodParameterName:
     - as
     - to
 
+Naming/RescuedExceptionsVariableName:
+  PreferredName: exception
+
 Metrics/ModuleLength:
   Exclude:
     - spec/**/*
