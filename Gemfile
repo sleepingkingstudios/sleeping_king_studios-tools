@@ -15,7 +15,7 @@ group :development, :test do
   gem 'rubocop-rspec', '~> 3.8'
   gem 'simplecov', '~> 0.22'
   gem 'sleeping_king_studios-tasks', '~> 0.4', '>= 0.4.1'
-  gem 'thor', '~> 1.3'
+  gem 'thor', '~> 1.4'
 end
 
 group :docs do
