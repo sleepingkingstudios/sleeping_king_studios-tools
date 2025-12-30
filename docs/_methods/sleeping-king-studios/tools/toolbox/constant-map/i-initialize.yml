@@ -1,15 +1,40 @@
 ---
 name: SleepingKingStudios::Tools::Toolbox::ConstantMap#initialize
 parent_path: sleeping-king-studios/tools/toolbox/constant-map
-signature: initialize(constants)
+signature: initialize(constants = {}, **keywords)
 slug: initialize
 constructor: true
 data_path: sleeping-king-studios/tools/toolbox/constant-map/i-initialize
-params:
-- description: the constants to define.
-  name: constants
-  type:
-  - name: Hash
+overloads:
+- name: SleepingKingStudios::Tools::Toolbox::ConstantMap#initialize
+  parent_path: sleeping-king-studios/tools/toolbox/constant-map
+  signature: initialize(constants)
+  slug: initialize
+  constructor: true
+  params:
+  - description: the constants to define.
+    name: constants
+    type:
+    - name: Hash
+      keys:
+      - name: String
+      - name: Symbol
+      values:
+      - name: Object
+- name: SleepingKingStudios::Tools::Toolbox::ConstantMap#initialize
+  parent_path: sleeping-king-studios/tools/toolbox/constant-map
+  signature: initialize(**constants)
+  slug: initialize
+  constructor: true
+  params:
+  - description: the constants to define.
+    name: constants
+    type:
+    - name: Hash
+      keys:
+      - name: Symbol
+      values:
+      - name: Object
 returns:
 - description: a new instance of ConstantMap
   type:
