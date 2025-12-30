@@ -57,6 +57,8 @@ module SleepingKingStudios::Tools::Toolbox
       othermod.singleton_class.include?(self)
     end
 
+    private
+
     # Callback invoked whenever the receiver is included in another module.
     #
     # @param othermod [Module] the other class or module in which the mixin is
