@@ -22,8 +22,11 @@ Updated `CoreTools` deprecations:
 
 ### Toolbox
 
-- Added keyword support to `ConstantMap.new`.
+Added keyword support to `ConstantMap.new`.
+
 - The value returned by `ConstantMap#to_h` is now immutable.
+
+Corrected the scope of `Mixin#included` and `Mixin#prepended` to be `private`.
 
 ## 1.2.1
 

@@ -11,15 +11,6 @@ class_methods:
   path: sleeping-king-studios/tools/toolbox/mixin/c-mixin?
   slug: mixin?
   inherited: false
-instance_methods:
-- name: included
-  path: sleeping-king-studios/tools/toolbox/mixin/i-included
-  slug: included
-  inherited: false
-- name: prepended
-  path: sleeping-king-studios/tools/toolbox/mixin/i-prepended
-  slug: prepended
-  inherited: false
 data_path: sleeping-king-studios/tools/toolbox/mixin
 metadata:
   examples:
