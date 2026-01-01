@@ -610,6 +610,20 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         end
       end
     end
+
+    describe 'with a nested data structure' do
+      let(:user)   { Struct.new(:name).new('Alan Bradley') }
+      let(:users)  { [user] }
+      let(:data)   { { 'users' => users } }
+      let(:result) { Struct.new(:data).new(data) }
+
+      describe 'with a valid method chain' do
+        it 'should return the nested value' do
+          expect(described_class.dig(result, :data, 'users', 0, :name))
+            .to be == 'Alan Bradley'
+        end
+      end
+    end
   end
   # rubocop:enable Style/SingleArgumentDig
 
