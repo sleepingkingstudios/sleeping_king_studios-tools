@@ -6,15 +6,23 @@ slug: dig
 constructor: false
 data_path: sleeping-king-studios/tools/object-tools/i-dig
 description: |-
-  This method calls the first named method on the given object, and then
-  each subsequent method on the result of the previous method call. If the
-  object does not respond to the method name, nil is returned instead of
-  calling the method.
+  This method finds the first named property on the given object, and then
+  each subsequent property on the result of the previous call.
+
+  - If the object responds to the property name as a public method, it calls
+    the  method directly.
+  - If the object does not respond to the property name, or if the property
+    name is not itself a valid method name, checks if the object responds to
+    #[]; if so, calls #[] with the property name.
+  - Otherwise, immediately returns nil.
+
+  Using #[] access allows digging through Array (using integer indices) and
+  Hash data structures as well as object methods.
 metadata:
   examples:
   - name: ''
     text: |-
-      ObjectTools.dig my_object, :first_method, :second_method, :third_method
+      ObjectTools.dig(my_object, :first_method, :second_method, :third_method)
       #=> my_object.first_method.second_method.third_method
 params:
 - description: the object to dig.

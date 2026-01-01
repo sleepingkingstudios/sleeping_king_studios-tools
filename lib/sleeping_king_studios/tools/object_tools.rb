@@ -170,10 +170,18 @@ module SleepingKingStudios::Tools
 
     # Accesses deeply nested attributes on an object.
     #
-    # This method calls the first named method on the given object, and then
-    # each subsequent method on the result of the previous method call. If the
-    # object does not respond to the method name, nil is returned instead of
-    # calling the method.
+    # This method finds the first named property on the given object, and then
+    # each subsequent property on the result of the previous call.
+    #
+    # - If the object responds to the property name as a public method, it calls
+    #   the  method directly.
+    # - If the object does not respond to the property name, or if the property
+    #   name is not itself a valid method name, checks if the object responds to
+    #   #[]; if so, calls #[] with the property name.
+    # - Otherwise, immediately returns nil.
+    #
+    # Using #[] access allows digging through Array (using integer indices) and
+    # Hash data structures as well as object methods.
     #
     # @param obj [Object] the object to dig.
     # @param method_names [Array] the names of the methods to call.
@@ -182,12 +190,18 @@ module SleepingKingStudios::Tools
     #   last object does not respond to the last method.
     #
     # @example
-    #   ObjectTools.dig my_object, :first_method, :second_method, :third_method
+    #   ObjectTools.dig(my_object, :first_method, :second_method, :third_method)
     #   #=> my_object.first_method.second_method.third_method
     def dig(obj, *method_names)
       method_names.reduce(obj) do |memo, method_name|
-        memo.respond_to?(method_name) ? memo.send(method_name) : nil
+        if object_responds_to_method?(memo, method_name)
+          next memo.public_send(method_name)
+        end
+
+        memo.respond_to?(:[]) ? memo[method_name] : nil
       end
+    rescue NameError
+      nil
     end
 
     # Returns the object's eigenclass.
@@ -325,6 +339,14 @@ module SleepingKingStudios::Tools
     end
 
     private
+
+    def object_responds_to_method?(object, maybe_method_name)
+      unless maybe_method_name.is_a?(String) || maybe_method_name.is_a?(Symbol)
+        return false
+      end
+
+      object.respond_to?(maybe_method_name)
+    end
 
     def with_temporary_method(receiver, method_name, proc)
       metaclass = class << receiver; self; end

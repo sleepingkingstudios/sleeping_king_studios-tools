@@ -7,6 +7,7 @@ gemspec
 gem 'byebug', '~> 11.1'
 
 group :development, :test do
+  gem 'irb', '~> 1.16'
   gem 'rake', '~> 13.2'
   gem 'rspec', '~> 3.13'
   gem 'rspec-sleeping_king_studios', '~> 2.8', '>= 2.8.3'

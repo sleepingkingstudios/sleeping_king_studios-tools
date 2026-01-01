@@ -20,6 +20,8 @@ Updated `CoreTools` deprecations:
 - Now supports passing `deprecate(message, caller:)` to override displayed backtrace.
 - Initializing `CoreTools` with an invalid deprecation strategy now raises an `ArgumentError`.
 
+Added `#[]` support to `ObjectTools#dig`, allowing access through indexed data structures.
+
 ### Toolbox
 
 Added keyword support to `ConstantMap.new`.
