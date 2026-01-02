@@ -312,30 +312,31 @@ module SleepingKingStudios::Tools
       Object.instance_method(:is_a?).bind(obj).call(Object)
     end
 
-    # As #send, but returns nil if the object does not respond to the method.
+    # @overload try(obj, method_name, *args)
+    #   As #send, but returns nil if the object does not respond to the method.
     #
-    # This method relies on #respond_to?, so methods defined with method_missing
-    # will not be called.
+    #   This method relies on #respond_to?, so methods defined with
+    #   method_missing will not be called.
     #
-    # @param obj [Object] the receiver of the message.
-    # @param method_name [String, Symbol] the name of the method to call.
-    # @param args [Array] the arguments to the message.
+    #   @param obj [Object] the receiver of the message.
+    #   @param method_name [String, Symbol] the name of the method to call.
+    #   @param args [Array] the arguments to the message.
     #
-    # @return [Object, nil] the return value of the called method, or nil if the
-    #   object does not respond to the method.
+    #   @return [Object, nil] the return value of the called method, or nil if
+    #     the object does not respond to the method.
     #
-    # @example
-    #   ObjectTools.try(%w(ichi ni san), :count)
-    #   #=> 3
+    #   @example
+    #     ObjectTools.try(%w(ichi ni san), :count)
+    #     #=> 3
     #
-    #   ObjectTools.try(nil, :count)
-    #   #=> nil
-    def try(obj, method_name, *args)
-      return obj.try(method_name, *args) if obj.respond_to?(:try)
+    #     ObjectTools.try(nil, :count)
+    #     #=> nil
+    def try(obj, method_name, *)
+      return obj.try(method_name, *) if obj.respond_to?(:try)
 
       return nil unless obj.respond_to?(method_name)
 
-      obj.send(method_name, *args)
+      obj.send(method_name, *)
     end
 
     private
