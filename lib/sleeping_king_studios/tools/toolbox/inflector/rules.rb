@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'set'
-
 require 'sleeping_king_studios/tools/toolbox'
 
 class SleepingKingStudios::Tools::Toolbox::Inflector

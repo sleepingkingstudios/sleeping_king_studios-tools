@@ -200,49 +200,51 @@ module SleepingKingStudios::Tools
       ary.each { |obj| ObjectTools.deep_freeze obj }
     end
 
-    # Generates a human-readable string representation of the list items.
+    # @overload def humanize_list(ary, **options, &)
+    #   Generates a human-readable string representation of the list items.
     #
-    # Accepts a list of values and returns a human-readable string of the
-    # values, with the format based on the number of items.
+    #   Accepts a list of values and returns a human-readable string of the
+    #   values, with the format based on the number of items.
     #
-    # @param ary [Array<String>] the list of values to format. Will be
-    #   coerced to strings using #to_s.
-    # @param options [Hash] optional configuration hash.
-    # @option options [String] :last_separator the value to use to separate
-    #   the final pair of values. Defaults to " and " (note the leading and
-    #   trailing spaces). Will be combined with the :separator for lists of
-    #   length 3 or greater.
-    # @option options [String] :separator the value to use to separate pairs
-    #   of values before the last in lists of length 3 or greater. Defaults to
-    #   ", " (note the trailing space).
+    #   @param ary [Array<String>] the list of values to format. Will be
+    #     coerced to strings using #to_s.
+    #   @param options [Hash] optional configuration hash.
+    #   @option options [String] :last_separator the value to use to separate
+    #     the final pair of values. Defaults to " and " (note the leading and
+    #     trailing spaces). Will be combined with the :separator for lists of
+    #     length 3 or greater.
+    #   @option options [String] :separator the value to use to separate pairs
+    #     of values before the last in lists of length 3 or greater. Defaults to
+    #     ", " (note the trailing space).
     #
-    # @return [String] the formatted string.
+    #   @return [String] the formatted string.
     #
-    # @raise [ArgumentError] if the first argument is not an Array-like object.
+    #   @raise [ArgumentError] if the first argument is not an Array-like
+    #     object.
     #
-    # @example With Zero Items
-    #   ArrayTools.humanize_list([])
-    #   #=> ''
+    #   @example With Zero Items
+    #     ArrayTools.humanize_list([])
+    #     #=> ''
     #
-    # @example With One Item
-    #   ArrayTools.humanize_list(['spam'])
-    #   #=> 'spam'
+    #   @example With One Item
+    #     ArrayTools.humanize_list(['spam'])
+    #     #=> 'spam'
     #
-    # @example With Two Items
-    #   ArrayTools.humanize_list(['spam', 'eggs'])
-    #   #=> 'spam and eggs'
+    #   @example With Two Items
+    #     ArrayTools.humanize_list(['spam', 'eggs'])
+    #     #=> 'spam and eggs'
     #
-    # @example With Three Or More Items
-    #   ArrayTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'])
-    #   #=> 'spam, eggs, bacon, and spam'
+    #   @example With Three Or More Items
+    #     ArrayTools.humanize_list(['spam', 'eggs', 'bacon', 'spam'])
+    #     #=> 'spam, eggs, bacon, and spam'
     #
-    # @example With Three Or More Items And Options
-    #   ArrayTools.humanize_list(
-    #     ['spam', 'eggs', 'bacon', 'spam'],
-    #     :last_separator => ' or '
-    #   )
-    #   #=> 'spam, eggs, bacon, or spam'
-    def humanize_list(ary, **options, &)
+    #   @example With Three Or More Items And Options
+    #     ArrayTools.humanize_list(
+    #       ['spam', 'eggs', 'bacon', 'spam'],
+    #       :last_separator => ' or '
+    #     )
+    #     #=> 'spam, eggs, bacon, or spam'
+    def humanize_list(ary, **, &)
       require_array!(ary)
 
       return '' if ary.empty?
@@ -253,7 +255,7 @@ module SleepingKingStudios::Tools
       return ary[0].to_s if size == 1
 
       separator, last_separator =
-        options_for_humanize_list(size:, **options)
+        options_for_humanize_list(size:, **)
 
       return "#{ary[0]}#{last_separator}#{ary[1]}" if size == 2
 

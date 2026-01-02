@@ -714,11 +714,11 @@ module SleepingKingStudios::Tools
     #
     #   Assertions.validate { true == true }
     #   #=> does not raise an exception
-    def validate(message: nil, &block)
+    def validate(message: nil, &)
       assert(
         error_class: ArgumentError,
         message:,
-        &block
+        &
       )
     end
 
@@ -1155,12 +1155,12 @@ module SleepingKingStudios::Tools
 
     private
 
-    def error_message_for_instance_of(expected:, **options) # rubocop:disable Metrics/MethodLength
+    def error_message_for_instance_of(expected:, **) # rubocop:disable Metrics/MethodLength
       if expected.name
         return error_message_for(
           'sleeping_king_studios.tools.assertions.instance_of',
           expected:,
-          **options
+          **
         )
       end
 
@@ -1168,29 +1168,29 @@ module SleepingKingStudios::Tools
         'sleeping_king_studios.tools.assertions.instance_of_anonymous',
         expected:,
         parent:   expected.ancestors.find(&:name),
-        **options
+        **
       )
     end
 
-    def error_message_for_matches(expected:, **options) # rubocop:disable Metrics/MethodLength
+    def error_message_for_matches(expected:, **) # rubocop:disable Metrics/MethodLength
       case expected
       when Module
-        error_message_for_instance_of(expected:, **options)
+        error_message_for_instance_of(expected:, **)
       when Proc
         error_message_for(
           'sleeping_king_studios.tools.assertions.matches_proc',
-          **options
+          **
         )
       when Regexp
         error_message_for(
           'sleeping_king_studios.tools.assertions.matches_regexp',
           pattern: expected.inspect,
-          **options
+          **
         )
       else
         error_message_for(
           'sleeping_king_studios.tools.assertions.matches',
-          **options
+          **
         )
       end
     end

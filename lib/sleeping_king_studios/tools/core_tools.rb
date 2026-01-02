@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'set'
-
 require 'sleeping_king_studios/tools'
 
 module SleepingKingStudios::Tools
@@ -101,14 +99,14 @@ module SleepingKingStudios::Tools
     #   @param format [String] the format string.
     #   @param message [String] an optional message to print after the formatted
     #     string. Defaults to nil.
-    def deprecate(*args, caller: nil, format: nil, message: nil)
+    def deprecate(*, caller: nil, format: nil, message: nil)
       case deprecation_strategy
       when 'ignore'
         # Do nothing.
       when 'raise'
-        deprecate_with_exception(*args, caller:, format:, message:)
+        deprecate_with_exception(*, caller:, format:, message:)
       when 'warn'
-        deprecate_with_warning(*args, caller:, format:, message:)
+        deprecate_with_warning(*, caller:, format:, message:)
       end
     end
 
