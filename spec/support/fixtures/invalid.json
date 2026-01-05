@@ -1,0 +1,12 @@
+{
+  "messages": {
+    "errors": [
+      "not going to space",
+      null
+    ],
+    "rockets": {
+      "launch_status": "rocket %<name>s is ready to launch"
+    }
+  },
+  "module_name": "Console Space Program"
+}
