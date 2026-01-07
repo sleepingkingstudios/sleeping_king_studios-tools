@@ -64,17 +64,24 @@ module SleepingKingStudios::Tools
     end
     alias [] get
 
-    # Adds a strategy to the registry with the given scope.
+    # @overload register(scope:, strategy:, force: false)
+    #   Adds a strategy to the registry with the given scope.
     #
-    # @param scope [String] the scope for the strategy.
-    # @param strategy [SleepingKingStudios::Tools::Messages::Strategy] the
-    #   strategy to register.
-    # @param force [true, false] if true, overrides an existing strategy with
-    #   the given scope. Defaults to false.
+    #   @param scope [String] the scope for the strategy.
+    #   @param strategy [SleepingKingStudios::Tools::Messages::Strategy] the
+    #     strategy to register.
+    #   @param force [true, false] if true, overrides an existing strategy with
+    #     the given scope. Defaults to false.
     #
-    # @return [self] the registry.
-    def register(scope:, strategy:, force: false)
+    #   @return [self] the registry.
+    #
+    # @overload register(scope:, hash:, force: false)
+    #
+    # @overload register(scope:, file:, force: false)
+    def register(scope:, force: false, **)
       validate_scope(scope)
+
+      strategy = resolve_strategy(**)
 
       if strategies.key?(scope.to_s) && !force
         raise StrategyAlreadyExistsError,
@@ -104,6 +111,17 @@ module SleepingKingStudios::Tools
       end
 
       leaf.strategy = strategy
+    end
+
+    def resolve_strategy(**options)
+      return options[:strategy] if options.key?(:strategy)
+
+      namespace = SleepingKingStudios::Tools::Messages::Strategies
+
+      return namespace::FileStrategy.new(options[:file]) if options.key?(:file)
+      return namespace::HashStrategy.new(options[:hash]) if options.key?(:hash)
+
+      raise ArgumentError, 'missing keyword: :strategy'
     end
 
     def validate_scope(scope)

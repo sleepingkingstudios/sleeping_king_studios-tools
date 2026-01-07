@@ -223,6 +223,15 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Registry do
       )
     end
 
+    describe 'with no strategy parameter' do
+      let(:error_message) { 'missing keyword: :strategy' }
+
+      it 'should raise an exception' do
+        expect { registry.register(scope:) }
+          .to raise_error ArgumentError, error_message
+      end
+    end
+
     describe 'with scope: nil' do
       let(:error_message) do
         "scope can't be blank"
@@ -264,6 +273,39 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Registry do
       it 'should raise an exception' do
         expect { registry.register(scope: :'', strategy:) }
           .to raise_error ArgumentError, error_message
+      end
+    end
+
+    describe 'with file: value' do
+      let(:file) { 'spec/support/fixtures/messages.yml' }
+
+      it 'should add the strategy to the registry', :aggregate_failures do
+        registry.register(file:, scope:)
+
+        namespace = SleepingKingStudios::Tools::Messages::Strategies
+        strategy  = registry.get(scope)
+
+        expect(strategy).to be_a namespace::FileStrategy
+        expect(strategy.file_name).to be == file
+      end
+    end
+
+    describe 'with hash: value' do
+      let(:hash) do
+        templates = {}
+        templates['module_name'] = 'Console Space Program'
+        templates['messages.errors.failure'] = 'not going to space'
+        templates
+      end
+
+      it 'should add the strategy to the registry', :aggregate_failures do
+        registry.register(hash:, scope:)
+
+        namespace = SleepingKingStudios::Tools::Messages::Strategies
+        strategy  = registry.get(scope)
+
+        expect(strategy).to be_a namespace::HashStrategy
+        expect(strategy.templates).to be == hash
       end
     end
 
