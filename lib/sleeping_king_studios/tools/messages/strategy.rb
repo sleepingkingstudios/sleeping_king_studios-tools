@@ -45,7 +45,7 @@ module SleepingKingStudios::Tools
     def join_scope(key:, scope:)
       validate_key(key)
 
-      return key if scope.nil? || scope.empty?
+      return key.to_s if scope.nil? || scope.empty?
 
       "#{scope}.#{key}"
     end
