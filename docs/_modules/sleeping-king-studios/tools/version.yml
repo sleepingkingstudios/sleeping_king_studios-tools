@@ -8,13 +8,9 @@ parent_path: sleeping-king-studios/tools
 short_description: SleepingKingStudios::Tools uses semantic versioning.
 class_methods:
 - name: to_gem_version
-  path: sleeping-king-studios/tools/toolbox/semantic-version/i-to-gem-version
+  path: sleeping-king-studios/tools/version/c-to-gem-version
   slug: to-gem-version
-  inherited: true
-- name: to_version
-  path: sleeping-king-studios/tools/toolbox/semantic-version/i-to-version
-  slug: to-version
-  inherited: true
+  inherited: false
 constants:
 - name: BUILD
   path: sleeping-king-studios/tools/version/build
@@ -37,10 +33,6 @@ constants:
   slug: prerelease
   inherited: false
 data_path: sleeping-king-studios/tools/version
-extended_modules:
-- name: SleepingKingStudios::Tools::Toolbox::SemanticVersion
-  slug: semantic-version
-  path: sleeping-king-studios/tools/toolbox/semantic-version
 metadata:
   see:
   - label: http://semver.org
