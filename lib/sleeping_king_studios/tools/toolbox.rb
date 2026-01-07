@@ -9,6 +9,8 @@ module SleepingKingStudios::Tools
       'sleeping_king_studios/tools/toolbox/constant_map'
     autoload :Inflector,
       'sleeping_king_studios/tools/toolbox/inflector'
+    autoload :Initializer,
+      'sleeping_king_studios/tools/toolbox/initializer'
     autoload :Mixin,
       'sleeping_king_studios/tools/toolbox/mixin'
     autoload :SemanticVersion,
