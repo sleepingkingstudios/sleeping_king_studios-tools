@@ -32,6 +32,9 @@ direct_subclasses:
 - name: SleepingKingStudios::Tools::IntegerTools
   slug: integer-tools
   path: sleeping-king-studios/tools/integer-tools
+- name: SleepingKingStudios::Tools::Messages
+  slug: messages
+  path: sleeping-king-studios/tools/messages
 - name: SleepingKingStudios::Tools::ObjectTools
   slug: object-tools
   path: sleeping-king-studios/tools/object-tools

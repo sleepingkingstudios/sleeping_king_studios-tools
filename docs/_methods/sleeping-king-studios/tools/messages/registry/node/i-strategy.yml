@@ -1,0 +1,13 @@
+---
+name: SleepingKingStudios::Tools::Messages::Registry::Node#strategy
+parent_path: sleeping-king-studios/tools/messages/registry/node
+signature: strategy
+slug: strategy
+constructor: false
+data_path: sleeping-king-studios/tools/messages/registry/node/i-strategy
+returns:
+- description: the current value of strategy
+  type:
+  - name: Object
+short_description: Returns the value of attribute strategy
+version: "*"

@@ -1,0 +1,19 @@
+---
+name: SleepingKingStudios::Tools::Messages::Strategies::FileStrategy#initialize
+parent_path: sleeping-king-studios/tools/messages/strategies/file-strategy
+signature: initialize(file_name)
+slug: initialize
+constructor: true
+data_path: sleeping-king-studios/tools/messages/strategies/file-strategy/i-initialize
+params:
+- description: |-
+    the full path to the file with the templates
+    data.
+  name: file_name
+  type:
+  - name: String
+returns:
+- description: a new instance of FileStrategy
+  type:
+  - name: FileStrategy
+version: "*"

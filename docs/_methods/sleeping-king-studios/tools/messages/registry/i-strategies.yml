@@ -1,0 +1,12 @@
+---
+name: SleepingKingStudios::Tools::Messages::Registry#strategies
+parent_path: sleeping-king-studios/tools/messages/registry
+signature: strategies
+slug: strategies
+constructor: false
+data_path: sleeping-king-studios/tools/messages/registry/i-strategies
+returns:
+- description: the registered strategies for the registry.
+  type:
+  - name: Hash
+version: "*"

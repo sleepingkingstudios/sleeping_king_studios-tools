@@ -1,0 +1,14 @@
+---
+name: SleepingKingStudios::Tools::Messages::Strategies::HashStrategy::ParseError
+slug: parse-error
+type: class
+files:
+- lib/sleeping_king_studios/tools/messages/strategies/hash_strategy.rb
+parent_path: sleeping-king-studios/tools/messages/strategies/hash-strategy
+short_description: Exception raised when parsing the templates input.
+data_path: sleeping-king-studios/tools/messages/strategies/hash-strategy/parse-error
+constructor: false
+inherited_classes:
+- name: StandardError
+  slug: standard-error
+version: "*"

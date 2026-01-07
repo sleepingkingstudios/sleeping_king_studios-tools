@@ -1,0 +1,14 @@
+---
+name: SleepingKingStudios::Tools::Messages::Registry::StrategyAlreadyExistsError
+slug: strategy-already-exists-error
+type: class
+files:
+- lib/sleeping_king_studios/tools/messages/registry.rb
+parent_path: sleeping-king-studios/tools/messages/registry
+short_description: Exception raised when registering a strategy for an existing scope.
+data_path: sleeping-king-studios/tools/messages/registry/strategy-already-exists-error
+constructor: false
+inherited_classes:
+- name: StandardError
+  slug: standard-error
+version: "*"

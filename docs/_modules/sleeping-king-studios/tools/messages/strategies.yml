@@ -1,0 +1,17 @@
+---
+name: SleepingKingStudios::Tools::Messages::Strategies
+slug: strategies
+type: module
+files:
+- lib/sleeping_king_studios/tools/messages/strategies.rb
+- lib/sleeping_king_studios/tools/messages/strategies/file_strategy.rb
+- lib/sleeping_king_studios/tools/messages/strategies/hash_strategy.rb
+parent_path: sleeping-king-studios/tools/messages
+short_description: Namespace for message strategy implementations.
+defined_classes:
+- name: FileStrategy
+  slug: file-strategy
+- name: HashStrategy
+  slug: hash-strategy
+data_path: sleeping-king-studios/tools/messages/strategies
+version: "*"

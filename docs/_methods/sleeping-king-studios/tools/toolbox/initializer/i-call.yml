@@ -1,0 +1,9 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Initializer#call
+parent_path: sleeping-king-studios/tools/toolbox/initializer
+signature: call
+slug: call
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/initializer/i-call
+short_description: Runs the initialization block exactly once.
+version: "*"

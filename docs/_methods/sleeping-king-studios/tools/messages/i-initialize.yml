@@ -1,0 +1,21 @@
+---
+name: SleepingKingStudios::Tools::Messages#initialize
+parent_path: sleeping-king-studios/tools/messages
+signature: initialize(registry:)
+slug: initialize
+constructor: true
+data_path: sleeping-king-studios/tools/messages/i-initialize
+params:
+- description: |-
+    the
+    strategies registry to use for the tool. Defaults to the value of
+    Registry.global.
+  name: registry
+  type:
+  - name: SleepingKingStudios::Tools::Messages::Registry
+    path: sleeping-king-studios/tools/messages/registry
+returns:
+- description: a new instance of Messages
+  type:
+  - name: Messages
+version: "*"

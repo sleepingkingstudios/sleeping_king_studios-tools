@@ -1,0 +1,15 @@
+---
+name: SleepingKingStudios::Tools::Toolbelt#messages
+parent_path: sleeping-king-studios/tools/toolbelt
+signature: messages
+slug: messages
+constructor: false
+data_path: sleeping-king-studios/tools/toolbelt/i-messages
+returns:
+- description: |-
+    methods for generating
+    human-readable messages.
+  type:
+  - name: SleepingKingStudios::Tools::Messages
+    path: sleeping-king-studios/tools/messages
+version: "*"

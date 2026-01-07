@@ -65,7 +65,9 @@ params:
   type:
   - name: Hash
 raises:
-- description: if the first argument is not an Array-like object.
+- description: |-
+    if the first argument is not an Array-like
+    object.
   type:
   - name: ArgumentError
 returns:

@@ -22,6 +22,13 @@ Updated `CoreTools` deprecations:
 
 Added `#[]` support to `ObjectTools#dig`, allowing access through indexed data structures.
 
+#### Messages
+
+Added `Messages` tool, which allows generating user-readable messages.
+
+- Added `Messages::Registry` for defining scoped message strategies.
+- Added `Messages::Strategy` and subclasses `FileStrategy` and `HashStrategy`.
+
 ### Toolbox
 
 Added keyword support to `ConstantMap.new`.
@@ -29,6 +36,10 @@ Added keyword support to `ConstantMap.new`.
 - The value returned by `ConstantMap#to_h` is now immutable.
 
 Corrected the scope of `Mixin#included` and `Mixin#prepended` to be `private`.
+
+#### Initializer
+
+Added `Toolbox::Initializer`, used for defining a one-time initialization for a library or project.
 
 ## 1.2.1
 

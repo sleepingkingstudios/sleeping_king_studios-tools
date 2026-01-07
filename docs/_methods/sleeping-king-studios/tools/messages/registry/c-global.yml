@@ -1,0 +1,15 @@
+---
+name: SleepingKingStudios::Tools::Messages::Registry.global
+parent_path: sleeping-king-studios/tools/messages/registry
+signature: global()
+slug: global
+constructor: false
+data_path: sleeping-king-studios/tools/messages/registry/c-global
+returns:
+- description: the messages registry singleton.
+  type:
+  - name: Registry
+short_description: |-
+  Returns a singleton instance of the messages registry, instantiating
+  the instance if needed.
+version: "*"

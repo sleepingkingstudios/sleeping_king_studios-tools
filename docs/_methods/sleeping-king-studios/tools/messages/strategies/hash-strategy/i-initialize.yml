@@ -1,0 +1,17 @@
+---
+name: SleepingKingStudios::Tools::Messages::Strategies::HashStrategy#initialize
+parent_path: sleeping-king-studios/tools/messages/strategies/hash-strategy
+signature: initialize(templates)
+slug: initialize
+constructor: true
+data_path: sleeping-king-studios/tools/messages/strategies/hash-strategy/i-initialize
+params:
+- description: the templates used to generate messages.
+  name: templates
+  type:
+  - name: Hash
+returns:
+- description: a new instance of HashStrategy
+  type:
+  - name: HashStrategy
+version: "*"

@@ -1,0 +1,13 @@
+---
+name: SleepingKingStudios::Tools::Messages::Registry::Node#children
+parent_path: sleeping-king-studios/tools/messages/registry/node
+signature: children
+slug: children
+constructor: false
+data_path: sleeping-king-studios/tools/messages/registry/node/i-children
+returns:
+- description: the current value of children
+  type:
+  - name: Object
+short_description: Returns the value of attribute children
+version: "*"

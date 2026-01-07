@@ -1,0 +1,12 @@
+---
+name: SleepingKingStudios::Tools::Messages::Registry#initialize
+parent_path: sleeping-king-studios/tools/messages/registry
+signature: initialize
+slug: initialize
+constructor: true
+data_path: sleeping-king-studios/tools/messages/registry/i-initialize
+returns:
+- description: a new instance of Registry
+  type:
+  - name: Registry
+version: "*"

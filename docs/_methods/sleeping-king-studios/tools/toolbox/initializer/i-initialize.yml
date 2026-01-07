@@ -1,0 +1,18 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Initializer#initialize
+parent_path: sleeping-king-studios/tools/toolbox/initializer
+signature: initialize(&block)
+slug: initialize
+constructor: true
+data_path: sleeping-king-studios/tools/toolbox/initializer/i-initialize
+raises:
+- description: ''
+  type:
+  - name: ArgumentError
+returns:
+- description: a new instance of Initializer
+  type:
+  - name: Initializer
+yields:
+- description: the block to execute when the initializer is called.
+version: "*"

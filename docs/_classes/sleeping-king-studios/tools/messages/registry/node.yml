@@ -1,0 +1,43 @@
+---
+name: SleepingKingStudios::Tools::Messages::Registry::Node
+slug: node
+type: class
+files:
+- lib/sleeping_king_studios/tools/messages/registry.rb
+parent_path: sleeping-king-studios/tools/messages/registry
+short_description: ''
+instance_attributes:
+- name: children
+  read: true
+  write: true
+  path: sleeping-king-studios/tools/messages/registry/node/i-children
+  slug: children
+  inherited: false
+- name: scope
+  read: true
+  write: true
+  path: sleeping-king-studios/tools/messages/registry/node/i-scope
+  slug: scope
+  inherited: false
+- name: strategy
+  read: true
+  write: true
+  path: sleeping-king-studios/tools/messages/registry/node/i-strategy
+  slug: strategy
+  inherited: false
+instance_methods:
+- name: "[]"
+  path: sleeping-king-studios/tools/messages/registry/node/i-[]
+  slug: "[]"
+  inherited: false
+- name: initialize
+  path: sleeping-king-studios/tools/messages/registry/node/i-initialize
+  slug: initialize
+  inherited: false
+  constructor: true
+data_path: sleeping-king-studios/tools/messages/registry/node
+constructor: true
+inherited_classes:
+- name: Struct
+  slug: struct
+version: "*"

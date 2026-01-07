@@ -7,6 +7,7 @@ files:
 - lib/sleeping_king_studios/tools/base.rb
 - lib/sleeping_king_studios/tools/toolbox.rb
 - lib/sleeping_king_studios/tools/version.rb
+- lib/sleeping_king_studios/tools/messages.rb
 - lib/sleeping_king_studios/tools/toolbelt.rb
 - lib/sleeping_king_studios/tools/assertions.rb
 - lib/sleeping_king_studios/tools/core_tools.rb
@@ -15,6 +16,9 @@ files:
 - lib/sleeping_king_studios/tools/object_tools.rb
 - lib/sleeping_king_studios/tools/string_tools.rb
 - lib/sleeping_king_studios/tools/integer_tools.rb
+- lib/sleeping_king_studios/tools/messages/registry.rb
+- lib/sleeping_king_studios/tools/messages/strategy.rb
+- lib/sleeping_king_studios/tools/messages/strategies.rb
 - lib/sleeping_king_studios/tools/assertions/aggregator.rb
 parent_path: sleeping-king-studios
 short_description: |-
@@ -38,6 +42,8 @@ defined_classes:
   slug: hash-tools
 - name: IntegerTools
   slug: integer-tools
+- name: Messages
+  slug: messages
 - name: ObjectTools
   slug: object-tools
 - name: StringTools

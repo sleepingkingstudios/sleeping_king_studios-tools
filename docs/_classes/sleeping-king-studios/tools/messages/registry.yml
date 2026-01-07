@@ -1,0 +1,39 @@
+---
+name: SleepingKingStudios::Tools::Messages::Registry
+slug: registry
+type: class
+files:
+- lib/sleeping_king_studios/tools/messages/registry.rb
+parent_path: sleeping-king-studios/tools/messages
+short_description: Matches defined message strategies by message scope.
+class_methods:
+- name: global
+  path: sleeping-king-studios/tools/messages/registry/c-global
+  slug: global
+  inherited: false
+defined_classes:
+- name: Node
+  slug: node
+- name: StrategyAlreadyExistsError
+  slug: strategy-already-exists-error
+instance_methods:
+- name: get
+  path: sleeping-king-studios/tools/messages/registry/i-get
+  slug: get
+  inherited: false
+- name: initialize
+  path: sleeping-king-studios/tools/messages/registry/i-initialize
+  slug: initialize
+  inherited: false
+  constructor: true
+- name: register
+  path: sleeping-king-studios/tools/messages/registry/i-register
+  slug: register
+  inherited: false
+- name: strategies
+  path: sleeping-king-studios/tools/messages/registry/i-strategies
+  slug: strategies
+  inherited: false
+data_path: sleeping-king-studios/tools/messages/registry
+constructor: true
+version: "*"
