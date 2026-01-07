@@ -30,10 +30,14 @@ module SleepingKingStudios::Tools
     #   inflector must be an object that conforms to the interface used by
     #   by SleepingKingStudios::Tools::Toolbox::Inflector, such as an instance
     #   of ActiveSupport::Inflector .
+    # @param messages_registry [SleepingKingStudios::Tools::Messages::Registry]
+    #   the strategies registry to use for the tool. Defaults to the value of
+    #   Registry.global.
     def initialize( # rubocop:disable Metrics/MethodLength
       deprecation_caller_depth: nil,
       deprecation_strategy:     nil,
-      inflector:                nil
+      inflector:                nil,
+      messages_registry:        nil
     )
       @array_tools   = ::SleepingKingStudios::Tools::ArrayTools.new
       @assertions    = ::SleepingKingStudios::Tools::Assertions.new
@@ -44,6 +48,8 @@ module SleepingKingStudios::Tools
         )
       @hash_tools    = ::SleepingKingStudios::Tools::HashTools.new
       @integer_tools = ::SleepingKingStudios::Tools::IntegerTools.new
+      @messages      =
+        ::SleepingKingStudios::Tools::Messages.new(registry: messages_registry)
       @object_tools  = ::SleepingKingStudios::Tools::ObjectTools.new
       @string_tools  =
         ::SleepingKingStudios::Tools::StringTools.new(inflector:)
@@ -71,6 +77,10 @@ module SleepingKingStudios::Tools
     #   integers.
     attr_reader :integer_tools
     alias int integer_tools
+
+    # @return [SleepingKingStudios::Tools::Messages] methods for generating
+    #   human-readable messages.
+    attr_reader :messages
 
     # @return [SleepingKingStudios::Tools::ObjectTools] low-level tools for
     #   working with objects.
