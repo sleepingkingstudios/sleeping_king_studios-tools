@@ -68,6 +68,14 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Registry do
         end
       end
 
+      around(:example) do |example|
+        value = described_class.instance_variable_get(:@global)
+
+        example.call
+      ensure
+        described_class.instance_variable_set(:@global, value)
+      end
+
       it 'should synchronize the cached values', :aggregate_failures do
         threads.map(&:join)
 

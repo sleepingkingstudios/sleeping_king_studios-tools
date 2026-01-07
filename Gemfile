@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'byebug', '~> 11.1'
+gem 'readline' # Required for byebug in Ruby 4.0.
 
 group :development, :test do
   gem 'irb', '~> 1.16'

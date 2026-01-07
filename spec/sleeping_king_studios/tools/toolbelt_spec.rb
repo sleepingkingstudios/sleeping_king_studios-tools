@@ -50,6 +50,17 @@ RSpec.describe SleepingKingStudios::Tools::Toolbelt do
           .to be inflector
       end
     end
+
+    describe 'with messages_registry: value' do
+      let(:registry) do
+        SleepingKingStudios::Tools::Messages::Registry.new
+      end
+      let(:toolbelt) { described_class.new(messages_registry: registry) }
+
+      it 'should pass the registry to #messages' do
+        expect(toolbelt.messages.registry).to be registry
+      end
+    end
   end
 
   describe '#array_tools' do
@@ -109,6 +120,17 @@ RSpec.describe SleepingKingStudios::Tools::Toolbelt do
     it 'should return an instance of IntegerTools' do
       expect(instance.__send__ :integer_tools)
         .to be_a SleepingKingStudios::Tools::IntegerTools
+    end
+  end
+
+  describe '#messages' do
+    it 'should return an instance of Messages' do
+      expect(instance.messages).to be_a SleepingKingStudios::Tools::Messages
+    end
+
+    it 'should configure the Messages tool' do
+      expect(instance.messages.registry)
+        .to be SleepingKingStudios::Tools::Messages::Registry.global
     end
   end
 
