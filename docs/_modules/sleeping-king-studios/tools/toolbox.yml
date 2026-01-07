@@ -7,6 +7,7 @@ files:
 - lib/sleeping_king_studios/tools/toolbox/mixin.rb
 - lib/sleeping_king_studios/tools/toolbox/subclass.rb
 - lib/sleeping_king_studios/tools/toolbox/inflector.rb
+- lib/sleeping_king_studios/tools/toolbox/initializer.rb
 - lib/sleeping_king_studios/tools/toolbox/constant_map.rb
 - lib/sleeping_king_studios/tools/toolbox/semantic_version.rb
 parent_path: sleeping-king-studios/tools
@@ -16,6 +17,8 @@ defined_classes:
   slug: constant-map
 - name: Inflector
   slug: inflector
+- name: Initializer
+  slug: initializer
 defined_modules:
 - name: Mixin
   slug: mixin

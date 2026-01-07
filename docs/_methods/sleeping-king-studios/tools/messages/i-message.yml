@@ -1,0 +1,39 @@
+---
+name: SleepingKingStudios::Tools::Messages#message
+parent_path: sleeping-king-studios/tools/messages
+signature: 'message(key, parameters: {}, scope: nil, **options)'
+slug: message
+constructor: false
+data_path: sleeping-king-studios/tools/messages/i-message
+description: |-
+  Internally, finds a messages strategy matching the combined key and
+  scope and calls that strategy. If a strategy is not found, instead
+  returns a generic failure message.
+params:
+- description: the key used to resolve the message.
+  name: key
+  type:
+  - name: String
+  - name: Symbol
+- description: |-
+    the parameters used to generate the message,
+    such as values for a template string.
+  name: parameters
+  type:
+  - name: Hash
+  default: "{}"
+- description: |-
+    the namespace for the key. Combined with the given
+    key to generate the scoped key value.
+  name: scope
+  type:
+  - name: String
+  default: nil
+- description: |-
+    additional options for resolving or generating the
+    message.
+  name: options
+  type:
+  - name: Hash
+short_description: Generates a message from the given key, scope, and parameters.
+version: "*"

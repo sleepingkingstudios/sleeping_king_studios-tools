@@ -1,0 +1,18 @@
+---
+name: SleepingKingStudios::Tools::Messages::Registry::Node#scope=
+parent_path: sleeping-king-studios/tools/messages/registry/node
+signature: scope=(value)
+slug: scope=
+constructor: false
+data_path: sleeping-king-studios/tools/messages/registry/node/i-scope=
+params:
+- description: the value to set the attribute scope to.
+  name: value
+  type:
+  - name: Object
+returns:
+- description: the newly set value
+  type:
+  - name: Object
+short_description: Sets the attribute scope
+version: "*"

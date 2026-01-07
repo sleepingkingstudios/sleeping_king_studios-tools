@@ -1,0 +1,27 @@
+---
+name: SleepingKingStudios::Tools::Messages::Registry#get
+parent_path: sleeping-king-studios/tools/messages/registry
+signature: get(scope)
+slug: get
+aliases:
+- "[]"
+constructor: false
+data_path: sleeping-king-studios/tools/messages/registry/i-get
+description: |-
+  The returned strategy will match the longest defined scope that matches
+  the given key.
+params:
+- description: the requested scope or key.
+  name: scope
+  type:
+  - name: String
+returns:
+- description: |-
+    the matching
+    strategy, or nil if no strategy matches the given scope or key.
+  type:
+  - name: SleepingKingStudios::Tools::Messages::Strategy
+    path: sleeping-king-studios/tools/messages/strategy
+  - name: nil
+short_description: Returns the strategy matching the given scope or key.
+version: "*"

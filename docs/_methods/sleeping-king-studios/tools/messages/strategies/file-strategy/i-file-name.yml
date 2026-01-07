@@ -1,0 +1,12 @@
+---
+name: SleepingKingStudios::Tools::Messages::Strategies::FileStrategy#file_name
+parent_path: sleeping-king-studios/tools/messages/strategies/file-strategy
+signature: file_name
+slug: file-name
+constructor: false
+data_path: sleeping-king-studios/tools/messages/strategies/file-strategy/i-file-name
+returns:
+- description: the full path to the file with the templates data.
+  type:
+  - name: String
+version: "*"

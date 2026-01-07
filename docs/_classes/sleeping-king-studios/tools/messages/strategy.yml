@@ -1,0 +1,21 @@
+---
+name: SleepingKingStudios::Tools::Messages::Strategy
+slug: strategy
+type: class
+files:
+- lib/sleeping_king_studios/tools/messages/strategy.rb
+parent_path: sleeping-king-studios/tools/messages
+short_description: Abstract class for converting parameterized keys to user-readable
+  messages.
+instance_methods:
+- name: call
+  path: sleeping-king-studios/tools/messages/strategy/i-call
+  slug: call
+  inherited: false
+data_path: sleeping-king-studios/tools/messages/strategy
+constructor: false
+direct_subclasses:
+- name: SleepingKingStudios::Tools::Messages::Strategies::HashStrategy
+  slug: hash-strategy
+  path: sleeping-king-studios/tools/messages/strategies/hash-strategy
+version: "*"

@@ -42,6 +42,12 @@ instance_attributes:
   path: sleeping-king-studios/tools/toolbelt/i-integer-tools
   slug: integer-tools
   inherited: false
+- name: messages
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/toolbelt/i-messages
+  slug: messages
+  inherited: false
 - name: object_tools
   read: true
   write: false

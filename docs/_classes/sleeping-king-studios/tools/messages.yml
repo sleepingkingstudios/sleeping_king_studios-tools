@@ -1,0 +1,45 @@
+---
+name: SleepingKingStudios::Tools::Messages
+slug: messages
+type: class
+files:
+- lib/sleeping_king_studios/tools/messages.rb
+parent_path: sleeping-king-studios/tools
+short_description: Utility for generating configured, user-readable output strings.
+class_methods:
+- name: instance
+  path: sleeping-king-studios/tools/base/c-instance
+  slug: instance
+  inherited: true
+defined_classes:
+- name: Registry
+  slug: registry
+- name: Strategy
+  slug: strategy
+defined_modules:
+- name: Strategies
+  slug: strategies
+instance_attributes:
+- name: registry
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/messages/i-registry
+  slug: registry
+  inherited: false
+instance_methods:
+- name: initialize
+  path: sleeping-king-studios/tools/messages/i-initialize
+  slug: initialize
+  inherited: false
+  constructor: true
+- name: message
+  path: sleeping-king-studios/tools/messages/i-message
+  slug: message
+  inherited: false
+data_path: sleeping-king-studios/tools/messages
+constructor: true
+inherited_classes:
+- name: SleepingKingStudios::Tools::Base
+  slug: base
+  path: sleeping-king-studios/tools/base
+version: "*"

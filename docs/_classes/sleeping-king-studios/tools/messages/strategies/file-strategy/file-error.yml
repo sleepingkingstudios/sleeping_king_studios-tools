@@ -1,0 +1,14 @@
+---
+name: SleepingKingStudios::Tools::Messages::Strategies::FileStrategy::FileError
+slug: file-error
+type: class
+files:
+- lib/sleeping_king_studios/tools/messages/strategies/file_strategy.rb
+parent_path: sleeping-king-studios/tools/messages/strategies/file-strategy
+short_description: Exception raised when reading the templates file.
+data_path: sleeping-king-studios/tools/messages/strategies/file-strategy/file-error
+constructor: false
+inherited_classes:
+- name: StandardError
+  slug: standard-error
+version: "*"

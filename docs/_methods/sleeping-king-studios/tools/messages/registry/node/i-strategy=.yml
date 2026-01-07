@@ -1,0 +1,18 @@
+---
+name: SleepingKingStudios::Tools::Messages::Registry::Node#strategy=
+parent_path: sleeping-king-studios/tools/messages/registry/node
+signature: strategy=(value)
+slug: strategy=
+constructor: false
+data_path: sleeping-king-studios/tools/messages/registry/node/i-strategy=
+params:
+- description: the value to set the attribute strategy to.
+  name: value
+  type:
+  - name: Object
+returns:
+- description: the newly set value
+  type:
+  - name: Object
+short_description: Sets the attribute strategy
+version: "*"

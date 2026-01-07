@@ -1,0 +1,45 @@
+---
+name: SleepingKingStudios::Tools::Messages::Strategies::FileStrategy
+slug: file-strategy
+type: class
+files:
+- lib/sleeping_king_studios/tools/messages/strategies/file_strategy.rb
+parent_path: sleeping-king-studios/tools/messages/strategies
+short_description: Messaging strategy that loads message templates from the given
+  file.
+defined_classes:
+- name: FileError
+  slug: file-error
+instance_attributes:
+- name: file_name
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/messages/strategies/file-strategy/i-file-name
+  slug: file-name
+  inherited: false
+- name: templates
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/messages/strategies/hash-strategy/i-templates
+  slug: templates
+  inherited: true
+instance_methods:
+- name: call
+  path: sleeping-king-studios/tools/messages/strategy/i-call
+  slug: call
+  inherited: true
+- name: initialize
+  path: sleeping-king-studios/tools/messages/strategies/file-strategy/i-initialize
+  slug: initialize
+  inherited: false
+  constructor: true
+data_path: sleeping-king-studios/tools/messages/strategies/file-strategy
+constructor: true
+inherited_classes:
+- name: SleepingKingStudios::Tools::Messages::Strategies::HashStrategy
+  slug: hash-strategy
+  path: sleeping-king-studios/tools/messages/strategies/hash-strategy
+- name: SleepingKingStudios::Tools::Messages::Strategy
+  slug: strategy
+  path: sleeping-king-studios/tools/messages/strategy
+version: "*"

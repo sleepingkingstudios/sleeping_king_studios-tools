@@ -1,0 +1,15 @@
+---
+name: SleepingKingStudios::Tools::Messages#registry
+parent_path: sleeping-king-studios/tools/messages
+signature: registry
+slug: registry
+constructor: false
+data_path: sleeping-king-studios/tools/messages/i-registry
+returns:
+- description: |-
+    the strategies
+    registry to use for the tool.
+  type:
+  - name: SleepingKingStudios::Tools::Messages::Registry
+    path: sleeping-king-studios/tools/messages/registry
+version: "*"

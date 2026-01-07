@@ -1,0 +1,13 @@
+---
+name: SleepingKingStudios::Tools::Messages::Registry::Node#scope
+parent_path: sleeping-king-studios/tools/messages/registry/node
+signature: scope
+slug: scope
+constructor: false
+data_path: sleeping-king-studios/tools/messages/registry/node/i-scope
+returns:
+- description: the current value of scope
+  type:
+  - name: Object
+short_description: Returns the value of attribute scope
+version: "*"

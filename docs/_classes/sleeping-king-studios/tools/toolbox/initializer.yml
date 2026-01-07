@@ -1,0 +1,21 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::Initializer
+slug: initializer
+type: class
+files:
+- lib/sleeping_king_studios/tools/toolbox/initializer.rb
+parent_path: sleeping-king-studios/tools/toolbox
+short_description: Utility class for initializing a library or project.
+instance_methods:
+- name: call
+  path: sleeping-king-studios/tools/toolbox/initializer/i-call
+  slug: call
+  inherited: false
+- name: initialize
+  path: sleeping-king-studios/tools/toolbox/initializer/i-initialize
+  slug: initialize
+  inherited: false
+  constructor: true
+data_path: sleeping-king-studios/tools/toolbox/initializer
+constructor: true
+version: "*"
