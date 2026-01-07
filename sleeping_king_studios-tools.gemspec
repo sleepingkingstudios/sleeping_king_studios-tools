@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-$LOAD_PATH << './lib'
-
-require 'sleeping_king_studios/tools/version'
+require_relative 'lib/sleeping_king_studios/tools/version'
 
 Gem::Specification.new do |gem|
   gem.name        = 'sleeping_king_studios-tools'
