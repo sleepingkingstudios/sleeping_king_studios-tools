@@ -102,14 +102,14 @@ module SleepingKingStudios::Tools
     #   copy[:songs][1][:name] = 'Shoot to Thrill'
     #   data[:songs][1]
     #   #=> { :name => 'Hells Bells', :artist => 'AC/DC', :album => 'Back in Black' }
-    def deep_dup(obj)
+    def deep_dup(obj) # rubocop:disable Metrics/AbcSize
       case obj
       when FalseClass, Integer, Float, NilClass, Symbol, TrueClass
         obj
-      when ->(_) { ArrayTools.array?(obj) }
-        ArrayTools.deep_dup obj
-      when ->(_) { HashTools.hash?(obj) }
-        HashTools.deep_dup obj
+      when ->(_) { toolbelt.array_tools.array?(obj) }
+        toolbelt.array_tools.deep_dup obj
+      when ->(_) { toolbelt.hash_tools.hash?(obj) }
+        toolbelt.hash_tools.deep_dup obj
       else
         obj.respond_to?(:deep_dup) ? obj.deep_dup : obj.dup
       end
@@ -155,14 +155,14 @@ module SleepingKingStudios::Tools
     #   #=> true
     #   data[:songs][0].name.frozen?
     #   #=> true
-    def deep_freeze(obj)
+    def deep_freeze(obj) # rubocop:disable Metrics/AbcSize
       case obj
       when FalseClass, Integer, Float, NilClass, Symbol, TrueClass
         # Object is inherently immutable; do nothing here.
-      when ->(_) { ArrayTools.array?(obj) }
-        ArrayTools.deep_freeze(obj)
-      when ->(_) { HashTools.hash?(obj) }
-        HashTools.deep_freeze obj
+      when ->(_) { toolbelt.array_tools.array?(obj) }
+        toolbelt.array_tools.deep_freeze(obj)
+      when ->(_) { toolbelt.hash_tools.hash?(obj) }
+        toolbelt.hash_tools.deep_freeze obj
       else
         obj.respond_to?(:deep_freeze) ? obj.deep_freeze : obj.freeze
       end

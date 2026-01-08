@@ -60,6 +60,10 @@ instance_methods:
   path: sleeping-king-studios/tools/string-tools/i-string?
   slug: string?
   inherited: false
+- name: toolbelt
+  path: sleeping-king-studios/tools/base/i-toolbelt
+  slug: toolbelt
+  inherited: true
 - name: underscore
   path: sleeping-king-studios/tools/string-tools/i-underscore
   slug: underscore

@@ -3,6 +3,10 @@
 require 'sleeping_king_studios/tools/base'
 
 RSpec.describe SleepingKingStudios::Tools::Base do
+  subject(:tool) { described_class.new(**constructor_options) }
+
+  let(:constructor_options) { {} }
+
   describe '.instance' do
     it { expect(described_class).to respond_to(:instance).with(0).arguments }
 
@@ -12,6 +16,32 @@ RSpec.describe SleepingKingStudios::Tools::Base do
       cached = described_class.instance
 
       expect(described_class.instance).to be cached
+    end
+  end
+
+  describe '.new' do
+    it 'should define the constructor' do
+      expect(described_class)
+        .to be_constructible
+        .with(0).arguments
+        .and_keywords(:toolbelt)
+    end
+  end
+
+  describe '#toolbelt' do
+    let(:expected) { SleepingKingStudios::Tools::Toolbelt.global }
+
+    it { expect(tool.toolbelt).to be expected }
+
+    it { expect(tool).to have_aliased_method(:toolbelt).as(:tools) }
+
+    context 'when initialized with toolbelt: value' do
+      let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.new }
+      let(:constructor_options) do
+        super().merge(toolbelt:)
+      end
+
+      it { expect(tool.toolbelt).to be toolbelt }
     end
   end
 end

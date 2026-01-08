@@ -1,7 +1,7 @@
 ---
 name: SleepingKingStudios::Tools::StringTools#initialize
 parent_path: sleeping-king-studios/tools/string-tools
-signature: 'initialize(inflector: nil)'
+signature: 'initialize(inflector: nil, toolbelt: nil)'
 slug: initialize
 constructor: true
 data_path: sleeping-king-studios/tools/string-tools/i-initialize
@@ -14,6 +14,14 @@ params:
   name: inflector
   type:
   - name: Object
+  default: nil
+- description: |-
+    the toolbelt this
+    tools instance belongs to.
+  name: toolbelt
+  type:
+  - name: SleepingKingStudios::Tools::Toolbelt
+    path: sleeping-king-studios/tools/toolbelt
   default: nil
 returns:
 - description: a new instance of StringTools

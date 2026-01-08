@@ -7,7 +7,7 @@ require 'support/deferred/assertions_examples'
 RSpec.describe SleepingKingStudios::Tools::Assertions do
   include Spec::Support::Deferred::AssertionsExamples
 
-  subject(:assertions) { described_class.instance }
+  subject(:assertions) { described_class.new(**constructor_options) }
 
   deferred_examples 'should fail the assertion' do |**deferred_options|
     describe 'should raise an exception with the failure message' do
@@ -51,8 +51,9 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     it { expect { assert }.not_to raise_error }
   end
 
-  let(:error_class) { described_class::AssertionError }
-  let(:options)     { {} }
+  let(:constructor_options) { {} }
+  let(:error_class)         { described_class::AssertionError }
+  let(:options)             { {} }
 
   describe '::AssertionError' do
     it { expect(described_class::AssertionError).to be_a Class }
@@ -69,6 +70,15 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       cached = described_class.instance
 
       expect(described_class.instance).to be cached
+    end
+  end
+
+  describe '.new' do
+    it 'should define the constructor' do
+      expect(described_class)
+        .to be_constructible
+        .with(0).arguments
+        .and_keywords(:toolbelt)
     end
   end
 
@@ -190,6 +200,23 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
         it { expect(error_message).to be == expected }
       end
+    end
+  end
+
+  describe '#toolbelt' do
+    let(:expected) { SleepingKingStudios::Tools::Toolbelt.global }
+
+    it { expect(assertions.toolbelt).to be expected }
+
+    it { expect(assertions).to have_aliased_method(:toolbelt).as(:tools) }
+
+    context 'when initialized with toolbelt: value' do
+      let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.new }
+      let(:constructor_options) do
+        super().merge(toolbelt:)
+      end
+
+      it { expect(assertions.toolbelt).to be toolbelt }
     end
   end
 

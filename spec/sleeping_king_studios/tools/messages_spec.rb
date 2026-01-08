@@ -3,16 +3,19 @@
 require 'sleeping_king_studios/tools/messages'
 
 RSpec.describe SleepingKingStudios::Tools::Messages do
-  subject(:messages) { described_class.new(registry:) }
+  subject(:messages) { described_class.new(**constructor_options) }
 
   let(:registry) { SleepingKingStudios::Tools::Messages::Registry.new }
+  let(:constructor_options) do
+    { registry: }
+  end
 
   describe '.new' do
     it 'should define the constructor' do
       expect(described_class)
         .to be_constructible
         .with(0).arguments
-        .and_keywords(:registry)
+        .and_keywords(:registry, :toolbelt)
     end
   end
 
@@ -222,6 +225,23 @@ RSpec.describe SleepingKingStudios::Tools::Messages do
       let(:expected) { described_class::Registry.global }
 
       it { expect(messages.registry).to be expected }
+    end
+  end
+
+  describe '#toolbelt' do
+    let(:expected) { SleepingKingStudios::Tools::Toolbelt.global }
+
+    it { expect(messages.toolbelt).to be expected }
+
+    it { expect(messages).to have_aliased_method(:toolbelt).as(:tools) }
+
+    context 'when initialized with toolbelt: value' do
+      let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.new }
+      let(:constructor_options) do
+        super().merge(toolbelt:)
+      end
+
+      it { expect(messages.toolbelt).to be toolbelt }
     end
   end
 end

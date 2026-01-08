@@ -45,12 +45,21 @@ instance_methods:
   path: sleeping-king-studios/tools/hash-tools/i-immutable?
   slug: immutable?
   inherited: false
+- name: initialize
+  path: sleeping-king-studios/tools/base/i-initialize
+  slug: initialize
+  inherited: true
+  constructor: true
 - name: mutable?
   path: sleeping-king-studios/tools/hash-tools/i-mutable?
   slug: mutable?
   inherited: false
+- name: toolbelt
+  path: sleeping-king-studios/tools/base/i-toolbelt
+  slug: toolbelt
+  inherited: true
 data_path: sleeping-king-studios/tools/hash-tools
-constructor: false
+constructor: true
 inherited_classes:
 - name: SleepingKingStudios::Tools::Base
   slug: base

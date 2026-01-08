@@ -24,8 +24,10 @@ module SleepingKingStudios::Tools
     #   inflector must be an object that conforms to the interface used by
     #   by SleepingKingStudios::Tools::Toolbox::Inflector, such as an instance
     #   of ActiveSupport::Inflector .
-    def initialize(inflector: nil)
-      super()
+    # @param toolbelt [SleepingKingStudios::Tools::Toolbelt] the toolbelt this
+    #   tools instance belongs to.
+    def initialize(inflector: nil, toolbelt: nil)
+      super(toolbelt:)
 
       @inflector =
         inflector || SleepingKingStudios::Tools::Toolbox::Inflector.new
@@ -71,7 +73,7 @@ module SleepingKingStudios::Tools
     def chain(str, *commands)
       str = require_string!(str)
 
-      commands.reduce(str) { |memo, command| send(command, memo) }
+      commands.reduce(str) { |memo, command| public_send(command, memo) }
     end
 
     # Adds the specified number of spaces to the start of each line.

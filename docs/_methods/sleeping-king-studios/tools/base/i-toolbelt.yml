@@ -1,0 +1,17 @@
+---
+name: SleepingKingStudios::Tools::Base#toolbelt
+parent_path: sleeping-king-studios/tools/base
+signature: toolbelt
+slug: toolbelt
+aliases:
+- tools
+constructor: false
+data_path: sleeping-king-studios/tools/base/i-toolbelt
+returns:
+- description: |-
+    the toolbelt this
+    tools instance belongs to, or the global toolbelt singleton.
+  type:
+  - name: SleepingKingStudios::Tools::Toolbelt
+    path: sleeping-king-studios/tools/toolbelt
+version: "*"

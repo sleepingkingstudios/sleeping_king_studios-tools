@@ -1,18 +1,27 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 require 'sleeping_king_studios/tools/array_tools'
 
 RSpec.describe SleepingKingStudios::Tools::ArrayTools do
-  extend RSpec::SleepingKingStudios::Concerns::WrapExamples
+  subject(:array_tools) { described_class.new(**constructor_options) }
 
-  include Spec::Examples::ArrayExamples
+  let(:constructor_options) { {} }
 
-  let(:instance) { described_class.instance }
+  shared_context 'when the array is frozen' do
+    let(:ary) { super().freeze }
+  end
+
+  describe '.new' do
+    it 'should define the constructor' do
+      expect(described_class)
+        .to be_constructible
+        .with(0).arguments
+        .and_keywords(:toolbelt)
+    end
+  end
 
   describe '#array?' do
-    it { expect(instance).to respond_to(:array?).with(1).argument }
+    it { expect(array_tools).to respond_to(:array?).with(1).argument }
 
     it { expect(described_class).to respond_to(:array?).with(1).argument }
 
@@ -59,7 +68,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
   end
 
   describe '#bisect' do
-    it { expect(instance).to respond_to(:bisect).with(1).arguments }
+    it { expect(array_tools).to respond_to(:bisect).with(1).arguments }
 
     it { expect(described_class).to respond_to(:bisect).with(1).argument }
 
@@ -148,11 +157,11 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
   end
 
   describe '#count_values' do
-    it { expect(instance).to respond_to(:count_values).with(1).argument }
+    it { expect(array_tools).to respond_to(:count_values).with(1).argument }
 
     it { expect(described_class).to respond_to(:count_values).with(1).argument }
 
-    it { expect(instance).to have_aliased_method(:count_values).as(:tally) }
+    it { expect(array_tools).to have_aliased_method(:count_values).as(:tally) }
 
     it { expect(described_class).to respond_to(:tally).with(1).argument }
 
@@ -212,7 +221,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
   end
 
   describe '#deep_dup' do
-    it { expect(instance).to respond_to(:deep_dup).with(1).argument }
+    it { expect(array_tools).to respond_to(:deep_dup).with(1).argument }
 
     it { expect(described_class).to respond_to(:deep_dup).with(1).argument }
 
@@ -223,11 +232,69 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       end
     end
 
-    include_examples 'should create a deep copy of an array'
+    describe 'with an array of arrays' do
+      let(:ary) { [%w[ichi ni san], %w[yon go roku], %w[hachi nana kyuu]] }
+      let(:cpy) { array_tools.deep_dup ary }
+
+      it { expect(cpy).to be == ary }
+
+      it 'should return a copy of the array' do
+        expect { cpy << 'jyuu' }.not_to(change { ary })
+      end
+
+      it 'should return a copy of the child arrays' do
+        expect { cpy.first << 'jyuu' }.not_to(change { ary })
+      end
+
+      it 'should return a copy of the child array items' do
+        expect { cpy.first.first << 'jyuu' }.not_to(change { ary })
+      end
+    end
+
+    describe 'with an array of integers' do
+      let(:ary) { [1, 2, 3] }
+      let(:cpy) { array_tools.deep_dup ary }
+
+      it { expect(cpy).to be == ary }
+
+      it 'should return a copy of the array' do
+        expect { cpy << 4 }.not_to(change { ary })
+      end
+    end
+
+    describe 'with an array of strings' do
+      let(:ary) { %w[ichi ni san] }
+      let(:cpy) { array_tools.deep_dup ary }
+
+      it { expect(cpy).to be == ary }
+
+      it 'should return a copy of the array' do
+        expect { cpy << 'yon' }.not_to(change { ary })
+      end
+
+      it 'should return a copy of the array items' do
+        expect { cpy.first << 'yon' }.not_to(change { ary })
+      end
+    end
+
+    describe 'with a heterogenous array' do
+      let(:ary) { ['0', 1.0, :'2', 3, 4..5] }
+      let(:cpy) { array_tools.deep_dup ary }
+
+      it { expect(cpy).to be == ary }
+
+      it 'should return a copy of the array' do
+        expect { cpy << 'yon' }.not_to(change { ary })
+      end
+
+      it 'should return a copy of the array items' do
+        expect { cpy.first << 'yon' }.not_to(change { ary })
+      end
+    end
   end
 
   describe '#deep_freeze' do
-    it { expect(instance).to respond_to(:deep_freeze).with(1).argument }
+    it { expect(array_tools).to respond_to(:deep_freeze).with(1).argument }
 
     it { expect(described_class).to respond_to(:deep_freeze).with(1).argument }
 
@@ -238,12 +305,74 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       end
     end
 
-    include_examples 'should perform a deep freeze of the array'
+    describe 'with an array of arrays' do
+      let(:ary) { [%w[ichi ni san], %w[yon go roku], %w[hachi nana kyuu]] }
+
+      it 'should freeze the array' do
+        expect { array_tools.deep_freeze ary }
+          .to change(ary, :frozen?)
+          .to be true
+      end
+
+      it 'should freeze the array items' do
+        array_tools.deep_freeze ary
+
+        expect(ary.all?(&:frozen?)).to be true
+      end
+
+      it 'should freeze the nested array items' do
+        array_tools.deep_freeze ary
+
+        expect(ary.flatten.all?(&:frozen?)).to be true
+      end
+    end
+
+    describe 'with an array of integers' do
+      let(:ary) { [1, 2, 3] }
+
+      it 'should freeze the array' do
+        expect { array_tools.deep_freeze ary }
+          .to change(ary, :frozen?)
+          .to be true
+      end
+    end
+
+    describe 'with an array of strings' do
+      let(:ary) { %w[ichi ni san] }
+
+      it 'should freeze the array' do
+        expect { array_tools.deep_freeze ary }
+          .to change(ary, :frozen?)
+          .to be true
+      end
+
+      it 'should freeze the array items' do
+        array_tools.deep_freeze ary
+
+        expect(ary.all?(&:frozen?)).to be true
+      end
+    end
+
+    describe 'with a heterogenous array' do
+      let(:ary) { ['0', 1.0, :'2', 3, 4..5] }
+
+      it 'should freeze the array' do
+        expect { array_tools.deep_freeze ary }
+          .to change(ary, :frozen?)
+          .to be true
+      end
+
+      it 'should freeze the array items' do
+        array_tools.deep_freeze ary
+
+        expect(ary.all?(&:frozen?)).to be true
+      end
+    end
   end
 
   describe '#humanize_list' do
     it 'should define the method' do
-      expect(instance)
+      expect(array_tools)
         .to respond_to(:humanize_list)
         .with(1)
         .argument.and_a_block
@@ -369,7 +498,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
   end
 
   describe '#immutable?' do
-    it { expect(instance).to respond_to(:immutable?).with(1).argument }
+    it { expect(array_tools).to respond_to(:immutable?).with(1).argument }
 
     it { expect(described_class).to respond_to(:immutable?).with(1).argument }
 
@@ -380,26 +509,120 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       end
     end
 
-    include_examples 'should test if the array is immutable'
+    describe 'with an array of arrays' do
+      let(:ary) do
+        [
+          [+'ichi', +'ni', +'san'],
+          [+'yon', +'go', +'roku'],
+          [+'hachi', +'nana', +'kyuu']
+        ]
+      end
+
+      it { expect(array_tools.immutable? ary).to be false }
+
+      context 'when the array is frozen' do
+        include_context 'when the array is frozen'
+
+        it { expect(array_tools.immutable? ary).to be false }
+
+        context 'when the child arrays are frozen' do
+          before(:example) { ary.each(&:freeze) }
+
+          it { expect(array_tools.immutable? ary).to be false }
+
+          context 'when the child array items are frozen' do # rubocop:disable RSpec/NestedGroups
+            before(:example) { ary.flatten.each(&:freeze) }
+
+            it { expect(array_tools.immutable? ary).to be true }
+          end
+        end
+      end
+    end
+
+    describe 'with an array of integers' do
+      let(:ary) { [1, 2, 3] }
+
+      it { expect(array_tools.immutable? ary).to be false }
+
+      wrap_context 'when the array is frozen' do
+        it { expect(array_tools.immutable? ary).to be true }
+      end
+    end
+
+    describe 'with an array of mutable strings' do
+      let(:ary) { [+'ichi', +'ni', +'san'] }
+
+      it { expect(array_tools.immutable? ary).to be false }
+
+      context 'when the array is frozen' do
+        include_context 'when the array is frozen'
+
+        it { expect(array_tools.immutable? ary).to be false }
+
+        context 'when some of the strings are frozen' do
+          before(:example) do
+            ary.each.with_index { |item, index| item.freeze if index.odd? }
+          end
+
+          it { expect(array_tools.immutable? ary).to be false }
+        end
+
+        context 'when all of the strings are frozen' do
+          before(:example) { ary.each(&:freeze) }
+
+          it { expect(array_tools.immutable? ary).to be true }
+        end
+      end
+    end
+
+    describe 'with a heterogenous array' do
+      let(:ary) { [+'0', 1.0, :'2', 3, 4..5] }
+
+      it { expect(array_tools.immutable? ary).to be false }
+
+      context 'when the array is frozen' do
+        include_context 'when the array is frozen'
+
+        it { expect(array_tools.immutable? ary).to be false }
+
+        context 'when the mutable items are frozen' do
+          before(:example) do
+            ary.each do |item|
+              unless SleepingKingStudios::Tools::ObjectTools.immutable?(item)
+                item.freeze
+              end
+            end
+          end
+
+          it { expect(array_tools.immutable? ary).to be true }
+        end
+      end
+    end
   end
 
   describe '#mutable?' do
     let(:ary) { [] }
 
-    before(:example) do
-      allow(instance).to receive(:immutable?).with(ary).and_return(false)
-    end
-
-    it { expect(instance).to respond_to(:mutable?).with(1).argument }
+    it { expect(array_tools).to respond_to(:mutable?).with(1).argument }
 
     it { expect(described_class).to respond_to(:mutable?).with(1).argument }
 
-    it { expect(instance.mutable? ary).to be true }
-
     it 'should delegate to #immutable?' do
-      instance.mutable?(ary)
+      allow(array_tools).to receive(:immutable?) # rubocop:disable RSpec/SubjectStub
 
-      expect(instance).to have_received(:immutable?).with(ary)
+      array_tools.mutable?(ary)
+
+      expect(array_tools).to have_received(:immutable?).with(ary) # rubocop:disable RSpec/SubjectStub
+    end
+
+    describe 'with an immutable Array' do
+      let(:ary) { super().freeze }
+
+      it { expect(array_tools.mutable?(ary)).to be false }
+    end
+
+    describe 'with a mutable Array' do
+      it { expect(array_tools.mutable?(ary)).to be true }
     end
   end
 
@@ -481,12 +704,12 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       end
     end
 
-    def perform_action
+    define_method :perform_action do
       described_class.splice values, start, delete_count, *insert
     end
 
     it 'should define the method' do
-      expect(instance)
+      expect(array_tools)
         .to respond_to(:splice)
         .with(3).arguments
         .and_unlimited_arguments
@@ -540,6 +763,23 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
         include_examples 'should splice the array'
       end
+    end
+  end
+
+  describe '#toolbelt' do
+    let(:expected) { SleepingKingStudios::Tools::Toolbelt.global }
+
+    it { expect(array_tools.toolbelt).to be expected }
+
+    it { expect(array_tools).to have_aliased_method(:toolbelt).as(:tools) }
+
+    context 'when initialized with toolbelt: value' do
+      let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.new }
+      let(:constructor_options) do
+        super().merge(toolbelt:)
+      end
+
+      it { expect(array_tools.toolbelt).to be toolbelt }
     end
   end
 end

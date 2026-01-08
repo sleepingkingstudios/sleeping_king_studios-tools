@@ -25,11 +25,14 @@ module SleepingKingStudios::Tools
     #   display when outputting a deprecation warning.
     # @param deprecation_strategy [String] the name of the strategy used when
     #   deprecated code is called. Must be 'ignore', 'raise', or 'warn'.
+    # @param toolbelt [SleepingKingStudios::Tools::Toolbelt] the toolbelt this
+    #   tools instance belongs to.
     def initialize(
       deprecation_caller_depth: nil,
-      deprecation_strategy:     nil
+      deprecation_strategy:     nil,
+      toolbelt:                 nil
     )
-      super()
+      super(toolbelt:)
 
       @deprecation_caller_depth =
         deprecation_caller_depth ||

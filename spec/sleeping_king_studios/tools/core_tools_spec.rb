@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 require 'sleeping_king_studios/tools/core_tools'
 
 RSpec.describe SleepingKingStudios::Tools::CoreTools do
-  subject(:instance) { described_class.new(**constructor_options) }
+  subject(:core_tools) { described_class.new(**constructor_options) }
 
   let(:constructor_options) { {} }
 
@@ -20,6 +18,21 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
   end
 
   describe '.new' do
+    let(:expected_keywords) do
+      %i[
+        deprecation_caller_depth
+        deprecation_strategy
+        toolbelt
+      ]
+    end
+
+    it 'should define the constructor' do
+      expect(described_class)
+        .to be_constructible
+        .with(0).arguments
+        .and_keywords(*expected_keywords)
+    end
+
     describe 'with deprecation_strategy: invalid value' do
       let(:constructor_options) { super().merge(deprecation_strategy: 'panic') }
       let(:error_message) do
@@ -42,7 +55,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
     let(:constructor_options)  { super().merge(deprecation_strategy:) }
 
     it 'should define the method' do
-      expect(instance)
+      expect(core_tools)
         .to respond_to(:deprecate)
         .with(1).argument
         .and_keywords(:caller, :format, :message)
@@ -55,7 +68,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       before(:example) { allow(Kernel).to receive(:warn) }
 
       it 'should not print a warning' do
-        instance.deprecate object
+        core_tools.deprecate object
 
         expect(Kernel).not_to have_received(:warn)
       end
@@ -67,12 +80,12 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       let(:error_message)        { object_string }
 
       it 'should raise an error' do
-        expect { instance.deprecate object }
+        expect { core_tools.deprecate object }
           .to raise_error described_class::DeprecationError, error_message
       end
 
       it 'should truncate the exception backtrace' do
-        instance.deprecate(object)
+        core_tools.deprecate(object)
       rescue described_class::DeprecationError => exception
         expect(exception.backtrace.first).to include(__FILE__)
       end
@@ -82,7 +95,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         let(:error_message) { "#{object_string} #{message}" }
 
         it 'should raise an error' do
-          expect { instance.deprecate object, message: }
+          expect { core_tools.deprecate object, message: }
             .to raise_error described_class::DeprecationError, error_message
         end
       end
@@ -93,7 +106,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         let(:object_string) { format(custom_format, object, version) }
 
         it 'should raise an error' do
-          expect { instance.deprecate object, version, format: custom_format }
+          expect { core_tools.deprecate object, version, format: custom_format }
             .to raise_error described_class::DeprecationError, error_message
         end
       end
@@ -108,12 +121,12 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         end
 
         it 'should raise an error' do
-          expect { instance.deprecate(object, caller: caller_stack) }
+          expect { core_tools.deprecate(object, caller: caller_stack) }
             .to raise_error described_class::DeprecationError, error_message
         end
 
         it 'should set the exception backtrace' do
-          instance.deprecate(object, caller: caller_stack)
+          core_tools.deprecate(object, caller: caller_stack)
         rescue described_class::DeprecationError => exception
           expect(exception.backtrace).to be == caller_stack
         end
@@ -132,7 +145,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         ]
       end
       let(:scoped_caller) do
-        caller_lines[2..(1 + instance.deprecation_caller_depth)]
+        caller_lines[2..(1 + core_tools.deprecation_caller_depth)]
       end
       let(:formatted_caller) do
         scoped_caller
@@ -147,13 +160,13 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       before(:example) do
         allow(Kernel).to receive(:warn)
 
-        allow(instance) # rubocop:disable RSpec/SubjectStub
+        allow(core_tools) # rubocop:disable RSpec/SubjectStub
           .to receive(:caller)
           .and_return(caller_lines)
       end
 
       it 'should print a deprecation warning' do
-        instance.deprecate object
+        core_tools.deprecate object
 
         expect(Kernel).to have_received(:warn).with(formatted_warning)
       end
@@ -167,7 +180,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         end
 
         it 'should print a deprecation warning' do
-          instance.deprecate(object, message:)
+          core_tools.deprecate(object, message:)
 
           expect(Kernel).to have_received(:warn).with(formatted_warning)
         end
@@ -179,7 +192,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         let(:object_string) { format(custom_format, object, version) }
 
         it 'should print a deprecation warning' do
-          instance.deprecate object, version, format: custom_format
+          core_tools.deprecate object, version, format: custom_format
 
           expect(Kernel).to have_received(:warn).with(formatted_warning)
         end
@@ -196,7 +209,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         let(:scoped_caller) { caller_stack }
 
         it 'should print a deprecation warning' do
-          instance.deprecate(object, caller: caller_stack)
+          core_tools.deprecate(object, caller: caller_stack)
 
           expect(Kernel).to have_received(:warn).with(formatted_warning)
         end
@@ -209,7 +222,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         let(:formatted_warning) { object_string }
 
         it 'should print a deprecation warning' do
-          instance.deprecate object
+          core_tools.deprecate object
 
           expect(Kernel).to have_received(:warn).with(formatted_warning)
         end
@@ -221,7 +234,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         end
 
         it 'should print a deprecation warning' do
-          instance.deprecate object
+          core_tools.deprecate object
 
           expect(Kernel).to have_received(:warn).with(formatted_warning)
         end
@@ -230,13 +243,13 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
   end
 
   describe '#deprecation_caller_depth' do
-    let(:instance) do
+    let(:core_tools) do
       described_class.new(**constructor_options)
     end
     let(:constructor_options) { {} }
 
     it 'should define the method' do
-      expect(instance)
+      expect(core_tools)
         .to respond_to(:deprecation_caller_depth)
         .with(0)
         .arguments
@@ -253,14 +266,14 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         ENV['DEPRECATION_CALLER_DEPTH'] = previous
       end
 
-      it { expect(instance.send :deprecation_caller_depth).to be 3 }
+      it { expect(core_tools.send :deprecation_caller_depth).to be 3 }
 
       context 'when initialized with deprecation_caller_depth: value' do
         let(:constructor_options) do
           super().merge(deprecation_caller_depth: 10)
         end
 
-        it { expect(instance.send :deprecation_caller_depth).to be 10 }
+        it { expect(core_tools.send :deprecation_caller_depth).to be 10 }
       end
     end
 
@@ -275,14 +288,14 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         ENV['DEPRECATION_CALLER_DEPTH'] = previous
       end
 
-      it { expect(instance.send :deprecation_caller_depth).to be 15 }
+      it { expect(core_tools.send :deprecation_caller_depth).to be 15 }
 
       context 'when initialized with deprecation_caller_depth: value' do
         let(:constructor_options) do
           super().merge(deprecation_caller_depth: 10)
         end
 
-        it { expect(instance.send :deprecation_caller_depth).to be 10 }
+        it { expect(core_tools.send :deprecation_caller_depth).to be 10 }
       end
     end
   end
@@ -313,21 +326,21 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       end
     end
 
-    let(:instance) do
+    let(:core_tools) do
       described_class.new(**constructor_options)
     end
     let(:constructor_options) { {} }
 
     it 'should define the method' do
-      expect(instance).to respond_to(:deprecation_strategy).with(0).arguments
+      expect(core_tools).to respond_to(:deprecation_strategy).with(0).arguments
     end
 
     wrap_context 'when ENV[DEPRECATION_STRATEGY] is not set' do
-      it { expect(instance.deprecation_strategy).to be == 'warn' }
+      it { expect(core_tools.deprecation_strategy).to be == 'warn' }
     end
 
     wrap_context 'when ENV[DEPRECATION_STRATEGY] is set', 'raise' do
-      it { expect(instance.deprecation_strategy).to be == 'raise' }
+      it { expect(core_tools.deprecation_strategy).to be == 'raise' }
     end
 
     context 'when initialized with deprecation_strategy: ignore' do
@@ -335,14 +348,14 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         super().merge(deprecation_strategy: 'ignore')
       end
 
-      it { expect(instance.deprecation_strategy).to be == 'ignore' }
+      it { expect(core_tools.deprecation_strategy).to be == 'ignore' }
 
       wrap_context 'when ENV[DEPRECATION_STRATEGY] is not set' do
-        it { expect(instance.deprecation_strategy).to be == 'ignore' }
+        it { expect(core_tools.deprecation_strategy).to be == 'ignore' }
       end
 
       wrap_context 'when ENV[DEPRECATION_STRATEGY] is set', 'raise' do
-        it { expect(instance.deprecation_strategy).to be == 'ignore' }
+        it { expect(core_tools.deprecation_strategy).to be == 'ignore' }
       end
     end
 
@@ -351,14 +364,14 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         super().merge(deprecation_strategy: 'raise')
       end
 
-      it { expect(instance.deprecation_strategy).to be == 'raise' }
+      it { expect(core_tools.deprecation_strategy).to be == 'raise' }
 
       wrap_context 'when ENV[DEPRECATION_STRATEGY] is not set' do
-        it { expect(instance.deprecation_strategy).to be == 'raise' }
+        it { expect(core_tools.deprecation_strategy).to be == 'raise' }
       end
 
       wrap_context 'when ENV[DEPRECATION_STRATEGY] is set', 'warn' do
-        it { expect(instance.deprecation_strategy).to be == 'raise' }
+        it { expect(core_tools.deprecation_strategy).to be == 'raise' }
       end
     end
 
@@ -367,14 +380,14 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         super().merge(deprecation_strategy: 'warn')
       end
 
-      it { expect(instance.deprecation_strategy).to be == 'warn' }
+      it { expect(core_tools.deprecation_strategy).to be == 'warn' }
 
       wrap_context 'when ENV[DEPRECATION_STRATEGY] is not set' do
-        it { expect(instance.deprecation_strategy).to be == 'warn' }
+        it { expect(core_tools.deprecation_strategy).to be == 'warn' }
       end
 
       wrap_context 'when ENV[DEPRECATION_STRATEGY] is set', 'ignore' do
-        it { expect(instance.deprecation_strategy).to be == 'warn' }
+        it { expect(core_tools.deprecation_strategy).to be == 'warn' }
       end
     end
   end
@@ -408,7 +421,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       let(:file_name) { '/path/to/file' }
 
       it 'should require the file' do
-        instance.require_each file_name
+        core_tools.require_each file_name
 
         expect(Kernel).to have_received(:require).with(file_name)
       end
@@ -420,7 +433,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       end
 
       it 'should require the file', :aggregate_failures do
-        instance.require_each(*file_names)
+        core_tools.require_each(*file_names)
 
         file_names.each do |file_name|
           expect(Kernel).to have_received(:require).with(file_name)
@@ -443,12 +456,29 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       end
 
       it 'should require all files matching the pattern' do
-        instance.require_each file_pattern
+        core_tools.require_each file_pattern
 
         file_names.each do |file_name|
           expect(Kernel).to have_received(:require).with(file_name)
         end
       end
+    end
+  end
+
+  describe '#toolbelt' do
+    let(:expected) { SleepingKingStudios::Tools::Toolbelt.global }
+
+    it { expect(core_tools.toolbelt).to be expected }
+
+    it { expect(core_tools).to have_aliased_method(:toolbelt).as(:tools) }
+
+    context 'when initialized with toolbelt: value' do
+      let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.new }
+      let(:constructor_options) do
+        super().merge(toolbelt:)
+      end
+
+      it { expect(core_tools.toolbelt).to be toolbelt }
     end
   end
 end
