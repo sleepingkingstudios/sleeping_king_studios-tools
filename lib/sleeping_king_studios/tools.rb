@@ -23,7 +23,7 @@ module SleepingKingStudios
         .global
         .register(
           scope:    'sleeping_king_studios.tools.assertions',
-          strategy: Assertions::Strategy.new
+          strategy: Assertions::MessagesStrategy.new
         )
     end
 
