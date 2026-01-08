@@ -5,19 +5,54 @@ require 'sleeping_king_studios/tools/toolbelt'
 RSpec.describe SleepingKingStudios::Tools::Toolbelt do
   let(:instance) { described_class.instance }
 
-  describe '.instance' do
-    it { expect(described_class).to have_reader(:instance) }
+  describe '.global' do
+    let(:cached_value) { described_class.global }
 
-    it 'should return an instance' do
-      klass = Kernel.instance_method(:class).bind(described_class.instance).call
+    it { expect(described_class).to respond_to(:global).with(0).arguments }
 
-      expect(klass).to be described_class
+    it 'should be an instance of Toolbelt' do
+      expect(Object.instance_method(:class).bind(described_class.global).call)
+        .to be described_class
     end
 
-    it 'should cache the instance' do
-      previous = described_class.instance
+    it { expect(described_class).to have_aliased_method(:global).as(:instance) }
 
-      expect(described_class.instance.equal?(previous)).to be true
+    it { expect(described_class.global).to be cached_value }
+
+    context 'when accessed by multiple threads' do
+      let(:values) do
+        []
+      end
+      let(:threads) do
+        Array.new(3) do |index|
+          Thread.new { values[index] = described_class.global }
+        end
+      end
+
+      before(:example) do
+        described_class.instance_variable_set(:@global, nil)
+
+        allow(described_class).to receive(:new).and_wrap_original do |original|
+          sleep 1
+
+          original.call
+        end
+      end
+
+      around(:example) do |example|
+        value = described_class.instance_variable_get(:@global)
+
+        example.call
+      ensure
+        described_class.instance_variable_set(:@global, value)
+      end
+
+      it 'should synchronize the cached values', :aggregate_failures do
+        threads.map(&:join)
+
+        expect(values.size).to be 3
+        expect(values).to all be cached_value
+      end
     end
   end
 

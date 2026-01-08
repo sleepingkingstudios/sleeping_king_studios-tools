@@ -7,9 +7,9 @@ files:
 parent_path: sleeping-king-studios/tools
 short_description: Helper object for quick access to all available tools.
 class_methods:
-- name: instance
-  path: sleeping-king-studios/tools/toolbelt/c-instance
-  slug: instance
+- name: global
+  path: sleeping-king-studios/tools/toolbelt/c-global
+  slug: global
   inherited: false
 instance_attributes:
 - name: array_tools

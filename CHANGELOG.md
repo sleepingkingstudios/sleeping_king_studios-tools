@@ -29,6 +29,12 @@ Added `Messages` tool, which allows generating user-readable messages.
 - Added `Messages::Registry` for defining scoped message strategies.
 - Added `Messages::Strategy` and subclasses `FileStrategy` and `HashStrategy`.
 
+### Toolbelt
+
+Implemented `Toolbelt.global`, a thread-safe singleton instance with default configuration.
+
+- Calling `Toolbelt.instance` now returns the singleton.
+
 ### Toolbox
 
 Added keyword support to `ConstantMap.new`.

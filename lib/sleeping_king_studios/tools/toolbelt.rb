@@ -16,10 +16,18 @@ module SleepingKingStudios::Tools
   #   toolbelt.array_tools.pluralize('light')
   #   #=> 'lights'
   class Toolbelt < BasicObject
-    # @return [SleepingKingStudios::Tools::Toolbelt] a memoized instance of the
-    #   toolbelt class.
-    def self.instance
-      @instance ||= new
+    class << self
+      semaphore = Thread::Mutex.new
+
+      # @!method global()
+      #   Returns a singleton instance of the messages registry, instantiating
+      #   the instance if needed.
+      #
+      #   @return [Registry] the messages registry singleton.
+      define_method :global do
+        semaphore.synchronize { @global ||= new }
+      end
+      alias instance global
     end
 
     # @param deprecation_caller_depth [Integer] the number of backtrace lines to
