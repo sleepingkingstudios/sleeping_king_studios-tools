@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 require 'sleeping_king_studios/tools/string_tools'
 
 RSpec.describe SleepingKingStudios::Tools::StringTools do
@@ -15,7 +13,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
         rules:
       )
     end
-    let(:instance) { described_class.new(inflector:) }
+    let(:constructor_options) { super().merge(inflector:) }
   end
 
   shared_examples 'should delegate to the inflector' \
@@ -23,29 +21,38 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     before(:example) { allow(inflector).to receive(method_name) }
 
     it 'should delegate to the inflector' do
-      instance.send(method_name, *arguments)
+      string_tools.send(method_name, *arguments)
 
       expect(inflector).to have_received(method_name).with(*arguments)
     end
   end
 
-  let(:instance) { described_class.instance }
+  subject(:string_tools) { described_class.new(**constructor_options) }
+
+  let(:constructor_options) { {} }
 
   describe '.new' do
+    it 'should define the constructor' do
+      expect(described_class)
+        .to be_constructible
+        .with(0).arguments
+        .and_keywords(:inflector, :toolbelt)
+    end
+
     describe 'with inflector: value' do
       let(:inflector) do
         instance_double(SleepingKingStudios::Tools::Toolbox::Inflector)
       end
-      let(:instance) { described_class.new(inflector:) }
+      let(:string_tools) { described_class.new(inflector:) }
 
-      it { expect(instance.inflector).to be inflector }
+      it { expect(string_tools.inflector).to be inflector }
     end
   end
 
   describe '#camelize' do
     include_context 'with an inflector double'
 
-    it { expect(instance).to respond_to(:camelize).with(1).argument }
+    it { expect(string_tools).to respond_to(:camelize).with(1).argument }
 
     it { expect(described_class).to respond_to(:camelize).with(1).argument }
 
@@ -62,7 +69,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     let(:expected)   { 'ArchivedPeriodical' }
 
     it 'should define the method' do
-      expect(instance)
+      expect(string_tools)
         .to respond_to(:chain)
         .with(1).argument
         .and_unlimited_arguments
@@ -77,13 +84,13 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
     describe 'with a string' do
       it 'should return the string' do
-        expect(instance.chain value, *operations).to be == expected
+        expect(string_tools.chain value, *operations).to be == expected
       end
     end
 
     describe 'with a symbol' do
       it 'should return the string' do
-        expect(instance.chain value.intern, *operations).to be == expected
+        expect(string_tools.chain value.intern, *operations).to be == expected
       end
     end
 
@@ -100,13 +107,13 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
       describe 'with a string' do
         it 'should return the string' do
-          expect(instance.chain value, *operations).to be == expected
+          expect(string_tools.chain value, *operations).to be == expected
         end
       end
 
       describe 'with a symbol' do
         it 'should return the string' do
-          expect(instance.chain value.intern, *operations).to be == expected
+          expect(string_tools.chain value.intern, *operations).to be == expected
         end
       end
     end
@@ -129,20 +136,20 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
       describe 'with a string' do
         it 'should return the string' do
-          expect(instance.chain value, *operations).to be == expected
+          expect(string_tools.chain value, *operations).to be == expected
         end
       end
 
       describe 'with a symbol' do
         it 'should return the string' do
-          expect(instance.chain value.intern, *operations).to be == expected
+          expect(string_tools.chain value.intern, *operations).to be == expected
         end
       end
     end
   end
 
   describe '#indent' do
-    it { expect(instance).to respond_to(:indent).with(1..2).arguments }
+    it { expect(string_tools).to respond_to(:indent).with(1..2).arguments }
 
     describe 'with nil' do
       it 'should raise an error' do
@@ -152,19 +159,19 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     end
 
     describe 'with an empty string' do
-      it { expect(instance.indent '').to be == '' }
+      it { expect(string_tools.indent '').to be == '' }
     end
 
     describe 'with a single-line string' do
       let(:string)   { 'Greetings, programs!' }
       let(:expected) { "  #{string}" }
 
-      it { expect(instance.indent string).to be == expected }
+      it { expect(string_tools.indent string).to be == expected }
 
       describe 'with an indent count' do
         let(:expected) { "    #{string}" }
 
-        it { expect(instance.indent string, 4).to be == expected }
+        it { expect(string_tools.indent string, 4).to be == expected }
       end
     end
 
@@ -172,12 +179,12 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
       let(:string)   { "Greetings, programs!\n" }
       let(:expected) { "  #{string}" }
 
-      it { expect(instance.indent string).to be == expected }
+      it { expect(string_tools.indent string).to be == expected }
 
       describe 'with an indent count' do
         let(:expected) { "    #{string}" }
 
-        it { expect(instance.indent string, 4).to be == expected }
+        it { expect(string_tools.indent string, 4).to be == expected }
       end
     end
 
@@ -193,7 +200,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
           'The Return of the King'
       end
 
-      it { expect(instance.indent string).to be == expected }
+      it { expect(string_tools.indent string).to be == expected }
 
       describe 'with an indent count' do
         let(:expected) do
@@ -202,22 +209,22 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
             'The Return of the King'
         end
 
-        it { expect(instance.indent string, 4).to be == expected }
+        it { expect(string_tools.indent string, 4).to be == expected }
       end
     end
   end
 
   describe '#inflector' do
-    it { expect(instance).to respond_to(:inflector).with(0).arguments }
+    it { expect(string_tools).to respond_to(:inflector).with(0).arguments }
 
     it 'should return an inflector' do
-      expect(instance.inflector)
+      expect(string_tools.inflector)
         .to be_a SleepingKingStudios::Tools::Toolbox::Inflector
     end
   end
 
   describe '#map_lines' do
-    it { expect(instance).to respond_to(:map_lines).with(1).argument }
+    it { expect(string_tools).to respond_to(:map_lines).with(1).argument }
 
     describe 'with nil' do
       it 'should raise an error' do
@@ -227,7 +234,9 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     end
 
     describe 'with an empty string' do
-      it { expect(instance.map_lines('') { |line| "- #{line}" }).to be == '' }
+      it 'should return an empty string' do
+        expect(string_tools.map_lines('') { |line| "- #{line}" }).to be == ''
+      end
     end
 
     describe 'with a single-line string' do
@@ -235,7 +244,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
       let(:expected) { "- #{string}" }
 
       it 'should map each line' do
-        expect(instance.map_lines(string) { |line| "- #{line}" })
+        expect(string_tools.map_lines(string) { |line| "- #{line}" })
           .to be == expected
       end
 
@@ -244,7 +253,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
         it 'should map each line' do
           expect(
-            instance.map_lines(string) do |line, index|
+            string_tools.map_lines(string) do |line, index|
               "#{index}. #{line}"
             end
           ).to be == expected
@@ -257,7 +266,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
       let(:expected) { "- #{string}" }
 
       it 'should map each line' do
-        expect(instance.map_lines(string) { |line| "- #{line}" })
+        expect(string_tools.map_lines(string) { |line| "- #{line}" })
           .to be == expected
       end
 
@@ -266,7 +275,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
         it 'should map each line' do
           expect(
-            instance.map_lines(string) do |line, index|
+            string_tools.map_lines(string) do |line, index|
               "#{index}. #{line}"
             end
           ).to be == expected
@@ -287,7 +296,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
       end
 
       it 'should map each line' do
-        expect(instance.map_lines(string) { |line| "- #{line}" })
+        expect(string_tools.map_lines(string) { |line| "- #{line}" })
           .to be == expected
       end
 
@@ -300,7 +309,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
         it 'should map each line' do
           expect(
-            instance.map_lines(string) do |line, index|
+            string_tools.map_lines(string) do |line, index|
               "#{index}. #{line}"
             end
           ).to be == expected
@@ -314,12 +323,12 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
     before(:example) { allow(inflector).to receive(:pluralize) }
 
-    it { expect(instance).to respond_to(:plural?).with(1).argument }
+    it { expect(string_tools).to respond_to(:plural?).with(1).argument }
 
     it { expect(described_class).to respond_to(:plural?).with(1).argument }
 
     it 'should delegate to the inflector' do
-      instance.send(:plural?, 'word')
+      string_tools.send(:plural?, 'word')
 
       expect(inflector).to have_received(:pluralize).with('word')
     end
@@ -331,7 +340,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
         allow(inflector).to receive(:pluralize).and_return('words')
       end
 
-      it { expect(instance.plural? word).to be false }
+      it { expect(string_tools.plural? word).to be false }
     end
 
     describe 'with a plural word' do
@@ -341,12 +350,12 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
         allow(inflector).to receive(:pluralize).and_return('words')
       end
 
-      it { expect(instance.plural? word).to be true }
+      it { expect(string_tools.plural? word).to be true }
     end
 
     describe 'with a symbol' do
       it 'should delegate to the inflector' do
-        instance.send(:plural?, :word)
+        string_tools.send(:plural?, :word)
 
         expect(inflector).to have_received(:pluralize).with('word')
       end
@@ -358,7 +367,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
           allow(inflector).to receive(:pluralize).and_return('words')
         end
 
-        it { expect(instance.plural? word).to be false }
+        it { expect(string_tools.plural? word).to be false }
       end
 
       describe 'with a plural word' do
@@ -368,7 +377,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
           allow(inflector).to receive(:pluralize).and_return('words')
         end
 
-        it { expect(instance.plural? word).to be true }
+        it { expect(string_tools.plural? word).to be true }
       end
     end
   end
@@ -376,7 +385,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
   describe '#pluralize' do
     include_context 'with an inflector double'
 
-    it { expect(instance).to respond_to(:pluralize).with(1).argument }
+    it { expect(string_tools).to respond_to(:pluralize).with(1).argument }
 
     it { expect(described_class).to respond_to(:pluralize).with(1).argument }
 
@@ -388,12 +397,12 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
     before(:example) { allow(inflector).to receive(:singularize) }
 
-    it { expect(instance).to respond_to(:singular?).with(1).argument }
+    it { expect(string_tools).to respond_to(:singular?).with(1).argument }
 
     it { expect(described_class).to respond_to(:singular?).with(1).argument }
 
     it 'should delegate to the inflector' do
-      instance.send(:singular?, 'words')
+      string_tools.send(:singular?, 'words')
 
       expect(inflector).to have_received(:singularize).with('words')
     end
@@ -405,7 +414,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
         allow(inflector).to receive(:singularize).and_return('word')
       end
 
-      it { expect(instance.singular? word).to be true }
+      it { expect(string_tools.singular? word).to be true }
     end
 
     describe 'with a plural word' do
@@ -415,12 +424,12 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
         allow(inflector).to receive(:singularize).and_return('word')
       end
 
-      it { expect(instance.singular? word).to be false }
+      it { expect(string_tools.singular? word).to be false }
     end
 
     describe 'with a symbol' do
       it 'should delegate to the inflector' do
-        instance.send(:singular?, :words)
+        string_tools.send(:singular?, :words)
 
         expect(inflector).to have_received(:singularize).with('words')
       end
@@ -432,7 +441,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
           allow(inflector).to receive(:singularize).and_return('word')
         end
 
-        it { expect(instance.singular? word).to be true }
+        it { expect(string_tools.singular? word).to be true }
       end
 
       describe 'with a plural word' do
@@ -442,7 +451,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
           allow(inflector).to receive(:singularize).and_return('word')
         end
 
-        it { expect(instance.singular? word).to be false }
+        it { expect(string_tools.singular? word).to be false }
       end
     end
   end
@@ -450,7 +459,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
   describe '#singularize' do
     include_context 'with an inflector double'
 
-    it { expect(instance).to respond_to(:singularize).with(1).argument }
+    it { expect(string_tools).to respond_to(:singularize).with(1).argument }
 
     it { expect(described_class).to respond_to(:singularize).with(1).argument }
 
@@ -458,7 +467,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
   end
 
   describe '#string?' do
-    it { expect(instance).to respond_to(:string?).with(1).argument }
+    it { expect(string_tools).to respond_to(:string?).with(1).argument }
 
     it { expect(described_class).to respond_to(:string?).with(1).argument }
 
@@ -501,10 +510,27 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     end
   end
 
+  describe '#toolbelt' do
+    let(:expected) { SleepingKingStudios::Tools::Toolbelt.global }
+
+    it { expect(string_tools.toolbelt).to be expected }
+
+    it { expect(string_tools).to have_aliased_method(:toolbelt).as(:tools) }
+
+    context 'when initialized with toolbelt: value' do
+      let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.new }
+      let(:constructor_options) do
+        super().merge(toolbelt:)
+      end
+
+      it { expect(string_tools.toolbelt).to be toolbelt }
+    end
+  end
+
   describe '#underscore' do
     include_context 'with an inflector double'
 
-    it { expect(instance).to respond_to(:underscore).with(1).argument }
+    it { expect(string_tools).to respond_to(:underscore).with(1).argument }
 
     it { expect(described_class).to respond_to(:underscore).with(1).argument }
 

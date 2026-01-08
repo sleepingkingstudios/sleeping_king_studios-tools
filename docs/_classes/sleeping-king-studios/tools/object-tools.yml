@@ -36,6 +36,11 @@ instance_methods:
   path: sleeping-king-studios/tools/object-tools/i-immutable?
   slug: immutable?
   inherited: false
+- name: initialize
+  path: sleeping-king-studios/tools/base/i-initialize
+  slug: initialize
+  inherited: true
+  constructor: true
 - name: mutable?
   path: sleeping-king-studios/tools/object-tools/i-mutable?
   slug: mutable?
@@ -44,12 +49,16 @@ instance_methods:
   path: sleeping-king-studios/tools/object-tools/i-object?
   slug: object?
   inherited: false
+- name: toolbelt
+  path: sleeping-king-studios/tools/base/i-toolbelt
+  slug: toolbelt
+  inherited: true
 - name: try
   path: sleeping-king-studios/tools/object-tools/i-try
   slug: try
   inherited: false
 data_path: sleeping-king-studios/tools/object-tools
-constructor: false
+constructor: true
 inherited_classes:
 - name: SleepingKingStudios::Tools::Base
   slug: base

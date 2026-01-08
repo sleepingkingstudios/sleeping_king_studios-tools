@@ -1,16 +1,20 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 require 'sleeping_king_studios/tools/object_tools'
 
 RSpec.describe SleepingKingStudios::Tools::ObjectTools do
-  extend RSpec::SleepingKingStudios::Concerns::WrapExamples
+  subject(:object_tools) { described_class.new(**constructor_options) }
 
-  include Spec::Examples::ArrayExamples
-  include Spec::Examples::HashExamples
+  let(:constructor_options) { {} }
 
-  let(:instance) { described_class.instance }
+  describe '.new' do
+    it 'should define the constructor' do
+      expect(described_class)
+        .to be_constructible
+        .with(0).arguments
+        .and_keywords(:toolbelt)
+    end
+  end
 
   describe '#apply' do
     shared_examples 'should not change the objects on the method' do
@@ -24,20 +28,20 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
     let(:receiver) do
       # rubocop:disable RSpec/VerifiedDoubles
-      double('base object', instance_method: nil)
+      double('base object', object_tools_method: nil)
       # rubocop:enable RSpec/VerifiedDoubles
     end
 
     before(:example) do
-      allow(receiver).to receive(:instance_method).and_return(:return_value)
+      allow(receiver).to receive(:object_tools_method).and_return(:return_value)
     end
 
-    it { expect(instance).to respond_to(:apply).with(2).arguments }
+    it { expect(object_tools).to respond_to(:apply).with(2).arguments }
 
     it { expect(described_class).to respond_to(:apply).with(2).arguments }
 
     describe 'with a proc with no parameters' do
-      let(:proc) { ->(*args) { instance_method(*args) } }
+      let(:proc) { ->(*args) { object_tools_method(*args) } }
 
       def apply_proc
         described_class.apply receiver, proc
@@ -45,17 +49,17 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
       it { expect(apply_proc).to be == :return_value }
 
-      it 'should call the instance method' do
+      it 'should call the object_tools method' do
         apply_proc
 
-        expect(receiver).to have_received(:instance_method).with(no_args)
+        expect(receiver).to have_received(:object_tools_method).with(no_args)
       end
 
       include_examples 'should not change the objects on the method'
     end
 
     describe 'with a proc with required parameters' do
-      let(:proc) { ->(foo, bar, baz) { instance_method(foo, bar, baz) } }
+      let(:proc) { ->(foo, bar, baz) { object_tools_method(foo, bar, baz) } }
 
       describe 'with no arguments' do
         def apply_proc
@@ -77,10 +81,10 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply receiver, proc, *args
         end
 
-        it 'should call the instance method with the arguments' do
+        it 'should call the object_tools method with the arguments' do
           apply_proc
 
-          expect(receiver).to have_received(:instance_method).with(*args)
+          expect(receiver).to have_received(:object_tools_method).with(*args)
         end
 
         include_examples 'should not change the objects on the method'
@@ -90,7 +94,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     describe 'with a proc with required and optional parameters' do
       let(:proc) do
         lambda do |foo, bar, baz, wibble = nil, wobble = nil|
-          instance_method(foo, bar, baz, wibble, wobble)
+          object_tools_method(foo, bar, baz, wibble, wobble)
         end
       end
 
@@ -115,10 +119,12 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply receiver, proc, *args
         end
 
-        it 'should call the instance method with the arguments' do
+        it 'should call the object_tools method with the arguments' do
           apply_proc
 
-          expect(receiver).to have_received(:instance_method).with(*expected)
+          expect(receiver)
+            .to have_received(:object_tools_method)
+            .with(*expected)
         end
 
         include_examples 'should not change the objects on the method'
@@ -131,10 +137,10 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply receiver, proc, *args
         end
 
-        it 'should call the instance method with the arguments' do
+        it 'should call the object_tools method with the arguments' do
           apply_proc
 
-          expect(receiver).to have_received(:instance_method).with(*args)
+          expect(receiver).to have_received(:object_tools_method).with(*args)
         end
 
         include_examples 'should not change the objects on the method'
@@ -143,16 +149,16 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
     describe 'with a proc with a splat parameter' do
       let(:args) { %w[ichi ni san] }
-      let(:proc) { ->(*args) { instance_method(*args) } }
+      let(:proc) { ->(*args) { object_tools_method(*args) } }
 
       def apply_proc
         described_class.apply receiver, proc, *args
       end
 
-      it 'should call the instance method with the arguments' do
+      it 'should call the object_tools method with the arguments' do
         apply_proc
 
-        expect(receiver).to have_received(:instance_method).with(*args)
+        expect(receiver).to have_received(:object_tools_method).with(*args)
       end
 
       include_examples 'should not change the objects on the method'
@@ -162,7 +168,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:kwargs) { { first: 'Who', second: 'What', third: "I Don't Know" } }
       let(:proc) do
         lambda do |first: nil, second: nil, third: nil|
-          instance_method(first:, second:, third:)
+          object_tools_method(first:, second:, third:)
         end
       end
 
@@ -173,10 +179,12 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply receiver, proc
         end
 
-        it 'should call the instance method with the default arguments' do
+        it 'should call the object_tools method with the default arguments' do
           apply_proc
 
-          expect(receiver).to have_received(:instance_method).with(**expected)
+          expect(receiver)
+            .to have_received(:object_tools_method)
+            .with(**expected)
         end
 
         include_examples 'should not change the objects on the method'
@@ -187,10 +195,10 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply receiver, proc, **kwargs
         end
 
-        it 'should call the instance method with the arguments' do
+        it 'should call the object_tools method with the arguments' do
           apply_proc
 
-          expect(receiver).to have_received(:instance_method).with(**kwargs)
+          expect(receiver).to have_received(:object_tools_method).with(**kwargs)
         end
 
         include_examples 'should not change the objects on the method'
@@ -199,16 +207,16 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
     describe 'with a proc with a keyword splat parameter' do
       let(:kwargs) { { first: 'Who', second: 'What', third: "I Don't Know" } }
-      let(:proc)   { ->(**kwargs) { instance_method(**kwargs) } }
+      let(:proc)   { ->(**kwargs) { object_tools_method(**kwargs) } }
 
       def apply_proc
         described_class.apply receiver, proc, **kwargs
       end
 
-      it 'should call the instance method with the arguments' do
+      it 'should call the object_tools method with the arguments' do
         apply_proc
 
-        expect(receiver).to have_received(:instance_method).with(**kwargs)
+        expect(receiver).to have_received(:object_tools_method).with(**kwargs)
       end
 
       include_examples 'should not change the objects on the method'
@@ -226,7 +234,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           second: nil,
           third: nil
         |
-          instance_method(
+          object_tools_method(
             foo,
             bar,
             baz,
@@ -263,11 +271,11 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply receiver, proc, *args
         end
 
-        it 'should call the instance method with the arguments and defaults' do
+        it 'should call the method with the arguments and defaults' do
           apply_proc
 
           expect(receiver)
-            .to have_received(:instance_method)
+            .to have_received(:object_tools_method)
             .with(*expected_args, **expected_kwargs)
         end
 
@@ -285,11 +293,11 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply receiver, proc, *args, **kwargs
         end
 
-        it 'should call the instance method with the arguments and defaults' do
+        it 'should call the method with the arguments and defaults' do
           apply_proc
 
           expect(receiver)
-            .to have_received(:instance_method)
+            .to have_received(:object_tools_method)
             .with(*expected_args, **kwargs)
         end
 
@@ -306,11 +314,11 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply receiver, proc, *args
         end
 
-        it 'should call the instance method with the arguments and defaults' do
+        it 'should call the method with the arguments and defaults' do
           apply_proc
 
           expect(receiver)
-            .to have_received(:instance_method)
+            .to have_received(:object_tools_method)
             .with(*args, **expected_kwargs)
         end
 
@@ -325,11 +333,11 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           described_class.apply receiver, proc, *args, **kwargs
         end
 
-        it 'should call the instance method with the arguments' do
+        it 'should call the object_tools method with the arguments' do
           apply_proc
 
           expect(receiver)
-            .to have_received(:instance_method)
+            .to have_received(:object_tools_method)
             .with(*args, **kwargs)
         end
 
@@ -339,25 +347,25 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
     describe 'with a proc with a block parameter' do
       let(:args) { %w[ichi ni san] }
-      let(:proc) { ->(*args, &block) { instance_method(*args, &block) } }
+      let(:proc) { ->(*args, &block) { object_tools_method(*args, &block) } }
 
       def apply_proc(&block)
         described_class.apply receiver, proc, *args, &block
       end
 
-      it 'should call the instance method with the arguments' do
+      it 'should call the object_tools method with the arguments' do
         apply_proc
 
-        expect(receiver).to have_received(:instance_method).with(*args)
+        expect(receiver).to have_received(:object_tools_method).with(*args)
       end
 
-      it 'should pass the block to the instance method' do
-        allow(receiver).to receive(:instance_method) do |*_args, &block|
-          block.call('in_instance_method')
+      it 'should pass the block to the object_tools method' do
+        allow(receiver).to receive(:object_tools_method) do |*_args, &block|
+          block.call('in_object_tools_method')
         end
 
         expect { |block| apply_proc(&block) }
-          .to yield_with_args('in_instance_method')
+          .to yield_with_args('in_object_tools_method')
       end
 
       include_examples 'should not change the objects on the method'
@@ -365,28 +373,56 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
   end
 
   describe '#deep_dup' do
-    it { expect(instance).to respond_to(:deep_dup).with(1).argument }
+    it { expect(object_tools).to respond_to(:deep_dup).with(1).argument }
 
     it { expect(described_class).to respond_to(:deep_dup).with(1).argument }
 
-    include_examples 'should create a deep copy of an array'
+    describe 'with an Array' do
+      let(:ary)      { %w[ichi ni san] }
+      let(:toolbelt) { object_tools.toolbelt }
+      let(:expected) { toolbelt.array_tools.deep_dup(ary) }
 
-    include_examples 'should create a deep copy of a hash'
+      it { expect(object_tools.deep_dup ary).to eq(expected) }
+
+      it 'should delegate to ArrayTools' do
+        allow(toolbelt.array_tools).to receive(:deep_dup)
+
+        object_tools.deep_dup(ary)
+
+        expect(toolbelt.array_tools).to have_received(:deep_dup).with(ary)
+      end
+    end
 
     describe 'with false' do
-      it { expect(instance.deep_dup false).to be false }
+      it { expect(object_tools.deep_dup false).to be false }
     end
 
     describe 'with a float' do
-      it { expect(instance.deep_dup 1.0).to eq 1.0 }
+      it { expect(object_tools.deep_dup 1.0).to eq 1.0 }
+    end
+
+    describe 'with a Hash' do
+      let(:hsh)      { { 'foo' => 'foo', 'bar' => 'bar', 'baz' => 'baz' } }
+      let(:toolbelt) { object_tools.toolbelt }
+      let(:expected) { toolbelt.hash_tools.deep_dup(hsh) }
+
+      it { expect(object_tools.deep_dup hsh).to eq(expected) }
+
+      it 'should delegate to HashTools' do
+        allow(toolbelt.hash_tools).to receive(:deep_dup)
+
+        object_tools.deep_dup(hsh)
+
+        expect(toolbelt.hash_tools).to have_received(:deep_dup).with(hsh)
+      end
     end
 
     describe 'with an integer' do
-      it { expect(instance.deep_dup 42).to be == 42 }
+      it { expect(object_tools.deep_dup 42).to be == 42 }
     end
 
     describe 'with nil' do
-      it { expect(instance.deep_dup nil).to be nil }
+      it { expect(object_tools.deep_dup nil).to be nil }
     end
 
     describe 'with an object' do
@@ -397,7 +433,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         allow(object).to receive(:dup).and_return(copy)
       end
 
-      it { expect(instance.deep_dup object).to be copy }
+      it { expect(object_tools.deep_dup object).to be copy }
     end
 
     describe 'with an object that responds to #deep_dup' do
@@ -410,15 +446,15 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         object.define_singleton_method(:deep_dup) { copied_object }
       end
 
-      it { expect(instance.deep_dup object).to be copy }
+      it { expect(object_tools.deep_dup object).to be copy }
     end
 
     describe 'with a string' do
-      it { expect(instance.deep_dup 'foo').to be == 'foo' }
+      it { expect(object_tools.deep_dup 'foo').to be == 'foo' }
 
       it 'should return a copy' do
         orig = 'foo'
-        copy = instance.deep_dup orig
+        copy = object_tools.deep_dup orig
 
         expect { copy << 'bar' }.not_to(change { orig })
       end
@@ -428,17 +464,17 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:struct_class) { Struct.new(:prop) }
       let(:struct)       { struct_class.new('foo') }
 
-      it { expect(instance.deep_dup struct).to be_a struct_class }
+      it { expect(object_tools.deep_dup struct).to be_a struct_class }
 
-      it { expect(instance.deep_dup(struct).prop).to be == struct.prop }
+      it { expect(object_tools.deep_dup(struct).prop).to be == struct.prop }
     end
 
     describe 'with a symbol' do
-      it { expect(instance.deep_dup :foo).to be :foo }
+      it { expect(object_tools.deep_dup :foo).to be :foo }
     end
 
     describe 'with true' do
-      it { expect(instance.deep_dup true).to be true }
+      it { expect(object_tools.deep_dup true).to be true }
     end
 
     describe 'with a complex data structure' do
@@ -472,7 +508,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           ]
         }
       end
-      let(:cpy) { instance.deep_dup hsh }
+      let(:cpy) { object_tools.deep_dup hsh }
 
       it { expect(cpy).to be == hsh }
 
@@ -505,20 +541,16 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
   end
 
   describe '#deep_freeze' do
-    it { expect(instance).to respond_to(:deep_freeze).with(1).argument }
+    it { expect(object_tools).to respond_to(:deep_freeze).with(1).argument }
 
     it { expect(described_class).to respond_to(:deep_freeze).with(1).argument }
-
-    include_examples 'should perform a deep freeze of the array'
-
-    include_examples 'should perform a deep freeze of the hash'
 
     describe 'with an immutable object' do
       let(:objects) { [nil, false, true, 1.0, 42, :symbol] }
 
       it 'should not raise an error' do
         objects.each do |object|
-          expect { instance.deep_freeze object }.not_to raise_error
+          expect { object_tools.deep_freeze object }.not_to raise_error
         end
       end
     end
@@ -527,9 +559,53 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:object) { Object.new }
 
       it 'should freeze the object' do
-        expect { instance.deep_freeze object }
+        expect { object_tools.deep_freeze object }
           .to change(object, :frozen?)
           .to be true
+      end
+    end
+
+    describe 'with an Array' do
+      let(:ary)      { %w[ichi ni san] }
+      let(:toolbelt) { object_tools.toolbelt }
+
+      it 'should freeze the array' do
+        expect { object_tools.deep_freeze ary }
+          .to change(ary, :frozen?)
+          .to be true
+      end
+
+      it 'should delegate to ArrayTools' do
+        allow(toolbelt.array_tools).to receive(:deep_freeze)
+
+        object_tools.deep_freeze(ary)
+
+        expect(toolbelt.array_tools).to have_received(:deep_freeze).with(ary)
+      end
+    end
+
+    describe 'with a Hash' do
+      let(:hsh) do
+        {
+          +'foo' => 'foo',
+          +'bar' => 'bar',
+          +'baz' => 'baz'
+        }
+      end
+      let(:toolbelt) { object_tools.toolbelt }
+
+      it 'should freeze the array' do
+        expect { object_tools.deep_freeze hsh }
+          .to change(hsh, :frozen?)
+          .to be true
+      end
+
+      it 'should delegate to ArrayTools' do
+        allow(toolbelt.hash_tools).to receive(:deep_freeze)
+
+        object_tools.deep_freeze(hsh)
+
+        expect(toolbelt.hash_tools).to have_received(:deep_freeze).with(hsh)
       end
     end
 
@@ -543,7 +619,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       end
 
       it 'should delegate to #deep_freeze' do
-        instance.deep_freeze object
+        object_tools.deep_freeze object
 
         expect(object).to have_received(:deep_freeze)
       end
@@ -553,7 +629,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
   # rubocop:disable Style/SingleArgumentDig
   describe '#dig' do
     it 'should define the method' do
-      expect(instance)
+      expect(object_tools)
         .to respond_to(:dig)
         .with(1).argument
         .and_unlimited_arguments
@@ -630,11 +706,13 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
   describe '#eigenclass' do
     let(:object) { Object.new }
 
-    it { expect(instance).to respond_to(:eigenclass).with(1).argument }
+    it { expect(object_tools).to respond_to(:eigenclass).with(1).argument }
 
     it { expect(described_class).to respond_to(:eigenclass).with(1).argument }
 
-    it { expect(instance).to have_aliased_method(:eigenclass).as(:metaclass) }
+    it 'should define the aliased method' do
+      expect(object_tools).to have_aliased_method(:eigenclass).as(:metaclass)
+    end
 
     it { expect(described_class).to respond_to(:metaclass).with(1).argument }
 
@@ -646,13 +724,9 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
   end
 
   describe '#immutable?' do
-    it { expect(instance).to respond_to(:immutable?).with(1).argument }
+    it { expect(object_tools).to respond_to(:immutable?).with(1).argument }
 
     it { expect(described_class).to respond_to(:immutable?).with(1).argument }
-
-    include_examples 'should test if the array is immutable'
-
-    include_examples 'should test if the hash is immutable'
 
     describe 'with nil' do
       it { expect(described_class.immutable? nil).to be true }
@@ -685,30 +759,84 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     describe 'with a frozen Object' do
       it { expect(described_class.immutable? Object.new.freeze).to be true }
     end
+
+    describe 'with an Array' do
+      let(:ary)      { %w[ichi ni san] }
+      let(:toolbelt) { object_tools.toolbelt }
+
+      it { expect(described_class.immutable? ary).to be false }
+
+      it 'should delegate to ArrayTools' do
+        allow(toolbelt.array_tools).to receive(:deep_freeze)
+
+        object_tools.deep_freeze(ary)
+
+        expect(toolbelt.array_tools).to have_received(:deep_freeze).with(ary)
+      end
+
+      context 'when the Array is frozen' do
+        let(:ary) { super().freeze }
+
+        it { expect(described_class.immutable? ary).to be true }
+      end
+    end
+
+    describe 'with a Hash' do
+      let(:hsh) do
+        {
+          +'foo' => 'foo',
+          +'bar' => 'bar',
+          +'baz' => 'baz'
+        }
+      end
+      let(:toolbelt) { object_tools.toolbelt }
+
+      it { expect(described_class.immutable? hsh).to be false }
+
+      it 'should delegate to HashTools' do
+        allow(toolbelt.hash_tools).to receive(:deep_freeze)
+
+        object_tools.deep_freeze(hsh)
+
+        expect(toolbelt.hash_tools).to have_received(:deep_freeze).with(hsh)
+      end
+
+      context 'when the Array is frozen' do
+        let(:hsh) { super().freeze }
+
+        it { expect(described_class.immutable? hsh).to be true }
+      end
+    end
   end
 
   describe '#mutable?' do
     let(:object) { Object.new }
 
-    before(:example) do
-      allow(instance).to receive(:immutable?).and_return(false)
-    end
-
-    it { expect(instance).to respond_to(:mutable?).with(1).argument }
+    it { expect(object_tools).to respond_to(:mutable?).with(1).argument }
 
     it { expect(described_class).to respond_to(:mutable?).with(1).argument }
 
-    it { expect(instance.mutable? object).to be true }
-
     it 'should delegate to #immutable?' do
-      instance.mutable?(object)
+      allow(object_tools).to receive(:immutable?) # rubocop:disable RSpec/SubjectStub
 
-      expect(instance).to have_received(:immutable?).with(object)
+      object_tools.mutable?(object)
+
+      expect(object_tools).to have_received(:immutable?).with(object) # rubocop:disable RSpec/SubjectStub
+    end
+
+    describe 'with an immutable object' do
+      let(:object) { super().freeze }
+
+      it { expect(object_tools.mutable?(object)).to be false }
+    end
+
+    describe 'with a mutable object' do
+      it { expect(object_tools.mutable?(object)).to be true }
     end
   end
 
   describe '#object?' do
-    it { expect(instance).to respond_to(:object?).with(1).argument }
+    it { expect(object_tools).to respond_to(:object?).with(1).argument }
 
     it { expect(described_class).to respond_to(:object?).with(1).argument }
 
@@ -755,7 +883,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     let(:object) { Object.new }
 
     it 'should define the method' do
-      expect(instance)
+      expect(object_tools)
         .to respond_to(:try)
         .with(2).arguments
         .and_unlimited_arguments
@@ -817,6 +945,23 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       describe 'with a method name that the object does not respond to' do
         it { expect(described_class.try object, :bar).to be nil }
       end
+    end
+  end
+
+  describe '#toolbelt' do
+    let(:expected) { SleepingKingStudios::Tools::Toolbelt.global }
+
+    it { expect(object_tools.toolbelt).to be expected }
+
+    it { expect(object_tools).to have_aliased_method(:toolbelt).as(:tools) }
+
+    context 'when initialized with toolbelt: value' do
+      let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.new }
+      let(:constructor_options) do
+        super().merge(toolbelt:)
+      end
+
+      it { expect(object_tools.toolbelt).to be toolbelt }
     end
   end
 end

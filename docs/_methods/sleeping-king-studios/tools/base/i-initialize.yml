@@ -1,0 +1,21 @@
+---
+name: SleepingKingStudios::Tools::Base#initialize
+parent_path: sleeping-king-studios/tools/base
+signature: 'initialize(toolbelt: nil)'
+slug: initialize
+constructor: true
+data_path: sleeping-king-studios/tools/base/i-initialize
+params:
+- description: |-
+    the toolbelt this
+    tools instance belongs to.
+  name: toolbelt
+  type:
+  - name: SleepingKingStudios::Tools::Toolbelt
+    path: sleeping-king-studios/tools/toolbelt
+  default: nil
+returns:
+- description: a new instance of Base
+  type:
+  - name: Base
+version: "*"

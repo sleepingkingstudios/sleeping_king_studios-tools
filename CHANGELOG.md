@@ -4,7 +4,9 @@
 
 ### Tools
 
-Added the following methods ot `SleepingKingStudios::Tools::Assertions`.
+Tools objects now define a circular `#toolbelt` reference.
+
+Added the following methods to `SleepingKingStudios::Tools::Assertions`.
 
 - `#assert_exclusion`
 - `#assert_inclusion`
@@ -28,6 +30,14 @@ Added `Messages` tool, which allows generating user-readable messages.
 
 - Added `Messages::Registry` for defining scoped message strategies.
 - Added `Messages::Strategy` and subclasses `FileStrategy` and `HashStrategy`.
+
+### Toolbelt
+
+Implemented `Toolbelt.global`, a thread-safe singleton instance with default configuration.
+
+- Calling `Toolbelt.instance` now returns the singleton.
+
+Tools objects are now defined lazily.
 
 ### Toolbox
 

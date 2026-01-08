@@ -108,8 +108,10 @@ module SleepingKingStudios::Tools
     def deep_dup(hsh)
       require_hash!(hsh)
 
+      object_tools = toolbelt.object_tools
+
       hsh.each.with_object({}) do |(key, value), copy|
-        copy[ObjectTools.deep_dup key] = ObjectTools.deep_dup(value)
+        copy[object_tools.deep_dup key] = object_tools.deep_dup(value)
       end
     end
 
@@ -134,9 +136,11 @@ module SleepingKingStudios::Tools
 
       hsh.freeze
 
+      object_tools = toolbelt.object_tools
+
       hsh.each do |key, value|
-        ObjectTools.deep_freeze key
-        ObjectTools.deep_freeze value
+        object_tools.deep_freeze key
+        object_tools.deep_freeze value
       end
     end
 
@@ -223,8 +227,10 @@ module SleepingKingStudios::Tools
 
       return false unless hsh.frozen?
 
+      object_tools = toolbelt.object_tools
+
       hsh.each do |key, value|
-        unless ObjectTools.immutable?(key) && ObjectTools.immutable?(value)
+        unless object_tools.immutable?(key) && object_tools.immutable?(value)
           return false
         end
       end

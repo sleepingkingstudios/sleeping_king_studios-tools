@@ -11,11 +11,21 @@ class_methods:
   path: sleeping-king-studios/tools/base/c-instance
   slug: instance
   inherited: false
+instance_methods:
+- name: initialize
+  path: sleeping-king-studios/tools/base/i-initialize
+  slug: initialize
+  inherited: false
+  constructor: true
+- name: toolbelt
+  path: sleeping-king-studios/tools/base/i-toolbelt
+  slug: toolbelt
+  inherited: false
 data_path: sleeping-king-studios/tools/base
 extended_modules:
 - name: Forwardable
   slug: forwardable
-constructor: false
+constructor: true
 direct_subclasses:
 - name: SleepingKingStudios::Tools::ArrayTools
   slug: array-tools

@@ -16,5 +16,18 @@ module SleepingKingStudios::Tools
     def self.instance
       @instance ||= new
     end
+
+    # @param toolbelt [SleepingKingStudios::Tools::Toolbelt] the toolbelt this
+    #   tools instance belongs to.
+    def initialize(toolbelt: nil)
+      @toolbelt = toolbelt
+    end
+
+    # @return [SleepingKingStudios::Tools::Toolbelt] the toolbelt this
+    #   tools instance belongs to, or the global toolbelt singleton.
+    def toolbelt
+      @toolbelt ||= SleepingKingStudios::Tools::Toolbelt.global
+    end
+    alias tools toolbelt
   end
 end

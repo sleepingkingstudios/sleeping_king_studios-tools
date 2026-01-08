@@ -49,6 +49,10 @@ instance_methods:
   path: sleeping-king-studios/tools/core-tools/i-require-each
   slug: require-each
   inherited: false
+- name: toolbelt
+  path: sleeping-king-studios/tools/base/i-toolbelt
+  slug: toolbelt
+  inherited: true
 data_path: sleeping-king-studios/tools/core-tools
 constructor: true
 inherited_classes:

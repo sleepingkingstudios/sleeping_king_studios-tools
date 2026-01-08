@@ -4,7 +4,7 @@ require 'sleeping_king_studios/tools'
 
 module SleepingKingStudios::Tools
   # Tools for working with array-like enumerable objects.
-  class ArrayTools < SleepingKingStudios::Tools::Base
+  class ArrayTools < SleepingKingStudios::Tools::Base # rubocop:disable Metrics/ClassLength
     # Expected methods that an Array-like object should implement.
     ARRAY_METHODS = %i[[] count each].freeze
 
@@ -171,7 +171,7 @@ module SleepingKingStudios::Tools
     def deep_dup(ary)
       require_array!(ary)
 
-      ary.map { |obj| ObjectTools.deep_dup obj }
+      ary.map { |obj| toolbelt.object_tools.deep_dup obj }
     end
 
     # Freezes the array and performs a deep freeze on each array item.
@@ -197,7 +197,7 @@ module SleepingKingStudios::Tools
 
       ary.freeze
 
-      ary.each { |obj| ObjectTools.deep_freeze obj }
+      ary.each { |obj| toolbelt.object_tools.deep_freeze obj }
     end
 
     # @overload def humanize_list(ary, **options, &)
@@ -297,7 +297,9 @@ module SleepingKingStudios::Tools
 
       return false unless ary.frozen?
 
-      ary.each { |item| return false unless ObjectTools.immutable?(item) }
+      ary.each do |item|
+        return false unless toolbelt.object_tools.immutable?(item)
+      end
 
       true
     end

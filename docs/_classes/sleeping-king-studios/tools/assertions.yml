@@ -81,6 +81,15 @@ instance_methods:
   path: sleeping-king-studios/tools/assertions/i-error-message-for
   slug: error-message-for
   inherited: false
+- name: initialize
+  path: sleeping-king-studios/tools/base/i-initialize
+  slug: initialize
+  inherited: true
+  constructor: true
+- name: toolbelt
+  path: sleeping-king-studios/tools/base/i-toolbelt
+  slug: toolbelt
+  inherited: true
 - name: validate
   path: sleeping-king-studios/tools/assertions/i-validate
   slug: validate
@@ -138,7 +147,7 @@ instance_methods:
   slug: validate-presence
   inherited: false
 data_path: sleeping-king-studios/tools/assertions
-constructor: false
+constructor: true
 direct_subclasses:
 - name: SleepingKingStudios::Tools::Assertions::Aggregator
   slug: aggregator

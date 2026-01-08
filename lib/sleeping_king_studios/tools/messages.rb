@@ -12,8 +12,10 @@ module SleepingKingStudios::Tools
     # @param registry [SleepingKingStudios::Tools::Messages::Registry] the
     #   strategies registry to use for the tool. Defaults to the value of
     #   Registry.global.
-    def initialize(registry:)
-      super()
+    # @param toolbelt [SleepingKingStudios::Tools::Toolbelt] the toolbelt this
+    #   tools instance belongs to.
+    def initialize(registry:, toolbelt: nil)
+      super(toolbelt:)
 
       @registry =
         registry || SleepingKingStudios::Tools::Messages::Registry.global

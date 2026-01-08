@@ -29,6 +29,11 @@ instance_methods:
   path: sleeping-king-studios/tools/integer-tools/i-digits
   slug: digits
   inherited: false
+- name: initialize
+  path: sleeping-king-studios/tools/base/i-initialize
+  slug: initialize
+  inherited: true
+  constructor: true
 - name: integer?
   path: sleeping-king-studios/tools/integer-tools/i-integer?
   slug: integer?
@@ -41,8 +46,12 @@ instance_methods:
   path: sleeping-king-studios/tools/integer-tools/i-romanize
   slug: romanize
   inherited: false
+- name: toolbelt
+  path: sleeping-king-studios/tools/base/i-toolbelt
+  slug: toolbelt
+  inherited: true
 data_path: sleeping-king-studios/tools/integer-tools
-constructor: false
+constructor: true
 inherited_classes:
 - name: SleepingKingStudios::Tools::Base
   slug: base
