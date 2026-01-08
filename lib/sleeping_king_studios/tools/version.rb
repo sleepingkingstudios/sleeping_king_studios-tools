@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 
-require 'sleeping_king_studios/tools/toolbox/semantic_version'
-
 module SleepingKingStudios
   module Tools
     # SleepingKingStudios::Tools uses semantic versioning.
     #
     # @see http://semver.org
     module Version
-      extend SleepingKingStudios::Tools::Toolbox::SemanticVersion
-
       # Major version.
       MAJOR = 1
       # Minor version.
@@ -20,6 +16,39 @@ module SleepingKingStudios
       PRERELEASE = :alpha
       # Build metadata.
       BUILD = nil
+
+      class << self
+        # Generates the gem version string from the Version constants.
+        #
+        # Inlined here because dependencies may not be loaded when processing a
+        # gemspec, which results in the user being unable to install the gem for
+        # the first time.
+        #
+        # @see SleepingKingStudios::Tools::SemanticVersion#to_gem_version
+        def to_gem_version
+          str = "#{MAJOR}.#{MINOR}.#{PATCH}"
+
+          prerelease = value_of(:PRERELEASE)
+          str = "#{str}.#{prerelease}" if prerelease
+
+          build = value_of(:BUILD)
+          str = "#{str}.#{build}" if build
+
+          str
+        end
+
+        private
+
+        def value_of(constant)
+          return nil unless const_defined?(constant)
+
+          value = const_get(constant)
+
+          return nil if value.respond_to?(:empty?) && value.empty?
+
+          value
+        end
+      end
     end
 
     # The current version of the gem.
