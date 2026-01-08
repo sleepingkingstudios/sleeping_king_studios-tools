@@ -41,69 +41,97 @@ module SleepingKingStudios::Tools
     # @param messages_registry [SleepingKingStudios::Tools::Messages::Registry]
     #   the strategies registry to use for the tool. Defaults to the value of
     #   Registry.global.
-    def initialize( # rubocop:disable Metrics/MethodLength
+    def initialize(
       deprecation_caller_depth: nil,
       deprecation_strategy:     nil,
       inflector:                nil,
       messages_registry:        nil
     )
-      @array_tools   = ::SleepingKingStudios::Tools::ArrayTools.new
-      @assertions    = ::SleepingKingStudios::Tools::Assertions.new
-      @core_tools    =
-        ::SleepingKingStudios::Tools::CoreTools.new(
-          deprecation_caller_depth:,
-          deprecation_strategy:
-        )
-      @hash_tools    = ::SleepingKingStudios::Tools::HashTools.new
-      @integer_tools = ::SleepingKingStudios::Tools::IntegerTools.new
-      @messages      =
-        ::SleepingKingStudios::Tools::Messages.new(registry: messages_registry)
-      @object_tools  = ::SleepingKingStudios::Tools::ObjectTools.new
-      @string_tools  =
-        ::SleepingKingStudios::Tools::StringTools.new(inflector:)
+      @deprecation_caller_depth = deprecation_caller_depth
+      @deprecation_strategy     = deprecation_strategy
+      @inflector                = inflector
+      @messages_registry        = messages_registry
     end
 
     # @return [SleepingKingStudios::Tools::ArrayTools] tools for working with
     #   array-like enumerable objects.
-    attr_reader :array_tools
+    def array_tools
+      @array_tools ||= ::SleepingKingStudios::Tools::ArrayTools.new(toolbelt:)
+    end
     alias ary array_tools
 
     # @return [SleepingKingStudios::Tools::Assertions] methods for asserting on
     #   the state of a function or application.
-    attr_reader :assertions
+    def assertions
+      @assertions ||= ::SleepingKingStudios::Tools::Assertions.new(toolbelt:)
+    end
 
     # @return [SleepingKingStudios::Tools::CoreTools] tools for working with an
     #   application or working environment.
-    attr_reader :core_tools
+    def core_tools
+      @core_tools ||= ::SleepingKingStudios::Tools::CoreTools.new(
+        deprecation_caller_depth:,
+        deprecation_strategy:,
+        toolbelt:
+      )
+    end
 
     # @return [SleepingKingStudios::Tools::HashTools] tools for working with
     #   hash-like enumerable objects.
-    attr_reader :hash_tools
+    def hash_tools
+      @hash_tools ||= ::SleepingKingStudios::Tools::HashTools.new(toolbelt:)
+    end
     alias hsh hash_tools
-
-    # @return [SleepingKingStudios::Tools::IntegerTools] tools for working with
-    #   integers.
-    attr_reader :integer_tools
-    alias int integer_tools
-
-    # @return [SleepingKingStudios::Tools::Messages] methods for generating
-    #   human-readable messages.
-    attr_reader :messages
-
-    # @return [SleepingKingStudios::Tools::ObjectTools] low-level tools for
-    #   working with objects.
-    attr_reader :object_tools
-    alias obj object_tools
-
-    # @return [SleepingKingStudios::Tools::ObjectTools] tools for working with
-    #   strings.
-    attr_reader :string_tools
-    alias str string_tools
 
     # @return [String] a human-readable representation of the object.
     def inspect
       "#<#{::Object.instance_method(:class).bind(self).call.name}>"
     end
     alias to_s inspect
+
+    # @return [SleepingKingStudios::Tools::IntegerTools] tools for working with
+    #   integers.
+    def integer_tools
+      @integer_tools = ::SleepingKingStudios::Tools::IntegerTools.new(toolbelt:)
+    end
+    alias int integer_tools
+
+    # @return [SleepingKingStudios::Tools::Messages] methods for generating
+    #   human-readable messages.
+    def messages
+      @messages ||= ::SleepingKingStudios::Tools::Messages.new(
+        registry: messages_registry,
+        toolbelt:
+      )
+    end
+
+    # @return [SleepingKingStudios::Tools::ObjectTools] low-level tools for
+    #   working with objects.
+    def object_tools
+      @object_tools ||= ::SleepingKingStudios::Tools::ObjectTools.new(toolbelt:)
+    end
+    alias obj object_tools
+
+    # @return [SleepingKingStudios::Tools::ObjectTools] tools for working with
+    #   strings.
+    def string_tools
+      @string_tools ||= ::SleepingKingStudios::Tools::StringTools.new(
+        inflector:,
+        toolbelt:
+      )
+    end
+    alias str string_tools
+
+    private
+
+    attr_reader :deprecation_caller_depth
+
+    attr_reader :deprecation_strategy
+
+    attr_reader :inflector
+
+    attr_reader :messages_registry
+
+    def toolbelt = self
   end
 end

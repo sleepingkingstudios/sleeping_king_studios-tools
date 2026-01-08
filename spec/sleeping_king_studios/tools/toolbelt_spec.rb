@@ -3,7 +3,9 @@
 require 'sleeping_king_studios/tools/toolbelt'
 
 RSpec.describe SleepingKingStudios::Tools::Toolbelt do
-  let(:instance) { described_class.instance }
+  subject(:toolbelt) { described_class.new(**constructor_options) }
+
+  let(:constructor_options) { {} }
 
   describe '.global' do
     let(:cached_value) { described_class.global }
@@ -58,18 +60,22 @@ RSpec.describe SleepingKingStudios::Tools::Toolbelt do
 
   describe '.new' do
     describe 'with deprecation_caller_depth: value' do
-      let(:instance) { described_class.new(deprecation_caller_depth: 10) }
+      let(:constructor_options) do
+        super().merge(deprecation_caller_depth: 10)
+      end
 
       it 'should pass the strategy to #core_tools' do
-        expect(instance.core_tools.deprecation_caller_depth).to be 10
+        expect(toolbelt.core_tools.deprecation_caller_depth).to be 10
       end
     end
 
     describe 'with deprecation_strategy: value' do
-      let(:instance) { described_class.new(deprecation_strategy: 'ignore') }
+      let(:constructor_options) do
+        super().merge(deprecation_strategy: 'ignore')
+      end
 
       it 'should pass the strategy to #core_tools' do
-        expect(instance.core_tools.deprecation_strategy)
+        expect(toolbelt.core_tools.deprecation_strategy)
           .to be == 'ignore'
       end
     end
@@ -78,10 +84,12 @@ RSpec.describe SleepingKingStudios::Tools::Toolbelt do
       let(:inflector) do
         instance_double(SleepingKingStudios::Tools::Toolbox::Inflector)
       end
-      let(:instance) { described_class.new(inflector:) }
+      let(:constructor_options) do
+        super().merge(inflector:)
+      end
 
       it 'should pass the inflector to #string_tools' do
-        expect(instance.string_tools.inflector)
+        expect(toolbelt.string_tools.inflector)
           .to be inflector
       end
     end
@@ -90,7 +98,9 @@ RSpec.describe SleepingKingStudios::Tools::Toolbelt do
       let(:registry) do
         SleepingKingStudios::Tools::Messages::Registry.new
       end
-      let(:toolbelt) { described_class.new(messages_registry: registry) }
+      let(:constructor_options) do
+        super().merge(messages_registry: registry)
+      end
 
       it 'should pass the registry to #messages' do
         expect(toolbelt.messages.registry).to be registry
@@ -100,104 +110,104 @@ RSpec.describe SleepingKingStudios::Tools::Toolbelt do
 
   describe '#array_tools' do
     it 'should return an instance of ArrayTools' do
-      expect(instance.__send__ :array_tools)
+      expect(toolbelt.array_tools)
         .to be_a SleepingKingStudios::Tools::ArrayTools
     end
   end
 
   describe '#assertions' do
     it 'should return an instance of Assertions' do
-      expect(instance.__send__ :assertions)
+      expect(toolbelt.assertions)
         .to be_a SleepingKingStudios::Tools::Assertions
     end
   end
 
   describe '#ary' do
     it 'should return an instance of ArrayTools' do
-      expect(instance.__send__ :ary)
+      expect(toolbelt.ary)
         .to be_a SleepingKingStudios::Tools::ArrayTools
     end
   end
 
   describe '#core_tools' do
     it 'should return an instance of CoreTools' do
-      expect(instance.__send__ :core_tools)
+      expect(toolbelt.core_tools)
         .to be_a SleepingKingStudios::Tools::CoreTools
     end
   end
 
   describe '#hash_tools' do
     it 'should return an instance of HashTools' do
-      expect(instance.__send__ :hash_tools)
+      expect(toolbelt.hash_tools)
         .to be_a SleepingKingStudios::Tools::HashTools
     end
   end
 
   describe '#hsh' do
     it 'should return an instance of HashTools' do
-      expect(instance.__send__ :hsh)
+      expect(toolbelt.hsh)
         .to be_a SleepingKingStudios::Tools::HashTools
     end
   end
 
   describe '#inspect' do
-    it { expect(instance.inspect).to be == "#<#{described_class.name}>" }
+    it { expect(toolbelt.inspect).to be == "#<#{described_class.name}>" }
   end
 
   describe '#int' do
     it 'should return an instance of IntegerTools' do
-      expect(instance.__send__ :int)
+      expect(toolbelt.int)
         .to be_a SleepingKingStudios::Tools::IntegerTools
     end
   end
 
   describe '#integer_tools' do
     it 'should return an instance of IntegerTools' do
-      expect(instance.__send__ :integer_tools)
+      expect(toolbelt.integer_tools)
         .to be_a SleepingKingStudios::Tools::IntegerTools
     end
   end
 
   describe '#messages' do
     it 'should return an instance of Messages' do
-      expect(instance.messages).to be_a SleepingKingStudios::Tools::Messages
+      expect(toolbelt.messages).to be_a SleepingKingStudios::Tools::Messages
     end
 
     it 'should configure the Messages tool' do
-      expect(instance.messages.registry)
+      expect(toolbelt.messages.registry)
         .to be SleepingKingStudios::Tools::Messages::Registry.global
     end
   end
 
   describe '#obj' do
     it 'should return an instance of ObjectTools' do
-      expect(instance.__send__ :obj)
+      expect(toolbelt.obj)
         .to be_a SleepingKingStudios::Tools::ObjectTools
     end
   end
 
   describe '#object_tools' do
     it 'should return an instance of ObjectTools' do
-      expect(instance.__send__ :object_tools)
+      expect(toolbelt.object_tools)
         .to be_a SleepingKingStudios::Tools::ObjectTools
     end
   end
 
   describe '#str' do
     it 'should return an instance of StringTools' do
-      expect(instance.__send__ :str)
+      expect(toolbelt.str)
         .to be_a SleepingKingStudios::Tools::StringTools
     end
   end
 
   describe '#string_tools' do
     it 'should return an instance of StringTools' do
-      expect(instance.__send__ :string_tools)
+      expect(toolbelt.string_tools)
         .to be_a SleepingKingStudios::Tools::StringTools
     end
   end
 
   describe '#to_s' do
-    it { expect(instance.to_s).to be == "#<#{described_class.name}>" }
+    it { expect(toolbelt.to_s).to be == "#<#{described_class.name}>" }
   end
 end

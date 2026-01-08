@@ -11,56 +11,23 @@ class_methods:
   path: sleeping-king-studios/tools/toolbelt/c-global
   slug: global
   inherited: false
-instance_attributes:
+instance_methods:
 - name: array_tools
-  read: true
-  write: false
   path: sleeping-king-studios/tools/toolbelt/i-array-tools
   slug: array-tools
   inherited: false
 - name: assertions
-  read: true
-  write: false
   path: sleeping-king-studios/tools/toolbelt/i-assertions
   slug: assertions
   inherited: false
 - name: core_tools
-  read: true
-  write: false
   path: sleeping-king-studios/tools/toolbelt/i-core-tools
   slug: core-tools
   inherited: false
 - name: hash_tools
-  read: true
-  write: false
   path: sleeping-king-studios/tools/toolbelt/i-hash-tools
   slug: hash-tools
   inherited: false
-- name: integer_tools
-  read: true
-  write: false
-  path: sleeping-king-studios/tools/toolbelt/i-integer-tools
-  slug: integer-tools
-  inherited: false
-- name: messages
-  read: true
-  write: false
-  path: sleeping-king-studios/tools/toolbelt/i-messages
-  slug: messages
-  inherited: false
-- name: object_tools
-  read: true
-  write: false
-  path: sleeping-king-studios/tools/toolbelt/i-object-tools
-  slug: object-tools
-  inherited: false
-- name: string_tools
-  read: true
-  write: false
-  path: sleeping-king-studios/tools/toolbelt/i-string-tools
-  slug: string-tools
-  inherited: false
-instance_methods:
 - name: initialize
   path: sleeping-king-studios/tools/toolbelt/i-initialize
   slug: initialize
@@ -69,6 +36,22 @@ instance_methods:
 - name: inspect
   path: sleeping-king-studios/tools/toolbelt/i-inspect
   slug: inspect
+  inherited: false
+- name: integer_tools
+  path: sleeping-king-studios/tools/toolbelt/i-integer-tools
+  slug: integer-tools
+  inherited: false
+- name: messages
+  path: sleeping-king-studios/tools/toolbelt/i-messages
+  slug: messages
+  inherited: false
+- name: object_tools
+  path: sleeping-king-studios/tools/toolbelt/i-object-tools
+  slug: object-tools
+  inherited: false
+- name: string_tools
+  path: sleeping-king-studios/tools/toolbelt/i-string-tools
+  slug: string-tools
   inherited: false
 data_path: sleeping-king-studios/tools/toolbelt
 description: |-
