@@ -116,11 +116,11 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
   end
 
   describe '#error_message_for' do
-    let(:scope)   { nil }
+    let(:key)     { nil }
     let(:options) { {} }
 
     define_method :error_message do
-      assertions.error_message_for(scope, **options)
+      assertions.error_message_for(key, **options)
     end
 
     it 'should define the method' do
@@ -130,22 +130,22 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
         .and_any_keywords
     end
 
-    describe 'with scope: an unknown String' do
-      let(:scope)    { 'spec.custom.scope' }
-      let(:expected) { 'Error message missing: spec.custom.scope' }
+    describe 'with key: an unknown String' do
+      let(:key)      { 'spec.custom.key' }
+      let(:expected) { 'Message missing: spec.custom.key' }
 
       it { expect(error_message).to be == expected }
     end
 
-    describe 'with scope: an unknown Symbol' do
-      let(:scope)    { :'spec.custom.scope' }
-      let(:expected) { 'Error message missing: spec.custom.scope' }
+    describe 'with key: an unknown Symbol' do
+      let(:key)      { :'spec.custom.key' }
+      let(:expected) { 'Message missing: spec.custom.key' }
 
       it { expect(error_message).to be == expected }
     end
 
-    describe 'with scope: a valid String' do
-      let(:scope)    { 'sleeping_king_studios.tools.assertions.blank' }
+    describe 'with key: a valid String' do
+      let(:key)      { 'blank' }
       let(:expected) { 'value must be nil or empty' }
 
       it { expect(error_message).to be == expected }
@@ -165,7 +165,7 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
 
       describe 'with options: Hash' do
-        let(:scope)    { 'sleeping_king_studios.tools.assertions.instance_of' }
+        let(:key)      { 'instance_of' }
         let(:options)  { super().merge(expected: String) }
         let(:expected) { 'value is not an instance of String' }
 
@@ -173,8 +173,8 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
     end
 
-    describe 'with scope: a valid Symbol' do
-      let(:scope)    { :'sleeping_king_studios.tools.assertions.blank' }
+    describe 'with key: a scoped String' do
+      let(:key)      { 'sleeping_king_studios.tools.assertions.blank' }
       let(:expected) { 'value must be nil or empty' }
 
       it { expect(error_message).to be == expected }
@@ -194,7 +194,65 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       end
 
       describe 'with options: Hash' do
-        let(:scope)    { :'sleeping_king_studios.tools.assertions.instance_of' }
+        let(:key)      { 'sleeping_king_studios.tools.assertions.instance_of' }
+        let(:options)  { super().merge(expected: String) }
+        let(:expected) { 'value is not an instance of String' }
+
+        it { expect(error_message).to be == expected }
+      end
+    end
+
+    describe 'with key: a valid Symbol' do
+      let(:key)      { :blank }
+      let(:expected) { 'value must be nil or empty' }
+
+      it { expect(error_message).to be == expected }
+
+      describe 'with as: false' do
+        let(:options)  { super().merge(as: false) }
+        let(:expected) { 'must be nil or empty' }
+
+        it { expect(error_message).to be == expected }
+      end
+
+      describe 'with as: value' do
+        let(:options)  { super().merge(as: 'item') }
+        let(:expected) { 'item must be nil or empty' }
+
+        it { expect(error_message).to be == expected }
+      end
+
+      describe 'with options: Hash' do
+        let(:key)      { :instance_of }
+        let(:options)  { super().merge(expected: String) }
+        let(:expected) { 'value is not an instance of String' }
+
+        it { expect(error_message).to be == expected }
+      end
+    end
+
+    describe 'with key: a scoped Symbol' do
+      let(:key)      { :'sleeping_king_studios.tools.assertions.blank' }
+      let(:expected) { 'value must be nil or empty' }
+
+      it { expect(error_message).to be == expected }
+
+      describe 'with as: false' do
+        let(:options)  { super().merge(as: false) }
+        let(:expected) { 'must be nil or empty' }
+
+        it { expect(error_message).to be == expected }
+      end
+
+      describe 'with as: value' do
+        let(:options)  { super().merge(as: 'item') }
+        let(:expected) { 'item must be nil or empty' }
+
+        it { expect(error_message).to be == expected }
+      end
+
+      describe 'with options: Hash' do
+        let(:key)      { :'sleeping_king_studios.tools.assertions.instance_of' }
         let(:options)  { super().merge(expected: String) }
         let(:expected) { 'value is not an instance of String' }
 
