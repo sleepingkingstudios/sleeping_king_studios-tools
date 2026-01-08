@@ -13,6 +13,8 @@ end
 # Isolated namespace for defining spec-only or transient objects.
 module Spec; end
 
+SleepingKingStudios::Tools.initialize
+
 # Require Factories, Custom Matchers, &c
 Dir[File.join File.dirname(__FILE__), 'support', '**', '*.rb']
   .each { |f| require f }
