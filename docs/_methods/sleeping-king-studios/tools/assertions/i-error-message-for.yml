@@ -1,7 +1,7 @@
 ---
 name: SleepingKingStudios::Tools::Assertions#error_message_for
 parent_path: sleeping-king-studios/tools/assertions
-signature: 'error_message_for(scope, as: ''value'', **options)'
+signature: 'error_message_for(key, as: ''value'', **parameters)'
 slug: error-message-for
 constructor: false
 data_path: sleeping-king-studios/tools/assertions/i-error-message-for
@@ -9,16 +9,16 @@ metadata:
   examples:
   - name: ''
     text: |-
-      scope = 'sleeping_king_studios.tools.assertions.blank'
+      key = 'sleeping_king_studios.tools.assertions.blank'
 
-      assertions.error_message_for(scope)
+      assertions.error_message_for(key)
       #=> 'value must be nil or empty'
-      assertions.error_message_for(scope, as: false)
+      assertions.error_message_for(key, as: false)
       #=> 'must be nil or empty'
-      assertions.error_message_for(scope, as: 'item')
+      assertions.error_message_for(key, as: 'item')
       #=> 'item must be nil or empty'
 options:
-- name: options
+- name: parameters
   opts:
   - description: |-
       the name of the validated property. Defaults
@@ -31,12 +31,12 @@ options:
     type:
     - name: Object
 params:
-- description: the message scope.
-  name: scope
+- description: the message key.
+  name: key
   type:
   - name: String
 - description: additional options for generating the message.
-  name: options
+  name: parameters
   type:
   - name: Hash
 returns:

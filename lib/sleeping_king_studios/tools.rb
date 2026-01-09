@@ -17,5 +17,32 @@ module SleepingKingStudios
     autoload :Toolbelt,     'sleeping_king_studios/tools/toolbelt'
     autoload :Toolbox,      'sleeping_king_studios/tools/toolbox'
     autoload :Version,      'sleeping_king_studios/tools/version'
+
+    @initializer = SleepingKingStudios::Tools::Toolbox::Initializer.new do
+      SleepingKingStudios::Tools::Messages::Registry
+        .global
+        .register(
+          scope:    'sleeping_king_studios.tools.assertions',
+          strategy: Assertions::MessagesStrategy.new
+        )
+    end
+
+    # @return [String] the absolute path to the gem directory.
+    def self.gem_path
+      sep     = File::SEPARATOR
+      pattern = /#{sep}lib#{sep}sleeping_king_studios#{sep}?\z/
+
+      __dir__.sub(pattern, '')
+    end
+
+    # Sets configuration for the module and its dependencies.
+    def self.initialize
+      @initializer.call
+    end
+
+    # @return [String] the current version of the gem.
+    def self.version
+      @version ||= Version.to_gem_version
+    end
   end
 end

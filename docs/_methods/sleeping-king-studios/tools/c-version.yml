@@ -1,0 +1,12 @@
+---
+name: SleepingKingStudios::Tools.version
+parent_path: sleeping-king-studios/tools
+signature: version
+slug: version
+constructor: false
+data_path: sleeping-king-studios/tools/c-version
+returns:
+- description: the current version of the gem.
+  type:
+  - name: String
+version: "*"

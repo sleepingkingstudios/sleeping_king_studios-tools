@@ -24,6 +24,13 @@ Updated `CoreTools` deprecations:
 
 Added `#[]` support to `ObjectTools#dig`, allowing access through indexed data structures.
 
+#### Assertions
+
+Assertions error messages now use `Messages`.
+
+- `Assertions#error_message_for` can be called with an unscoped key, e.g. `error_message_for(:blank)`.
+- Error messages can be overwritten by changing the messaging strategy for scope `'sleeping_king_studios.tools.assertions'`.
+
 #### Messages
 
 Added `Messages` tool, which allows generating user-readable messages.
