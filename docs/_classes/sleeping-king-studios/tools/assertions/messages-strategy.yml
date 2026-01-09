@@ -1,0 +1,43 @@
+---
+name: SleepingKingStudios::Tools::Assertions::MessagesStrategy
+slug: messages-strategy
+type: class
+files:
+- lib/sleeping_king_studios/tools/assertions/messages_strategy.rb
+parent_path: sleeping-king-studios/tools/assertions
+short_description: Messages strategy for displaying assertions errors.
+constants:
+- name: ERROR_MESSAGES
+  path: sleeping-king-studios/tools/assertions/messages-strategy/error-messages
+  slug: error-messages
+  inherited: false
+instance_attributes:
+- name: templates
+  read: true
+  write: false
+  path: sleeping-king-studios/tools/messages/strategies/hash-strategy/i-templates
+  slug: templates
+  inherited: true
+instance_methods:
+- name: call
+  path: sleeping-king-studios/tools/messages/strategy/i-call
+  slug: call
+  inherited: true
+- name: initialize
+  path: sleeping-king-studios/tools/assertions/messages-strategy/i-initialize
+  slug: initialize
+  inherited: false
+  constructor: true
+data_path: sleeping-king-studios/tools/assertions/messages-strategy
+description: |-
+  Defines its own internal message templates, and automatically handles value
+  name option (:as option) when generating messages.
+constructor: true
+inherited_classes:
+- name: SleepingKingStudios::Tools::Messages::Strategies::HashStrategy
+  slug: hash-strategy
+  path: sleeping-king-studios/tools/messages/strategies/hash-strategy
+- name: SleepingKingStudios::Tools::Messages::Strategy
+  slug: strategy
+  path: sleeping-king-studios/tools/messages/strategy
+version: "*"

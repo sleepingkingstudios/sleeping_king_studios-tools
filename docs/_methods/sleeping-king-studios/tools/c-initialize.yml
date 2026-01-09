@@ -1,0 +1,9 @@
+---
+name: SleepingKingStudios::Tools.initialize
+parent_path: sleeping-king-studios/tools
+signature: initialize
+slug: initialize
+constructor: false
+data_path: sleeping-king-studios/tools/c-initialize
+short_description: Sets configuration for the module and its dependencies.
+version: "*"

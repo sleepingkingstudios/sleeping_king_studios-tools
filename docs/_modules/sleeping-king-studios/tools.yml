@@ -20,10 +20,24 @@ files:
 - lib/sleeping_king_studios/tools/messages/strategy.rb
 - lib/sleeping_king_studios/tools/messages/strategies.rb
 - lib/sleeping_king_studios/tools/assertions/aggregator.rb
+- lib/sleeping_king_studios/tools/assertions/messages_strategy.rb
 parent_path: sleeping-king-studios
 short_description: |-
   A library of utility services and concerns to expand the functionality of
   core classes without polluting the global namespace.
+class_methods:
+- name: gem_path
+  path: sleeping-king-studios/tools/c-gem-path
+  slug: gem-path
+  inherited: false
+- name: initialize
+  path: sleeping-king-studios/tools/c-initialize
+  slug: initialize
+  inherited: false
+- name: version
+  path: sleeping-king-studios/tools/c-version
+  slug: version
+  inherited: false
 constants:
 - name: VERSION
   path: sleeping-king-studios/tools/version

@@ -16,6 +16,8 @@ defined_classes:
   slug: aggregator
 - name: AssertionError
   slug: assertion-error
+- name: MessagesStrategy
+  slug: messages-strategy
 instance_methods:
 - name: aggregator_class
   path: sleeping-king-studios/tools/assertions/i-aggregator-class

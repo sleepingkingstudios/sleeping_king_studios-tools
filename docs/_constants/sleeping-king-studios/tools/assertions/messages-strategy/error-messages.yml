@@ -1,0 +1,49 @@
+---
+name: SleepingKingStudios::Tools::Assertions::MessagesStrategy::ERROR_MESSAGES
+parent_path: sleeping-king-studios/tools/assertions/messages-strategy
+slug: error-messages
+short_description: rubocop:disable Layout/HashAlignment
+value: |-
+  {
+    'blank' =>
+      'must be nil or empty',
+    'block' =>
+      'block returned a falsy value',
+    'boolean' =>
+      'must be true or false',
+    'class' =>
+      'is not a Class',
+    'class_or_module' =>
+      'is not a Class or Module',
+    'exclusion' =>
+      'is one of %<expected>s',
+    'exclusion_range' =>
+      'is within %<range_expr>s',
+    'inclusion' =>
+      'is not one of %<expected>s',
+    'inclusion_range' =>
+      'is outside %<range_expr>s',
+    'inherit_from' =>
+      'does not inherit from %<expected>s',
+    'instance_of' =>
+      'is not an instance of %<expected>s',
+    'instance_of_anonymous' =>
+      'is not an instance of %<expected>s (%<parent>s)',
+    'matches' =>
+      'does not match the expected value',
+    'matches_proc' =>
+      'does not match the Proc',
+    'matches_regexp' =>
+      'does not match the pattern %<pattern>s',
+    'name' =>
+      'is not a String or a Symbol',
+    'nil' =>
+      'must be nil',
+    'not_nil' =>
+      'must not be nil',
+    # @note: This value will be changed in a future version.
+    'presence' =>
+      "can't be blank"
+  }.freeze
+data_path: sleeping-king-studios/tools/assertions/messages-strategy/error-messages
+version: "*"

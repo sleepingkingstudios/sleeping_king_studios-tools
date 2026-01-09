@@ -1,0 +1,13 @@
+---
+name: SleepingKingStudios::Tools::Assertions::MessagesStrategy#initialize
+parent_path: sleeping-king-studios/tools/assertions/messages-strategy
+signature: initialize
+slug: initialize
+constructor: true
+data_path: sleeping-king-studios/tools/assertions/messages-strategy/i-initialize
+returns:
+- description: a new instance of MessagesStrategy
+  type:
+  - name: MessagesStrategy
+short_description: rubocop:enable Layout/HashAlignment
+version: "*"
