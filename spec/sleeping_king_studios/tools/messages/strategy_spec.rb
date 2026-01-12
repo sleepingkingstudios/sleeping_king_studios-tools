@@ -176,7 +176,21 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
 
       include_deferred 'should return the matching message'
 
-      describe 'with a scoped key' do
+      context 'when the template requires parameters' do
+        let(:strategy_templates) do
+          super().merge(
+            'messages.rockets.fuel_status' => '%<name> is fully fueled'
+          )
+        end
+        let(:key) { 'messages.rockets.fuel_status' }
+        let(:expected) do
+          "Message missing parameters: #{scoped_key} key<name> not found"
+        end
+
+        it { expect(call_strategy).to be == expected }
+      end
+
+      describe 'with key: a scoped value' do
         let(:key)      { 'messages.rockets.launch_status' }
         let(:expected) { 'rocket is not ready to launch' }
 
@@ -229,19 +243,20 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
   end
 
   describe '#generate' do
+    let(:scoped_key) { 'path.to.template' }
     let(:value)      { 'template string' }
     let(:parameters) { {} }
     let(:options)    { {} }
 
     define_method :generate_string do
-      strategy.send(:generate, template, parameters:, **options)
+      strategy.send(:generate, template, parameters:, scoped_key:, **options)
     end
 
     it 'should define the method' do
       expect(strategy)
         .to respond_to(:generate, true)
         .with(1).argument
-        .and_keywords(:parameters)
+        .and_keywords(:parameters, :scoped_key)
         .and_any_keywords
     end
 
@@ -336,13 +351,11 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
       let(:template) { 'rocket %<name>s is ready to launch' }
 
       describe 'with non-matching parameters' do
-        let(:error_message) do
-          'key<name> not found'
+        let(:missing_parameters_message) do
+          "Message missing parameters: #{scoped_key} key<name> not found"
         end
 
-        it 'should raise an exception' do
-          expect { generate_string }.to raise_error KeyError, error_message
-        end
+        it { expect(generate_string).to be == missing_parameters_message }
       end
 
       describe 'with matching parameters' do
