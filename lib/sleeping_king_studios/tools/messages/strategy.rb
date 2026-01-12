@@ -24,12 +24,12 @@ module SleepingKingStudios::Tools
 
       return missing_message(scoped_key, **) unless template
 
-      generate(template, parameters:, **)
+      generate(template, parameters:, scoped_key:, **)
     end
 
     private
 
-    def generate(template, parameters: {}, **)
+    def generate(template, scoped_key: nil, parameters: {}, **) # rubocop:disable Metrics/MethodLength
       raise ArgumentError, "template can't be blank" if template.nil?
 
       case template
@@ -40,6 +40,8 @@ module SleepingKingStudios::Tools
       else
         raise ArgumentError, "invalid template #{template.inspect}"
       end
+    rescue KeyError => exception
+      missing_parameters_message(scoped_key, exception:, **)
     end
 
     def join_scope(key:, scope:)
@@ -52,6 +54,10 @@ module SleepingKingStudios::Tools
 
     def missing_message(scoped_key, **)
       "Message missing: #{scoped_key}"
+    end
+
+    def missing_parameters_message(scoped_key, exception:, **)
+      "Message missing parameters: #{scoped_key} #{exception.message}"
     end
 
     def template_for(_scoped_key, **)
