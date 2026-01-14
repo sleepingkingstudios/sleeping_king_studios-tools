@@ -1,7 +1,7 @@
 ---
 name: SleepingKingStudios::Tools::ObjectTools#dig
 parent_path: sleeping-king-studios/tools/object-tools
-signature: dig(obj, *method_names)
+signature: 'dig(obj, *method_names, indifferent_keys: false)'
 slug: dig
 constructor: false
 data_path: sleeping-king-studios/tools/object-tools/i-dig
@@ -33,6 +33,14 @@ params:
   name: method_names
   type:
   - name: Array
+- description: |-
+    if true, matches both String and
+    Symbol keys when accessing a Hash value using #[]. Defaults to false.
+  name: indifferent_keys
+  type:
+  - name: 'true'
+  - name: 'false'
+  default: 'false'
 returns:
 - description: |-
     the result of the last method call, or nil if the

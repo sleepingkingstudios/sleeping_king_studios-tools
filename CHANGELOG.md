@@ -24,6 +24,8 @@ Updated `CoreTools` deprecations:
 
 Added `#[]` support to `ObjectTools#dig`, allowing access through indexed data structures.
 
+- Added `:indifferent_keys` option - if set, treats `String` and `Symbol` values as interchangeable when traversing a `Hash` using `ObjectTools#dig`.
+
 #### Assertions
 
 Assertions error messages now use `Messages`.
