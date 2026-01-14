@@ -43,7 +43,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     describe 'with a proc with no parameters' do
       let(:proc) { ->(*args) { object_tools_method(*args) } }
 
-      def apply_proc
+      define_method :apply_proc do
         described_class.apply receiver, proc
       end
 
@@ -62,7 +62,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:proc) { ->(foo, bar, baz) { object_tools_method(foo, bar, baz) } }
 
       describe 'with no arguments' do
-        def apply_proc
+        define_method :apply_proc do
           described_class.apply receiver, proc
         end
 
@@ -77,7 +77,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       describe 'with the required arguments' do
         let(:args) { %w[ichi ni san] }
 
-        def apply_proc
+        define_method :apply_proc do
           described_class.apply receiver, proc, *args
         end
 
@@ -99,7 +99,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       end
 
       describe 'with no arguments' do
-        def apply_proc
+        define_method :apply_proc do
           described_class.apply receiver, proc
         end
 
@@ -115,7 +115,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         let(:args)     { %w[ichi ni san] }
         let(:expected) { [*args, nil, nil] }
 
-        def apply_proc
+        define_method :apply_proc do
           described_class.apply receiver, proc, *args
         end
 
@@ -133,7 +133,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       describe 'with the required and optional arguments' do
         let(:args) { %w[ichi ni san yon go] }
 
-        def apply_proc
+        define_method :apply_proc do
           described_class.apply receiver, proc, *args
         end
 
@@ -151,7 +151,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:args) { %w[ichi ni san] }
       let(:proc) { ->(*args) { object_tools_method(*args) } }
 
-      def apply_proc
+      define_method :apply_proc do
         described_class.apply receiver, proc, *args
       end
 
@@ -175,7 +175,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       describe 'with no arguments' do
         let(:expected) { { first: nil, second: nil, third: nil } }
 
-        def apply_proc
+        define_method :apply_proc do
           described_class.apply receiver, proc
         end
 
@@ -191,7 +191,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       end
 
       describe 'with the optional keywords' do
-        def apply_proc
+        define_method :apply_proc do
           described_class.apply receiver, proc, **kwargs
         end
 
@@ -209,7 +209,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:kwargs) { { first: 'Who', second: 'What', third: "I Don't Know" } }
       let(:proc)   { ->(**kwargs) { object_tools_method(**kwargs) } }
 
-      def apply_proc
+      define_method :apply_proc do
         described_class.apply receiver, proc, **kwargs
       end
 
@@ -248,7 +248,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       end
 
       describe 'with no arguments' do
-        def apply_proc
+        define_method :apply_proc do
           described_class.apply receiver, proc
         end
 
@@ -267,7 +267,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           { first: nil, second: nil, third: nil }
         end
 
-        def apply_proc
+        define_method :apply_proc do
           described_class.apply receiver, proc, *args
         end
 
@@ -289,7 +289,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           { first: 'Who', second: 'What', third: "I Don't Know" }
         end
 
-        def apply_proc
+        define_method :apply_proc do
           described_class.apply receiver, proc, *args, **kwargs
         end
 
@@ -310,7 +310,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           { first: nil, second: nil, third: nil }
         end
 
-        def apply_proc
+        define_method :apply_proc do
           described_class.apply receiver, proc, *args
         end
 
@@ -329,7 +329,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         let(:args)   { %w[ichi ni san yon go] }
         let(:kwargs) { { first: 'Who', second: 'What', third: "I Don't Know" } }
 
-        def apply_proc
+        define_method :apply_proc do
           described_class.apply receiver, proc, *args, **kwargs
         end
 
@@ -349,7 +349,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:args) { %w[ichi ni san] }
       let(:proc) { ->(*args, &block) { object_tools_method(*args, &block) } }
 
-      def apply_proc(&block)
+      define_method :apply_proc do |&block|
         described_class.apply receiver, proc, *args, &block
       end
 
@@ -640,6 +640,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         .to respond_to(:dig)
         .with(1).argument
         .and_unlimited_arguments
+        .and_keywords(:indifferent_keys)
     end
 
     describe 'with nil' do
@@ -697,6 +698,130 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         it 'should return the nested value' do
           expect(described_class.dig(result, :data, 'users', 0, :name))
             .to be == 'Alan Bradley'
+        end
+      end
+    end
+
+    describe 'with a Hash with String keys' do
+      let(:result) do
+        {
+          'data' => {
+            'users' => [
+              { 'name' => 'Alan Bradley' }
+            ]
+          }
+        }
+      end
+
+      describe 'with a method chain with String keys' do
+        let(:method_names) do
+          ['data', 'users', 0, 'name']
+        end
+
+        it 'should return the nested value' do
+          expect(described_class.dig(result, *method_names))
+            .to be == 'Alan Bradley'
+        end
+      end
+
+      describe 'with a method chain with Symbol keys' do
+        let(:method_names) do
+          [:data, :users, 0, :name]
+        end
+
+        it 'should return nil' do
+          expect(described_class.dig(result, *method_names))
+            .to be nil
+        end
+      end
+
+      describe 'with indifferent_keys: false' do
+        describe 'with a method chain with Symbol keys' do
+          let(:method_names) do
+            [:data, :users, 0, :name]
+          end
+          let(:options) { { indifferent_keys: false } }
+
+          it 'should return nil' do
+            expect(described_class.dig(result, *method_names, **options))
+              .to be nil
+          end
+        end
+      end
+
+      describe 'with indifferent_keys: true' do
+        describe 'with a method chain with Symbol keys' do
+          let(:method_names) do
+            [:data, :users, 0, :name]
+          end
+          let(:options) { { indifferent_keys: true } }
+
+          it 'should return nil' do
+            expect(described_class.dig(result, *method_names, **options))
+              .to be == 'Alan Bradley'
+          end
+        end
+      end
+    end
+
+    describe 'with a Hash with Symbol keys' do
+      let(:result) do
+        {
+          data: {
+            users: [
+              { name: 'Alan Bradley' }
+            ]
+          }
+        }
+      end
+
+      describe 'with a method chain with String keys' do
+        let(:method_names) do
+          ['data', 'users', 0, 'name']
+        end
+
+        it 'should return the nested value' do
+          expect(described_class.dig(result, *method_names))
+            .to be nil
+        end
+      end
+
+      describe 'with a method chain with Symbol keys' do
+        let(:method_names) do
+          [:data, :users, 0, :name]
+        end
+
+        it 'should return nil' do
+          expect(described_class.dig(result, *method_names))
+            .to be == 'Alan Bradley'
+        end
+      end
+
+      describe 'with indifferent_keys: false' do
+        describe 'with a method chain with String keys' do
+          let(:method_names) do
+            ['data', 'users', 0, 'name']
+          end
+          let(:options) { { indifferent_keys: false } }
+
+          it 'should return nil' do
+            expect(described_class.dig(result, *method_names, **options))
+              .to be nil
+          end
+        end
+      end
+
+      describe 'with indifferent_keys: true' do
+        describe 'with a method chain with String keys' do
+          let(:method_names) do
+            ['data', 'users', 0, 'name']
+          end
+          let(:options) { { indifferent_keys: true } }
+
+          it 'should return nil' do
+            expect(described_class.dig(result, *method_names, **options))
+              .to be == 'Alan Bradley'
+          end
         end
       end
     end

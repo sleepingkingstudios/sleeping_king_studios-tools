@@ -4,7 +4,7 @@ require 'sleeping_king_studios/tools'
 
 module SleepingKingStudios::Tools
   # Low-level tools for working with objects.
-  class ObjectTools < SleepingKingStudios::Tools::Base
+  class ObjectTools < SleepingKingStudios::Tools::Base # rubocop:disable Metrics/ClassLength
     TEMPORARY_METHOD_NAME =
       '__sleeping_king_studios_tools_apply_%i__'
     private_constant :TEMPORARY_METHOD_NAME
@@ -185,6 +185,8 @@ module SleepingKingStudios::Tools
     #
     # @param obj [Object] the object to dig.
     # @param method_names [Array] the names of the methods to call.
+    # @param indifferent_keys [true, false] if true, matches both String and
+    #   Symbol keys when accessing a Hash value using #[]. Defaults to false.
     #
     # @return [Object, nil] the result of the last method call, or nil if the
     #   last object does not respond to the last method.
@@ -192,13 +194,17 @@ module SleepingKingStudios::Tools
     # @example
     #   ObjectTools.dig(my_object, :first_method, :second_method, :third_method)
     #   #=> my_object.first_method.second_method.third_method
-    def dig(obj, *method_names)
+    def dig(obj, *method_names, indifferent_keys: false)
       method_names.reduce(obj) do |memo, method_name|
         if object_responds_to_method?(memo, method_name)
           next memo.public_send(method_name)
         end
 
-        memo.respond_to?(:[]) ? memo[method_name] : nil
+        next nil unless memo.respond_to?(:[])
+
+        next memo[method_name] unless indifferent_keys
+
+        indifferent_fetch(memo, method_name)
       end
     rescue NameError
       nil
@@ -340,6 +346,17 @@ module SleepingKingStudios::Tools
     end
 
     private
+
+    def indifferent_fetch(object, key)
+      case key
+      when String
+        object[key] || object[key.to_sym]
+      when Symbol
+        object[key] || object[key.to_s]
+      else
+        object[key]
+      end
+    end
 
     def object_responds_to_method?(object, maybe_method_name)
       unless maybe_method_name.is_a?(String) || maybe_method_name.is_a?(Symbol)
