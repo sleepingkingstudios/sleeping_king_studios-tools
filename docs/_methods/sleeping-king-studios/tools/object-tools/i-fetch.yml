@@ -1,0 +1,90 @@
+---
+name: SleepingKingStudios::Tools::ObjectTools#fetch
+parent_path: sleeping-king-studios/tools/object-tools
+signature: 'fetch(obj, key_or_index, default = UNDEFINED, indifferent_key: false,
+  &)'
+slug: fetch
+constructor: false
+data_path: sleeping-king-studios/tools/object-tools/i-fetch
+overloads:
+- name: SleepingKingStudios::Tools::ObjectTools#fetch
+  parent_path: sleeping-king-studios/tools/object-tools
+  signature: 'fetch(obj, key, default = nil, indifferent_key: false)'
+  slug: fetch
+  constructor: false
+  description: |-
+    If the value does not exist, returns the default value, or raises am
+    exception if there is no default value. If the object defines a native
+    #fetch method, delegates to the native implementation.
+  params:
+  - description: the baseobject.
+    name: obj
+    type:
+    - name: Object
+  - description: the key to retrieve.
+    name: key
+    type:
+    - name: Object
+  - description: |-
+      if true and the key is a String or
+      a Symbol, tries to match both the String and Symbol equivalent.
+      Defaults to false.
+    name: indifferent_key
+    type:
+    - name: 'true'
+    - name: 'false'
+    default: 'false'
+  - description: the default value.
+    name: default
+    type:
+    - name: Object
+    default: nil
+  returns:
+  - description: the value at the specified key or index.
+    type:
+    - name: Object
+  short_description: Retrieves the value at the specified method, key, or index.
+- name: SleepingKingStudios::Tools::ObjectTools#fetch
+  parent_path: sleeping-king-studios/tools/object-tools
+  signature: 'fetch(obj, key, indifferent_key: false, &default)'
+  slug: fetch
+  constructor: false
+  description: |-
+    If the value does not exist, returns the default value, or raises am
+    exception if there is no default value. If the object defines a native
+    #fetch method, delegates to the native implementation.
+  params:
+  - description: the baseobject.
+    name: obj
+    type:
+    - name: Object
+  - description: the key to retrieve.
+    name: key
+    type:
+    - name: Object
+  - description: |-
+      if true and the key is a String or
+      a Symbol, tries to match both the String and Symbol equivalent.
+      Defaults to false.
+    name: indifferent_key
+    type:
+    - name: 'true'
+    - name: 'false'
+    default: 'false'
+  returns:
+  - description: the value at the specified key or index.
+    type:
+    - name: Object
+  short_description: Retrieves the value at the specified method, key, or index.
+  yield_params:
+  - description: the requested key.
+    name: key
+    type:
+    - name: Object
+  yield_returns:
+  - description: the default value.
+    type:
+    - name: Object
+  yields:
+  - description: generates the default value if there is no value at the key.
+version: "*"

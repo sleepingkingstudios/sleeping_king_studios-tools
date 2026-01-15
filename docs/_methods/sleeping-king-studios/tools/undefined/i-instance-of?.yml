@@ -1,0 +1,20 @@
+---
+name: SleepingKingStudios::Tools::Undefined#instance_of?
+parent_path: sleeping-king-studios/tools/undefined
+signature: instance_of?(mod)
+slug: instance-of?
+constructor: false
+data_path: sleeping-king-studios/tools/undefined/i-instance-of?
+params:
+- description: the class or module to compare.
+  name: mod
+  type:
+  - name: Module
+returns:
+- description: |-
+    true if the object is an instance of the given
+    class.
+  type:
+  - name: 'true'
+  - name: 'false'
+version: "*"

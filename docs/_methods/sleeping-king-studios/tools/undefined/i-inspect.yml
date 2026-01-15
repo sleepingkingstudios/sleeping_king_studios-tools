@@ -1,0 +1,14 @@
+---
+name: SleepingKingStudios::Tools::Undefined#inspect
+parent_path: sleeping-king-studios/tools/undefined
+signature: inspect
+slug: inspect
+constructor: false
+data_path: sleeping-king-studios/tools/undefined/i-inspect
+returns:
+- description: |-
+    a string containing a human-readable representation of
+    the object.
+  type:
+  - name: String
+version: "*"

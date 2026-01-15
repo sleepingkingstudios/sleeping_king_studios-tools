@@ -16,6 +16,7 @@ module SleepingKingStudios::Tools
         :deep_freeze,
         :dig,
         :eigenclass,
+        :fetch,
         :immutable?,
         :metaclass,
         :mutable?,
@@ -204,7 +205,7 @@ module SleepingKingStudios::Tools
 
         next memo[method_name] unless indifferent_keys
 
-        indifferent_fetch(memo, method_name)
+        indifferent_get(memo, method_name)
       end
     rescue NameError
       nil
@@ -219,6 +220,61 @@ module SleepingKingStudios::Tools
       obj.singleton_class
     end
     alias metaclass eigenclass
+
+    # @overload fetch(obj, key, default = nil, indifferent_key: false)
+    #   Retrieves the value at the specified method, key, or index.
+    #
+    #   If the value does not exist, returns the default value, or raises am
+    #   exception if there is no default value. If the object defines a native
+    #   #fetch method, delegates to the native implementation.
+    #
+    #   @param obj [Object] the baseobject.
+    #   @param key [Object] the key to retrieve.
+    #   @param indifferent_key [true, false] if true and the key is a String or
+    #     a Symbol, tries to match both the String and Symbol equivalent.
+    #     Defaults to false.
+    #   @param default [Object] the default value.
+    #
+    #   @return [Object] the value at the specified key or index.
+    #
+    #   @raises [IndexError, KeyError, NameError] if the object does not have a
+    #     value for the requested key or index and there is no default value.
+    #
+    # @overload fetch(obj, key, indifferent_key: false, &default)
+    #   Retrieves the value at the specified method, key, or index.
+    #
+    #   If the value does not exist, returns the default value, or raises am
+    #   exception if there is no default value. If the object defines a native
+    #   #fetch method, delegates to the native implementation.
+    #
+    #   @param obj [Object] the baseobject.
+    #   @param key [Object] the key to retrieve.
+    #   @param indifferent_key [true, false] if true and the key is a String or
+    #     a Symbol, tries to match both the String and Symbol equivalent.
+    #     Defaults to false.
+    #
+    #   @yield generates the default value if there is no value at the key.
+    #
+    #   @yieldparam key [Object] the requested key.
+    #
+    #   @yieldreturn [Object] the default value.
+    #
+    #   @return [Object] the value at the specified key or index.
+    #
+    #   @raises [IndexError, KeyError, NameError] if the object does not have a
+    #     value for the requested key or index and there is no default value.
+    def fetch(obj, key_or_index, default = UNDEFINED, indifferent_key: false, &)
+      case obj
+      when ->(_) { object_responds_to_method?(obj, key_or_index) }
+        obj.public_send(key_or_index)
+      when ->(_) { toolbelt.array_tools.array?(obj) }
+        fetch_array(obj, key_or_index, default, &)
+      when ->(_) { toolbelt.hash_tools.hash?(obj) }
+        fetch_hash(obj, key_or_index, default, indifferent_key:, &)
+      else
+        handle_invalid_fetch(obj, key_or_index, default, &)
+      end
+    end
 
     # Checks if the object is immutable.
     #
@@ -347,7 +403,33 @@ module SleepingKingStudios::Tools
 
     private
 
-    def indifferent_fetch(object, key)
+    def fetch_array(ary, index, default = UNDEFINED, &)
+      return toolbelt.array_tools.fetch(ary, index, &) if default == UNDEFINED
+
+      toolbelt.array_tools.fetch(ary, index, default, &)
+    end
+
+    def fetch_hash(hsh, key, default = UNDEFINED, indifferent_key: false, &)
+      if default == UNDEFINED
+        return toolbelt.hash_tools.fetch(hsh, key, indifferent_key:, &)
+      end
+
+      toolbelt.hash_tools.fetch(hsh, key, default, indifferent_key:, &)
+    end
+
+    def handle_invalid_fetch(obj, key, default, &block)
+      return block.call(key) if block_given?
+
+      return default unless default == UNDEFINED
+
+      message    = "undefined method #{key.inspect}"
+      class_name = Object.instance_method(:class).bind(obj).call&.name
+      message   += " for an instance of #{class_name}" if class_name
+
+      raise NoMethodError, message
+    end
+
+    def indifferent_get(object, key)
       case key
       when String
         object[key] || object[key.to_sym]

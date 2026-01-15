@@ -32,6 +32,10 @@ instance_methods:
   path: sleeping-king-studios/tools/object-tools/i-eigenclass
   slug: eigenclass
   inherited: false
+- name: fetch
+  path: sleeping-king-studios/tools/object-tools/i-fetch
+  slug: fetch
+  inherited: false
 - name: immutable?
   path: sleeping-king-studios/tools/object-tools/i-immutable?
   slug: immutable?

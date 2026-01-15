@@ -828,6 +828,277 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
   end
   # rubocop:enable Style/SingleArgumentDig
 
+  describe '#fetch' do
+    let(:obj) { Object.new.freeze }
+    let(:key) { :launch }
+
+    it 'should define the class method' do
+      expect(described_class)
+        .to respond_to(:fetch)
+        .with(2..3).arguments
+        .and_keywords(:indifferent_key)
+        .and_a_block
+    end
+
+    it 'should define the method' do
+      expect(object_tools)
+        .to respond_to(:fetch)
+        .with(2..3).arguments
+        .and_keywords(:indifferent_key)
+        .and_a_block
+    end
+
+    describe 'with an Array' do
+      let(:obj)      { %w[foo bar baz] }
+      let(:key)      { 0 }
+      let(:toolbelt) { object_tools.toolbelt }
+
+      it 'should delegate to ArrayTools' do
+        allow(toolbelt.array_tools).to receive(:fetch)
+
+        object_tools.fetch(obj, key)
+
+        expect(toolbelt.array_tools).to have_received(:fetch).with(obj, key)
+      end
+
+      describe 'with default: block' do
+        let(:default) { ->(key) { "undefined method #{key.inspect}" } }
+
+        it 'should delegate to ArrayTools', :aggregate_failures do # rubocop:disable RSpec/ExampleLength
+          block_given = nil
+
+          allow(toolbelt.array_tools).to receive(:fetch) do |*, &block|
+            block_given = block
+          end
+
+          object_tools.fetch(obj, key, &default)
+
+          expect(toolbelt.array_tools).to have_received(:fetch).with(obj, key)
+          expect(block_given).to be default
+        end
+      end
+
+      describe 'with default: value' do
+        let(:default) { 'undefined method' }
+
+        it 'should delegate to ArrayTools' do
+          allow(toolbelt.array_tools).to receive(:fetch)
+
+          object_tools.fetch(obj, key, default)
+
+          expect(toolbelt.array_tools)
+            .to have_received(:fetch)
+            .with(obj, key, default)
+        end
+      end
+
+      describe 'with indifferent_key: value' do
+        it 'should delegate to ArrayTools' do
+          allow(toolbelt.array_tools).to receive(:fetch)
+
+          object_tools.fetch(obj, key, indifferent_key: true)
+
+          expect(toolbelt.array_tools).to have_received(:fetch).with(obj, key)
+        end
+      end
+
+      describe 'with the name of a method the object responds to' do
+        let(:key) { :count }
+
+        it 'should return the value of calling the method' do
+          expect(object_tools.fetch(obj, key)).to be obj.count
+        end
+      end
+
+      describe 'with an invalid index' do
+        let(:error_message) do
+          'index 3 outside of array bounds: -3...3'
+        end
+
+        it 'should raise an exception' do
+          expect { object_tools.fetch(obj, 3) }
+            .to raise_error IndexError, error_message
+        end
+
+        describe 'with default: block' do
+          let(:default) { ->(index) { "missing index #{index}" } }
+
+          it 'should generate the default value' do
+            expect(object_tools.fetch(obj, 3, &default))
+              .to be == 'missing index 3'
+          end
+        end
+
+        describe 'with default: value' do
+          it 'should return the default value' do
+            expect(object_tools.fetch(obj, 3, 'qux')).to be == 'qux'
+          end
+        end
+      end
+
+      describe 'with a valid index' do
+        it { expect(object_tools.fetch(obj, -3)).to be == 'foo' }
+      end
+    end
+
+    describe 'with a Hash' do
+      let(:obj) do
+        {
+          title:  'The Silmarillion',
+          author: 'J.R.R. Tolkien'
+        }
+      end
+      let(:key)      { :series }
+      let(:toolbelt) { object_tools.toolbelt }
+
+      it 'should delegate to HashTools' do
+        allow(toolbelt.hash_tools).to receive(:fetch)
+
+        object_tools.fetch(obj, key)
+
+        expect(toolbelt.hash_tools)
+          .to have_received(:fetch)
+          .with(obj, key, indifferent_key: false)
+      end
+
+      describe 'with default: block' do
+        let(:default) { ->(key) { "undefined method #{key.inspect}" } }
+
+        it 'should delegate to HashTools', :aggregate_failures do # rubocop:disable RSpec/ExampleLength
+          block_given = nil
+
+          allow(toolbelt.hash_tools).to receive(:fetch) do |*, &block|
+            block_given = block
+          end
+
+          object_tools.fetch(obj, key, &default)
+
+          expect(toolbelt.hash_tools)
+            .to have_received(:fetch)
+            .with(obj, key, indifferent_key: false)
+          expect(block_given).to be default
+        end
+      end
+
+      describe 'with default: value' do
+        let(:default) { 'undefined method' }
+
+        it 'should delegate to HashTools' do
+          allow(toolbelt.hash_tools).to receive(:fetch)
+
+          object_tools.fetch(obj, key, default)
+
+          expect(toolbelt.hash_tools)
+            .to have_received(:fetch)
+            .with(obj, key, default, indifferent_key: false)
+        end
+      end
+
+      describe 'with indifferent_key: value' do
+        it 'should delegate to HashTools' do
+          allow(toolbelt.hash_tools).to receive(:fetch)
+
+          object_tools.fetch(obj, key, indifferent_key: true)
+
+          expect(toolbelt.hash_tools)
+            .to have_received(:fetch)
+            .with(obj, key, indifferent_key: true)
+        end
+      end
+
+      describe 'with the name of a method the object responds to' do
+        let(:key) { :keys }
+
+        it 'should return the value of calling the method' do
+          expect(object_tools.fetch(obj, key)).to eq obj.keys
+        end
+      end
+
+      describe 'with an invalid key' do
+        let(:error_message) do
+          "key not found: #{key.inspect}"
+        end
+
+        it 'should raise an exception' do
+          expect { object_tools.fetch(obj, key) }
+            .to raise_error KeyError, error_message
+        end
+
+        describe 'with default: block' do
+          let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+          it 'should generate the default value' do
+            expect(object_tools.fetch(obj, key, &default))
+              .to be == 'missing key :series'
+          end
+        end
+
+        describe 'with default: value' do
+          it 'should return the default value' do
+            expect(object_tools.fetch(obj, key, 'qux')).to be == 'qux'
+          end
+        end
+      end
+
+      describe 'with a valid key' do
+        it { expect(object_tools.fetch(obj, :title)).to be == obj[:title] }
+      end
+    end
+
+    describe 'with an Object' do
+      describe 'with an invalid key' do
+        let(:error_message) do
+          "undefined method #{key.inspect} for an instance of #{obj.class.name}"
+        end
+
+        it 'should raise an exception' do
+          expect { object_tools.fetch(obj, key) }
+            .to raise_error NoMethodError, error_message
+        end
+
+        describe 'with default: block' do
+          let(:default) { ->(key) { "undefined method #{key.inspect}" } }
+
+          it 'should return the default value' do
+            expect(object_tools.fetch(obj, key, &default))
+              .to be == "undefined method #{key.inspect}"
+          end
+        end
+
+        describe 'with default: value' do
+          let(:default) { 'undefined method' }
+
+          it 'should return the default value' do
+            expect(object_tools.fetch(obj, key, default)).to be == default
+          end
+        end
+      end
+
+      describe 'with a valid method name' do
+        let(:key) { :object_id }
+
+        it 'should return the value of calling the method' do
+          expect(object_tools.fetch(obj, key)).to be obj.object_id
+        end
+      end
+    end
+
+    describe 'with an instance of an anonymous class' do
+      let(:obj) { Class.new.new.freeze }
+
+      describe 'with an invalid key' do
+        let(:error_message) do
+          "undefined method #{key.inspect}"
+        end
+
+        it 'should raise an exception' do
+          expect { object_tools.fetch(obj, key) }
+            .to raise_error NoMethodError, error_message
+        end
+      end
+    end
+  end
+
   describe '#eigenclass' do
     let(:object) { Object.new }
 
