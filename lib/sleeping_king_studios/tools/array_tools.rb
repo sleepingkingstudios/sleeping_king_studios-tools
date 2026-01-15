@@ -5,6 +5,9 @@ require 'sleeping_king_studios/tools'
 module SleepingKingStudios::Tools
   # Tools for working with array-like enumerable objects.
   class ArrayTools < SleepingKingStudios::Tools::Base # rubocop:disable Metrics/ClassLength
+    UNDEFINED = Object.new.freeze
+    private_constant :UNDEFINED
+
     # Expected methods that an Array-like object should implement.
     ARRAY_METHODS = %i[[] count each].freeze
 
@@ -200,6 +203,61 @@ module SleepingKingStudios::Tools
       ary.each { |obj| toolbelt.object_tools.deep_freeze obj }
     end
 
+    # @overload fetch(ary, index, default = nil)
+    #   Retrieves the value at the specified index.
+    #
+    #   If the value does not exist, returns the default value, or raises an
+    #   IndexError if there is no default value. If the object defines a native
+    #   #fetch method, delegates to the native implementation.
+    #
+    #   @param ary [Array] the array or array-like object.
+    #   @param index [Integer] the index to retrieve.
+    #   @param default [Object] the default value.
+    #
+    #   @return [Object] the value at the specified index.
+    #
+    #   @raises [IndexError] if the array does not have a value at that index
+    #     and there is no default value.
+    #
+    # @overload fetch(ary, index, &default)
+    #   Retrieves the value at the specified index.
+    #
+    #   If the value does not exist, returns the value of the default block, or
+    #   raises an IndexError if there is no default block. If the object defines
+    #   a native #fetch method, delegates to the native implementation.
+    #
+    #   @param ary [Array] the array or array-like object.
+    #   @param index [Integer] the index to retrieve.
+    #
+    #   @yield generates the default value if there is no value at the index.
+    #
+    #   @yieldparam index [Integer] the requested index.
+    #
+    #   @yieldreturn [Object] the default value.
+    #
+    #   @return [Object] the value at the specified index.
+    #
+    #   @raises [IndexError] if the array does not have a value at that index
+    #     and there is no default value.
+    def fetch(ary, index, default = UNDEFINED, &block)
+      require_array!(ary)
+
+      if ary.respond_to?(:fetch)
+        return native_fetch(ary, index, default, &block)
+      end
+
+      size = ary.respond_to?(:size) ? ary.size : ary.count
+
+      return ary[index] if index < size && index >= -size
+
+      return block.call(index) if block_given?
+
+      return default unless default == UNDEFINED
+
+      raise IndexError,
+        "index #{index} outside of array bounds: -#{size}...#{size}"
+    end
+
     # @overload def humanize_list(ary, **options, &)
     #   Generates a human-readable string representation of the list items.
     #
@@ -219,7 +277,7 @@ module SleepingKingStudios::Tools
     #
     #   @return [String] the formatted string.
     #
-    #   @raise [ArgumentError] if the first argument is not an Array-like
+    #   @raises [ArgumentError] if the first argument is not an Array-like
     #     object.
     #
     #   @example With Zero Items
@@ -364,6 +422,12 @@ module SleepingKingStudios::Tools
     end
 
     private
+
+    def native_fetch(ary, index, default, &)
+      return ary.fetch(index, &) if default == UNDEFINED
+
+      ary.fetch(index, default, &)
+    end
 
     def options_for_humanize_list(
       size:,

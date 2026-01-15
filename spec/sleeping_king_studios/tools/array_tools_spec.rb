@@ -370,6 +370,180 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
     end
   end
 
+  describe '#fetch' do
+    it 'should define the method' do
+      expect(array_tools)
+        .to respond_to(:fetch)
+        .with(2..3)
+        .arguments
+        .and_a_block
+    end
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { array_tools.fetch(nil, 0) }
+          .to raise_error ArgumentError, /argument must be an array/
+      end
+    end
+
+    describe 'with an Object' do
+      it 'should raise an error' do
+        expect { array_tools.fetch(Object.new.freeze, 0) }
+          .to raise_error ArgumentError, /argument must be an array/
+      end
+    end
+
+    describe 'with an Array' do
+      let(:ary) { %w[foo bar baz] }
+
+      describe 'with an invalid negative index' do
+        let(:error_message) do
+          'index -4 outside of array bounds: -3...3'
+        end
+
+        it 'should raise an exception' do
+          expect { array_tools.fetch(ary, -4) }
+            .to raise_error IndexError, error_message
+        end
+
+        describe 'with default: block' do
+          let(:default) { ->(index) { "missing index #{index}" } }
+
+          it 'should generate the default value' do
+            expect(array_tools.fetch(ary, -4, &default))
+              .to be == 'missing index -4'
+          end
+        end
+
+        describe 'with default: value' do
+          it 'should return the default value' do
+            expect(array_tools.fetch(ary, -4, 'qux')).to be == 'qux'
+          end
+        end
+      end
+
+      describe 'with an invalid positive index' do
+        let(:error_message) do
+          'index 3 outside of array bounds: -3...3'
+        end
+
+        it 'should raise an exception' do
+          expect { array_tools.fetch(ary, 3) }
+            .to raise_error IndexError, error_message
+        end
+
+        describe 'with default: block' do
+          let(:default) { ->(index) { "missing index #{index}" } }
+
+          it 'should generate the default value' do
+            expect(array_tools.fetch(ary, 3, &default))
+              .to be == 'missing index 3'
+          end
+        end
+
+        describe 'with default: value' do
+          it 'should return the default value' do
+            expect(array_tools.fetch(ary, 3, 'qux')).to be == 'qux'
+          end
+        end
+      end
+
+      describe 'with a valid negative index' do
+        it { expect(array_tools.fetch(ary, -3)).to be == 'foo' }
+      end
+
+      describe 'with a valid positive index' do
+        it { expect(array_tools.fetch(ary, 2)).to be == 'baz' }
+      end
+    end
+
+    describe 'with an Array-like object' do
+      let(:ary) { Spec::ArrayLike.new(%w[foo bar baz]) }
+
+      example_class 'Spec::ArrayLike' do |klass|
+        klass.define_method :initialize do |data|
+          @data = data
+        end
+
+        klass.attr_reader :data
+
+        klass.define_method :[] do |index|
+          data[index]
+        end
+
+        klass.define_method :count do
+          data.count
+        end
+
+        klass.define_method :each do |&block|
+          # :nocov:
+          data.each(&block)
+          # :nocov:
+        end
+      end
+
+      describe 'with an invalid negative index' do
+        let(:error_message) do
+          'index -4 outside of array bounds: -3...3'
+        end
+
+        it 'should raise an exception' do
+          expect { array_tools.fetch(ary, -4) }
+            .to raise_error IndexError, error_message
+        end
+
+        describe 'with default: block' do
+          let(:default) { ->(index) { "missing index #{index}" } }
+
+          it 'should generate the default value' do
+            expect(array_tools.fetch(ary, -4, &default))
+              .to be == 'missing index -4'
+          end
+        end
+
+        describe 'with default: value' do
+          it 'should return the default value' do
+            expect(array_tools.fetch(ary, -4, 'qux')).to be == 'qux'
+          end
+        end
+      end
+
+      describe 'with an invalid positive index' do
+        let(:error_message) do
+          'index 3 outside of array bounds: -3...3'
+        end
+
+        it 'should raise an exception' do
+          expect { array_tools.fetch(ary, 3) }
+            .to raise_error IndexError, error_message
+        end
+
+        describe 'with default: block' do
+          let(:default) { ->(index) { "missing index #{index}" } }
+
+          it 'should generate the default value' do
+            expect(array_tools.fetch(ary, 3, &default))
+              .to be == 'missing index 3'
+          end
+        end
+
+        describe 'with default: value' do
+          it 'should return the default value' do
+            expect(array_tools.fetch(ary, 3, 'qux')).to be == 'qux'
+          end
+        end
+      end
+
+      describe 'with a valid negative index' do
+        it { expect(array_tools.fetch(ary, -3)).to be == 'foo' }
+      end
+
+      describe 'with a valid positive index' do
+        it { expect(array_tools.fetch(ary, 2)).to be == 'baz' }
+      end
+    end
+  end
+
   describe '#humanize_list' do
     it 'should define the method' do
       expect(array_tools)
