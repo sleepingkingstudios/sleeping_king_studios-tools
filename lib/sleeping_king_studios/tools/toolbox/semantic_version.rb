@@ -24,7 +24,7 @@ module SleepingKingStudios::Tools::Toolbox
   #
   # @see http://semver.org
   module SemanticVersion
-    UNDEFINED = Object.new.freeze
+    UNDEFINED = SleepingKingStudios::Tools::UNDEFINED
     private_constant :UNDEFINED
 
     # Error class for handling missing constants in a version definition.

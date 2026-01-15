@@ -16,7 +16,11 @@ module SleepingKingStudios
     autoload :StringTools,  'sleeping_king_studios/tools/string_tools'
     autoload :Toolbelt,     'sleeping_king_studios/tools/toolbelt'
     autoload :Toolbox,      'sleeping_king_studios/tools/toolbox'
+    autoload :Undefined,    'sleeping_king_studios/tools/undefined'
     autoload :Version,      'sleeping_king_studios/tools/version'
+
+    UNDEFINED = Undefined.new
+    Object.instance_method(:freeze).bind(UNDEFINED).call
 
     @initializer = SleepingKingStudios::Tools::Toolbox::Initializer.new do
       SleepingKingStudios::Tools::Messages::Registry

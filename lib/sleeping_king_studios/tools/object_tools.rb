@@ -9,9 +9,6 @@ module SleepingKingStudios::Tools
       '__sleeping_king_studios_tools_apply_%i__'
     private_constant :TEMPORARY_METHOD_NAME
 
-    UNDEFINED = Object.new.freeze
-    private_constant :UNDEFINED
-
     class << self
       def_delegators :instance,
         :apply,

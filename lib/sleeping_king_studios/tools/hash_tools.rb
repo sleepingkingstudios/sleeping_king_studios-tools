@@ -8,9 +8,6 @@ module SleepingKingStudios::Tools
     # Expected methods that a Hash-like object should implement.
     HASH_METHODS = %i[[] count each each_key each_pair].freeze
 
-    UNDEFINED = Object.new.freeze
-    private_constant :UNDEFINED
-
     class << self
       def_delegators :instance,
         :convert_keys_to_strings,

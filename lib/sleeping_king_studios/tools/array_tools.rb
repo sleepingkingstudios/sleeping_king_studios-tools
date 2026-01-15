@@ -5,9 +5,6 @@ require 'sleeping_king_studios/tools'
 module SleepingKingStudios::Tools
   # Tools for working with array-like enumerable objects.
   class ArrayTools < SleepingKingStudios::Tools::Base # rubocop:disable Metrics/ClassLength
-    UNDEFINED = Object.new.freeze
-    private_constant :UNDEFINED
-
     # Expected methods that an Array-like object should implement.
     ARRAY_METHODS = %i[[] count each].freeze
 

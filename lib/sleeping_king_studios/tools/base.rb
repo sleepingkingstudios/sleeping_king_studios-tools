@@ -11,6 +11,9 @@ module SleepingKingStudios::Tools
       extend Forwardable
     end
 
+    UNDEFINED = SleepingKingStudios::Tools::UNDEFINED
+    private_constant :UNDEFINED
+
     # @return [SleepingKingStudios::Tools::Base] a memoized instance of the
     #   tools class.
     def self.instance
