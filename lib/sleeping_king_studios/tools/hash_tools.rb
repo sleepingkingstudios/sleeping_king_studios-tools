@@ -17,6 +17,7 @@ module SleepingKingStudios::Tools
         :convert_keys_to_symbols,
         :deep_dup,
         :deep_freeze,
+        :fetch,
         :generate_binding,
         :hash?,
         :immutable?,
@@ -150,7 +151,7 @@ module SleepingKingStudios::Tools
     # @overload fetch(hsh, key, default = nil, indifferent_key: false)
     #   Retrieves the value at the specified key.
     #
-    #   If the key does not exist, returns the default value, or raises a
+    #   If the value does not exist, returns the default value, or raises a
     #   KeyError if there is no default value. If the object defines a native
     #   #fetch method, delegates to the native implementation.
     #

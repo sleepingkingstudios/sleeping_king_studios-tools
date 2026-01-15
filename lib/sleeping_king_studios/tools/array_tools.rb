@@ -21,6 +21,7 @@ module SleepingKingStudios::Tools
         :count_values,
         :deep_dup,
         :deep_freeze,
+        :fetch,
         :humanize_list,
         :immutable?,
         :mutable?,

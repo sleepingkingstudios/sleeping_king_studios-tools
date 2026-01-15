@@ -371,6 +371,14 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
   end
 
   describe '#fetch' do
+    it 'should define the class method' do
+      expect(described_class)
+        .to respond_to(:fetch)
+        .with(2..3)
+        .arguments
+        .and_a_block
+    end
+
     it 'should define the method' do
       expect(array_tools)
         .to respond_to(:fetch)

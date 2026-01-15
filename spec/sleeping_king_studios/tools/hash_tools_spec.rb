@@ -562,6 +562,14 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
 
   # rubocop:disable RSpec/NestedGroups
   describe '#fetch' do
+    it 'should define the class method' do
+      expect(described_class)
+        .to respond_to(:fetch)
+        .with(2..3).arguments
+        .and_keywords(:indifferent_key)
+        .and_a_block
+    end
+
     it 'should define the method' do
       expect(hash_tools)
         .to respond_to(:fetch)
