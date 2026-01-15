@@ -1,0 +1,75 @@
+---
+name: SleepingKingStudios::Tools::ArrayTools#fetch
+parent_path: sleeping-king-studios/tools/array-tools
+signature: fetch(ary, index, default = UNDEFINED, &block)
+slug: fetch
+constructor: false
+data_path: sleeping-king-studios/tools/array-tools/i-fetch
+overloads:
+- name: SleepingKingStudios::Tools::ArrayTools#fetch
+  parent_path: sleeping-king-studios/tools/array-tools
+  signature: fetch(ary, index, default = nil)
+  slug: fetch
+  constructor: false
+  description: |-
+    If the value does not exist, returns the default value, or raises an
+    IndexError if there is no default value. If the object defines a native
+    #fetch method, delegates to the native implementation.
+  params:
+  - description: the array or array-like object.
+    name: ary
+    type:
+    - name: Array
+  - description: the index to retrieve.
+    name: index
+    type:
+    - name: Integer
+  - description: the default value.
+    name: default
+    type:
+    - name: Object
+    default: nil
+  returns:
+  - description: the value at the specified index.
+    type:
+    - name: Object
+  short_description: Retrieves the value at the specified index.
+- name: SleepingKingStudios::Tools::ArrayTools#fetch
+  parent_path: sleeping-king-studios/tools/array-tools
+  signature: fetch(ary, index, &default)
+  slug: fetch
+  constructor: false
+  description: |-
+    If the value does not exist, returns the value of the default block, or
+    raises an IndexError if there is no default block. If the object defines
+    a native #fetch method, delegates to the native implementation.
+  params:
+  - description: the array or array-like object.
+    name: ary
+    type:
+    - name: Array
+  - description: the index to retrieve.
+    name: index
+    type:
+    - name: Integer
+  returns:
+  - description: the value at the specified index.
+    type:
+    - name: Object
+  short_description: Retrieves the value at the specified index.
+  yield_params:
+  - description: the requested index.
+    name: index
+    type:
+    - name: Integer
+  yield_returns:
+  - description: the default value.
+    type:
+    - name: Object
+  yields:
+  - description: generates the default value if there is no value at the index.
+raises:
+- description: ''
+  type:
+  - name: IndexError
+version: "*"

@@ -9,6 +9,7 @@ files:
 - lib/sleeping_king_studios/tools/version.rb
 - lib/sleeping_king_studios/tools/messages.rb
 - lib/sleeping_king_studios/tools/toolbelt.rb
+- lib/sleeping_king_studios/tools/undefined.rb
 - lib/sleeping_king_studios/tools/assertions.rb
 - lib/sleeping_king_studios/tools/core_tools.rb
 - lib/sleeping_king_studios/tools/hash_tools.rb
@@ -39,6 +40,10 @@ class_methods:
   slug: version
   inherited: false
 constants:
+- name: UNDEFINED
+  path: sleeping-king-studios/tools/undefined
+  slug: undefined
+  inherited: false
 - name: VERSION
   path: sleeping-king-studios/tools/version
   slug: version
@@ -64,6 +69,8 @@ defined_classes:
   slug: string-tools
 - name: Toolbelt
   slug: toolbelt
+- name: Undefined
+  slug: undefined
 defined_modules:
 - name: Toolbox
   slug: toolbox

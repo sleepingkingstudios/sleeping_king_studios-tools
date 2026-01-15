@@ -1,0 +1,22 @@
+---
+name: SleepingKingStudios::Tools::Undefined#is_a?
+parent_path: sleeping-king-studios/tools/undefined
+signature: is_a?(mod)
+slug: is-a?
+aliases:
+- kind_of?
+constructor: false
+data_path: sleeping-king-studios/tools/undefined/i-is-a?
+params:
+- description: the class or module to compare.
+  name: mod
+  type:
+  - name: Module
+returns:
+- description: |-
+    true if the given class is an ancestor of the
+    object.
+  type:
+  - name: 'true'
+  - name: 'false'
+version: "*"

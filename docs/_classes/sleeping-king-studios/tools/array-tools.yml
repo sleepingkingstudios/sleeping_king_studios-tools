@@ -41,6 +41,10 @@ instance_methods:
   path: sleeping-king-studios/tools/array-tools/i-deep-freeze
   slug: deep-freeze
   inherited: false
+- name: fetch
+  path: sleeping-king-studios/tools/array-tools/i-fetch
+  slug: fetch
+  inherited: false
 - name: humanize_list
   path: sleeping-king-studios/tools/array-tools/i-humanize-list
   slug: humanize-list

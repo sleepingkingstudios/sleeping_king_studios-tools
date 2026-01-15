@@ -6,7 +6,13 @@
 
 Tools objects now define a circular `#toolbelt` reference.
 
-Added the following methods to `SleepingKingStudios::Tools::Assertions`.
+#### ArrayTools
+
+Added `ArrayTools#fetch`, which retrieves the value at the requested index or raises an `IndexError`.
+
+#### Assertions
+
+Added the following methods to `Assertions`.
 
 - `#assert_exclusion`
 - `#assert_inclusion`
@@ -17,21 +23,21 @@ Added the following methods to `SleepingKingStudios::Tools::Assertions`.
 
 Updated `Assertions#assert_instance_of` to accept a `Module` as the expected value.
 
+Assertions error messages now use `Messages`.
+
+- `Assertions#error_message_for` can be called with an unscoped key, e.g. `error_message_for(:blank)`.
+- Error messages can be overwritten by changing the messaging strategy for scope `'sleeping_king_studios.tools.assertions'`.
+
+#### CoreTools
+
 Updated `CoreTools` deprecations:
 
 - Now supports passing `deprecate(message, caller:)` to override displayed backtrace.
 - Initializing `CoreTools` with an invalid deprecation strategy now raises an `ArgumentError`.
 
-Added `#[]` support to `ObjectTools#dig`, allowing access through indexed data structures.
+#### HashTools
 
-- Added `:indifferent_keys` option - if set, treats `String` and `Symbol` values as interchangeable when traversing a `Hash` using `ObjectTools#dig`.
-
-#### Assertions
-
-Assertions error messages now use `Messages`.
-
-- `Assertions#error_message_for` can be called with an unscoped key, e.g. `error_message_for(:blank)`.
-- Error messages can be overwritten by changing the messaging strategy for scope `'sleeping_king_studios.tools.assertions'`.
+Added `HashTools#fetch`, which retrieves the value at the requested key or raises a `KeyError`.
 
 #### Messages
 
@@ -39,6 +45,14 @@ Added `Messages` tool, which allows generating user-readable messages.
 
 - Added `Messages::Registry` for defining scoped message strategies.
 - Added `Messages::Strategy` and subclasses `FileStrategy` and `HashStrategy`.
+
+#### ObjectTools
+
+Added `#[]` support to `ObjectTools#dig`, allowing access through indexed data structures.
+
+- Added `:indifferent_keys` option - if set, treats `String` and `Symbol` values as interchangeable when traversing a `Hash` using `ObjectTools#dig`.
+
+Added `ObjectTools#fetch`, which tries to find the requested value via the named method call or by calling `#[]`.
 
 ### Toolbelt
 
@@ -59,6 +73,10 @@ Corrected the scope of `Mixin#included` and `Mixin#prepended` to be `private`.
 #### Initializer
 
 Added `Toolbox::Initializer`, used for defining a one-time initialization for a library or project.
+
+### Undefined
+
+Added `SleepingKingStudios::Tools::Undefined`, used to represent undefined method parameters.
 
 ## 1.2.1
 

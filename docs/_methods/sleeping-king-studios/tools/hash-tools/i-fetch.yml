@@ -1,0 +1,93 @@
+---
+name: SleepingKingStudios::Tools::HashTools#fetch
+parent_path: sleeping-king-studios/tools/hash-tools
+signature: 'fetch(hsh, key, default = UNDEFINED, indifferent_key: false, &block)'
+slug: fetch
+constructor: false
+data_path: sleeping-king-studios/tools/hash-tools/i-fetch
+overloads:
+- name: SleepingKingStudios::Tools::HashTools#fetch
+  parent_path: sleeping-king-studios/tools/hash-tools
+  signature: 'fetch(hsh, key, default = nil, indifferent_key: false)'
+  slug: fetch
+  constructor: false
+  description: |-
+    If the value does not exist, returns the default value, or raises a
+    KeyError if there is no default value. If the object defines a native
+    #fetch method, delegates to the native implementation.
+  params:
+  - description: the hash or hash-like object.
+    name: hsh
+    type:
+    - name: Hash
+  - description: the key to retrieve.
+    name: key
+    type:
+    - name: Object
+  - description: |-
+      if true and the key is a String or
+      a Symbol, tries to match both the String and Symbol equivalent.
+      Defaults to false.
+    name: indifferent_key
+    type:
+    - name: 'true'
+    - name: 'false'
+    default: 'false'
+  - description: the default value.
+    name: default
+    type:
+    - name: Object
+    default: nil
+  returns:
+  - description: the value at the specified key.
+    type:
+    - name: Object
+  short_description: Retrieves the value at the specified key.
+- name: SleepingKingStudios::Tools::HashTools#fetch
+  parent_path: sleeping-king-studios/tools/hash-tools
+  signature: 'fetch(hsh, key, indifferent_key: false, &default)'
+  slug: fetch
+  constructor: false
+  description: |-
+    If the value does not exist, returns the value of the default block, or
+    raises a KeyError if there is no default block. If the object defines
+    a native #fetch method, delegates to the native implementation.
+  params:
+  - description: the hash or hash-like object.
+    name: hsh
+    type:
+    - name: Hash
+  - description: the key to retrieve.
+    name: key
+    type:
+    - name: Object
+  - description: |-
+      if true and the key is a String or
+      a Symbol, tries to match both the String and Symbol equivalent.
+      Defaults to false.
+    name: indifferent_key
+    type:
+    - name: 'true'
+    - name: 'false'
+    default: 'false'
+  returns:
+  - description: the value at the specified key.
+    type:
+    - name: Object
+  short_description: Retrieves the value at the specified key.
+  yield_params:
+  - description: the requested key.
+    name: key
+    type:
+    - name: Object
+  yield_returns:
+  - description: the default value.
+    type:
+    - name: Object
+  yields:
+  - description: generates the default value if there is no value at the key.
+raises:
+- description: ''
+  type:
+  - name: KeyError
+version: "*"
