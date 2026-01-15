@@ -4,9 +4,12 @@ require 'sleeping_king_studios/tools'
 
 module SleepingKingStudios::Tools
   # Tools for working with hash-like enumerable objects.
-  class HashTools < SleepingKingStudios::Tools::Base
+  class HashTools < SleepingKingStudios::Tools::Base # rubocop:disable Metrics/ClassLength
     # Expected methods that a Hash-like object should implement.
     HASH_METHODS = %i[[] count each each_key each_pair].freeze
+
+    UNDEFINED = Object.new.freeze
+    private_constant :UNDEFINED
 
     class << self
       def_delegators :instance,
@@ -144,6 +147,70 @@ module SleepingKingStudios::Tools
       end
     end
 
+    # @overload fetch(hsh, key, default = nil, indifferent_key: false)
+    #   Retrieves the value at the specified key.
+    #
+    #   If the key does not exist, returns the default value, or raises a
+    #   KeyError if there is no default value. If the object defines a native
+    #   #fetch method, delegates to the native implementation.
+    #
+    #   @param hsh [Hash] the hash or hash-like object.
+    #   @param key [Object] the key to retrieve.
+    #   @param indifferent_key [true, false] if true and the key is a String or
+    #     a Symbol, tries to match both the String and Symbol equivalent.
+    #     Defaults to false.
+    #   @param default [Object] the default value.
+    #
+    #   @return [Object] the value at the specified key.
+    #
+    #   @raises [KeyError] if the hash does not have a value at that key
+    #     and there is no default value.
+    #
+    # @overload fetch(hsh, key, indifferent_key: false, &default)
+    #   Retrieves the value at the specified key.
+    #
+    #   If the value does not exist, returns the value of the default block, or
+    #   raises a KeyError if there is no default block. If the object defines
+    #   a native #fetch method, delegates to the native implementation.
+    #
+    #   @param hsh [Hash] the hash or hash-like object.
+    #   @param key [Object] the key to retrieve.
+    #   @param indifferent_key [true, false] if true and the key is a String or
+    #     a Symbol, tries to match both the String and Symbol equivalent.
+    #     Defaults to false.
+    #
+    #   @yield generates the default value if there is no value at the key.
+    #
+    #   @yieldparam key [Object] the requested key.
+    #
+    #   @yieldreturn [Object] the default value.
+    #
+    #   @return [Object] the value at the specified key.
+    #
+    #   @raises [KeyError] if the hash does not have a value at that key
+    #     and there is no default value.
+    def fetch(hsh, key, default = UNDEFINED, indifferent_key: false, &block) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+      require_hash!(hsh)
+
+      if hsh.respond_to?(:fetch)
+        return native_fetch(hsh, key, default, indifferent_key:, &block)
+      end
+
+      return hsh[key] if hsh.key?(key)
+
+      if indifferent_key && (key.is_a?(String) || key.is_a?(Symbol))
+        indifferent_key = key.is_a?(String) ? key.to_sym : key.to_s
+
+        return hsh[indifferent_key] if hsh.key?(indifferent_key)
+      end
+
+      return block.call(key) if block_given?
+
+      return default unless default == UNDEFINED
+
+      raise KeyError, "key not found: #{key.inspect}"
+    end
+
     # Generates a Binding with the hash values as local variables.
     #
     # @return [Binding] the binding object.
@@ -271,6 +338,33 @@ module SleepingKingStudios::Tools
       else
         value
       end
+    end
+
+    def native_indifferent_fetch(hsh, original_key, default, &block) # rubocop:disable Metrics/CyclomaticComplexity,  Metrics/MethodLength, Metrics/PerceivedComplexity
+      indifferent_key =
+        original_key.is_a?(String) ? original_key.to_sym : original_key.to_s
+
+      hsh.fetch(original_key) do
+        if default == UNDEFINED && !block_given?
+          hsh.fetch(indifferent_key) do
+            raise KeyError, "key not found: #{original_key.inspect}"
+          end
+        elsif default == UNDEFINED
+          hsh.fetch(indifferent_key) { block.call(original_key) }
+        else
+          hsh.fetch(indifferent_key, default)
+        end
+      end
+    end
+
+    def native_fetch(hsh, key, default, indifferent_key: false, &)
+      if indifferent_key && (key.is_a?(String) || key.is_a?(Symbol))
+        return native_indifferent_fetch(hsh, key, default, &)
+      end
+
+      return hsh.fetch(key, &) if default == UNDEFINED
+
+      hsh.fetch(key, default)
     end
 
     def require_hash!(value)

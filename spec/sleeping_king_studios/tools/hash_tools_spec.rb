@@ -560,6 +560,636 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
     end
   end
 
+  # rubocop:disable RSpec/NestedGroups
+  describe '#fetch' do
+    it 'should define the method' do
+      expect(hash_tools)
+        .to respond_to(:fetch)
+        .with(2..3).arguments
+        .and_keywords(:indifferent_key)
+        .and_a_block
+    end
+
+    describe 'with nil' do
+      it 'should raise an error' do
+        expect { hash_tools.fetch(nil, :name) }
+          .to raise_error ArgumentError, /argument must be a hash/
+      end
+    end
+
+    describe 'with an Object' do
+      it 'should raise an error' do
+        expect { hash_tools.fetch(Object.new.freeze, :name) }
+          .to raise_error ArgumentError, /argument must be a hash/
+      end
+    end
+
+    describe 'with a Hash' do
+      let(:author)     { Data.define(:name) }
+      let(:author_key) { author.new(name: 'J.R.R. Tolkien') }
+      let(:hsh) do
+        {
+          author_key => 'J.R.R. Tolkien',
+          :name      => 'The Hobbit',
+          'slug'     => 'the-hobbit',
+          'topic'    => 'hobbits',
+          :topic     => :goblins
+        }
+      end
+
+      describe 'with an invalid Object key' do
+        let(:invalid_key) { author.new(name: 'Ursula K. LeGuin') }
+        let(:error_message) do
+          "key not found: #{invalid_key.inspect}"
+        end
+
+        it 'should raise an error' do
+          expect { hash_tools.fetch(hsh, invalid_key) }
+            .to raise_error KeyError, error_message
+        end
+
+        describe 'with default: block' do
+          let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+          it 'should return the default value' do
+            expect(hash_tools.fetch(hsh, invalid_key, &default))
+              .to be == "missing key #{invalid_key.inspect}"
+          end
+        end
+
+        describe 'with default: value' do
+          let(:default) { 'missing key' }
+
+          it 'should return the default value' do
+            expect(hash_tools.fetch(hsh, invalid_key, default)).to be == default
+          end
+        end
+      end
+
+      describe 'with an invalid String key' do
+        let(:invalid_key) { 'publisher' }
+        let(:error_message) do
+          "key not found: #{invalid_key.inspect}"
+        end
+
+        it 'should raise an error' do
+          expect { hash_tools.fetch(hsh, invalid_key) }
+            .to raise_error KeyError, error_message
+        end
+
+        describe 'with default: block' do
+          let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+          it 'should return the default value' do
+            expect(hash_tools.fetch(hsh, invalid_key, &default))
+              .to be == "missing key #{invalid_key.inspect}"
+          end
+        end
+
+        describe 'with default: value' do
+          let(:default) { 'missing key' }
+
+          it 'should return the default value' do
+            expect(hash_tools.fetch(hsh, invalid_key, default)).to be == default
+          end
+        end
+
+        context 'when the equivalent Symbol key is defined' do
+          let(:invalid_key) { 'name' }
+
+          it 'should raise an error' do
+            expect { hash_tools.fetch(hsh, invalid_key) }
+              .to raise_error KeyError, error_message
+          end
+
+          describe 'with default: block' do
+            let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+            it 'should return the default value' do
+              expect(hash_tools.fetch(hsh, invalid_key, &default))
+                .to be == "missing key #{invalid_key.inspect}"
+            end
+          end
+
+          describe 'with default: value' do
+            let(:default) { 'missing key' }
+
+            it 'should return the default value' do
+              expect(hash_tools.fetch(hsh, invalid_key, default))
+                .to be == default
+            end
+          end
+        end
+
+        describe 'with indifferent_key: true' do
+          it 'should raise an error' do
+            expect { hash_tools.fetch(hsh, invalid_key, indifferent_key: true) }
+              .to raise_error KeyError, error_message
+          end
+
+          describe 'with default: block' do
+            let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+            it 'should return the default value' do # rubocop:disable RSpec/ExampleLength
+              expect(
+                hash_tools.fetch(
+                  hsh,
+                  invalid_key,
+                  indifferent_key: true,
+                  &default
+                )
+              )
+                .to be == "missing key #{invalid_key.inspect}"
+            end
+          end
+
+          describe 'with default: value' do
+            let(:default) { 'missing key' }
+
+            it 'should return the default value' do # rubocop:disable RSpec/ExampleLength
+              expect(
+                hash_tools.fetch(
+                  hsh,
+                  invalid_key,
+                  default,
+                  indifferent_key: true
+                )
+              ).to be == default
+            end
+          end
+
+          context 'when the equivalent Symbol key is defined' do
+            let(:invalid_key) { 'name' }
+
+            it 'should return the value for the Symbol key' do
+              expect(hash_tools.fetch(hsh, invalid_key, indifferent_key: true))
+                .to be == 'The Hobbit'
+            end
+          end
+        end
+      end
+
+      describe 'with an invalid Symbol key' do
+        let(:invalid_key) { :publisher }
+        let(:error_message) do
+          "key not found: #{invalid_key.inspect}"
+        end
+
+        it 'should raise an error' do
+          expect { hash_tools.fetch(hsh, invalid_key) }
+            .to raise_error KeyError, error_message
+        end
+
+        describe 'with default: block' do
+          let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+          it 'should return the default value' do
+            expect(hash_tools.fetch(hsh, invalid_key, &default))
+              .to be == "missing key #{invalid_key.inspect}"
+          end
+        end
+
+        describe 'with default: value' do
+          let(:default) { 'missing key' }
+
+          it 'should return the default value' do
+            expect(hash_tools.fetch(hsh, invalid_key, default)).to be == default
+          end
+        end
+
+        context 'when the equivalent String key is defined' do
+          let(:invalid_key) { :slug }
+
+          it 'should raise an error' do
+            expect { hash_tools.fetch(hsh, invalid_key) }
+              .to raise_error KeyError, error_message
+          end
+
+          describe 'with default: block' do
+            let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+            it 'should return the default value' do
+              expect(hash_tools.fetch(hsh, invalid_key, &default))
+                .to be == "missing key #{invalid_key.inspect}"
+            end
+          end
+
+          describe 'with default: value' do
+            let(:default) { 'missing key' }
+
+            it 'should return the default value' do
+              expect(hash_tools.fetch(hsh, invalid_key, default))
+                .to be == default
+            end
+          end
+        end
+
+        describe 'with indifferent_key: true' do
+          it 'should raise an error' do
+            expect { hash_tools.fetch(hsh, invalid_key, indifferent_key: true) }
+              .to raise_error KeyError, error_message
+          end
+
+          describe 'with default: block' do
+            let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+            it 'should return the default value' do # rubocop:disable RSpec/ExampleLength
+              expect(
+                hash_tools.fetch(
+                  hsh,
+                  invalid_key,
+                  indifferent_key: true,
+                  &default
+                )
+              )
+                .to be == "missing key #{invalid_key.inspect}"
+            end
+          end
+
+          describe 'with default: value' do
+            let(:default) { 'missing key' }
+
+            it 'should return the default value' do # rubocop:disable RSpec/ExampleLength
+              expect(
+                hash_tools.fetch(
+                  hsh,
+                  invalid_key,
+                  default,
+                  indifferent_key: true
+                )
+              ).to be == default
+            end
+          end
+
+          context 'when the equivalent String key is defined' do
+            let(:invalid_key) { :slug }
+
+            it 'should return the value for the String key' do
+              expect(hash_tools.fetch(hsh, invalid_key, indifferent_key: true))
+                .to be == 'the-hobbit'
+            end
+          end
+        end
+      end
+
+      describe 'with a valid Object key' do
+        it 'should retrieve the value' do
+          expect(hash_tools.fetch(hsh, author_key)).to be == 'J.R.R. Tolkien'
+        end
+      end
+
+      describe 'with a valid String key' do
+        it 'should retrieve the value' do
+          expect(hash_tools.fetch(hsh, 'slug')).to be == 'the-hobbit'
+        end
+
+        describe 'with indifferent_key: true' do
+          it 'should retrieve the value' do
+            expect(hash_tools.fetch(hsh, 'topic', indifferent_key: true))
+              .to be == 'hobbits'
+          end
+        end
+      end
+
+      describe 'with a valid Symbol key' do
+        it 'should retrieve the value' do
+          expect(hash_tools.fetch(hsh, :name)).to be == 'The Hobbit'
+        end
+
+        describe 'with indifferent_key: true' do
+          it 'should retrieve the value' do
+            expect(hash_tools.fetch(hsh, :topic, indifferent_key: true))
+              .to be == :goblins
+          end
+        end
+      end
+    end
+
+    describe 'with a Hash-like object' do
+      let(:author)     { Data.define(:name) }
+      let(:author_key) { author.new(name: 'J.R.R. Tolkien') }
+      let(:hsh) do
+        Spec::HashLike.new(
+          {
+            author_key => 'J.R.R. Tolkien',
+            :name      => 'The Hobbit',
+            'slug'     => 'the-hobbit',
+            'topic'    => 'hobbits',
+            :topic     => :goblins
+          }
+        )
+      end
+
+      example_class 'Spec::HashLike' do |klass|
+        klass.define_method :initialize do |data|
+          @data = data
+        end
+
+        klass.attr_reader :data
+
+        klass.define_method :[] do |key|
+          data[key]
+        end
+
+        klass.define_method :count do
+          # :nocov:
+          data.count
+          # :nocov:
+        end
+
+        klass.define_method :each do |&block|
+          # :nocov:
+          data.each(&block)
+          # :nocov:
+        end
+
+        klass.define_method :each_key do |&block|
+          # :nocov:
+          data.each_key(&block)
+          # :nocov:
+        end
+
+        klass.define_method :each_pair do |&block|
+          # :nocov:
+          data.each_pair(&block)
+          # :nocov:
+        end
+
+        klass.define_method :key? do |key|
+          data.key?(key)
+        end
+      end
+
+      describe 'with an invalid Object key' do
+        let(:invalid_key) { author.new(name: 'Ursula K. LeGuin') }
+        let(:error_message) do
+          "key not found: #{invalid_key.inspect}"
+        end
+
+        it 'should raise an error' do
+          expect { hash_tools.fetch(hsh, invalid_key) }
+            .to raise_error KeyError, error_message
+        end
+
+        describe 'with default: block' do
+          let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+          it 'should return the default value' do
+            expect(hash_tools.fetch(hsh, invalid_key, &default))
+              .to be == "missing key #{invalid_key.inspect}"
+          end
+        end
+
+        describe 'with default: value' do
+          let(:default) { 'missing key' }
+
+          it 'should return the default value' do
+            expect(hash_tools.fetch(hsh, invalid_key, default)).to be == default
+          end
+        end
+      end
+
+      describe 'with an invalid String key' do
+        let(:invalid_key) { 'publisher' }
+        let(:error_message) do
+          "key not found: #{invalid_key.inspect}"
+        end
+
+        it 'should raise an error' do
+          expect { hash_tools.fetch(hsh, invalid_key) }
+            .to raise_error KeyError, error_message
+        end
+
+        describe 'with default: block' do
+          let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+          it 'should return the default value' do
+            expect(hash_tools.fetch(hsh, invalid_key, &default))
+              .to be == "missing key #{invalid_key.inspect}"
+          end
+        end
+
+        describe 'with default: value' do
+          let(:default) { 'missing key' }
+
+          it 'should return the default value' do
+            expect(hash_tools.fetch(hsh, invalid_key, default)).to be == default
+          end
+        end
+
+        context 'when the equivalent Symbol key is defined' do
+          let(:invalid_key) { 'name' }
+
+          it 'should raise an error' do
+            expect { hash_tools.fetch(hsh, invalid_key) }
+              .to raise_error KeyError, error_message
+          end
+
+          describe 'with default: block' do
+            let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+            it 'should return the default value' do
+              expect(hash_tools.fetch(hsh, invalid_key, &default))
+                .to be == "missing key #{invalid_key.inspect}"
+            end
+          end
+
+          describe 'with default: value' do
+            let(:default) { 'missing key' }
+
+            it 'should return the default value' do
+              expect(hash_tools.fetch(hsh, invalid_key, default))
+                .to be == default
+            end
+          end
+        end
+
+        describe 'with indifferent_key: true' do
+          it 'should raise an error' do
+            expect { hash_tools.fetch(hsh, invalid_key, indifferent_key: true) }
+              .to raise_error KeyError, error_message
+          end
+
+          describe 'with default: block' do
+            let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+            it 'should return the default value' do # rubocop:disable RSpec/ExampleLength
+              expect(
+                hash_tools.fetch(
+                  hsh,
+                  invalid_key,
+                  indifferent_key: true,
+                  &default
+                )
+              )
+                .to be == "missing key #{invalid_key.inspect}"
+            end
+          end
+
+          describe 'with default: value' do
+            let(:default) { 'missing key' }
+
+            it 'should return the default value' do # rubocop:disable RSpec/ExampleLength
+              expect(
+                hash_tools.fetch(
+                  hsh,
+                  invalid_key,
+                  default,
+                  indifferent_key: true
+                )
+              ).to be == default
+            end
+          end
+
+          context 'when the equivalent Symbol key is defined' do
+            let(:invalid_key) { 'name' }
+
+            it 'should return the value for the Symbol key' do
+              expect(hash_tools.fetch(hsh, invalid_key, indifferent_key: true))
+                .to be == 'The Hobbit'
+            end
+          end
+        end
+      end
+
+      describe 'with an invalid Symbol key' do
+        let(:invalid_key) { :publisher }
+        let(:error_message) do
+          "key not found: #{invalid_key.inspect}"
+        end
+
+        it 'should raise an error' do
+          expect { hash_tools.fetch(hsh, invalid_key) }
+            .to raise_error KeyError, error_message
+        end
+
+        describe 'with default: block' do
+          let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+          it 'should return the default value' do
+            expect(hash_tools.fetch(hsh, invalid_key, &default))
+              .to be == "missing key #{invalid_key.inspect}"
+          end
+        end
+
+        describe 'with default: value' do
+          let(:default) { 'missing key' }
+
+          it 'should return the default value' do
+            expect(hash_tools.fetch(hsh, invalid_key, default)).to be == default
+          end
+        end
+
+        context 'when the equivalent String key is defined' do
+          let(:invalid_key) { :slug }
+
+          it 'should raise an error' do
+            expect { hash_tools.fetch(hsh, invalid_key) }
+              .to raise_error KeyError, error_message
+          end
+
+          describe 'with default: block' do
+            let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+            it 'should return the default value' do
+              expect(hash_tools.fetch(hsh, invalid_key, &default))
+                .to be == "missing key #{invalid_key.inspect}"
+            end
+          end
+
+          describe 'with default: value' do
+            let(:default) { 'missing key' }
+
+            it 'should return the default value' do
+              expect(hash_tools.fetch(hsh, invalid_key, default))
+                .to be == default
+            end
+          end
+        end
+
+        describe 'with indifferent_key: true' do
+          it 'should raise an error' do
+            expect { hash_tools.fetch(hsh, invalid_key, indifferent_key: true) }
+              .to raise_error KeyError, error_message
+          end
+
+          describe 'with default: block' do
+            let(:default) { ->(key) { "missing key #{key.inspect}" } }
+
+            it 'should return the default value' do # rubocop:disable RSpec/ExampleLength
+              expect(
+                hash_tools.fetch(
+                  hsh,
+                  invalid_key,
+                  indifferent_key: true,
+                  &default
+                )
+              )
+                .to be == "missing key #{invalid_key.inspect}"
+            end
+          end
+
+          describe 'with default: value' do
+            let(:default) { 'missing key' }
+
+            it 'should return the default value' do # rubocop:disable RSpec/ExampleLength
+              expect(
+                hash_tools.fetch(
+                  hsh,
+                  invalid_key,
+                  default,
+                  indifferent_key: true
+                )
+              ).to be == default
+            end
+          end
+
+          context 'when the equivalent String key is defined' do
+            let(:invalid_key) { :slug }
+
+            it 'should return the value for the String key' do
+              expect(hash_tools.fetch(hsh, invalid_key, indifferent_key: true))
+                .to be == 'the-hobbit'
+            end
+          end
+        end
+      end
+
+      describe 'with a valid Object key' do
+        it 'should retrieve the value' do
+          expect(hash_tools.fetch(hsh, author_key)).to be == 'J.R.R. Tolkien'
+        end
+      end
+
+      describe 'with a valid String key' do
+        it 'should retrieve the value' do
+          expect(hash_tools.fetch(hsh, 'slug')).to be == 'the-hobbit'
+        end
+
+        describe 'with indifferent_key: true' do
+          it 'should retrieve the value' do
+            expect(hash_tools.fetch(hsh, 'topic', indifferent_key: true))
+              .to be == 'hobbits'
+          end
+        end
+      end
+
+      describe 'with a valid Symbol key' do
+        it 'should retrieve the value' do
+          expect(hash_tools.fetch(hsh, :name)).to be == 'The Hobbit'
+        end
+
+        describe 'with indifferent_key: true' do
+          it 'should retrieve the value' do
+            expect(hash_tools.fetch(hsh, :topic, indifferent_key: true))
+              .to be == :goblins
+          end
+        end
+      end
+    end
+  end
+  # rubocop:enable RSpec/NestedGroups
+
   describe '#generate_binding' do
     it { expect(hash_tools).to respond_to(:generate_binding).with(1).argument }
 
