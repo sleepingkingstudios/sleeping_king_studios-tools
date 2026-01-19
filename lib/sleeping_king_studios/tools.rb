@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative 'tools/toolbox/initializer'
+require_relative 'tools/version'
+
 # Hic iacet Arthurus, rex quondam, rexque futurus.
 module SleepingKingStudios
   # A library of utility services and concerns to expand the functionality of
@@ -17,7 +20,6 @@ module SleepingKingStudios
     autoload :Toolbelt,     'sleeping_king_studios/tools/toolbelt'
     autoload :Toolbox,      'sleeping_king_studios/tools/toolbox'
     autoload :Undefined,    'sleeping_king_studios/tools/undefined'
-    autoload :Version,      'sleeping_king_studios/tools/version'
 
     UNDEFINED = Undefined.new
     Object.instance_method(:freeze).bind(UNDEFINED).call
@@ -39,9 +41,10 @@ module SleepingKingStudios
       __dir__.sub(pattern, '')
     end
 
-    # Sets configuration for the module and its dependencies.
-    def self.initialize
-      @initializer.call
+    # @return [SleepingKingStudios::Tools::Toolbox::Initializer] the initializer
+    #   for the module.
+    def self.initializer
+      @initializer
     end
 
     # @return [String] the current version of the gem.

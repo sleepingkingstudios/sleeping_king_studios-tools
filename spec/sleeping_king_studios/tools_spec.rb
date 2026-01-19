@@ -25,8 +25,10 @@ RSpec.describe SleepingKingStudios::Tools do
       -> { be == expected }
   end
 
-  describe '.initialize' do
-    it { expect(described_class).to respond_to(:initialize).with(0).arguments }
+  describe '.initializer' do
+    include_examples 'should define class reader',
+      :initializer,
+      -> { be_a(SleepingKingStudios::Tools::Toolbox::Initializer) }
   end
 
   describe '.version' do
