@@ -214,7 +214,7 @@ module SleepingKingStudios::Tools
     #
     #   @return [Object] the value at the specified index.
     #
-    #   @raises [IndexError] if the array does not have a value at that index
+    #   @raise [IndexError] if the array does not have a value at that index
     #     and there is no default value.
     #
     # @overload fetch(ary, index, &default)
@@ -235,7 +235,7 @@ module SleepingKingStudios::Tools
     #
     #   @return [Object] the value at the specified index.
     #
-    #   @raises [IndexError] if the array does not have a value at that index
+    #   @raise [IndexError] if the array does not have a value at that index
     #     and there is no default value.
     def fetch(ary, index, default = UNDEFINED, &block)
       require_array!(ary)
@@ -275,7 +275,7 @@ module SleepingKingStudios::Tools
     #
     #   @return [String] the formatted string.
     #
-    #   @raises [ArgumentError] if the first argument is not an Array-like
+    #   @raise [ArgumentError] if the first argument is not an Array-like
     #     object.
     #
     #   @example With Zero Items

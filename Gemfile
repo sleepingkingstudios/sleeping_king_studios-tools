@@ -21,6 +21,8 @@ group :development, :test do
 end
 
 group :docs do
+  gem 'logger', '~> 1.7'
+
   gem 'jekyll', '~> 4.3'
   gem 'jekyll-theme-dinky', '~> 0.2'
 

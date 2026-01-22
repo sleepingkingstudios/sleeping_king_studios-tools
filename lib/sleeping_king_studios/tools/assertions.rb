@@ -89,8 +89,6 @@ module SleepingKingStudios::Tools
     # @param error_class [Class] the exception class to raise on a failure.
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
-    # @param strict [true, false] if true, fails if the given and expected
-    #   values are the same class or module.
     #
     # @return [void]
     #

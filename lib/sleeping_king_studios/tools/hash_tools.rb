@@ -161,7 +161,7 @@ module SleepingKingStudios::Tools
     #
     #   @return [Object] the value at the specified key.
     #
-    #   @raises [KeyError] if the hash does not have a value at that key
+    #   @raise [KeyError] if the hash does not have a value at that key
     #     and there is no default value.
     #
     # @overload fetch(hsh, key, indifferent_key: false, &default)
@@ -185,7 +185,7 @@ module SleepingKingStudios::Tools
     #
     #   @return [Object] the value at the specified key.
     #
-    #   @raises [KeyError] if the hash does not have a value at that key
+    #   @raise [KeyError] if the hash does not have a value at that key
     #     and there is no default value.
     def fetch(hsh, key, default = UNDEFINED, indifferent_key: false, &block) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
       require_hash!(hsh)

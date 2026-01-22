@@ -237,7 +237,7 @@ module SleepingKingStudios::Tools
     #
     #   @return [Object] the value at the specified key or index.
     #
-    #   @raises [IndexError, KeyError, NameError] if the object does not have a
+    #   @raise [IndexError, KeyError, NameError] if the object does not have a
     #     value for the requested key or index and there is no default value.
     #
     # @overload fetch(obj, key, indifferent_key: false, &default)
@@ -261,7 +261,7 @@ module SleepingKingStudios::Tools
     #
     #   @return [Object] the value at the specified key or index.
     #
-    #   @raises [IndexError, KeyError, NameError] if the object does not have a
+    #   @raise [IndexError, KeyError, NameError] if the object does not have a
     #     value for the requested key or index and there is no default value.
     def fetch(obj, key_or_index, default = UNDEFINED, indifferent_key: false, &)
       case obj

@@ -21,11 +21,21 @@ module SleepingKingStudios::Tools
       end
     end
 
+    # Data class representing a single node in the registry tree.
     Node = Struct.new(:children, :scope, :strategy, keyword_init: true) do
+      # @param scope [String] the scope for the registry node.
+      # @param strategy [SleepingKingStudios::Tools::Messages::Strategy] the
+      #   strategy defined for the node, if any.
       def initialize(scope:, strategy: nil)
         super(children: {}, scope:, strategy:)
       end
 
+      # Retrieves the child node with the requested sub-path, if any.
+      #
+      # @param segment [String] the sub-path for the requested child.
+      #
+      # @return [SleepingKingStudios::Tools::Messages::Registry::Node, nil] the
+      #   child node, or nil if there is no node defined at that sub-path.
       def [](segment)
         children[segment]
       end
