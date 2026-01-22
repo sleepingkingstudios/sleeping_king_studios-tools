@@ -30,3 +30,31 @@ The canonical repository for this gem is on [GitHub](https://github.com/sleeping
 ### Code of Conduct
 
 Please note that the `SleepingKingStudios::Tools` project is released with a [Contributor Code of Conduct](https://github.com/sleepingkingstudios/sleeping_king_studios-tools/blob/master/CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
+
+## Getting Started
+
+Add the gem to your `Gemfile` or `gemspec`:
+
+```ruby
+gem 'sleeping_king_studios-tools'
+```
+
+Require `SleepingKingStudios::Tools` in your code:
+
+```ruby
+require 'sleeping_king_studios/tools'
+```
+
+To ensure that [message definitions](./tools/messages) are loaded, call the `SleepingKingStudios::Tools` initializer:
+
+- In the [initializer](./initializers) for your project:
+
+  ```ruby
+  module Space
+    @initializer = SleepingKingStudios::Tools::Toolbox::Initializer.new do
+      SleepingKingStudios::Tools::Toolbox.initializer.call
+    end
+  end
+  ```
+
+- Or, in the entry points of your application (such as a `bin` script or `spec_helper.rb`).
