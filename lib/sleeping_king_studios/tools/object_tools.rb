@@ -169,7 +169,7 @@ module SleepingKingStudios::Tools
       end
     end
 
-    # Accesses deeply nested attributes on an object.
+    # Accesses deeply nested properties on an object.
     #
     # This method finds the first named property on the given object, and then
     # each subsequent property on the result of the previous call.

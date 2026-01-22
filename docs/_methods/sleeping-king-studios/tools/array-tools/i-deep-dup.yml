@@ -45,5 +45,5 @@ returns:
 - description: the copy of the array.
   type:
   - name: Array
-short_description: Creates a deep copy of the object.
+short_description: Creates a deep copy of the array and its contents.
 version: "*"

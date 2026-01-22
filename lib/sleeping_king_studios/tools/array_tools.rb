@@ -142,7 +142,7 @@ module SleepingKingStudios::Tools
     end
     alias tally count_values
 
-    # Creates a deep copy of the object.
+    # Creates a deep copy of the array and its contents.
     #
     # Iterates over the array and returns a new Array with deep copies of each
     # array item.

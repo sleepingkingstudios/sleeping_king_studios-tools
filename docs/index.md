@@ -44,6 +44,12 @@ To ensure that [message definitions](./tools/messages) are loaded, call the `Sle
 
 SleepingKingStudios::Tools defines the following tools:
 
+- **[Toolbelt](./tools)**
+  <br>
+  Functional tools for operating on Ruby objects, grouped by object type.
+
+It also provides a set of utility classes:
+
 - **[Initializers](./initializers)**
   <br>
   Utility class for initializing a library or project and its dependencies.

@@ -5,7 +5,7 @@ require 'forwardable'
 require 'sleeping_king_studios/tools'
 
 module SleepingKingStudios::Tools
-  # Methods for asserting on the state of a function or application.
+  # Methods for asserting on the type or content of values
   class Assertions < Base # rubocop:disable Metrics/ClassLength
     autoload :Aggregator,
       'sleeping_king_studios/tools/assertions/aggregator'

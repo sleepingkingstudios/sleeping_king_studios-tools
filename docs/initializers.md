@@ -1,7 +1,7 @@
 ---
 breadcrumbs:
   - name: Documentation
-    path: '../'
+    path: './'
 ---
 
 # Initializers
