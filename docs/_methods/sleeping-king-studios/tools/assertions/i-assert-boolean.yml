@@ -47,13 +47,6 @@ params:
   - name: 'true'
   - name: 'false'
   default: 'false'
-- description: |-
-    if true, fails if the given and expected
-    values are the same class or module.
-  name: strict
-  type:
-  - name: 'true'
-  - name: 'false'
 raises:
 - description: if the value is not true or false.
   type:

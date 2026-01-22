@@ -38,6 +38,12 @@ overloads:
     type:
     - name: Object
     default: nil
+  raises:
+  - description: |-
+      if the hash does not have a value at that key
+      and there is no default value.
+    type:
+    - name: KeyError
   returns:
   - description: the value at the specified key.
     type:
@@ -70,6 +76,12 @@ overloads:
     - name: 'true'
     - name: 'false'
     default: 'false'
+  raises:
+  - description: |-
+      if the hash does not have a value at that key
+      and there is no default value.
+    type:
+    - name: KeyError
   returns:
   - description: the value at the specified key.
     type:

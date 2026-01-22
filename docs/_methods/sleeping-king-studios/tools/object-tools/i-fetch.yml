@@ -39,6 +39,14 @@ overloads:
     type:
     - name: Object
     default: nil
+  raises:
+  - description: |-
+      if the object does not have a
+      value for the requested key or index and there is no default value.
+    type:
+    - name: IndexError
+    - name: KeyError
+    - name: NameError
   returns:
   - description: the value at the specified key or index.
     type:
@@ -71,6 +79,14 @@ overloads:
     - name: 'true'
     - name: 'false'
     default: 'false'
+  raises:
+  - description: |-
+      if the object does not have a
+      value for the requested key or index and there is no default value.
+    type:
+    - name: IndexError
+    - name: KeyError
+    - name: NameError
   returns:
   - description: the value at the specified key or index.
     type:

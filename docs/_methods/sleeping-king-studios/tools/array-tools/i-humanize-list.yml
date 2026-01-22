@@ -64,6 +64,12 @@ params:
   name: options
   type:
   - name: Hash
+raises:
+- description: |-
+    if the first argument is not an Array-like
+    object.
+  type:
+  - name: ArgumentError
 returns:
 - description: the formatted string.
   type:

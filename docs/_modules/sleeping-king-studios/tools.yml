@@ -20,6 +20,7 @@ files:
 - lib/sleeping_king_studios/tools/messages/registry.rb
 - lib/sleeping_king_studios/tools/messages/strategy.rb
 - lib/sleeping_king_studios/tools/messages/strategies.rb
+- lib/sleeping_king_studios/tools/toolbox/initializer.rb
 - lib/sleeping_king_studios/tools/assertions/aggregator.rb
 - lib/sleeping_king_studios/tools/assertions/messages_strategy.rb
 parent_path: sleeping-king-studios
@@ -31,19 +32,15 @@ class_methods:
   path: sleeping-king-studios/tools/c-gem-path
   slug: gem-path
   inherited: false
-- name: initialize
-  path: sleeping-king-studios/tools/c-initialize
-  slug: initialize
+- name: initializer
+  path: sleeping-king-studios/tools/c-initializer
+  slug: initializer
   inherited: false
 - name: version
   path: sleeping-king-studios/tools/c-version
   slug: version
   inherited: false
 constants:
-- name: UNDEFINED
-  path: sleeping-king-studios/tools/undefined
-  slug: undefined
-  inherited: false
 - name: VERSION
   path: sleeping-king-studios/tools/version
   slug: version

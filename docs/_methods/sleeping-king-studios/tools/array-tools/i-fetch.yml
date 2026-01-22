@@ -29,6 +29,12 @@ overloads:
     type:
     - name: Object
     default: nil
+  raises:
+  - description: |-
+      if the array does not have a value at that index
+      and there is no default value.
+    type:
+    - name: IndexError
   returns:
   - description: the value at the specified index.
     type:
@@ -52,6 +58,12 @@ overloads:
     name: index
     type:
     - name: Integer
+  raises:
+  - description: |-
+      if the array does not have a value at that index
+      and there is no default value.
+    type:
+    - name: IndexError
   returns:
   - description: the value at the specified index.
     type:
