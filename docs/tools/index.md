@@ -39,7 +39,7 @@ toolbelt.object_tools.immutable?(Object.new)        #=> false
 toolbelt.object_tools.immutable?(Object.new.freeze) #=> true
 ```
 
-For a full list of tools, see [Defined Tools](#defined-tools) below, or [Reference](../reference/sleeping-king-studios/tools/toolbelt).
+For a full list of tools, see [Defined Tools](#defined-tools) below, or [Reference]({{site.baseurl}}/reference/sleeping-king-studios/tools/toolbelt).
 
 ### Toolbelt.instance
 
@@ -100,13 +100,13 @@ Tools for working with `Array`s and `Array`-like objects (countable, enumerable,
   </dd>
 </dl>
 
-For a full list of methods, see [Reference](../reference/sleeping-king-studios/tools/array-tools).
+For a full list of methods, see [Reference]({{site.baseurl}}/reference/sleeping-king-studios/tools/array-tools).
 
 [Back to Defined Tools](#defined-tools) \| [Back to Top](#)
 
-### `assertions`
+### [Assertions](./assertions)
 
-Methods for asserting on the type or content of values.
+Methods for asserting on the type or content of values. See [Assertions documentation](./assertions).
 
 `Assertions` methods include:
 
@@ -142,7 +142,7 @@ Methods for asserting on the type or content of values.
   </dd>
 </dl>
 
-For a full list of methods, see [Reference](../reference/sleeping-king-studios/tools/assertions).
+For a full list of methods, see [Reference]({{site.baseurl}}/reference/sleeping-king-studios/tools/assertions).
 
 [Back to Defined Tools](#defined-tools) \| [Back to Top](#)
 
@@ -165,7 +165,7 @@ To configure the deprecation strategy, set `ENV['DEPRECATION_STRATEGY']` to one 
 - `'raise'` will raise a `DeprecationError` for each deprecation.
 - `'warn'` will print a deprecation warning using `Kernel.warn`.
 
-For a full list of methods, see [Reference](../reference/sleeping-king-studios/tools/core-tools).
+For a full list of methods, see [Reference]({{site.baseurl}}/reference/sleeping-king-studios/tools/core-tools).
 
 [Back to Defined Tools](#defined-tools) \| [Back to Top](#)
 
@@ -202,7 +202,7 @@ Tools for working with `Hash`es and `Hash`-like objects (enumerable key-value co
   </dd>
 </dl>
 
-For a full list of methods, see [Reference](../reference/sleeping-king-studios/tools/hash-tools).
+For a full list of methods, see [Reference]({{site.baseurl}}/reference/sleeping-king-studios/tools/hash-tools).
 
 [Back to Defined Tools](#defined-tools) \| [Back to Top](#)
 
@@ -224,7 +224,7 @@ Tools for working with `Integer` values.
   </dd>
 </dl>
 
-For a full list of methods, see [Reference](../reference/sleeping-king-studios/tools/integer-tools).
+For a full list of methods, see [Reference]({{site.baseurl}}/reference/sleeping-king-studios/tools/integer-tools).
 
 [Back to Defined Tools](#defined-tools) \| [Back to Top](#)
 
@@ -241,7 +241,7 @@ Utility for generating configured, user-readable output strings.
   </dd>
 </dl>
 
-For a full list of methods, see [Reference](../reference/sleeping-king-studios/tools/messages).
+For a full list of methods, see [Reference]({{site.baseurl}}/reference/sleeping-king-studios/tools/messages).
 
 [Back to Defined Tools](#defined-tools) \| [Back to Top](#)
 
@@ -278,7 +278,7 @@ Low-level tools for working with objects.
   </dd>
 </dl>
 
-For a full list of methods, see [Reference](../reference/sleeping-king-studios/tools/object-tools).
+For a full list of methods, see [Reference]({{site.baseurl}}/reference/sleeping-king-studios/tools/object-tools).
 
 [Back to Defined Tools](#defined-tools) \| [Back to Top](#)
 
@@ -315,7 +315,7 @@ Tools for working with `String`s.
   </dd>
 </dl>
 
-For a full list of methods, see [Reference](../reference/sleeping-king-studios/tools/string-tools).
+For a full list of methods, see [Reference]({{site.baseurl}}/reference/sleeping-king-studios/tools/string-tools).
 
 [Back to Defined Tools](#defined-tools) \| [Back to Top](#)
 

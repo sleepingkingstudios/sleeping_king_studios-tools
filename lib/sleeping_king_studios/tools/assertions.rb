@@ -273,6 +273,8 @@ module SleepingKingStudios::Tools
     # @param error_class [Class] the exception class to raise on a failure.
     # @param expected [Class, Module] the expected ancestor.
     # @param message [String] the exception message to raise on a failure.
+    # @param strict [true, false] if true, fails if the given and expected
+    #   values are the same class or module.
     #
     # @return [void]
     #
