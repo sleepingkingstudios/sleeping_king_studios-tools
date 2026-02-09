@@ -9,7 +9,9 @@ breadcrumbs:
 A `ConstantMap` provides an enumerable interface for defining a group of constants.
 
 ```ruby
-UserRoles = ConstantMap.new(
+require 'sleeping_king_studios/tools/toolbox/constant_map'
+
+UserRoles = SleepingKingStudios::Tools::Toolbox::ConstantMap.new(
   GUEST: 'guest',
   USER:  'user',
   ADMIN: 'admin'

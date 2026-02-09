@@ -11,7 +11,7 @@ module SleepingKingStudios::Tools::Toolbox
   #
   #     module ClassMethods
   #       def widget_types
-  #         %w(gadget doohickey thingamabob)
+  #         %w[gadget doohickey thingamabob]
   #       end
   #     end
   #

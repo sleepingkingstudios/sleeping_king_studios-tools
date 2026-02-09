@@ -66,11 +66,14 @@ SleepingKingStudios::Tools defines the following tools:
 
 It also provides a set of utility classes:
 
-- **[Constant Maps]({{site.baseurl}}/constant-maps)**
+- **[Constant Map]({{site.baseurl}}/constant-maps)**
   <br>
   Provides an enumerable interface for defining a group of constants.
-- **[Initializers]({{site.baseurl}}/initializers)**
+- **[Initializer]({{site.baseurl}}/initializers)**
   <br>
   Utility class for initializing a library or project and its dependencies.
+- **[Mixin]({{site.baseurl}}/mixins)**
+  <br>
+  Implements recursive inheritance of both class and instance methods.
 
 For a full list of defined classes and objects, see [Reference]({{site.baseurl}}/reference).
