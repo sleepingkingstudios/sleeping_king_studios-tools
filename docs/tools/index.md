@@ -20,7 +20,7 @@ Unlike other solutions such as `ActiveSupport` which patch core classes, `Sleepi
   - [Core Tools](#core-tools)
   - [Hash Tools](#hash-tools)
   - [Integer Tools](#integer-tools)
-  - [Messages](#messages-tools)
+  - [Messages](#messages)
   - [Object Tools](#object-tools)
   - [String Tools](#string-tools)
 
@@ -228,9 +228,9 @@ For a full list of methods, see [Reference]({{site.baseurl}}/reference/sleeping-
 
 [Back to Defined Tools](#defined-tools) \| [Back to Top](#)
 
-### Messages
+### [Messages](./messages)
 
-Utility for generating configured, user-readable output strings.
+Utility for generating configured, user-readable output strings. See [Messages documentation](./messages).
 
 `Messages` methods include:
 

@@ -55,6 +55,11 @@ SleepingKingStudios::Tools defines the following tools:
         <br>
         Methods for asserting on the type or content of values.
       </li>
+      <li>
+        <strong><a href="{{site.baseurl}}/tools/messages">Messages</a></strong>
+        <br>
+        Tool for defining and generating human-readable messages.
+      </li>
     </ul>
   </li>
 </ul>
