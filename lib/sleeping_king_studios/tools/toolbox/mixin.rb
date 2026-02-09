@@ -69,7 +69,7 @@ module SleepingKingStudios::Tools::Toolbox
       return super unless defined?(self::ClassMethods)
 
       if SleepingKingStudios::Tools::Toolbox::Mixin.mixin?(othermod)
-        unless othermod.constants(false).include?(:ClassMethods)
+        unless othermod.const_defined?(:ClassMethods, false)
           othermod.const_set(:ClassMethods, Module.new)
         end
 
@@ -91,7 +91,7 @@ module SleepingKingStudios::Tools::Toolbox
       return super unless defined?(self::ClassMethods)
 
       if SleepingKingStudios::Tools::Toolbox::Mixin.mixin?(othermod)
-        unless othermod.constants(false).include?(:ClassMethods)
+        unless othermod.const_defined?(:ClassMethods, false)
           othermod.const_set(:ClassMethods, Module.new)
         end
 
