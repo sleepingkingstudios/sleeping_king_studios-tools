@@ -26,7 +26,7 @@ module Widgets
 end
 ```
 
-The class reference for `SleepingKingStudios::Tools::Toolbox::Mixin` can be found in [Reference](./reference/sleeping-king-studios/tools/toolbox/mixin).
+The class reference for `SleepingKingStudios::Tools::Toolbox::Mixin` can be found in [Reference]({{site.baseurl}}/reference/sleeping-king-studios/tools/toolbox/mixin).
 
 ## Contents
 
@@ -134,4 +134,3 @@ In our above example, our `.widget_types` class method is extended onto `GadgetF
 > *Warning:* This feature can cause unexpected behavior. When you need to extend class methods *onto a `Mixin` module*, use a traditional `.included` hook instead of another `Mixin`.
 
 {% include breadcrumbs.md %}
-

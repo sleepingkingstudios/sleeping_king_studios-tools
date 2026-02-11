@@ -28,7 +28,7 @@ require 'sleeping_king_studios/tools'
 
 To ensure that [message definitions]({{site.baseurl}}/tools/messages) are loaded, call the `SleepingKingStudios::Tools` initializer:
 
-- In the [initializer]({{site.baseurl}}/initializers) for your project:
+- In the [initializer]({{site.baseurl}}/initializer) for your project:
 
   ```ruby
   module Space
@@ -49,18 +49,16 @@ SleepingKingStudios::Tools defines the following tools:
     <strong><a href="{{site.baseurl}}/tools">Toolbelt</a></strong>
     <br>
     Functional tools for operating on Ruby objects, grouped by object type.
-    <ul>
-      <li>
-        <strong><a href="{{site.baseurl}}/tools/assertions">Assertions</a></strong>
-        <br>
-        Methods for asserting on the type or content of values.
-      </li>
-      <li>
-        <strong><a href="{{site.baseurl}}/tools/messages">Messages</a></strong>
-        <br>
-        Tool for defining and generating human-readable messages.
-      </li>
-    </ul>
+  </li>
+  <li>
+    <strong><a href="{{site.baseurl}}/tools/assertions">Assertions</a></strong>
+    <br>
+    Methods for asserting on the type or content of values.
+  </li>
+  <li>
+    <strong><a href="{{site.baseurl}}/tools/messages">Messages</a></strong>
+    <br>
+    Tool for defining and generating human-readable messages.
   </li>
 </ul>
 
@@ -69,11 +67,14 @@ It also provides a set of utility classes:
 - **[Constant Map]({{site.baseurl}}/constant-maps)**
   <br>
   Provides an enumerable interface for defining a group of constants.
-- **[Initializer]({{site.baseurl}}/initializers)**
+- **[Initializer]({{site.baseurl}}/initializer)**
   <br>
   Utility class for initializing a library or project and its dependencies.
-- **[Mixin]({{site.baseurl}}/mixins)**
+- **[Mixin]({{site.baseurl}}/mixin)**
   <br>
   Implements recursive inheritance of both class and instance methods.
+- **[Subclass]({{site.baseurl}}/subclass)**
+  <br>
+  Define subclasses with partially applied constructor parameters.
 
 For a full list of defined classes and objects, see [Reference]({{site.baseurl}}/reference).

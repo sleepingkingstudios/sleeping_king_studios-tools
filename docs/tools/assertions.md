@@ -86,7 +86,7 @@ The `#error_message_for` method is particularly useful when writing tests, as it
 
 You can also pass a full scoped key to `#error_message_for`, which will return the corresponding [message]({{site.baseurl}}/tools/messages) defined for that scoped key. This is useful when defining custom assertions.
 
-Using error messages requires the [initializer]({{site.baseurl}}/initializers) for `SleepingKingStudios::Tools` to be called; otherwise, a fallback message starting with `"Message missing:"` will be used. The fallback is also used for error messages when the key is not defined, which may occur when defining custom assertions.
+Using error messages requires the [initializer]({{site.baseurl}}/initializer) for `SleepingKingStudios::Tools` to be called; otherwise, a fallback message starting with `"Message missing:"` will be used. The fallback is also used for error messages when the key is not defined, which may occur when defining custom assertions.
 
 #### Redefining Error Messages
 

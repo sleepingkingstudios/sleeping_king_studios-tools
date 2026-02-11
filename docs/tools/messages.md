@@ -247,7 +247,7 @@ toolbelt.messages.message(:going_to_space, scope: 'spec.test_cases')
 
 ## Initializing Messages
 
-The recommended way to register messages for your application or project is using a [project initializer]({{site.baseurl}}/initializers).
+The recommended way to register messages for your application or project is using a [project initializer]({{site.baseurl}}/initializer).
 
 ```ruby
 module Space
