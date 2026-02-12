@@ -216,7 +216,14 @@ module SleepingKingStudios::Tools
     # @param obj [Object] the object for which an eigenclass is required.
     #
     # @return [Class] the object's singleton class.
+    #
+    # @deprecated v1.3.0 Use Object#singleton_class instead.
     def eigenclass(obj)
+      toolbelt.core_tools.deprecate(
+        "#{self.class.name}#eigenclass",
+        message: 'Use Object#singleton_class instead.'
+      )
+
       obj.singleton_class
     end
     alias metaclass eigenclass
@@ -393,7 +400,14 @@ module SleepingKingStudios::Tools
     #
     #     ObjectTools.try(nil, :count)
     #     #=> nil
+    #
+    #   @deprecated v1.3.0 Use the safe access operator &. instead.
     def try(obj, method_name, *)
+      toolbelt.core_tools.deprecate(
+        "#{self.class.name}#try",
+        message: 'Use the safe access operator &. instead.'
+      )
+
       return obj.try(method_name, *) if obj.respond_to?(:try)
 
       return nil unless obj.respond_to?(method_name)

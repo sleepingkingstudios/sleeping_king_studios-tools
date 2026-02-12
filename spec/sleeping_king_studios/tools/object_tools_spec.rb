@@ -828,6 +828,40 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
   end
   # rubocop:enable Style/SingleArgumentDig
 
+  describe '#eigenclass' do
+    let(:object)   { Object.new }
+    let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.global }
+
+    before(:example) { allow(toolbelt.core_tools).to receive(:deprecate) }
+
+    it { expect(object_tools).to respond_to(:eigenclass).with(1).argument }
+
+    it { expect(described_class).to respond_to(:eigenclass).with(1).argument }
+
+    it 'should define the aliased method' do
+      expect(object_tools).to have_aliased_method(:eigenclass).as(:metaclass)
+    end
+
+    it { expect(described_class).to respond_to(:metaclass).with(1).argument }
+
+    it "should return the object's singleton class" do
+      metaclass = class << object; self; end
+
+      expect(object_tools.eigenclass(object)).to be == metaclass
+    end
+
+    it 'should print a deprecation warning' do # rubocop:disable RSpec/ExampleLength
+      object_tools.eigenclass(object)
+
+      expect(toolbelt.core_tools)
+        .to have_received(:deprecate)
+        .with(
+          "#{described_class.name}#eigenclass",
+          message: 'Use Object#singleton_class instead.'
+        )
+    end
+  end
+
   describe '#fetch' do
     let(:obj) { Object.new.freeze }
     let(:key) { :launch }
@@ -1099,26 +1133,6 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     end
   end
 
-  describe '#eigenclass' do
-    let(:object) { Object.new }
-
-    it { expect(object_tools).to respond_to(:eigenclass).with(1).argument }
-
-    it { expect(described_class).to respond_to(:eigenclass).with(1).argument }
-
-    it 'should define the aliased method' do
-      expect(object_tools).to have_aliased_method(:eigenclass).as(:metaclass)
-    end
-
-    it { expect(described_class).to respond_to(:metaclass).with(1).argument }
-
-    it "returns the object's singleton class" do
-      metaclass = class << object; self; end
-
-      expect(object_tools.eigenclass(object)).to be == metaclass
-    end
-  end
-
   describe '#immutable?' do
     it { expect(object_tools).to respond_to(:immutable?).with(1).argument }
 
@@ -1276,7 +1290,10 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
   end
 
   describe '#try' do
-    let(:object) { Object.new }
+    let(:object)   { Object.new }
+    let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.global }
+
+    before(:example) { allow(toolbelt.core_tools).to receive(:deprecate) }
 
     it 'should define the method' do
       expect(object_tools)
@@ -1290,6 +1307,17 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         .to respond_to(:try)
         .with(2).arguments
         .and_unlimited_arguments
+    end
+
+    it 'should print a deprecation warning' do # rubocop:disable RSpec/ExampleLength
+      object_tools.try(object, :nil?)
+
+      expect(toolbelt.core_tools)
+        .to have_received(:deprecate)
+        .with(
+          "#{described_class.name}#try",
+          message: 'Use the safe access operator &. instead.'
+        )
     end
 
     describe 'with nil' do
