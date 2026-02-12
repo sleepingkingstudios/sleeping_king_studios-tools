@@ -123,7 +123,13 @@ module SleepingKingStudios::Tools
     # Expands each file pattern and requires each file.
     #
     # @param file_patterns [Array] The files to require.
-    def require_each(*file_patterns)
+    #
+    # @deprecated v1.3.0
+    def require_each(*file_patterns) # rubocop:disable Metrics/MethodLength
+      SleepingKingStudios::Tools::Toolbelt.instance.core_tools.deprecate(
+        "#{self.class.name}#require_each"
+      )
+
       file_patterns.each do |file_pattern|
         if file_pattern.include?('*')
           Dir[file_pattern].each do |file_name|

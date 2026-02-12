@@ -407,7 +407,11 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
   end
 
   describe '#require_each' do
+    let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.global }
+
     before(:example) do
+      allow(toolbelt.core_tools).to receive(:deprecate)
+
       allow(Kernel).to receive(:require)
     end
 
@@ -415,6 +419,14 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       expect(described_class)
         .to respond_to(:require_each)
         .with_unlimited_arguments
+    end
+
+    it 'should print a deprecation warning' do
+      core_tools.require_each
+
+      expect(toolbelt.core_tools)
+        .to have_received(:deprecate)
+        .with("#{described_class.name}#require_each")
     end
 
     describe 'with one file name' do
