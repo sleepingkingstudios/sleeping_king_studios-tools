@@ -397,10 +397,10 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
       expect(described_class).to respond_to(:empty_binding).with(0).arguments
     end
 
-    it { expect(described_class.empty_binding).to be_a Binding }
+    it { expect(core_tools.empty_binding).to be_a Binding }
 
     it 'should set an Object as the receiver' do
-      binding = described_class.empty_binding
+      binding = core_tools.empty_binding
 
       expect(binding.receiver.class).to be Object
     end

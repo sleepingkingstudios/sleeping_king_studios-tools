@@ -11,7 +11,9 @@ group :development, :test do
   gem 'irb', '~> 1.16'
   gem 'rake', '~> 13.2'
   gem 'rspec', '~> 3.13'
-  gem 'rspec-sleeping_king_studios', '~> 2.8', '>= 2.8.3'
+  gem 'rspec-sleeping_king_studios',
+    git:    'https://github.com/sleepingkingstudios/rspec-sleeping_king_studios',
+    branch: 'main'
   gem 'rubocop', '~> 1.84'
   gem 'rubocop-rake', '~> 0.7'
   gem 'rubocop-rspec', '~> 3.9'

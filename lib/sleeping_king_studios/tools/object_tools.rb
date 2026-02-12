@@ -326,10 +326,10 @@ module SleepingKingStudios::Tools
       case obj
       when NilClass, FalseClass, TrueClass, Numeric, Symbol
         true
-      when ->(_) { ArrayTools.array?(obj) }
-        ArrayTools.immutable?(obj)
-      when ->(_) { HashTools.hash?(obj) }
-        HashTools.immutable?(obj)
+      when ->(_) { toolbelt.array_tools.array?(obj) }
+        toolbelt.array_tools.immutable?(obj)
+      when ->(_) { toolbelt.hash_tools.hash?(obj) }
+        toolbelt.hash_tools.immutable?(obj)
       else
         obj.frozen?
       end

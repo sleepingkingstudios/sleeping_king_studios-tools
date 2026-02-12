@@ -153,7 +153,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.indent nil }
+        expect { string_tools.indent nil }
           .to raise_error ArgumentError, /argument must be a string/
       end
     end
@@ -228,7 +228,7 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.map_lines nil }
+        expect { string_tools.map_lines nil }
           .to raise_error ArgumentError, /argument must be a string/
       end
     end
@@ -472,41 +472,41 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     it { expect(described_class).to respond_to(:string?).with(1).argument }
 
     describe 'with nil' do
-      it { expect(described_class.string? nil).to be false }
+      it { expect(string_tools.string? nil).to be false }
     end
 
     describe 'with an object' do
-      it { expect(described_class.string? Object.new).to be false }
+      it { expect(string_tools.string? Object.new).to be false }
     end
 
     describe 'with a string' do
-      it { expect(described_class.string? 'greetings,programs').to be true }
+      it { expect(string_tools.string? 'greetings,programs').to be true }
     end
 
     describe 'with a symbol' do
-      it { expect(described_class.string? :greetings_starfighter).to be false }
+      it { expect(string_tools.string? :greetings_starfighter).to be false }
     end
 
     describe 'with an integer' do
-      it { expect(described_class.string? 42).to be false }
+      it { expect(string_tools.string? 42).to be false }
     end
 
     describe 'with an empty array' do
-      it { expect(described_class.string? []).to be false }
+      it { expect(string_tools.string? []).to be false }
     end
 
     describe 'with a non-empty array' do
-      it { expect(described_class.string? %w[ichi ni san]).to be false }
+      it { expect(string_tools.string? %w[ichi ni san]).to be false }
     end
 
     describe 'with an empty hash' do
-      it { expect(described_class.string?({})).to be false }
+      it { expect(string_tools.string?({})).to be false }
     end
 
     describe 'with a non-empty hash' do
       let(:object) { { greetings: 'programs' } }
 
-      it { expect(described_class.string?(object)).to be false }
+      it { expect(string_tools.string?(object)).to be false }
     end
   end
 

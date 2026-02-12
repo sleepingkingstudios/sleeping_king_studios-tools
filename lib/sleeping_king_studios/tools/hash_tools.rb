@@ -229,7 +229,7 @@ module SleepingKingStudios::Tools
     def generate_binding(hsh)
       require_hash!(hsh)
 
-      CoreTools.empty_binding.tap do |binding|
+      toolbelt.core_tools.empty_binding.tap do |binding|
         hsh.each do |key, value|
           binding.local_variable_set key, value
         end
@@ -321,7 +321,7 @@ module SleepingKingStudios::Tools
     def convert_value_to_stringified_hash(value)
       if hash?(value)
         convert_keys_to_strings(value)
-      elsif ArrayTools.array?(value)
+      elsif toolbelt.array_tools.array?(value)
         value.map { |item| convert_value_to_stringified_hash(item) }
       else
         value
@@ -331,7 +331,7 @@ module SleepingKingStudios::Tools
     def convert_value_to_symbolic_hash(value)
       if hash?(value)
         convert_keys_to_symbols(value)
-      elsif ArrayTools.array?(value)
+      elsif toolbelt.array_tools.array?(value)
         value.map { |item| convert_value_to_symbolic_hash(item) }
       else
         value

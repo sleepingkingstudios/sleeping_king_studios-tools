@@ -26,43 +26,43 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
     it { expect(described_class).to respond_to(:array?).with(1).argument }
 
     describe 'with nil' do
-      it { expect(described_class.array? nil).to be false }
+      it { expect(array_tools.array? nil).to be false }
     end
 
     describe 'with an object' do
-      it { expect(described_class.array? Object.new).to be false }
+      it { expect(array_tools.array? Object.new).to be false }
     end
 
     describe 'with a struct' do
       let(:struct_class) { Struct.new(:title) }
       let(:struct)       { struct_class.new 'The Art of War' }
 
-      it { expect(described_class.array? struct).to be false }
+      it { expect(array_tools.array? struct).to be false }
     end
 
     describe 'with a string' do
-      it { expect(described_class.array? 'greetings,programs').to be false }
+      it { expect(array_tools.array? 'greetings,programs').to be false }
     end
 
     describe 'with an integer' do
-      it { expect(described_class.array? 42).to be false }
+      it { expect(array_tools.array? 42).to be false }
     end
 
     describe 'with an empty array' do
-      it { expect(described_class.array? []).to be true }
+      it { expect(array_tools.array? []).to be true }
     end
 
     describe 'with a non-empty array' do
-      it { expect(described_class.array? %w[ichi ni san]).to be true }
+      it { expect(array_tools.array? %w[ichi ni san]).to be true }
     end
 
     describe 'with an empty hash' do
-      it { expect(described_class.array?({})).to be false }
+      it { expect(array_tools.array?({})).to be false }
     end
 
     describe 'with a non-empty hash' do
       it 'should return false' do
-        expect(described_class.array?({ greetings: 'programs' })).to be false
+        expect(array_tools.array?({ greetings: 'programs' })).to be false
       end
     end
   end
@@ -74,20 +74,20 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.bisect nil }
+        expect { array_tools.bisect nil }
           .to raise_error ArgumentError, /argument must be an array/
       end
     end
 
     describe 'with an empty array' do
       it 'should raise an error' do
-        expect { described_class.bisect [] }
+        expect { array_tools.bisect [] }
           .to raise_error ArgumentError, /no block given/
       end
 
       describe 'with a block' do
         it 'should return two empty arrays' do
-          expect(described_class.bisect([]) { |item| item }).to be == [[], []]
+          expect(array_tools.bisect([]) { |item| item }).to be == [[], []]
         end
       end
     end
@@ -96,25 +96,25 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       let(:ary) { [*0...10] }
 
       it 'should raise an error' do
-        expect { described_class.bisect ary }
+        expect { array_tools.bisect ary }
           .to raise_error ArgumentError, /no block given/
       end
 
       describe 'with a block matching no array items' do
         it 'should filter the matching items' do
-          selected, = described_class.bisect(ary) { |item| item < 0 }
+          selected, = array_tools.bisect(ary) { |item| item < 0 }
 
           expect(selected).to be == []
         end
 
         it 'should filter the non-matching items' do
-          _, rejected = described_class.bisect(ary) { |item| item < 0 }
+          _, rejected = array_tools.bisect(ary) { |item| item < 0 }
 
           expect(rejected).to be == ary
         end
 
         it 'should return a copy of the original array' do
-          _, rejected = described_class.bisect(ary) { |item| item < 0 }
+          _, rejected = array_tools.bisect(ary) { |item| item < 0 }
 
           expect { rejected << 10 }.not_to(change { ary })
         end
@@ -122,13 +122,13 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
       describe 'with a block matching some array items' do
         it 'should filter the matching items' do
-          selected, = described_class.bisect(ary, &:even?)
+          selected, = array_tools.bisect(ary, &:even?)
 
           expect(selected).to be == ary.select(&:even?)
         end
 
         it 'should filter the non-matching items' do
-          _, rejected = described_class.bisect(ary, &:even?)
+          _, rejected = array_tools.bisect(ary, &:even?)
 
           expect(rejected).to be == ary.reject(&:even?)
         end
@@ -136,19 +136,19 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
       describe 'with a block matching all array items' do
         it 'should filter the matching items' do
-          selected, = described_class.bisect(ary) { |item| item >= 0 }
+          selected, = array_tools.bisect(ary) { |item| item >= 0 }
 
           expect(selected).to be == ary
         end
 
         it 'should filter the non-matching items' do
-          _, rejected = described_class.bisect(ary) { |item| item >= 0 }
+          _, rejected = array_tools.bisect(ary) { |item| item >= 0 }
 
           expect(rejected).to be == []
         end
 
         it 'should return a copy of the original array' do
-          selected, = described_class.bisect(ary) { |item| item >= 0 }
+          selected, = array_tools.bisect(ary) { |item| item >= 0 }
 
           expect { selected << 10 }.not_to(change { ary })
         end
@@ -167,14 +167,14 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.count_values nil }
+        expect { array_tools.count_values nil }
           .to raise_error ArgumentError, /argument must be an array/
       end
     end
 
     describe 'with an empty array' do
       it 'returns an empty hash' do
-        expect(described_class.count_values []).to be == {}
+        expect(array_tools.count_values []).to be == {}
       end
     end
 
@@ -182,7 +182,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       let(:values) { %w[spam] }
 
       it 'returns the count of each value' do
-        expect(described_class.count_values values).to be == { 'spam' => 1 }
+        expect(array_tools.count_values values).to be == { 'spam' => 1 }
       end
 
       describe 'with a block' do
@@ -192,7 +192,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
         end
 
         it 'returns the count of each value' do
-          expect(described_class.count_values values, &:value)
+          expect(array_tools.count_values values, &:value)
             .to be == { 'spam' => 1 }
         end
       end
@@ -202,7 +202,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       let(:values) { %w[spam bacon eggs spam] }
 
       it 'returns the count of each value' do
-        expect(described_class.count_values values)
+        expect(array_tools.count_values values)
           .to be == { 'spam' => 2, 'bacon' => 1, 'eggs' => 1 }
       end
 
@@ -213,7 +213,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
         end
 
         it 'returns the count of each value' do
-          expect(described_class.count_values values, &:value)
+          expect(array_tools.count_values values, &:value)
             .to be == { 'spam' => 2, 'bacon' => 1, 'eggs' => 1 }
         end
       end
@@ -227,7 +227,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.deep_dup nil }
+        expect { array_tools.deep_dup nil }
           .to raise_error ArgumentError, /argument must be an array/
       end
     end
@@ -300,7 +300,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.deep_freeze nil }
+        expect { array_tools.deep_freeze nil }
           .to raise_error ArgumentError, /argument must be an array/
       end
     end
@@ -569,7 +569,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.humanize_list nil }
+        expect { array_tools.humanize_list nil }
           .to raise_error ArgumentError, /argument must be an array/
       end
     end
@@ -578,12 +578,12 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       let(:values) { [] }
 
       it 'returns an empty string' do
-        expect(described_class.humanize_list values).to be == ''
+        expect(array_tools.humanize_list values).to be == ''
       end
 
       describe 'with a block' do
         it 'returns an empty string' do
-          expect(described_class.humanize_list values, &:upcase).to be == ''
+          expect(array_tools.humanize_list values, &:upcase).to be == ''
         end
       end
     end
@@ -594,14 +594,14 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       let(:expected) { mapped.first.to_s }
 
       it 'returns the item converted to a string' do
-        expect(described_class.humanize_list values).to be == expected
+        expect(array_tools.humanize_list values).to be == expected
       end
 
       describe 'with a block' do
         let(:mapped) { values.map(&:upcase) }
 
         it 'passes the item to the block' do
-          expect(described_class.humanize_list values, &:upcase)
+          expect(array_tools.humanize_list values, &:upcase)
             .to be == expected
         end
       end
@@ -613,14 +613,14 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       let(:expected) { mapped.join(' and ') }
 
       it 'returns the items joined by "and"' do
-        expect(described_class.humanize_list values).to be == expected
+        expect(array_tools.humanize_list values).to be == expected
       end
 
       describe 'with :last_separator => " or "' do
         let(:expected) { mapped.join(' or ') }
 
         it 'returns the items joined by "or"' do
-          expect(described_class.humanize_list values, last_separator: ' or ')
+          expect(array_tools.humanize_list values, last_separator: ' or ')
             .to be == expected
         end
       end
@@ -629,7 +629,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
         let(:mapped) { values.map(&:upcase) }
 
         it 'passes the items to the block' do
-          expect(described_class.humanize_list values, &:upcase)
+          expect(array_tools.humanize_list values, &:upcase)
             .to be == expected
         end
       end
@@ -643,7 +643,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       it 'returns the items joined by commas and the last value preceded by ' \
          '"and"' \
       do
-        expect(described_class.humanize_list values).to be == expected
+        expect(array_tools.humanize_list values).to be == expected
       end
 
       describe 'with :separator => ";"' do
@@ -652,7 +652,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
         it 'returns the items joined by semicolons and the last value ' \
            'preceded by "and"' \
         do
-          expect(described_class.humanize_list values, separator: '; ')
+          expect(array_tools.humanize_list values, separator: '; ')
             .to be == expected
         end
       end
@@ -663,7 +663,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
         it 'returns the items joined by commas and the last value preceded ' \
            'by "or"' \
         do
-          expect(described_class.humanize_list values, last_separator: ', or ')
+          expect(array_tools.humanize_list values, last_separator: ', or ')
             .to be == expected
         end
       end
@@ -672,7 +672,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
         let(:mapped) { values.map(&:upcase) }
 
         it 'passes the items to the block' do
-          expect(described_class.humanize_list values, &:upcase)
+          expect(array_tools.humanize_list values, &:upcase)
             .to be == expected
         end
       end
@@ -686,7 +686,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.immutable? nil }
+        expect { array_tools.immutable? nil }
           .to raise_error ArgumentError, /argument must be an array/
       end
     end
@@ -765,14 +765,14 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       context 'when the array is frozen' do
         include_context 'when the array is frozen'
 
+        let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.instance }
+
         it { expect(array_tools.immutable? ary).to be false }
 
         context 'when the mutable items are frozen' do
           before(:example) do
             ary.each do |item|
-              unless SleepingKingStudios::Tools::ObjectTools.immutable?(item)
-                item.freeze
-              end
+              item.freeze unless toolbelt.object_tools.immutable?(item)
             end
           end
 
@@ -887,7 +887,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
     end
 
     define_method :perform_action do
-      described_class.splice values, start, delete_count, *insert
+      array_tools.splice values, start, delete_count, *insert
     end
 
     it 'should define the method' do
@@ -906,7 +906,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.splice nil, 0, 0 }
+        expect { array_tools.splice nil, 0, 0 }
           .to raise_error ArgumentError, /argument must be an array/
       end
     end

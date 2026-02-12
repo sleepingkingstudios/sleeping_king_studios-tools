@@ -8,6 +8,10 @@ RSpec.describe SleepingKingStudios::Tools::Base do
   let(:constructor_options) { {} }
 
   describe '.instance' do
+    let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.global }
+
+    before(:example) { allow(toolbelt.core_tools).to receive(:deprecate) }
+
     it { expect(described_class).to respond_to(:instance).with(0).arguments }
 
     it { expect(described_class.instance).to be_a described_class }
@@ -16,6 +20,17 @@ RSpec.describe SleepingKingStudios::Tools::Base do
       cached = described_class.instance
 
       expect(described_class.instance).to be cached
+    end
+
+    it 'should print a deprecation warning' do # rubocop:disable RSpec/ExampleLength
+      described_class.instance
+
+      expect(toolbelt.core_tools)
+        .to have_received(:deprecate)
+        .with(
+          "#{described_class.name}.instance",
+          message: 'Use Toolbelt.instance instead.'
+        )
     end
   end
 
