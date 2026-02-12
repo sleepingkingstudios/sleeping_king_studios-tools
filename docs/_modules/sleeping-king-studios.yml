@@ -5,6 +5,7 @@ type: module
 files:
 - lib/sleeping_king_studios/tools.rb
 - lib/sleeping_king_studios/tools/version.rb
+- lib/sleeping_king_studios/tools/toolbox/initializer.rb
 parent_path: ''
 short_description: Hic iacet Arthurus, rex quondam, rexque futurus.
 defined_modules:

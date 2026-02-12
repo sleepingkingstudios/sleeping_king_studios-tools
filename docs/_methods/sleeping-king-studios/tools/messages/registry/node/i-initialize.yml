@@ -5,6 +5,19 @@ signature: 'initialize(scope:, strategy: nil)'
 slug: initialize
 constructor: true
 data_path: sleeping-king-studios/tools/messages/registry/node/i-initialize
+params:
+- description: the scope for the registry node.
+  name: scope
+  type:
+  - name: String
+- description: |-
+    the
+    strategy defined for the node, if any.
+  name: strategy
+  type:
+  - name: SleepingKingStudios::Tools::Messages::Strategy
+    path: sleeping-king-studios/tools/messages/strategy
+  default: nil
 returns:
 - description: a new instance of Node
   type:

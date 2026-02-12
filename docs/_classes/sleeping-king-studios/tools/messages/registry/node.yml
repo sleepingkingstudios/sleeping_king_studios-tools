@@ -5,7 +5,7 @@ type: class
 files:
 - lib/sleeping_king_studios/tools/messages/registry.rb
 parent_path: sleeping-king-studios/tools/messages/registry
-short_description: ''
+short_description: Data class representing a single node in the registry tree.
 instance_attributes:
 - name: children
   read: true

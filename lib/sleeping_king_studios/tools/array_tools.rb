@@ -142,7 +142,7 @@ module SleepingKingStudios::Tools
     end
     alias tally count_values
 
-    # Creates a deep copy of the object.
+    # Creates a deep copy of the array and its contents.
     #
     # Iterates over the array and returns a new Array with deep copies of each
     # array item.
@@ -214,7 +214,7 @@ module SleepingKingStudios::Tools
     #
     #   @return [Object] the value at the specified index.
     #
-    #   @raises [IndexError] if the array does not have a value at that index
+    #   @raise [IndexError] if the array does not have a value at that index
     #     and there is no default value.
     #
     # @overload fetch(ary, index, &default)
@@ -235,7 +235,7 @@ module SleepingKingStudios::Tools
     #
     #   @return [Object] the value at the specified index.
     #
-    #   @raises [IndexError] if the array does not have a value at that index
+    #   @raise [IndexError] if the array does not have a value at that index
     #     and there is no default value.
     def fetch(ary, index, default = UNDEFINED, &block)
       require_array!(ary)
@@ -265,6 +265,7 @@ module SleepingKingStudios::Tools
     #   @param ary [Array<String>] the list of values to format. Will be
     #     coerced to strings using #to_s.
     #   @param options [Hash] optional configuration hash.
+    #
     #   @option options [String] :last_separator the value to use to separate
     #     the final pair of values. Defaults to " and " (note the leading and
     #     trailing spaces). Will be combined with the :separator for lists of
@@ -275,7 +276,7 @@ module SleepingKingStudios::Tools
     #
     #   @return [String] the formatted string.
     #
-    #   @raises [ArgumentError] if the first argument is not an Array-like
+    #   @raise [ArgumentError] if the first argument is not an Array-like
     #     object.
     #
     #   @example With Zero Items

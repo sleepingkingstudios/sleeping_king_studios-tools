@@ -45,6 +45,14 @@ params:
   type:
   - name: String
   default: nil
+- description: |-
+    if true, fails if the given and expected
+    values are the same class or module.
+  name: strict
+  type:
+  - name: 'true'
+  - name: 'false'
+  default: 'false'
 raises:
 - description: |-
     if the value is not a class or module or does not

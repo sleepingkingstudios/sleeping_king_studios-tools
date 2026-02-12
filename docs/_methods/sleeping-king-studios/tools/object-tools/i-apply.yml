@@ -45,11 +45,12 @@ params:
     lambda.
   name: block
   type:
-  - name: block
+  - name: Proc
 returns:
 - description: |-
     the result of calling the proc or lambda with the given
     receiver and any additional arguments or block.
-  type: []
+  type:
+  - name: Object
 short_description: Calls a Proc or lambda on the given receiver with the given parameters.
 version: "*"

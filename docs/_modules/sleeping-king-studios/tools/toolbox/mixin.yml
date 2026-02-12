@@ -21,7 +21,7 @@ metadata:
 
         module ClassMethods
           def widget_types
-            %w(gadget doohickey thingamabob)
+            %w[gadget doohickey thingamabob]
           end
         end
 

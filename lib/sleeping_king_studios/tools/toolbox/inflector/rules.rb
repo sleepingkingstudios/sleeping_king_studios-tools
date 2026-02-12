@@ -5,11 +5,11 @@ require 'sleeping_king_studios/tools/toolbox'
 class SleepingKingStudios::Tools::Toolbox::Inflector
   # Rules for inflecting words.
   class Rules
-    # @param irregular_words [Hash<String, String>] irregular word pairs in
+    # @param irregular_words [Hash{String => String}] irregular word pairs in
     #   singular => plural order, e.g. "child" => "children".
-    # @param plural_rules [Array<Array<(Regexp, String)>>] rules for
+    # @param plural_rules [Array<Array<Regexp, String>>] rules for
     #   pluralizing words.
-    # @param singular_rules [Array<Array<(Regexp, String)>>] rules for
+    # @param singular_rules [Array<Array<Regexp, String>>] rules for
     #   singularizing words.
     # @param uncountable_words [Array<String>] uncountable words e.g. "data".
     def initialize(
@@ -27,18 +27,18 @@ class SleepingKingStudios::Tools::Toolbox::Inflector
       @irregular_words_reversed = reverse_hash(@irregular_words)
     end
 
-    # @return [Array<Array<(String, String)>>] irregular word pairs in
+    # @return [Array<Array<String, String>>] irregular word pairs in
     #   singular => plural order.
     attr_reader :irregular_words
 
-    # @return [Array<Array<(String, String)>>] irregular word pairs in plural =>
+    # @return [Array<Array<String, String>>] irregular word pairs in plural =>
     #   singular order.
     attr_reader :irregular_words_reversed
 
-    # @return [Array<Array<(Regexp, String)>>] rules for pluralizing words.
+    # @return [Array<Array<Regexp, String>>] rules for pluralizing words.
     attr_reader :plural_rules
 
-    # @return [Array<Array<(Regexp, String)>>] rules for singularizing words.
+    # @return [Array<Array<Regexp, String>>] rules for singularizing words.
     attr_reader :singular_rules
 
     # @return [Array<String>] uncountable words.

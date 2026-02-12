@@ -48,5 +48,5 @@ returns:
   type:
   - name: Object
   - name: nil
-short_description: Accesses deeply nested attributes on an object.
+short_description: Accesses deeply nested properties on an object.
 version: "*"

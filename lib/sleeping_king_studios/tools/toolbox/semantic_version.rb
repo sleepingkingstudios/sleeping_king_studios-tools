@@ -37,6 +37,11 @@ module SleepingKingStudios::Tools::Toolbox
     # compatible with Rubygems. The major, minor, patch, prerelease, and build
     # values (if available) are separated by dots (.).
     #
+    # @return [String] the modified semantic version string.
+    #
+    # @raise [SleepingKingStudios::Tools::Toolbox::SemanticVersion::InvalidVersionError]
+    #   if MAJOR, MINOR, or PATCH is undefined.
+    #
     # @example
     #   module Version
     #     extend SleepingKingStudios::Tools::SemanticVersion
@@ -50,11 +55,6 @@ module SleepingKingStudios::Tools::Toolbox
     #
     #   VERSION = Version.to_gem_version
     #   #=> '3.1.4.beta.1'
-    #
-    # @return [String] the modified semantic version string.
-    #
-    # @raise [SleepingKingStudios::Tools::Toolbox::SemanticVersion::InvalidVersionError]
-    #   if MAJOR, MINOR, or PATCH is undefined.
     def to_gem_version
       str = "#{const_fetch :MAJOR}.#{const_fetch :MINOR}.#{const_fetch :PATCH}"
 
@@ -75,6 +75,11 @@ module SleepingKingStudios::Tools::Toolbox
     # prerelease (if available) preceded by a hyphen (-), and the build (if
     # available) preceded by a plus (+).
     #
+    # @return [String] the semantic version string.
+    #
+    # @raise [SleepingKingStudios::Tools::Toolbox::SemanticVersion::InvalidVersionError]
+    #   if MAJOR, MINOR, or PATCH is undefined.
+    #
     # @example
     #   module Version
     #     extend SleepingKingStudios::Tools::SemanticVersion
@@ -88,11 +93,6 @@ module SleepingKingStudios::Tools::Toolbox
     #
     #   VERSION = Version.to_version
     #   #=> '3.1.4-beta+1'
-    #
-    # @return [String] the semantic version string.
-    #
-    # @raise [SleepingKingStudios::Tools::Toolbox::SemanticVersion::InvalidVersionError]
-    #   if MAJOR, MINOR, or PATCH is undefined.
     def to_version
       str = "#{const_fetch :MAJOR}.#{const_fetch :MINOR}.#{const_fetch :PATCH}"
 

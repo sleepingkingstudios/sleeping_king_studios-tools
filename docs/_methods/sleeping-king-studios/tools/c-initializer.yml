@@ -1,0 +1,15 @@
+---
+name: SleepingKingStudios::Tools.initializer
+parent_path: sleeping-king-studios/tools
+signature: initializer
+slug: initializer
+constructor: false
+data_path: sleeping-king-studios/tools/c-initializer
+returns:
+- description: |-
+    the initializer
+    for the module.
+  type:
+  - name: SleepingKingStudios::Tools::Toolbox::Initializer
+    path: sleeping-king-studios/tools/toolbox/initializer
+version: "*"

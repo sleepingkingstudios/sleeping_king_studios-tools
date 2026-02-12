@@ -21,6 +21,7 @@ module SleepingKingStudios
     autoload :Toolbox,      'sleeping_king_studios/tools/toolbox'
     autoload :Undefined,    'sleeping_king_studios/tools/undefined'
 
+    # @private
     UNDEFINED = Undefined.new
     Object.instance_method(:freeze).bind(UNDEFINED).call
 

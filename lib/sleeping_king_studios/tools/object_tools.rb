@@ -36,10 +36,10 @@ module SleepingKingStudios::Tools
     #   or lambda.
     # @param kwargs [Hash] optional. Additional keywords to pass in to the proc
     #   or lambda.
-    # @param block [block] optional. If present, will be passed in to proc or
+    # @param block [Proc] optional. If present, will be passed in to proc or
     #   lambda.
     #
-    # @return the result of calling the proc or lambda with the given
+    # @return [Object] the result of calling the proc or lambda with the given
     #   receiver and any additional arguments or block.
     #
     # @example
@@ -75,7 +75,7 @@ module SleepingKingStudios::Tools
     #
     # @example
     #   data = {
-    #     :songs = [
+    #     :songs => [
     #       {
     #         :name   => 'Welcome to the Jungle',
     #         :artist => "Guns N' Roses",
@@ -128,7 +128,7 @@ module SleepingKingStudios::Tools
     #
     # @example
     #   data = {
-    #     :songs = [
+    #     :songs => [
     #       {
     #         :name   => 'Welcome to the Jungle',
     #         :artist => "Guns N' Roses",
@@ -169,7 +169,7 @@ module SleepingKingStudios::Tools
       end
     end
 
-    # Accesses deeply nested attributes on an object.
+    # Accesses deeply nested properties on an object.
     #
     # This method finds the first named property on the given object, and then
     # each subsequent property on the result of the previous call.
@@ -237,7 +237,7 @@ module SleepingKingStudios::Tools
     #
     #   @return [Object] the value at the specified key or index.
     #
-    #   @raises [IndexError, KeyError, NameError] if the object does not have a
+    #   @raise [IndexError, KeyError, NameError] if the object does not have a
     #     value for the requested key or index and there is no default value.
     #
     # @overload fetch(obj, key, indifferent_key: false, &default)
@@ -261,7 +261,7 @@ module SleepingKingStudios::Tools
     #
     #   @return [Object] the value at the specified key or index.
     #
-    #   @raises [IndexError, KeyError, NameError] if the object does not have a
+    #   @raise [IndexError, KeyError, NameError] if the object does not have a
     #     value for the requested key or index and there is no default value.
     def fetch(obj, key_or_index, default = UNDEFINED, indifferent_key: false, &)
       case obj
@@ -292,6 +292,12 @@ module SleepingKingStudios::Tools
     #
     # @return [Boolean] true if the object is immutable, otherwise false.
     #
+    # @see #mutable?
+    #
+    # @see ArrayTools#immutable?
+    #
+    # @see HashTools#immutable?
+    #
     # @example
     #   ObjectTools.immutable?(nil)
     #   #=> true
@@ -316,12 +322,6 @@ module SleepingKingStudios::Tools
     #
     #   ObjectTools.immutable?([1, 2, 3].freeze)
     #   #=> false
-    #
-    # @see #mutable?
-    #
-    # @see ArrayTools#immutable?
-    #
-    # @see HashTools#immutable?
     def immutable?(obj)
       case obj
       when NilClass, FalseClass, TrueClass, Numeric, Symbol

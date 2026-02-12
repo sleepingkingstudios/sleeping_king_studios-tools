@@ -150,14 +150,14 @@ module SleepingKingStudios::Tools
     #
     # @return [Boolean] true if the word is in plural form, otherwise false.
     #
+    # @see #pluralize
+    #
     # @example
     #   StringTools.plural? 'light'
     #   #=> false
     #
     #   StringTools.plural? 'lights'
     #   #=> true
-    #
-    # @see #pluralize
     def plural?(word)
       word = require_string!(word)
 

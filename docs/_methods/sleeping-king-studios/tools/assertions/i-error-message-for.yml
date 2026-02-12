@@ -20,12 +20,6 @@ metadata:
 options:
 - name: parameters
   opts:
-  - description: |-
-      the name of the validated property. Defaults
-      to 'value'.
-    name: as
-    type:
-    - name: String
   - description: the expected object, if any.
     name: expected
     type:
@@ -35,6 +29,13 @@ params:
   name: key
   type:
   - name: String
+- description: |-
+    the name of the validated property. Defaults to
+    'value'.
+  name: as
+  type:
+  - name: String
+  default: "'value'"
 - description: additional options for generating the message.
   name: parameters
   type:

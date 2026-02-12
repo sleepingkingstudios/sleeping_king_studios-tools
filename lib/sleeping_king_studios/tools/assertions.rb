@@ -5,7 +5,7 @@ require 'forwardable'
 require 'sleeping_king_studios/tools'
 
 module SleepingKingStudios::Tools
-  # Methods for asserting on the state of a function or application.
+  # Methods for asserting on the type or content of values
   class Assertions < Base # rubocop:disable Metrics/ClassLength
     autoload :Aggregator,
       'sleeping_king_studios/tools/assertions/aggregator'
@@ -89,8 +89,6 @@ module SleepingKingStudios::Tools
     # @param error_class [Class] the exception class to raise on a failure.
     # @param message [String] the exception message to raise on a failure.
     # @param optional [true, false] if true, allows nil values.
-    # @param strict [true, false] if true, fails if the given and expected
-    #   values are the same class or module.
     #
     # @return [void]
     #
@@ -275,6 +273,8 @@ module SleepingKingStudios::Tools
     # @param error_class [Class] the exception class to raise on a failure.
     # @param expected [Class, Module] the expected ancestor.
     # @param message [String] the exception message to raise on a failure.
+    # @param strict [true, false] if true, fails if the given and expected
+    #   values are the same class or module.
     #
     # @return [void]
     #
@@ -558,10 +558,10 @@ module SleepingKingStudios::Tools
     # Generates an error message for a failed validation.
     #
     # @param key [String] the message key.
+    # @param as [String] the name of the validated property. Defaults to
+    #   'value'.
     # @param parameters [Hash] additional options for generating the message.
     #
-    # @option parameters as [String] the name of the validated property. Defaults
-    #   to 'value'.
     # @option parameters expected [Object] the expected object, if any.
     #
     # @return [String] the generated error message.
