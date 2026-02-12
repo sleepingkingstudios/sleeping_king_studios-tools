@@ -105,9 +105,30 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         let(:version)       { '1.0.0' }
         let(:object_string) { format(custom_format, object, version) }
 
+        before(:example) do
+          # rubocop:disable RSpec/SubjectStub
+          allow(core_tools).to receive(:deprecate).and_wrap_original \
+          do |original, *args, format: nil, **kwargs|
+            original.call(*args, format:, **kwargs) if format
+          end
+          # rubocop:enable RSpec/SubjectStub
+        end
+
         it 'should raise an error' do
           expect { core_tools.deprecate object, version, format: custom_format }
             .to raise_error described_class::DeprecationError, error_message
+        end
+
+        it 'should report the deprecated option' do # rubocop:disable RSpec/ExampleLength
+          begin
+            core_tools.deprecate(object, version, format: custom_format)
+          rescue described_class::DeprecationError
+            # Do nothing.
+          end
+
+          expect(core_tools) # rubocop:disable RSpec/SubjectStub
+            .to have_received(:deprecate)
+            .with("#{described_class.name}#deprecate with :format option")
         end
       end
 
@@ -191,10 +212,27 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         let(:version)       { '1.0.0' }
         let(:object_string) { format(custom_format, object, version) }
 
+        before(:example) do
+          # rubocop:disable RSpec/SubjectStub
+          allow(core_tools).to receive(:deprecate).and_wrap_original \
+          do |original, *args, format: nil, **kwargs|
+            original.call(*args, format:, **kwargs) if format
+          end
+          # rubocop:enable RSpec/SubjectStub
+        end
+
         it 'should print a deprecation warning' do
           core_tools.deprecate object, version, format: custom_format
 
           expect(Kernel).to have_received(:warn).with(formatted_warning)
+        end
+
+        it 'should report the deprecated option' do
+          core_tools.deprecate(object, version, format: custom_format)
+
+          expect(core_tools) # rubocop:disable RSpec/SubjectStub
+            .to have_received(:deprecate)
+            .with("#{described_class.name}#deprecate with :format option")
         end
       end
 
@@ -407,10 +445,8 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
   end
 
   describe '#require_each' do
-    let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.global }
-
     before(:example) do
-      allow(toolbelt.core_tools).to receive(:deprecate)
+      allow(core_tools).to receive(:deprecate) # rubocop:disable RSpec/SubjectStub
 
       allow(Kernel).to receive(:require)
     end
@@ -424,7 +460,7 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
     it 'should print a deprecation warning' do
       core_tools.require_each
 
-      expect(toolbelt.core_tools)
+      expect(core_tools) # rubocop:disable RSpec/SubjectStub
         .to have_received(:deprecate)
         .with("#{described_class.name}#require_each")
     end
