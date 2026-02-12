@@ -68,9 +68,24 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
   end
 
   describe '#bisect' do
+    let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.global }
+
+    before(:example) { allow(toolbelt.core_tools).to receive(:deprecate) }
+
     it { expect(array_tools).to respond_to(:bisect).with(1).arguments }
 
     it { expect(described_class).to respond_to(:bisect).with(1).argument }
+
+    it 'should print a deprecation warning' do # rubocop:disable RSpec/ExampleLength
+      array_tools.bisect([]) { false }
+
+      expect(toolbelt.core_tools)
+        .to have_received(:deprecate)
+        .with(
+          "#{described_class.name}#bisect",
+          message: 'Use Enumerable#partition instead.'
+        )
+    end
 
     describe 'with nil' do
       it 'should raise an error' do
@@ -157,6 +172,10 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
   end
 
   describe '#count_values' do
+    let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.global }
+
+    before(:example) { allow(toolbelt.core_tools).to receive(:deprecate) }
+
     it { expect(array_tools).to respond_to(:count_values).with(1).argument }
 
     it { expect(described_class).to respond_to(:count_values).with(1).argument }
@@ -164,6 +183,17 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
     it { expect(array_tools).to have_aliased_method(:count_values).as(:tally) }
 
     it { expect(described_class).to respond_to(:tally).with(1).argument }
+
+    it 'should print a deprecation warning' do # rubocop:disable RSpec/ExampleLength
+      array_tools.count_values([])
+
+      expect(toolbelt.core_tools)
+        .to have_received(:deprecate)
+        .with(
+          "#{described_class.name}#count_values",
+          message: 'Use Enumerable#tally instead.'
+        )
+    end
 
     describe 'with nil' do
       it 'should raise an error' do
@@ -886,6 +916,10 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
       end
     end
 
+    let(:toolbelt) { SleepingKingStudios::Tools::Toolbelt.global }
+
+    before(:example) { allow(toolbelt.core_tools).to receive(:deprecate) }
+
     define_method :perform_action do
       array_tools.splice values, start, delete_count, *insert
     end
@@ -902,6 +936,17 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
         .to respond_to(:splice)
         .with(3).arguments
         .and_unlimited_arguments
+    end
+
+    it 'should print a deprecation warning' do # rubocop:disable RSpec/ExampleLength
+      array_tools.splice([], 0, 0)
+
+      expect(toolbelt.core_tools)
+        .to have_received(:deprecate)
+        .with(
+          "#{described_class.name}#splice",
+          message: 'Use Array#[]= with a block instead.'
+        )
     end
 
     describe 'with nil' do
