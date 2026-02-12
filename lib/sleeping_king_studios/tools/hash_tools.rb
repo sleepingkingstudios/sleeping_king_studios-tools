@@ -87,7 +87,7 @@ module SleepingKingStudios::Tools
 
     # Creates a deep copy of the Hash.
     #
-    # @param hsh [Hash<Object>] the hash to copy.
+    # @param hsh [Hash] the hash to copy.
     #
     # @return [Hash] the copy of the hash.
     #

@@ -13,8 +13,9 @@ params:
   name: irregular_words
   type:
   - name: Hash
-    items:
+    keys:
     - name: String
+    values:
     - name: String
   default: nil
 - description: |-
@@ -28,7 +29,6 @@ params:
       items:
       - name: Regexp
       - name: String
-      ordered: true
   default: nil
 - description: |-
     rules for
@@ -41,7 +41,6 @@ params:
       items:
       - name: Regexp
       - name: String
-      ordered: true
   default: nil
 - description: uncountable words e.g. "data".
   name: uncountable_words

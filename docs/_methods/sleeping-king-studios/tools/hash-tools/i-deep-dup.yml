@@ -26,8 +26,6 @@ params:
   name: hsh
   type:
   - name: Hash
-    items:
-    - name: Object
 raises:
 - description: if the first argument is not an Hash-like object.
   type:

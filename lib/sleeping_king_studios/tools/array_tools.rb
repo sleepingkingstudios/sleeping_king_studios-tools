@@ -265,6 +265,7 @@ module SleepingKingStudios::Tools
     #   @param ary [Array<String>] the list of values to format. Will be
     #     coerced to strings using #to_s.
     #   @param options [Hash] optional configuration hash.
+    #
     #   @option options [String] :last_separator the value to use to separate
     #     the final pair of values. Defaults to " and " (note the leading and
     #     trailing spaces). Will be combined with the :separator for lists of

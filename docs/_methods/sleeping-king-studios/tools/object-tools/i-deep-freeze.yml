@@ -14,7 +14,7 @@ metadata:
   - name: ''
     text: |-
       data = {
-        :songs = [
+        :songs => [
           {
             :name   => 'Welcome to the Jungle',
             :artist => "Guns N' Roses",

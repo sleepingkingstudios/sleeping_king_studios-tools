@@ -558,10 +558,10 @@ module SleepingKingStudios::Tools
     # Generates an error message for a failed validation.
     #
     # @param key [String] the message key.
+    # @param as [String] the name of the validated property. Defaults to
+    #   'value'.
     # @param parameters [Hash] additional options for generating the message.
     #
-    # @option parameters as [String] the name of the validated property. Defaults
-    #   to 'value'.
     # @option parameters expected [Object] the expected object, if any.
     #
     # @return [String] the generated error message.
