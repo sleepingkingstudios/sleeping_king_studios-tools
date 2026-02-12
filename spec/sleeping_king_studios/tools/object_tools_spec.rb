@@ -44,7 +44,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:proc) { ->(*args) { object_tools_method(*args) } }
 
       define_method :apply_proc do
-        described_class.apply receiver, proc
+        object_tools.apply receiver, proc
       end
 
       it { expect(apply_proc).to be == :return_value }
@@ -63,7 +63,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
       describe 'with no arguments' do
         define_method :apply_proc do
-          described_class.apply receiver, proc
+          object_tools.apply receiver, proc
         end
 
         it 'should raise an error' do
@@ -78,7 +78,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         let(:args) { %w[ichi ni san] }
 
         define_method :apply_proc do
-          described_class.apply receiver, proc, *args
+          object_tools.apply receiver, proc, *args
         end
 
         it 'should call the object_tools method with the arguments' do
@@ -100,7 +100,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
       describe 'with no arguments' do
         define_method :apply_proc do
-          described_class.apply receiver, proc
+          object_tools.apply receiver, proc
         end
 
         it 'should raise an error' do
@@ -116,7 +116,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         let(:expected) { [*args, nil, nil] }
 
         define_method :apply_proc do
-          described_class.apply receiver, proc, *args
+          object_tools.apply receiver, proc, *args
         end
 
         it 'should call the object_tools method with the arguments' do
@@ -134,7 +134,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         let(:args) { %w[ichi ni san yon go] }
 
         define_method :apply_proc do
-          described_class.apply receiver, proc, *args
+          object_tools.apply receiver, proc, *args
         end
 
         it 'should call the object_tools method with the arguments' do
@@ -152,7 +152,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:proc) { ->(*args) { object_tools_method(*args) } }
 
       define_method :apply_proc do
-        described_class.apply receiver, proc, *args
+        object_tools.apply receiver, proc, *args
       end
 
       it 'should call the object_tools method with the arguments' do
@@ -176,7 +176,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         let(:expected) { { first: nil, second: nil, third: nil } }
 
         define_method :apply_proc do
-          described_class.apply receiver, proc
+          object_tools.apply receiver, proc
         end
 
         it 'should call the object_tools method with the default arguments' do
@@ -192,7 +192,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
       describe 'with the optional keywords' do
         define_method :apply_proc do
-          described_class.apply receiver, proc, **kwargs
+          object_tools.apply receiver, proc, **kwargs
         end
 
         it 'should call the object_tools method with the arguments' do
@@ -210,7 +210,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:proc)   { ->(**kwargs) { object_tools_method(**kwargs) } }
 
       define_method :apply_proc do
-        described_class.apply receiver, proc, **kwargs
+        object_tools.apply receiver, proc, **kwargs
       end
 
       it 'should call the object_tools method with the arguments' do
@@ -249,7 +249,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
       describe 'with no arguments' do
         define_method :apply_proc do
-          described_class.apply receiver, proc
+          object_tools.apply receiver, proc
         end
 
         it 'should raise an error' do
@@ -268,7 +268,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         end
 
         define_method :apply_proc do
-          described_class.apply receiver, proc, *args
+          object_tools.apply receiver, proc, *args
         end
 
         it 'should call the method with the arguments and defaults' do
@@ -290,7 +290,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         end
 
         define_method :apply_proc do
-          described_class.apply receiver, proc, *args, **kwargs
+          object_tools.apply receiver, proc, *args, **kwargs
         end
 
         it 'should call the method with the arguments and defaults' do
@@ -311,7 +311,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         end
 
         define_method :apply_proc do
-          described_class.apply receiver, proc, *args
+          object_tools.apply receiver, proc, *args
         end
 
         it 'should call the method with the arguments and defaults' do
@@ -330,7 +330,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         let(:kwargs) { { first: 'Who', second: 'What', third: "I Don't Know" } }
 
         define_method :apply_proc do
-          described_class.apply receiver, proc, *args, **kwargs
+          object_tools.apply receiver, proc, *args, **kwargs
         end
 
         it 'should call the object_tools method with the arguments' do
@@ -350,7 +350,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:proc) { ->(*args, &block) { object_tools_method(*args, &block) } }
 
       define_method :apply_proc do |&block|
-        described_class.apply receiver, proc, *args, &block
+        object_tools.apply receiver, proc, *args, &block
       end
 
       it 'should call the object_tools method with the arguments' do
@@ -646,18 +646,18 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     describe 'with nil' do
       let(:object) { nil }
 
-      it { expect(described_class.dig object).to be nil }
+      it { expect(object_tools.dig object).to be nil }
 
       describe 'with a method that the object responds to' do
-        it { expect(described_class.dig object, :nil?).to be true }
+        it { expect(object_tools.dig object, :nil?).to be true }
       end
 
       describe 'with a method that the object does not respond to' do
-        it { expect(described_class.dig object, :foo).to be nil }
+        it { expect(object_tools.dig object, :foo).to be nil }
       end
 
       describe 'with an invalid method chain' do
-        it { expect(described_class.dig object, :foo, :bar, :baz).to be nil }
+        it { expect(object_tools.dig object, :foo, :bar, :baz).to be nil }
       end
     end
 
@@ -667,23 +667,23 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:foo)    { Struct.new(:bar).new(bar) }
       let(:object) { Struct.new(:foo).new(foo) }
 
-      it { expect(described_class.dig object).to be object }
+      it { expect(object_tools.dig object).to be object }
 
       describe 'with a method that the object responds to' do
-        it { expect(described_class.dig object, :foo).to be foo }
+        it { expect(object_tools.dig object, :foo).to be foo }
       end
 
       describe 'with a method that the object does not respond to' do
-        it { expect(described_class.dig object, :wibble).to be nil }
+        it { expect(object_tools.dig object, :wibble).to be nil }
       end
 
       describe 'with a valid method chain' do
-        it { expect(described_class.dig object, :foo, :bar, :baz).to be baz }
+        it { expect(object_tools.dig object, :foo, :bar, :baz).to be baz }
       end
 
       describe 'with an invalid method chain' do
         it 'should return nil' do
-          expect(described_class.dig object, :foo, :wibble, :wobble).to be nil
+          expect(object_tools.dig object, :foo, :wibble, :wobble).to be nil
         end
       end
     end
@@ -696,7 +696,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
       describe 'with a valid method chain' do
         it 'should return the nested value' do
-          expect(described_class.dig(result, :data, 'users', 0, :name))
+          expect(object_tools.dig(result, :data, 'users', 0, :name))
             .to be == 'Alan Bradley'
         end
       end
@@ -719,7 +719,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         end
 
         it 'should return the nested value' do
-          expect(described_class.dig(result, *method_names))
+          expect(object_tools.dig(result, *method_names))
             .to be == 'Alan Bradley'
         end
       end
@@ -730,7 +730,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         end
 
         it 'should return nil' do
-          expect(described_class.dig(result, *method_names))
+          expect(object_tools.dig(result, *method_names))
             .to be nil
         end
       end
@@ -743,7 +743,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           let(:options) { { indifferent_keys: false } }
 
           it 'should return nil' do
-            expect(described_class.dig(result, *method_names, **options))
+            expect(object_tools.dig(result, *method_names, **options))
               .to be nil
           end
         end
@@ -757,7 +757,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           let(:options) { { indifferent_keys: true } }
 
           it 'should return nil' do
-            expect(described_class.dig(result, *method_names, **options))
+            expect(object_tools.dig(result, *method_names, **options))
               .to be == 'Alan Bradley'
           end
         end
@@ -781,7 +781,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         end
 
         it 'should return the nested value' do
-          expect(described_class.dig(result, *method_names))
+          expect(object_tools.dig(result, *method_names))
             .to be nil
         end
       end
@@ -792,7 +792,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
         end
 
         it 'should return nil' do
-          expect(described_class.dig(result, *method_names))
+          expect(object_tools.dig(result, *method_names))
             .to be == 'Alan Bradley'
         end
       end
@@ -805,7 +805,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           let(:options) { { indifferent_keys: false } }
 
           it 'should return nil' do
-            expect(described_class.dig(result, *method_names, **options))
+            expect(object_tools.dig(result, *method_names, **options))
               .to be nil
           end
         end
@@ -819,7 +819,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
           let(:options) { { indifferent_keys: true } }
 
           it 'should return nil' do
-            expect(described_class.dig(result, *method_names, **options))
+            expect(object_tools.dig(result, *method_names, **options))
               .to be == 'Alan Bradley'
           end
         end
@@ -1115,7 +1115,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     it "returns the object's singleton class" do
       metaclass = class << object; self; end
 
-      expect(described_class.eigenclass(object)).to be == metaclass
+      expect(object_tools.eigenclass(object)).to be == metaclass
     end
   end
 
@@ -1125,42 +1125,42 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     it { expect(described_class).to respond_to(:immutable?).with(1).argument }
 
     describe 'with nil' do
-      it { expect(described_class.immutable? nil).to be true }
+      it { expect(object_tools.immutable? nil).to be true }
     end
 
     describe 'with false' do
-      it { expect(described_class.immutable? false).to be true }
+      it { expect(object_tools.immutable? false).to be true }
     end
 
     describe 'with true' do
-      it { expect(described_class.immutable? true).to be true }
+      it { expect(object_tools.immutable? true).to be true }
     end
 
     describe 'with an Integer' do
-      it { expect(described_class.immutable? 0).to be true }
+      it { expect(object_tools.immutable? 0).to be true }
     end
 
     describe 'with a Float' do
-      it { expect(described_class.immutable? 0.0).to be true }
+      it { expect(object_tools.immutable? 0.0).to be true }
     end
 
     describe 'with a Symbol' do
-      it { expect(described_class.immutable? :symbol).to be true }
+      it { expect(object_tools.immutable? :symbol).to be true }
     end
 
     describe 'with an Object' do
-      it { expect(described_class.immutable? Object.new).to be false }
+      it { expect(object_tools.immutable? Object.new).to be false }
     end
 
     describe 'with a frozen Object' do
-      it { expect(described_class.immutable? Object.new.freeze).to be true }
+      it { expect(object_tools.immutable? Object.new.freeze).to be true }
     end
 
     describe 'with an Array' do
       let(:ary)      { %w[ichi ni san] }
       let(:toolbelt) { object_tools.toolbelt }
 
-      it { expect(described_class.immutable? ary).to be false }
+      it { expect(object_tools.immutable? ary).to be false }
 
       it 'should delegate to ArrayTools' do
         allow(toolbelt.array_tools).to receive(:deep_freeze)
@@ -1173,7 +1173,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       context 'when the Array is frozen' do
         let(:ary) { super().freeze }
 
-        it { expect(described_class.immutable? ary).to be true }
+        it { expect(object_tools.immutable? ary).to be true }
       end
     end
 
@@ -1187,7 +1187,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       end
       let(:toolbelt) { object_tools.toolbelt }
 
-      it { expect(described_class.immutable? hsh).to be false }
+      it { expect(object_tools.immutable? hsh).to be false }
 
       it 'should delegate to HashTools' do
         allow(toolbelt.hash_tools).to receive(:deep_freeze)
@@ -1200,7 +1200,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       context 'when the Array is frozen' do
         let(:hsh) { super().freeze }
 
-        it { expect(described_class.immutable? hsh).to be true }
+        it { expect(object_tools.immutable? hsh).to be true }
       end
     end
   end
@@ -1237,41 +1237,41 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     it { expect(described_class).to respond_to(:object?).with(1).argument }
 
     describe 'with nil' do
-      it { expect(described_class.object? nil).to be true }
+      it { expect(object_tools.object? nil).to be true }
     end
 
     describe 'with a basic object' do
-      it { expect(described_class.object? BasicObject.new).to be false }
+      it { expect(object_tools.object? BasicObject.new).to be false }
     end
 
     describe 'with an object' do
-      it { expect(described_class.object? Object.new).to be true }
+      it { expect(object_tools.object? Object.new).to be true }
     end
 
     describe 'with a string' do
-      it { expect(described_class.object? 'greetings,programs').to be true }
+      it { expect(object_tools.object? 'greetings,programs').to be true }
     end
 
     describe 'with an integer' do
-      it { expect(described_class.object? 42).to be true }
+      it { expect(object_tools.object? 42).to be true }
     end
 
     describe 'with an empty array' do
-      it { expect(described_class.object? []).to be true }
+      it { expect(object_tools.object? []).to be true }
     end
 
     describe 'with a non-empty array' do
-      it { expect(described_class.object? %w[ichi ni san]).to be true }
+      it { expect(object_tools.object? %w[ichi ni san]).to be true }
     end
 
     describe 'with an empty hash' do
-      it { expect(described_class.object?({})).to be true }
+      it { expect(object_tools.object?({})).to be true }
     end
 
     describe 'with a non-empty hash' do
       let(:object) { { greetings: 'programs' } }
 
-      it { expect(described_class.object?(object)).to be true }
+      it { expect(object_tools.object?(object)).to be true }
     end
   end
 
@@ -1296,11 +1296,11 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:object) { nil }
 
       describe 'with a method name that the object responds to' do
-        it { expect(described_class.try object, :nil?).to be true }
+        it { expect(object_tools.try object, :nil?).to be true }
       end
 
       describe 'with a method name that the object does not respond to' do
-        it { expect(described_class.try object, :foo).to be nil }
+        it { expect(object_tools.try object, :foo).to be nil }
       end
     end
 
@@ -1316,7 +1316,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       let(:expected) { 'tried :nil? with 3 arguments' }
 
       it 'should delegate to object#try' do
-        expect(described_class.try object, :nil?, 'ichi', 'ni', 'san')
+        expect(object_tools.try object, :nil?, 'ichi', 'ni', 'san')
           .to be == expected
       end
     end
@@ -1329,17 +1329,17 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       end
 
       describe 'with a method name that the object responds to' do
-        it { expect(described_class.try(object, :is_a?, Object)).to be false }
+        it { expect(object_tools.try(object, :is_a?, Object)).to be false }
 
         it 'should call the method' do
-          described_class.try(object, :is_a?, Object)
+          object_tools.try(object, :is_a?, Object)
 
           expect(object).to have_received(:is_a?).with(Object)
         end
       end
 
       describe 'with a method name that the object does not respond to' do
-        it { expect(described_class.try object, :bar).to be nil }
+        it { expect(object_tools.try object, :bar).to be nil }
       end
     end
   end

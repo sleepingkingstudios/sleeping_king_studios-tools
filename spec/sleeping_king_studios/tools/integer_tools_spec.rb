@@ -129,41 +129,41 @@ RSpec.describe SleepingKingStudios::Tools::IntegerTools do
     it { expect(described_class).to respond_to(:integer?).with(1).argument }
 
     describe 'with nil' do
-      it { expect(described_class.integer? nil).to be false }
+      it { expect(integer_tools.integer? nil).to be false }
     end
 
     describe 'with an object' do
-      it { expect(described_class.integer? Object.new).to be false }
+      it { expect(integer_tools.integer? Object.new).to be false }
     end
 
     describe 'with a string' do
-      it { expect(described_class.integer? 'greetings,programs').to be false }
+      it { expect(integer_tools.integer? 'greetings,programs').to be false }
     end
 
     describe 'with an integer' do
-      it { expect(described_class.integer? 42).to be true }
+      it { expect(integer_tools.integer? 42).to be true }
     end
 
     describe 'with a large integer' do
-      it { expect(described_class.integer? 2**72).to be true }
+      it { expect(integer_tools.integer? 2**72).to be true }
     end
 
     describe 'with an empty array' do
-      it { expect(described_class.integer? []).to be false }
+      it { expect(integer_tools.integer? []).to be false }
     end
 
     describe 'with a non-empty array' do
-      it { expect(described_class.integer? %w[ichi ni san]).to be false }
+      it { expect(integer_tools.integer? %w[ichi ni san]).to be false }
     end
 
     describe 'with an empty hash' do
-      it { expect(described_class.integer?({})).to be false }
+      it { expect(integer_tools.integer?({})).to be false }
     end
 
     describe 'with a non-empty hash' do
       let(:value) { { greetings: 'programs' } }
 
-      it { expect(described_class.integer?(value)).to be false }
+      it { expect(integer_tools.integer?(value)).to be false }
     end
   end
 
@@ -180,15 +180,15 @@ RSpec.describe SleepingKingStudios::Tools::IntegerTools do
       let(:plural) { 'cows' }
 
       describe 'with zero items' do
-        it { expect(described_class.pluralize 0, single).to be == plural }
+        it { expect(integer_tools.pluralize 0, single).to be == plural }
       end
 
       describe 'with one item' do
-        it { expect(described_class.pluralize 1, single).to be == single }
+        it { expect(integer_tools.pluralize 1, single).to be == single }
       end
 
       describe 'with many items' do
-        it { expect(described_class.pluralize 3, single).to be == plural }
+        it { expect(integer_tools.pluralize 3, single).to be == plural }
       end
     end
 
@@ -197,19 +197,19 @@ RSpec.describe SleepingKingStudios::Tools::IntegerTools do
 
       describe 'with zero items' do
         it 'should return the plural term' do
-          expect(described_class.pluralize 0, single, plural).to be == plural
+          expect(integer_tools.pluralize 0, single, plural).to be == plural
         end
       end
 
       describe 'with one item' do
         it 'should return the singular term' do
-          expect(described_class.pluralize 1, single, plural).to be == single
+          expect(integer_tools.pluralize 1, single, plural).to be == single
         end
       end
 
       describe 'with many items' do
         it 'should return the plural term' do
-          expect(described_class.pluralize 3, single, plural).to be == plural
+          expect(integer_tools.pluralize 3, single, plural).to be == plural
         end
       end
     end

@@ -150,7 +150,7 @@ module SleepingKingStudios::Tools
     #   IntegerTools.pluralize 3, 'cow', 'kine'
     #   #=> 'kine'
     def pluralize(count, single, plural = nil)
-      plural ||= StringTools.pluralize(single)
+      plural ||= toolbelt.string_tools.pluralize(single)
 
       count == 1 ? single : plural
     end

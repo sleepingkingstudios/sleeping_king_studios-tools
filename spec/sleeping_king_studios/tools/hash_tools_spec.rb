@@ -59,14 +59,14 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.convert_keys_to_strings nil }
+        expect { hash_tools.convert_keys_to_strings nil }
           .to raise_error ArgumentError, /argument must be a hash/
       end
     end
 
     describe 'with an object' do
       it 'should raise an error' do
-        expect { described_class.convert_keys_to_strings Object.new }
+        expect { hash_tools.convert_keys_to_strings Object.new }
           .to raise_error ArgumentError, /argument must be a hash/
       end
     end
@@ -74,19 +74,19 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
     describe 'with an empty hash' do
       let(:hsh) { {} }
 
-      it { expect(described_class.convert_keys_to_strings(hsh)).to be_a(Hash) }
+      it { expect(hash_tools.convert_keys_to_strings(hsh)).to be_a(Hash) }
 
-      it { expect(described_class.convert_keys_to_strings(hsh)).to be_empty }
+      it { expect(hash_tools.convert_keys_to_strings(hsh)).to be_empty }
 
-      it { expect(described_class.convert_keys_to_strings(hsh)).not_to be hsh }
+      it { expect(hash_tools.convert_keys_to_strings(hsh)).not_to be hsh }
     end
 
     describe 'with a hash with string keys' do
       let(:hsh) { { 'ichi' => 1, 'ni' => 2, 'san' => 3 } }
 
-      it { expect(described_class.convert_keys_to_strings(hsh)).to be == hsh }
+      it { expect(hash_tools.convert_keys_to_strings(hsh)).to be == hsh }
 
-      it { expect(described_class.convert_keys_to_strings(hsh)).not_to be hsh }
+      it { expect(hash_tools.convert_keys_to_strings(hsh)).not_to be hsh }
     end
 
     describe 'with a hash with symbol keys' do
@@ -94,7 +94,7 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
       let(:expected) { { 'ichi' => 1, 'ni' => 2, 'san' => 3 } }
 
       it 'should convert the keys to strings' do
-        expect(described_class.convert_keys_to_strings(hsh)).to be == expected
+        expect(hash_tools.convert_keys_to_strings(hsh)).to be == expected
       end
     end
 
@@ -119,7 +119,7 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
       end
 
       it 'should convert the keys to strings' do
-        cpy = described_class.convert_keys_to_strings(hsh)
+        cpy = hash_tools.convert_keys_to_strings(hsh)
 
         expect(cpy).to be == expected
       end
@@ -142,7 +142,7 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
       end
 
       it 'should convert the keys to strings' do
-        cpy = described_class.convert_keys_to_strings(hsh)
+        cpy = hash_tools.convert_keys_to_strings(hsh)
 
         expect(cpy).to be == expected
       end
@@ -176,14 +176,14 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.convert_keys_to_symbols nil }
+        expect { hash_tools.convert_keys_to_symbols nil }
           .to raise_error ArgumentError, /argument must be a hash/
       end
     end
 
     describe 'with an object' do
       it 'should raise an error' do
-        expect { described_class.convert_keys_to_symbols Object.new }
+        expect { hash_tools.convert_keys_to_symbols Object.new }
           .to raise_error ArgumentError, /argument must be a hash/
       end
     end
@@ -191,11 +191,11 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
     describe 'with an empty hash' do
       let(:hsh) { {} }
 
-      it { expect(described_class.convert_keys_to_symbols(hsh)).to be_a(Hash) }
+      it { expect(hash_tools.convert_keys_to_symbols(hsh)).to be_a(Hash) }
 
-      it { expect(described_class.convert_keys_to_symbols(hsh)).to be_empty }
+      it { expect(hash_tools.convert_keys_to_symbols(hsh)).to be_empty }
 
-      it { expect(described_class.convert_keys_to_symbols(hsh)).not_to be hsh }
+      it { expect(hash_tools.convert_keys_to_symbols(hsh)).not_to be hsh }
     end
 
     describe 'with a hash with string keys' do
@@ -203,7 +203,7 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
       let(:expected) { { ichi: 1, ni: 2, san: 3 } }
 
       it 'should convert the keys to symbols' do
-        cpy = described_class.convert_keys_to_symbols(hsh)
+        cpy = hash_tools.convert_keys_to_symbols(hsh)
 
         expect(cpy).to be == expected
       end
@@ -212,9 +212,9 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
     describe 'with a hash with symbol keys' do
       let(:hsh) { { ichi: 1, ni: 2, san: 3 } }
 
-      it { expect(described_class.convert_keys_to_symbols(hsh)).to be == hsh }
+      it { expect(hash_tools.convert_keys_to_symbols(hsh)).to be == hsh }
 
-      it { expect(described_class.convert_keys_to_symbols(hsh)).not_to be hsh }
+      it { expect(hash_tools.convert_keys_to_symbols(hsh)).not_to be hsh }
     end
 
     describe 'with a hash with nested arrays' do
@@ -238,7 +238,7 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
       end
 
       it 'should convert the keys to symbols' do
-        cpy = described_class.convert_keys_to_symbols(hsh)
+        cpy = hash_tools.convert_keys_to_symbols(hsh)
 
         expect(cpy).to be == expected
       end
@@ -261,7 +261,7 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
       end
 
       it 'should convert the keys to symbols' do
-        cpy = described_class.convert_keys_to_symbols(hsh)
+        cpy = hash_tools.convert_keys_to_symbols(hsh)
 
         expect(cpy).to be == expected
       end
@@ -275,14 +275,14 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.deep_dup nil }
+        expect { hash_tools.deep_dup nil }
           .to raise_error ArgumentError, /argument must be a hash/
       end
     end
 
     describe 'with an object' do
       it 'should raise an error' do
-        expect { described_class.deep_dup Object.new }
+        expect { hash_tools.deep_dup Object.new }
           .to raise_error ArgumentError, /argument must be a hash/
       end
     end
@@ -434,14 +434,14 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.deep_freeze nil }
+        expect { hash_tools.deep_freeze nil }
           .to raise_error ArgumentError, /argument must be a hash/
       end
     end
 
     describe 'with an object' do
       it 'should raise an error' do
-        expect { described_class.deep_freeze Object.new }
+        expect { hash_tools.deep_freeze Object.new }
           .to raise_error ArgumentError, /argument must be a hash/
       end
     end
@@ -1207,13 +1207,13 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.generate_binding nil }
+        expect { hash_tools.generate_binding nil }
           .to raise_error ArgumentError, /argument must be a hash/
       end
     end
 
     describe 'with an empty hash' do
-      it { expect(described_class.generate_binding({})).to be_a Binding }
+      it { expect(hash_tools.generate_binding({})).to be_a Binding }
     end
 
     describe 'with a hash with values' do
@@ -1225,10 +1225,10 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
         }
       end
 
-      it { expect(described_class.generate_binding(hash)).to be_a Binding }
+      it { expect(hash_tools.generate_binding(hash)).to be_a Binding }
 
       it 'should bind the hash values', :aggregate_failures do
-        binding = described_class.generate_binding(hash)
+        binding = hash_tools.generate_binding(hash)
 
         hash.each do |key, value|
           expect(binding.local_variable_defined?(key)).to be true
@@ -1244,42 +1244,42 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
     it { expect(described_class).to respond_to(:hash?).with(1).argument }
 
     describe 'with nil' do
-      it { expect(described_class.hash? nil).to be false }
+      it { expect(hash_tools.hash? nil).to be false }
     end
 
     describe 'with an object' do
-      it { expect(described_class.hash? Object.new).to be false }
+      it { expect(hash_tools.hash? Object.new).to be false }
     end
 
     describe 'with a struct' do
       let(:struct_class) { Struct.new(:title) }
       let(:struct)       { struct_class.new 'The Art of War' }
 
-      it { expect(described_class.hash? struct).to be false }
+      it { expect(hash_tools.hash? struct).to be false }
     end
 
     describe 'with a string' do
-      it { expect(described_class.hash? 'greetings,programs').to be false }
+      it { expect(hash_tools.hash? 'greetings,programs').to be false }
     end
 
     describe 'with an integer' do
-      it { expect(described_class.hash? 42).to be false }
+      it { expect(hash_tools.hash? 42).to be false }
     end
 
     describe 'with an empty array' do
-      it { expect(described_class.hash? []).to be false }
+      it { expect(hash_tools.hash? []).to be false }
     end
 
     describe 'with a non-empty array' do
-      it { expect(described_class.hash? %w[ichi ni san]).to be false }
+      it { expect(hash_tools.hash? %w[ichi ni san]).to be false }
     end
 
     describe 'with an empty hash' do
-      it { expect(described_class.hash?({})).to be true }
+      it { expect(hash_tools.hash?({})).to be true }
     end
 
     describe 'with a non-empty hash' do
-      it { expect(described_class.hash?({ greetings: 'programs' })).to be true }
+      it { expect(hash_tools.hash?({ greetings: 'programs' })).to be true }
     end
 
     describe 'with a hash-like object' do
@@ -1298,7 +1298,7 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
           :each_pair
       end
 
-      it { expect(described_class.hash?(hash_like)).to be true }
+      it { expect(hash_tools.hash?(hash_like)).to be true }
     end
   end
 
@@ -1309,14 +1309,14 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
 
     describe 'with nil' do
       it 'should raise an error' do
-        expect { described_class.immutable? nil }
+        expect { hash_tools.immutable? nil }
           .to raise_error ArgumentError, /argument must be a hash/
       end
     end
 
     describe 'with an object' do
       it 'should raise an error' do
-        expect { described_class.immutable? Object.new }
+        expect { hash_tools.immutable? Object.new }
           .to raise_error ArgumentError, /argument must be a hash/
       end
     end

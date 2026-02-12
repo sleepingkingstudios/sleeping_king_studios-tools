@@ -16,7 +16,14 @@ module SleepingKingStudios::Tools
 
     # @return [SleepingKingStudios::Tools::Base] a memoized instance of the
     #   tools class.
+    #
+    # @deprecated v1.3.0 Use Toolbelt.instance instead.
     def self.instance
+      SleepingKingStudios::Tools::Toolbelt.instance.core_tools.deprecate(
+        "#{name}.instance",
+        message: 'Use Toolbelt.instance instead.'
+      )
+
       @instance ||= new
     end
 
