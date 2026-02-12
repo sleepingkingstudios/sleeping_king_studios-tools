@@ -190,6 +190,12 @@ module SleepingKingStudios::Tools
     def pluralize(*args)
       str = require_string!(args.first)
 
+      unless args.one?
+        toolbelt.core_tools.deprecate(
+          "#{self.class.name}#pluralize with multiple arguments"
+        )
+      end
+
       inflector.pluralize(str)
     end
 
