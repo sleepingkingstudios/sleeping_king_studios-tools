@@ -7,6 +7,8 @@ aliases:
 - metaclass
 constructor: false
 data_path: sleeping-king-studios/tools/object-tools/i-eigenclass
+metadata:
+  deprecated: v1.3.0 Use Object#singleton_class instead.
 params:
 - description: the object for which an eigenclass is required.
   name: obj

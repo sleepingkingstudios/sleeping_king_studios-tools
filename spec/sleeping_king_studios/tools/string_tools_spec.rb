@@ -404,6 +404,20 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     it { expect(described_class).to respond_to(:pluralize).with(1).argument }
 
     include_examples 'should delegate to the inflector', :pluralize, 'thing'
+
+    describe 'with multiple arguments' do
+      let(:toolbelt)   { SleepingKingStudios::Tools::Toolbelt.global }
+
+      before(:example) { allow(toolbelt.core_tools).to receive(:deprecate) }
+
+      it 'should print a deprecation warning' do
+        string_tools.pluralize('thing', 0, 1)
+
+        expect(toolbelt.core_tools)
+          .to have_received(:deprecate)
+          .with("#{described_class.name}#pluralize with multiple arguments")
+      end
+    end
   end
 
   describe '#singular?' do

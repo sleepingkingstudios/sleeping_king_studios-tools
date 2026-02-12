@@ -945,7 +945,7 @@ RSpec.describe SleepingKingStudios::Tools::ArrayTools do
         .to have_received(:deprecate)
         .with(
           "#{described_class.name}#splice",
-          message: 'Use Array#[]= with a block instead.'
+          message: 'Use Array#[]= with a range instead.'
         )
     end
 

@@ -9,6 +9,7 @@ description: |-
   Use #chain to call each specified method in the chain in sequence, passing
   the output of each method to the next method.
 metadata:
+  deprecated: v1.3.0 Use Object#then {} instead.
   examples:
   - name: ''
     text: |-

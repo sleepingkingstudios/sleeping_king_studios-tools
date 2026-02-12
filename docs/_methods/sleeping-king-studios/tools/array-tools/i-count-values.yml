@@ -1,12 +1,14 @@
 ---
 name: SleepingKingStudios::Tools::ArrayTools#count_values
 parent_path: sleeping-king-studios/tools/array-tools
-signature: count_values(ary, &block)
+signature: count_values(ary, &)
 slug: count-values
 aliases:
 - tally
 constructor: false
 data_path: sleeping-king-studios/tools/array-tools/i-count-values
+metadata:
+  deprecated: v1.3.0 Use Enumerable#tally instead.
 overloads:
 - name: SleepingKingStudios::Tools::ArrayTools#count_values
   parent_path: sleeping-king-studios/tools/array-tools

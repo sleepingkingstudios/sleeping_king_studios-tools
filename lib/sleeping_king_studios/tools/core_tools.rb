@@ -103,6 +103,8 @@ module SleepingKingStudios::Tools
     #   @param message [String] an optional message to print after the formatted
     #     string. Defaults to nil.
     def deprecate(*, caller: nil, format: nil, message: nil)
+      deprecate("#{self.class.name}#deprecate with :format option") if format
+
       case deprecation_strategy
       when 'ignore'
         # Do nothing.
@@ -116,6 +118,8 @@ module SleepingKingStudios::Tools
     # Generates an empty Binding object with an Object as the receiver.
     #
     # @return [Binding] The empty binding object.
+    #
+    # @see HashTools#generate_binding.
     def empty_binding
       Object.new.instance_exec { binding }
     end
@@ -123,7 +127,11 @@ module SleepingKingStudios::Tools
     # Expands each file pattern and requires each file.
     #
     # @param file_patterns [Array] The files to require.
+    #
+    # @deprecated v1.3.0
     def require_each(*file_patterns)
+      deprecate("#{self.class.name}#require_each")
+
       file_patterns.each do |file_pattern|
         if file_pattern.include?('*')
           Dir[file_pattern].each do |file_name|

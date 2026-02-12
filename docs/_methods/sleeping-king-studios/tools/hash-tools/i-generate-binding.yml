@@ -5,6 +5,7 @@ signature: generate_binding(hsh)
 slug: generate-binding
 constructor: false
 data_path: sleeping-king-studios/tools/hash-tools/i-generate-binding
+description: This method is primarily used when rendering ERB templates.
 metadata:
   examples:
   - name: ''
