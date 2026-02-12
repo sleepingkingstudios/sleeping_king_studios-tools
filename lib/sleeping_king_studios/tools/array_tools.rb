@@ -83,19 +83,19 @@ module SleepingKingStudios::Tools
     #   #=> [0, 2, 4, 6, 8]
     #   rejected
     #   #=> [1, 3, 5, 7, 9]
-    def bisect(ary)
+    #
+    # @deprecated v1.3.0 Use Enumerable#partition instead.
+    def bisect(ary, &)
+      toolbelt.core_tools.deprecate(
+        "#{self.class.name}#bisect",
+        message: 'Use Enumerable#partition instead.'
+      )
+
       require_array!(ary)
 
       raise ArgumentError, 'no block given' unless block_given?
 
-      selected = []
-      rejected = []
-
-      ary.each do |item|
-        (yield(item) ? selected : rejected) << item
-      end
-
-      [selected, rejected]
+      ary.each.partition(&)
     end
 
     # Counts the number of times each item or result appears in the object.
@@ -131,14 +131,17 @@ module SleepingKingStudios::Tools
     #   @example
     #     ArrayTools.count_values([1, 1, 1, 2, 2, 3]) { |i| i ** 2 }
     #     #=> { 1 => 3, 4 => 2, 9 => 1 }
-    def count_values(ary, &block)
+    #
+    # @deprecated v1.3.0 Use Enumerable#tally instead.
+    def count_values(ary, &)
+      toolbelt.core_tools.deprecate(
+        "#{self.class.name}#count_values",
+        message: 'Use Enumerable#tally instead.'
+      )
+
       require_array!(ary)
 
-      ary.each.with_object({}) do |item, hsh|
-        value = block_given? ? block.call(item) : item
-
-        hsh[value] = hsh.fetch(value, 0) + 1
-      end
+      (block_given? ? ary.map(&) : ary.to_a).tally
     end
     alias tally count_values
 
@@ -408,7 +411,14 @@ module SleepingKingStudios::Tools
     #   #=> ['crossbow']
     #   values
     #   #=> ['shortbow', 'longbow', 'arbalest', 'chu-ko-nu']
+    #
+    # @deprecated v1.3.0 Use Array#[]= with a block instead.
     def splice(ary, start, delete_count, *insert)
+      toolbelt.core_tools.deprecate(
+        "#{self.class.name}#splice",
+        message: 'Use Array#[]= with a block instead.'
+      )
+
       require_array!(ary)
 
       start  += ary.count if start.negative?

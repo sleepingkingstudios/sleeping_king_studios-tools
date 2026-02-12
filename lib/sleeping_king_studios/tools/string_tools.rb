@@ -70,7 +70,14 @@ module SleepingKingStudios::Tools
     #   # Equivalent to `StringTools.underscore(StringTools.pluralize str)`.
     #   StringTools#chain 'ArchivedPeriodical', :underscore, :pluralize
     #   # => 'archived_periodicals'
+    #
+    # @deprecated v1.3.0 Use Object#then {} instead.
     def chain(str, *commands)
+      toolbelt.core_tools.deprecate(
+        "#{self.class.name}#chain",
+        message: 'Use Object#then {} instead.'
+      )
+
       str = require_string!(str)
 
       commands.reduce(str) { |memo, command| public_send(command, memo) }

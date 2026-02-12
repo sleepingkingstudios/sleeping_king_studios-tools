@@ -67,6 +67,9 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
     let(:operations) { [] }
     let(:value)      { 'ArchivedPeriodical' }
     let(:expected)   { 'ArchivedPeriodical' }
+    let(:toolbelt)   { SleepingKingStudios::Tools::Toolbelt.global }
+
+    before(:example) { allow(toolbelt.core_tools).to receive(:deprecate) }
 
     it 'should define the method' do
       expect(string_tools)
@@ -80,6 +83,17 @@ RSpec.describe SleepingKingStudios::Tools::StringTools do
         .to respond_to(:chain)
         .with(1).argument
         .and_unlimited_arguments
+    end
+
+    it 'should print a deprecation warning' do # rubocop:disable RSpec/ExampleLength
+      string_tools.chain(value, *operations)
+
+      expect(toolbelt.core_tools)
+        .to have_received(:deprecate)
+        .with(
+          "#{described_class.name}#chain",
+          message: 'Use Object#then {} instead.'
+        )
     end
 
     describe 'with a string' do
