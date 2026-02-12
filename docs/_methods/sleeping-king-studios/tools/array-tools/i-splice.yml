@@ -6,6 +6,7 @@ slug: splice
 constructor: false
 data_path: sleeping-king-studios/tools/array-tools/i-splice
 metadata:
+  deprecated: v1.3.0 Use Array#[]= with a range instead.
   examples:
   - name: Deleting items from an Array
     text: |-

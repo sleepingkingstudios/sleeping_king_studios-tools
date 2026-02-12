@@ -5,6 +5,8 @@ signature: instance
 slug: instance
 constructor: false
 data_path: sleeping-king-studios/tools/base/c-instance
+metadata:
+  deprecated: v1.3.0 Use Toolbelt.instance instead.
 returns:
 - description: |-
     a memoized instance of the

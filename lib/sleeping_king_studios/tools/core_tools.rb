@@ -118,6 +118,8 @@ module SleepingKingStudios::Tools
     # Generates an empty Binding object with an Object as the receiver.
     #
     # @return [Binding] The empty binding object.
+    #
+    # @see HashTools#generate_binding.
     def empty_binding
       Object.new.instance_exec { binding }
     end

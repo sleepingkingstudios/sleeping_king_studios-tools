@@ -211,6 +211,8 @@ module SleepingKingStudios::Tools
 
     # Generates a Binding with the hash values as local variables.
     #
+    # This method is primarily used when rendering ERB templates.
+    #
     # @return [Binding] the binding object.
     #
     # @raise [ArgumentError] if the first argument is not an Hash-like object.

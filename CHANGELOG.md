@@ -10,6 +10,12 @@ Tools objects now define a circular `#toolbelt` reference.
 
 Added `ArrayTools#fetch`, which retrieves the value at the requested index or raises an `IndexError`.
 
+Deprecated methods with native equivalents:
+
+- Deprecated `#bisect` - use `Enumerable#partition` instead.
+- Deprecated `#count_values` - use `Enumerable#tally` instead.
+- Deprecated `#splice` - use `Array#[]=` with a range instead.
+
 #### Assertions
 
 Added the following methods to `Assertions`.
@@ -35,6 +41,8 @@ Updated `CoreTools` deprecations:
 - Now supports passing `deprecate(message, caller:)` to override displayed backtrace.
 - Initializing `CoreTools` with an invalid deprecation strategy now raises an `ArgumentError`.
 
+Deprecated `#require_each` method.
+
 #### HashTools
 
 Added `HashTools#fetch`, which retrieves the value at the requested key or raises a `KeyError`.
@@ -53,6 +61,19 @@ Added `#[]` support to `ObjectTools#dig`, allowing access through indexed data s
 - Added `:indifferent_keys` option - if set, treats `String` and `Symbol` values as interchangeable when traversing a `Hash` using `ObjectTools#dig`.
 
 Added `ObjectTools#fetch`, which tries to find the requested value via the named method call or by calling `#[]`.
+
+Deprecated methods with native equivalents:
+
+- Deprecated `#eigenclass` - use `Object#singleton_class` instead.
+- Deprecated `#try` - use the safe access operator `&.` instead.
+
+#### StringTools
+
+Deprecated methods with native equivalents:
+
+- Deprecated `#chain` - use `Object#then {}` instead.
+
+Deprecated calling `#pluralize` with multiple arguments.
 
 ### Toolbelt
 

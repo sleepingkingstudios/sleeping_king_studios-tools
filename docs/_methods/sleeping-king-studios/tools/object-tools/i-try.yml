@@ -9,6 +9,7 @@ description: |-
   This method relies on #respond_to?, so methods defined with
   method_missing will not be called.
 metadata:
+  deprecated: v1.3.0 Use the safe access operator &. instead.
   examples:
   - name: ''
     text: |-

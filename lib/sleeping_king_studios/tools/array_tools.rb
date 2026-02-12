@@ -412,11 +412,11 @@ module SleepingKingStudios::Tools
     #   values
     #   #=> ['shortbow', 'longbow', 'arbalest', 'chu-ko-nu']
     #
-    # @deprecated v1.3.0 Use Array#[]= with a block instead.
+    # @deprecated v1.3.0 Use Array#[]= with a range instead.
     def splice(ary, start, delete_count, *insert)
       toolbelt.core_tools.deprecate(
         "#{self.class.name}#splice",
-        message: 'Use Array#[]= with a block instead.'
+        message: 'Use Array#[]= with a range instead.'
       )
 
       require_array!(ary)
