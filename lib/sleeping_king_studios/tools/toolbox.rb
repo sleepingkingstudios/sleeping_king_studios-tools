@@ -7,6 +7,8 @@ module SleepingKingStudios::Tools
   module Toolbox
     autoload :ConstantMap,
       'sleeping_king_studios/tools/toolbox/constant_map'
+    autoload :HeritableData,
+      'sleeping_king_studios/tools/toolbox/heritable_data'
     autoload :Inflector,
       'sleeping_king_studios/tools/toolbox/inflector'
     autoload :Initializer,
