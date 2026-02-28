@@ -12,7 +12,7 @@ group :development, :test do
   gem 'rake', '~> 13.2'
   gem 'rspec', '~> 3.13'
   gem 'rspec-sleeping_king_studios', '~> 2.8.4'
-  gem 'rubocop', '~> 1.84'
+  gem 'rubocop', '~> 1.85'
   gem 'rubocop-rake', '~> 0.7'
   gem 'rubocop-rspec', '~> 3.9'
   gem 'simplecov', '~> 0.22'
