@@ -1,0 +1,22 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::HeritableData#is_a?
+parent_path: sleeping-king-studios/tools/toolbox/heritable-data
+signature: is_a?(type)
+slug: is-a?
+aliases:
+- kind_of?
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/heritable-data/i-is-a?
+params:
+- description: the type to check.
+  name: type
+  type:
+  - name: Module
+returns:
+- description: |-
+    if the object class inherits from type, or if the object
+    class inherits members and methods from the given type.
+  type:
+  - name: 'true'
+short_description: Checks if the object class inherits from type.
+version: "*"

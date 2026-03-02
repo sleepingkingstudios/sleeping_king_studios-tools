@@ -1,0 +1,39 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::HeritableData::ClassMethods
+slug: class-methods
+type: module
+files:
+- lib/sleeping_king_studios/tools/toolbox/heritable_data.rb
+parent_path: sleeping-king-studios/tools/toolbox/heritable-data
+short_description: Methods prepended onto the singleton class when including HeritableData.
+instance_methods:
+- name: "<"
+  path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i-<
+  slug: "<"
+  inherited: false
+- name: "<="
+  path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i-<=
+  slug: "<="
+  inherited: false
+- name: "<=>"
+  path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i-<=>
+  slug: "<=>"
+  inherited: false
+- name: "==="
+  path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i-===
+  slug: "==="
+  inherited: false
+- name: ">"
+  path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i->
+  slug: ">"
+  inherited: false
+- name: ">="
+  path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i->=
+  slug: ">="
+  inherited: false
+- name: define
+  path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i-define
+  slug: define
+  inherited: false
+data_path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods
+version: "*"

@@ -26,10 +26,14 @@ RSpec.configure do |config|
   config.include RSpec::SleepingKingStudios::Deferred::Consumer
   config.include RSpec::SleepingKingStudios::Examples::PropertyExamples
 
-  # Limit a spec run to individual examples or groups you care about by tagging
-  # them with `:focus` metadata.
-  config.filter_run :focus
-  config.run_all_when_everything_filtered = true
+  config.disable_monkey_patching!
+
+  # This allows you to limit a spec run to individual examples or groups
+  # you care about by tagging them with `:focus` metadata.
+  config.filter_run_when_matching :focus
+
+  # Allows RSpec to persist some state between runs.
+  config.example_status_persistence_file_path = 'spec/examples.txt'
 
   # Allow more verbose output when running an individual spec file.
   config.default_formatter = 'doc' if config.files_to_run.one?

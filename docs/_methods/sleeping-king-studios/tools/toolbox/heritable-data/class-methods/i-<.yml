@@ -1,0 +1,29 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::HeritableData::ClassMethods#<
+parent_path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods
+signature: "<(other)"
+slug: "<"
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i-<
+params:
+- description: the object to compare.
+  name: other
+  type:
+  - name: Object
+returns:
+- description: |-
+    if self is a subclass of other, or if self inherits Data
+    members and methods from other.
+  type:
+  - name: 'true'
+- description: |-
+    if self and other are the same class, if other is a
+    subclass of self, or if other inherits Data members and methods from
+    self.
+  type:
+  - name: 'false'
+- description: if none of the above is true.
+  type:
+  - name: nil
+short_description: Compares `self` and `other`.
+version: "*"

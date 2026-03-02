@@ -67,6 +67,9 @@ It also provides a set of utility classes:
 - **[Constant Map]({{site.baseurl}}/constant-maps)**
   <br>
   Provides an enumerable interface for defining a group of constants.
+- **[HeritableData]({{site.baseurl}}/heritable-data)**
+  <br>
+  Define `Data` subclasses with inheritable members and methods.
 - **[Initializer]({{site.baseurl}}/initializer)**
   <br>
   Utility class for initializing a library or project and its dependencies.

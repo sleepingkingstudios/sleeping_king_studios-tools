@@ -22,7 +22,7 @@ module SleepingKingStudios::Tools
     end
 
     # Data class representing a single node in the registry tree.
-    Node = Struct.new(:children, :scope, :strategy, keyword_init: true) do
+    Node = Struct.new(:children, :scope, :strategy) do
       # @param scope [String] the scope for the registry node.
       # @param strategy [SleepingKingStudios::Tools::Messages::Strategy] the
       #   strategy defined for the node, if any.

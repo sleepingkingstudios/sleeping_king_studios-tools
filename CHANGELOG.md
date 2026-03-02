@@ -91,6 +91,10 @@ Added keyword support to `ConstantMap.new`.
 
 Corrected the scope of `Mixin#included` and `Mixin#prepended` to be `private`.
 
+#### HeritableData
+
+Added `Toolbox::HeritableData`, which allows for defining `Data` subclasses with inheritable members and methods.
+
 #### Initializer
 
 Added `Toolbox::Initializer`, used for defining a one-time initialization for a library or project.
