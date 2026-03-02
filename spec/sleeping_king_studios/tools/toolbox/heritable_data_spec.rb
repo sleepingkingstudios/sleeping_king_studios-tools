@@ -25,13 +25,90 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
   let(:attributes)      { { type: 'spec.event' } }
 
   example_constant 'Spec::Event' do
-    Data.define(:type) do
-      include SleepingKingStudios::Tools::Toolbox::HeritableData
+    SleepingKingStudios::Tools::Toolbox::HeritableData.define(:type) do # rubocop:disable RSpec/DescribedClass
+      def event_type = type
     end
   end
 
-  describe '::Methods' do
-    it { expect(described_class).to define_constant(:Methods) }
+  describe '::HeritableMethods' do
+    it { expect(described_class).to define_constant(:HeritableMethods) }
+  end
+
+  describe 'singleton_class.define' do
+    let(:symbols)    { [] }
+    let(:methods)    { nil }
+    let(:options)    { {} }
+    let(:subclass)   { concern.define(*symbols, **options, &methods) }
+    let(:attributes) { {} }
+    let(:instance)   { subclass.new(**attributes) }
+
+    it 'should define the class method' do
+      expect(concern)
+        .to respond_to(:define)
+        .with_unlimited_arguments
+        .and_keywords(:parent_class)
+        .and_a_block
+    end
+
+    it { expect(subclass).to be_a(Class) }
+
+    it { expect(subclass.superclass).to be Data }
+
+    it { expect(subclass).to be < concern }
+
+    it { expect(subclass.members).to be == [] }
+
+    describe 'with a block' do
+      let(:methods) do
+        lambda do
+          def greet = 'Greetings, programs!'
+        end
+      end
+
+      it { expect(instance).to respond_to(:greet).with(0).arguments }
+
+      it { expect(instance.greet).to be == 'Greetings, programs!' }
+    end
+
+    describe 'with symbols' do
+      let(:symbols) { %i[details] }
+
+      it { expect(subclass.members).to be == %i[details] }
+    end
+
+    describe 'with parent_class: value' do
+      let(:parent_class) { Spec::Event }
+      let(:options)      { { parent_class: } }
+      let(:attributes)   { super().merge(type: 'spec.event') }
+
+      it { expect(subclass).to be_a(Class) }
+
+      it { expect(subclass.superclass).to be Data }
+
+      it { expect(subclass).to be < concern }
+
+      it { expect(subclass.members).to be == %i[type] }
+
+      it { expect(instance.event_type).to be == 'spec.event' }
+
+      describe 'with a block' do
+        let(:methods) do
+          lambda do
+            def greet = 'Greetings, programs!'
+          end
+        end
+
+        it { expect(instance).to respond_to(:greet).with(0).arguments }
+
+        it { expect(instance.greet).to be == 'Greetings, programs!' }
+      end
+
+      describe 'with symbols' do
+        let(:symbols) { %i[details] }
+
+        it { expect(subclass.members).to be == %i[type details] }
+      end
+    end
   end
 
   describe '.<' do
@@ -377,6 +454,8 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
 
     it { expect(subclass.members).to be == %i[type] }
 
+    it { expect(instance.event_type).to be == 'spec.event' }
+
     describe 'with a block' do
       let(:methods) do
         lambda do
@@ -408,6 +487,8 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
 
       it { expect(instance.admin?).to be false }
 
+      it { expect(instance.event_type).to be == 'spec.event' }
+
       describe 'with a block' do
         let(:methods) do
           lambda do
@@ -425,14 +506,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
 
         it { expect(subclass.members).to be == %i[type user details] }
       end
-    end
-  end
-
-  describe '.prototype' do
-    include_examples 'should define class reader', :prototype, Data
-
-    wrap_deferred 'with an inherited data class' do
-      it { expect(described_class.prototype).to be Spec::Event }
     end
   end
 
