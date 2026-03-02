@@ -1,0 +1,23 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::HeritableData
+slug: heritable-data
+type: module
+files:
+- lib/sleeping_king_studios/tools/toolbox/heritable_data.rb
+parent_path: sleeping-king-studios/tools/toolbox
+short_description: Mixin to allow defining subclasses of Data classes.
+class_methods:
+- name: define
+  path: sleeping-king-studios/tools/toolbox/heritable-data/c-define
+  slug: define
+  inherited: false
+defined_modules:
+- name: ClassMethods
+  slug: class-methods
+instance_methods:
+- name: is_a?
+  path: sleeping-king-studios/tools/toolbox/heritable-data/i-is-a?
+  slug: is-a?
+  inherited: false
+data_path: sleeping-king-studios/tools/toolbox/heritable-data
+version: "*"
