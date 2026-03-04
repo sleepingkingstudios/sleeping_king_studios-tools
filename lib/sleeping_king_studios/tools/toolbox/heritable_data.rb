@@ -116,28 +116,33 @@ module SleepingKingStudios::Tools::Toolbox
       #   methods from.
       #
       # @yield additional methods to define on the new Data class.
-      def define(*symbols, parent_class: nil, &methods)
-        Data.define(*parent_class&.members, *symbols) do
-          include HeritableData
+      def define(*symbols, parent_class: nil, &)
+        Data.define(*parent_class&.members, *symbols).tap do |data_class|
+          data_class.include(HeritableData)
 
-          if parent_class
-            self::HeritableMethods.include(parent_class::HeritableMethods)
-          end
-
-          self::HeritableMethods.class_exec(&methods) if methods
+          define_mixin_for(data_class, parent_class, &)
         end
       end
 
       private
 
+      def define_mixin_for(data_class, parent_class = nil, &methods)
+        unless data_class.const_defined?(:HeritableMethods, false)
+          data_class.const_set(:HeritableMethods, Module.new)
+        end
+
+        if parent_class
+          data_class::HeritableMethods.include(parent_class::HeritableMethods)
+        end
+
+        data_class::HeritableMethods.class_exec(&methods) if methods
+
+        data_class.include(data_class::HeritableMethods)
+      end
+
       def included(other)
         super
 
-        unless other.const_defined?(:HeritableMethods, false)
-          other.const_set(:HeritableMethods, Module.new)
-        end
-
-        other.include(other.const_get(:HeritableMethods))
         other.singleton_class.prepend(ClassMethods)
       end
     end

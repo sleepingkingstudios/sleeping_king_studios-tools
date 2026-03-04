@@ -468,6 +468,22 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
       it { expect(instance.loud_type).to be == 'SPEC.EVENT' }
     end
 
+    describe 'with a block that defines a lifecycle hook' do
+      let(:methods) do
+        lambda do
+          def self.included(other)
+            super
+
+            other.define_singleton_method(:secret) { '12345' }
+          end
+        end
+      end
+
+      it { expect(subclass).to respond_to(:secret).with(0).arguments }
+
+      it { expect(subclass.secret).to be == '12345' }
+    end
+
     describe 'with symbols' do
       let(:symbols) { %i[details] }
 
@@ -499,6 +515,22 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
         it { expect(instance).to respond_to(:loud_type).with(0).arguments }
 
         it { expect(instance.loud_type).to be == 'SPEC.EVENT' }
+      end
+
+      describe 'with a block that defines a lifecycle hook' do
+        let(:methods) do
+          lambda do
+            def self.included(other)
+              super
+
+              other.define_singleton_method(:secret) { '12345' }
+            end
+          end
+        end
+
+        it { expect(subclass).to respond_to(:secret).with(0).arguments }
+
+        it { expect(subclass.secret).to be == '12345' }
       end
 
       describe 'with symbols' do
