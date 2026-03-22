@@ -15,7 +15,7 @@ module SleepingKingStudios
       # Prerelease version.
       PRERELEASE = :rc
       # Build metadata.
-      BUILD = 0
+      BUILD = 1
 
       class << self
         # Generates the gem version string from the Version constants.
