@@ -53,7 +53,10 @@ module SleepingKingStudios::Tools::Toolbox
 
         return nil unless other.const_defined?(:HeritableMethods)
 
-        self::HeritableMethods <=> other::HeritableMethods
+        return -1 if include?(other::HeritableMethods)
+        return 1 if other.include?(self::HeritableMethods)
+
+        nil
       end
 
       # @return [true] if the object is an instance of the data class, or if the
@@ -108,6 +111,45 @@ module SleepingKingStudios::Tools::Toolbox
       end
     end
 
+    # Custom module used to propagate heritable methods across Data classes.
+    #
+    # @private
+    class HeritableMethods < Module
+      # @param parent_class [Class, nil] the parent data class, if any.
+      #
+      # @yield additional methods to define on the Data class.
+      def initialize(parent_class: nil, &methods)
+        super(&nil)
+
+        @parent_class = parent_class
+
+        class_exec(&methods) if methods
+      end
+
+      # @return [Class, nil] the parent data class.
+      attr_reader :parent_class
+
+      private
+
+      def each_ancestor
+        return enum_for(:each_ancestor) unless block_given?
+
+        ancestor = parent_class
+
+        while ancestor
+          yield ancestor::HeritableMethods
+
+          ancestor = ancestor::HeritableMethods.parent_class
+        end
+      end
+
+      def included(other)
+        super
+
+        each_ancestor { |ancestor| other.include(ancestor) }
+      end
+    end
+
     class << self
       # Defines a new heritable Data class.
       #
@@ -126,16 +168,11 @@ module SleepingKingStudios::Tools::Toolbox
 
       private
 
-      def define_mixin_for(data_class, parent_class = nil, &methods)
-        unless data_class.const_defined?(:HeritableMethods, false)
-          data_class.const_set(:HeritableMethods, Module.new)
-        end
-
-        if parent_class
-          data_class::HeritableMethods.include(parent_class::HeritableMethods)
-        end
-
-        data_class::HeritableMethods.class_exec(&methods) if methods
+      def define_mixin_for(data_class, parent_class = nil, &)
+        data_class.const_set(
+          :HeritableMethods,
+          HeritableData::HeritableMethods.new(parent_class:, &)
+        )
 
         data_class.include(data_class::HeritableMethods)
       end

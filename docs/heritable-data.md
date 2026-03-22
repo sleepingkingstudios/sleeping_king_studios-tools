@@ -39,6 +39,7 @@ The class reference for `SleepingKingStudios::Tools::Toolbox::HeritableData` can
 - [Defining Heritable Data](#defining-heritable-data)
 - [Subclassing Heritable Data](#subclassing-heritable-data)
 - [Reflection And Comparison](#reflection-and-comparison)
+- [Defining Class Methods](#defining-class-methods)
 
 ## Defining Heritable Data
 
@@ -165,6 +166,44 @@ message =
 message
 #=> 'A user did something.'
 ```
+
+[Back To Top](#)
+
+## Defining Class Methods
+
+The easiest way to define class methods is by redefining the `included` hook:
+
+```ruby
+module Events
+  module ClassMethods
+    def metadata = { name: }
+  end
+end
+
+Event = SleepingKingStudios::Tools::Toolbox::HeritableData.define(:type) do
+  class << self
+    private
+
+    def included(other)
+      super
+
+      other.extend(Events::ClassMethods)
+    end
+  end
+end
+
+UserEvent = Event.define(:user)
+
+Event.metadata
+#=> { name: 'Event' }
+
+UserEvent.metadata
+#=> { name: 'UserEvent' }
+```
+
+In the above example, we redefine the `included` hook to also extend the `Events::ClassMethods` onto `Event` and each `Event` subclass.
+
+One potential pitfall to be aware of: a `Data.define` block doesn't create a new Ruby *namespace*, meaning that constants defined inside the block will actually be defined on the parent namespace. That means that defining `ClassMethods` inside of the `define` block won't work correctly unless done using the `const_set` method (in which case, watch out for block precedence). Defining the module ahead of time (as we do in the above example) is the safest approach.
 
 [Back To Top](#)
 

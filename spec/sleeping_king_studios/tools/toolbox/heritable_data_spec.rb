@@ -132,6 +132,10 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
       it { expect(described_class < described_class).to be false } # rubocop:disable Lint/BinaryOperatorWithIdenticalOperands
     end
 
+    describe 'with a data class' do
+      it { expect(described_class < concern.define).to be nil }
+    end
+
     describe 'with a subclass' do
       example_constant 'Spec::DetailsEvent' do
         described_class.define(:details)
@@ -184,6 +188,10 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
       it { expect(described_class <= described_class).to be true } # rubocop:disable Lint/BinaryOperatorWithIdenticalOperands
     end
 
+    describe 'with a data class' do
+      it { expect(described_class <= concern.define).to be nil }
+    end
+
     describe 'with a subclass' do
       example_constant 'Spec::DetailsEvent' do
         described_class.define(:details)
@@ -234,6 +242,10 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
 
     describe 'with the class' do
       it { expect(described_class <=> described_class).to be 0 } # rubocop:disable Lint/BinaryOperatorWithIdenticalOperands
+    end
+
+    describe 'with a data class' do
+      it { expect(described_class <=> concern.define).to be nil }
     end
 
     describe 'with a subclass' do
@@ -350,6 +362,10 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
       it { expect(described_class > described_class).to be false } # rubocop:disable Lint/BinaryOperatorWithIdenticalOperands
     end
 
+    describe 'with a data class' do
+      it { expect(described_class > concern.define).to be nil }
+    end
+
     describe 'with a subclass' do
       example_constant 'Spec::DetailsEvent' do
         described_class.define(:details)
@@ -400,6 +416,10 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
 
     describe 'with the class' do
       it { expect(described_class >= described_class).to be true } # rubocop:disable Lint/BinaryOperatorWithIdenticalOperands
+    end
+
+    describe 'with a data class' do
+      it { expect(described_class >= concern.define).to be nil }
     end
 
     describe 'with a subclass' do
@@ -482,6 +502,13 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
       it { expect(subclass).to respond_to(:secret).with(0).arguments }
 
       it { expect(subclass.secret).to be == '12345' }
+
+      describe 'with a subclass of the data class' do
+        let(:described_class) { super().define(&methods) }
+        let(:subclass)        { described_class.define(:metadata) }
+
+        it { expect(subclass.secret).to be == '12345' }
+      end
     end
 
     describe 'with symbols' do
