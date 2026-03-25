@@ -1,0 +1,9 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::HeritableData::HeritableMethods#each_heritable_module
+parent_path: sleeping-king-studios/tools/toolbox/heritable-data/heritable-methods
+signature: each_heritable_module
+slug: each-heritable-module
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/heritable-data/heritable-methods/i-each-heritable-module
+short_description: Iterates over the ::HeritableMethods modules for parent classes.
+version: "*"
