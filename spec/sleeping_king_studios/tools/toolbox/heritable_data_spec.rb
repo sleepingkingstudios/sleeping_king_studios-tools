@@ -560,6 +560,21 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
         it { expect(subclass.secret).to be == '12345' }
       end
 
+      describe 'with a block that overrides a defined method' do
+        let(:subclass) { Spec::EnglishEvent }
+        let(:methods) do
+          lambda do
+            def admin? = super ? 'yes' : 'no' # rubocop:disable Naming/PredicateMethod
+          end
+        end
+
+        example_constant 'Spec::EnglishEvent' do
+          Spec::UserEvent.define(&methods)
+        end
+
+        it { expect(instance.admin?).to be == 'no' }
+      end
+
       describe 'with symbols' do
         let(:symbols) { %i[details] }
 

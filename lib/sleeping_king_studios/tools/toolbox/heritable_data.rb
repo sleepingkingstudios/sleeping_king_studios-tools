@@ -129,24 +129,17 @@ module SleepingKingStudios::Tools::Toolbox
       # @return [Class, nil] the parent data class.
       attr_reader :parent_class
 
-      private
+      # Iterates over the ::HeritableMethods modules for parent classes.
+      def each_heritable_module
+        return enum_for(:each_heritable_module) unless block_given?
 
-      def each_ancestor
-        return enum_for(:each_ancestor) unless block_given?
-
-        ancestor = parent_class
+        ancestor = self
 
         while ancestor
-          yield ancestor::HeritableMethods
+          yield ancestor
 
-          ancestor = ancestor::HeritableMethods.parent_class
+          ancestor = ancestor.parent_class&.then { |mod| mod::HeritableMethods }
         end
-      end
-
-      def included(other)
-        super
-
-        each_ancestor { |ancestor| other.include(ancestor) }
       end
     end
 
@@ -174,7 +167,7 @@ module SleepingKingStudios::Tools::Toolbox
           HeritableData::HeritableMethods.new(parent_class:, &)
         )
 
-        data_class.include(data_class::HeritableMethods)
+        data_class.include(*data_class::HeritableMethods.each_heritable_module)
       end
 
       def included(other)
