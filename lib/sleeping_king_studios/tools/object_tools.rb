@@ -5,6 +5,9 @@ require 'sleeping_king_studios/tools'
 module SleepingKingStudios::Tools
   # Low-level tools for working with objects.
   class ObjectTools < SleepingKingStudios::Tools::Base # rubocop:disable Metrics/ClassLength
+    MEMORY_ADDRESS_PATTERN = /#<[:\w]+:(?'address'0x\h+)/
+    private_constant :MEMORY_ADDRESS_PATTERN
+
     TEMPORARY_METHOD_NAME =
       '__sleeping_king_studios_tools_apply_%i__'
     private_constant :TEMPORARY_METHOD_NAME
@@ -283,6 +286,39 @@ module SleepingKingStudios::Tools
       end
     end
 
+    # Createss a string representation of the object and specified properties.
+    #
+    # The string representation resembles the output of Object#inspect, but with
+    # support for BasicObjects and greater customization of the displayed
+    # properties.
+    #
+    # @param obj [BasicObject] the object to inspect.
+    # @param address [true, false] if true, includes the formatted memory
+    #   address from Object#inspect. Defaults to true.
+    # @param properties [Array, Hash] the properties to display. If the given
+    #   properties are an Array, maps the values to instance variables or public
+    #   methods based on the property name.
+    #
+    # @return [String] the string representation of the object.
+    def format_inspect(obj, address: true, properties: {}) # rubocop:disable Metrics/MethodLength
+      str = "#<#{class_name(obj)}"
+
+      if address
+        native  = Object.instance_method(:inspect).bind(obj).call
+        address = MEMORY_ADDRESS_PATTERN.match(native)&.[](:address)
+
+        str << ':' << address
+      end
+
+      if properties.is_a?(Hash)
+        format_properties_hash(str, **properties)
+      elsif properties.is_a?(Enumerable)
+        format_properties_array(str, obj, *properties)
+      end
+
+      str << '>'
+    end
+
     # Checks if the object is immutable.
     #
     # - nil, false, and true are always immutable, as are instances of Numeric
@@ -417,6 +453,17 @@ module SleepingKingStudios::Tools
 
     private
 
+    def class_name(obj)
+      klass =
+        if object?(obj)
+          obj.class
+        else
+          Object.instance_method(:class).bind(obj).call
+        end
+
+      klass.name || klass.inspect
+    end
+
     def fetch_array(ary, index, default = UNDEFINED, &)
       return toolbelt.array_tools.fetch(ary, index, &) if default == UNDEFINED
 
@@ -431,6 +478,45 @@ module SleepingKingStudios::Tools
       toolbelt.hash_tools.fetch(hsh, key, default, indifferent_key:, &)
     end
 
+    def format_properties_array(buf, obj, *properties)
+      properties.each do |property|
+        property_name = property.to_s
+
+        value = get_object_property(obj, property_name)
+
+        buf << ' ' << property_name << '=' << value
+      end
+    end
+
+    def format_properties_hash(buf, **properties)
+      properties.each do |property, value|
+        property_name = property.to_s
+
+        buf << ' ' << property_name << '=' << value.inspect
+      end
+    end
+
+    def get_instance_variable(obj, property_name)
+      return obj.instance_variable_get(property_name) if object?(obj)
+
+      Object
+        .instance_method(:instance_variable_get)
+        .bind(obj)
+        .call(property_name)
+    end
+
+    def get_object_property(obj, property_name)
+      if property_name.start_with?('@')
+        return 'undefined' unless has_instance_variable?(obj, property_name)
+
+        get_instance_variable(obj, property_name).inspect
+      else
+        return 'undefined' unless respond_to_method?(obj, property_name)
+
+        obj.__send__(property_name).inspect
+      end
+    end
+
     def handle_invalid_fetch(obj, key, default, &block)
       return block.call(key) if block_given?
 
@@ -441,6 +527,15 @@ module SleepingKingStudios::Tools
       message   += " for an instance of #{class_name}" if class_name
 
       raise NoMethodError, message
+    end
+
+    def has_instance_variable?(obj, property_name) # rubocop:disable Naming/PredicatePrefix
+      return obj.instance_variable_defined?(property_name) if object?(obj)
+
+      Object
+        .instance_method(:instance_variable_defined?)
+        .bind(obj)
+        .call(property_name)
     end
 
     def indifferent_get(object, key)
@@ -460,6 +555,15 @@ module SleepingKingStudios::Tools
       end
 
       object.respond_to?(maybe_method_name)
+    end
+
+    def respond_to_method?(obj, method_name)
+      return obj.respond_to?(method_name) if object?(obj)
+
+      Object
+        .instance_method(:respond_to?)
+        .bind(obj)
+        .call(method_name)
     end
 
     def with_temporary_method(receiver, method_name, proc)

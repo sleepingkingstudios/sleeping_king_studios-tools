@@ -1133,6 +1133,166 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     end
   end
 
+  describe '#format_inspect' do
+    deferred_examples 'should format the object' do
+      describe 'with no properties' do
+        let(:expected_properties) { {} }
+
+        it { expect(formatted).to be == expected }
+
+        describe 'with address: false' do
+          let(:options) { super().merge(address: false) }
+
+          it { expect(formatted).to be == expected }
+        end
+      end
+
+      describe 'with properties: an Array' do
+        let(:properties) { %w[@id @name password secret] }
+        let(:options)    { super().merge(properties:) }
+
+        it { expect(formatted).to be == expected }
+
+        describe 'with address: false' do
+          let(:options) { super().merge(address: false) }
+
+          it { expect(formatted).to be == expected }
+        end
+      end
+
+      describe 'with properties: a Hash' do
+        let(:properties) { { '@name' => 'object', 'secret' => 12_345 } }
+        let(:options)    { super().merge(properties:) }
+        let(:expected_properties) do
+          properties.transform_values(&:inspect)
+        end
+
+        it { expect(formatted).to be == expected }
+
+        describe 'with address: false' do
+          let(:options) { super().merge(address: false) }
+
+          it { expect(formatted).to be == expected }
+        end
+      end
+    end
+
+    let(:options)             { {} }
+    let(:expected_properties) { {} }
+    let(:formatted) do
+      object_tools.format_inspect(object, **options)
+    end
+    let(:class_name) do
+      object.class.name
+    end
+    let(:address) do
+      pattern = /#<[:\w]+:(?'address'0x\h+)/
+      method  = Object.instance_method(:inspect)
+
+      pattern.match(method.bind(object).call)&.[](:address)
+    end
+    let(:expected) do
+      str = "#<#{class_name}"
+      str << ':' << address if options.fetch(:address, true)
+
+      expected_properties.each do |key, value|
+        str << ' ' << key.to_s << '=' << value
+      end
+
+      str << '>'
+    end
+
+    it 'should define the method' do
+      expect(object_tools)
+        .to respond_to(:format_inspect)
+        .with(1).argument
+        .and_keywords(:address, :properties)
+    end
+
+    describe 'with nil' do
+      let(:object) { nil }
+      let(:expected_properties) do
+        properties.to_h { |key| [key, 'undefined'] }
+      end
+
+      include_deferred 'should format the object'
+    end
+
+    describe 'with a BasicObject' do
+      let(:object)     { BasicObject.new }
+      let(:class_name) { BasicObject.name }
+      let(:expected_properties) do
+        properties.to_h { |key| [key, 'undefined'] }
+      end
+
+      include_deferred 'should format the object'
+    end
+
+    describe 'with an instance of a BasicObject subclass' do
+      let(:object)     { Spec::CustomObject.new }
+      let(:class_name) { Spec::CustomObject.name }
+      let(:expected_properties) do
+        properties
+          .to_h { |key| [key, 'undefined'] }
+          .merge('@id' => '0', 'password' => '"password"')
+      end
+
+      example_class 'Spec::CustomObject', BasicObject do |klass|
+        klass.define_method(:initialize) { @id = 0 }
+
+        klass.define_method(:password) { 'password' }
+      end
+
+      include_deferred 'should format the object'
+    end
+
+    describe 'with an Object' do
+      let(:object) { Object.new }
+      let(:expected_properties) do
+        properties.to_h { |key| [key, 'undefined'] }
+      end
+
+      include_deferred 'should format the object'
+    end
+
+    describe 'with an instance of a Class' do
+      let(:object) { Spec::CustomObject.new }
+      let(:expected_properties) do
+        properties
+          .to_h { |key| [key, 'undefined'] }
+          .merge('@id' => '0', 'password' => '"password"')
+      end
+
+      example_class 'Spec::CustomObject' do |klass|
+        klass.define_method(:initialize) { @id = 0 }
+
+        klass.define_method(:password) { 'password' }
+      end
+
+      include_deferred 'should format the object'
+    end
+
+    describe 'with an instance of an anonymous Class' do
+      let(:anonymous_class) do
+        Class.new do
+          def initialize = @id = 0
+
+          def password = 'password'
+        end
+      end
+      let(:object)     { anonymous_class.new }
+      let(:class_name) { anonymous_class.inspect }
+      let(:expected_properties) do
+        properties
+          .to_h { |key| [key, 'undefined'] }
+          .merge('@id' => '0', 'password' => '"password"')
+      end
+      let(:properties) { {} }
+
+      include_deferred 'should format the object'
+    end
+  end
+
   describe '#immutable?' do
     it { expect(object_tools).to respond_to(:immutable?).with(1).argument }
 
