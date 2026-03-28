@@ -1291,6 +1291,36 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
 
       include_deferred 'should format the object'
     end
+
+    describe 'with an instance of a Data class' do
+      let(:object) { Spec::CustomData.new(password: 'password') }
+      let(:expected_properties) do
+        properties
+          .to_h { |key| [key, 'undefined'] }
+          .merge('password' => '"password"')
+      end
+
+      example_constant 'Spec::CustomData' do
+        Data.define(:password)
+      end
+
+      include_deferred 'should format the object'
+    end
+
+    describe 'with an instance of a Struct' do
+      let(:object) { Spec::CustomStruct.new('password') }
+      let(:expected_properties) do
+        properties
+          .to_h { |key| [key, 'undefined'] }
+          .merge('password' => '"password"')
+      end
+
+      example_constant 'Spec::CustomStruct' do
+        Struct.new(:password)
+      end
+
+      include_deferred 'should format the object'
+    end
   end
 
   describe '#immutable?' do

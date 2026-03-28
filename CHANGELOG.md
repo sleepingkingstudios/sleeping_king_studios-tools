@@ -62,6 +62,8 @@ Added `#[]` support to `ObjectTools#dig`, allowing access through indexed data s
 
 Added `ObjectTools#fetch`, which tries to find the requested value via the named method call or by calling `#[]`.
 
+Added `ObjectTools#format_inspect`, which generates a `String` representation of the object (similar to the built-in `Object#inspect`) with support for `BasicObject`s and for customizing the displayed properties.
+
 Deprecated methods with native equivalents:
 
 - Deprecated `#eigenclass` - use `Object#singleton_class` instead.

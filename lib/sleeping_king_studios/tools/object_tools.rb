@@ -286,7 +286,7 @@ module SleepingKingStudios::Tools
       end
     end
 
-    # Createss a string representation of the object and specified properties.
+    # Creates a string representation of the object and specified properties.
     #
     # The string representation resembles the output of Object#inspect, but with
     # support for BasicObjects and greater customization of the displayed
