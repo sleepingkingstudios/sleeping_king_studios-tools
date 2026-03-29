@@ -276,6 +276,11 @@ Low-level tools for working with objects.
   <dd>
     Retrieves the value at the specified method, key, or index.
   </dd>
+
+  <dt><code>#format_inspect(obj, address: true, properties: {})</code></dt>
+  <dd>
+    Creates a string representation of the object and specified properties.
+  </dd>
 </dl>
 
 For a full list of methods, see [Reference]({{site.baseurl}}/reference/sleeping-king-studios/tools/object-tools).

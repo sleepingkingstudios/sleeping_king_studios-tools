@@ -36,6 +36,10 @@ instance_methods:
   path: sleeping-king-studios/tools/object-tools/i-fetch
   slug: fetch
   inherited: false
+- name: format_inspect
+  path: sleeping-king-studios/tools/object-tools/i-format-inspect
+  slug: format-inspect
+  inherited: false
 - name: immutable?
   path: sleeping-king-studios/tools/object-tools/i-immutable?
   slug: immutable?
