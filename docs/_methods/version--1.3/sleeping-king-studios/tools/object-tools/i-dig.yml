@@ -1,0 +1,52 @@
+---
+name: SleepingKingStudios::Tools::ObjectTools#dig
+parent_path: sleeping-king-studios/tools/object-tools
+signature: 'dig(obj, *method_names, indifferent_keys: false)'
+slug: dig
+constructor: false
+data_path: sleeping-king-studios/tools/object-tools/i-dig
+description: |-
+  This method finds the first named property on the given object, and then
+  each subsequent property on the result of the previous call.
+
+  - If the object responds to the property name as a public method, it calls
+    the  method directly.
+  - If the object does not respond to the property name, or if the property
+    name is not itself a valid method name, checks if the object responds to
+    #[]; if so, calls #[] with the property name.
+  - Otherwise, immediately returns nil.
+
+  Using #[] access allows digging through Array (using integer indices) and
+  Hash data structures as well as object methods.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      ObjectTools.dig(my_object, :first_method, :second_method, :third_method)
+      #=> my_object.first_method.second_method.third_method
+params:
+- description: the object to dig.
+  name: obj
+  type:
+  - name: Object
+- description: the names of the methods to call.
+  name: method_names
+  type:
+  - name: Array
+- description: |-
+    if true, matches both String and
+    Symbol keys when accessing a Hash value using #[]. Defaults to false.
+  name: indifferent_keys
+  type:
+  - name: 'true'
+  - name: 'false'
+  default: 'false'
+returns:
+- description: |-
+    the result of the last method call, or nil if the
+    last object does not respond to the last method.
+  type:
+  - name: Object
+  - name: nil
+short_description: Accesses deeply nested properties on an object.
+version: '1.3'

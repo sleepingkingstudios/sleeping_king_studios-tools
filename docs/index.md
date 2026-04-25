@@ -9,7 +9,7 @@ A library of utility services and concerns to expand the functionality of core c
 
 This is the documentation for the [current development build](https://github.com/sleepingkingstudios/sleeping_king_studios-tools) of SleepingKingStudios::Tools.
 
-- For the most recent release, see [Version 1.2]({{site.baseurl}}/versions/1.2).
+- For the most recent release, see [Version 1.3]({{site.baseurl}}/versions/1.3).
 - For previous releases, see the [Versions]({{site.baseurl}}/versions) page.
 
 ## Getting Started
@@ -26,9 +26,9 @@ Require `SleepingKingStudios::Tools` in your code:
 require 'sleeping_king_studios/tools'
 ```
 
-To ensure that [message definitions]({{site.baseurl}}/tools/messages) are loaded, call the `SleepingKingStudios::Tools` initializer:
+To ensure that [message definitions](./tools/messages) are loaded, call the `SleepingKingStudios::Tools` initializer:
 
-- In the [initializer]({{site.baseurl}}/initializer) for your project:
+- In the [initializer](./initializer) for your project:
 
   ```ruby
   module Space
@@ -46,17 +46,17 @@ SleepingKingStudios::Tools defines the following tools:
 
 <ul>
   <li>
-    <strong><a href="{{site.baseurl}}/tools">Toolbelt</a></strong>
+    <strong><a href="./tools">Toolbelt</a></strong>
     <br>
     Functional tools for operating on Ruby objects, grouped by object type.
   </li>
   <li>
-    <strong><a href="{{site.baseurl}}/tools/assertions">Assertions</a></strong>
+    <strong><a href="./tools/assertions">Assertions</a></strong>
     <br>
     Methods for asserting on the type or content of values.
   </li>
   <li>
-    <strong><a href="{{site.baseurl}}/tools/messages">Messages</a></strong>
+    <strong><a href="./tools/messages">Messages</a></strong>
     <br>
     Tool for defining and generating human-readable messages.
   </li>
@@ -64,20 +64,20 @@ SleepingKingStudios::Tools defines the following tools:
 
 It also provides a set of utility classes:
 
-- **[Constant Map]({{site.baseurl}}/constant-maps)**
+- **[Constant Map](./constant-maps)**
   <br>
   Provides an enumerable interface for defining a group of constants.
-- **[HeritableData]({{site.baseurl}}/heritable-data)**
+- **[HeritableData](./heritable-data)**
   <br>
   Define `Data` subclasses with inheritable members and methods.
-- **[Initializer]({{site.baseurl}}/initializer)**
+- **[Initializer](./initializer)**
   <br>
   Utility class for initializing a library or project and its dependencies.
-- **[Mixin]({{site.baseurl}}/mixin)**
+- **[Mixin](./mixin)**
   <br>
   Implements recursive inheritance of both class and instance methods.
-- **[Subclass]({{site.baseurl}}/subclass)**
+- **[Subclass](./subclass)**
   <br>
   Define subclasses with partially applied constructor parameters.
 
-For a full list of defined classes and objects, see [Reference]({{site.baseurl}}/reference).
+For a full list of defined classes and objects, see [Reference](./reference).

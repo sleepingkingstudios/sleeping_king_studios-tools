@@ -26,7 +26,7 @@ module Widgets
 end
 ```
 
-The class reference for `SleepingKingStudios::Tools::Toolbox::Mixin` can be found in [Reference]({{site.baseurl}}/reference/sleeping-king-studios/tools/toolbox/mixin).
+The class reference for `SleepingKingStudios::Tools::Toolbox::Mixin` can be found in [Reference](./reference/sleeping-king-studios/tools/toolbox/mixin).
 
 ## Contents
 

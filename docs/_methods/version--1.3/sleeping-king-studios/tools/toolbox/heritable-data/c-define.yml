@@ -1,0 +1,25 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::HeritableData.define
+parent_path: sleeping-king-studios/tools/toolbox/heritable-data
+signature: 'define(*symbols, parent_class: nil, &)'
+slug: define
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/heritable-data/c-define
+params:
+- description: Data members to define.
+  name: symbols
+  type:
+  - name: Array
+    items:
+    - name: Symbol
+- description: |-
+    the parent class to inherit members and
+    methods from.
+  name: parent_class
+  type:
+  - name: Class
+  default: nil
+short_description: Defines a new heritable Data class.
+yields:
+- description: additional methods to define on the new Data class.
+version: '1.3'

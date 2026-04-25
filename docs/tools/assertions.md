@@ -10,7 +10,7 @@ breadcrumbs:
 
 The `Assertions` tool is used to define invariants in the code to catch invalid data.
 
-For a list of available assertions, see [Defined Assertions](#defined-assertions) below, or the [Reference documentation]({{site.baseurl}}/reference/sleeping-king-studios/tools/assertions).
+For a list of available assertions, see [Defined Assertions](#defined-assertions) below, or the [Reference documentation](../reference/sleeping-king-studios/tools/assertions).
 
 ## Contents
 
@@ -84,13 +84,13 @@ tools.assertions.error_message_for('name', as: 'username')
 
 The `#error_message_for` method is particularly useful when writing tests, as it ensures that the expected message will always match the configured message for that error without requiring updates if the message format is changed.
 
-You can also pass a full scoped key to `#error_message_for`, which will return the corresponding [message]({{site.baseurl}}/tools/messages) defined for that scoped key. This is useful when defining custom assertions.
+You can also pass a full scoped key to `#error_message_for`, which will return the corresponding [message](../tools/messages) defined for that scoped key. This is useful when defining custom assertions.
 
-Using error messages requires the [initializer]({{site.baseurl}}/initializer) for `SleepingKingStudios::Tools` to be called; otherwise, a fallback message starting with `"Message missing:"` will be used. The fallback is also used for error messages when the key is not defined, which may occur when defining custom assertions.
+Using error messages requires the [initializer](../initializer) for `SleepingKingStudios::Tools` to be called; otherwise, a fallback message starting with `"Message missing:"` will be used. The fallback is also used for error messages when the key is not defined, which may occur when defining custom assertions.
 
 #### Redefining Error Messages
 
-The base message for each assertion is defined using a [Messages strategy]({{site.baseurl}}/tools/messages) with scope `"sleeping_king_studios.tools.assertions"`. To override the default messages, use a custom Messages registry or define a new strategy for that scope.
+The base message for each assertion is defined using a [Messages strategy](../tools/messages) with scope `"sleeping_king_studios.tools.assertions"`. To override the default messages, use a custom Messages registry or define a new strategy for that scope.
 
 ### Validating Method Parameters
 
@@ -138,7 +138,7 @@ Validating method parameters helps to avoid bugs farther down the line.
 - [#assert_not_nil](#assert_not_nil)
 - [#assert_presence](#assert_presence)
 
-For a full list of methods, see the [Reference documentation]({{site.baseurl}}/reference/sleeping-king-studios/tools/assertions).
+For a full list of methods, see the [Reference documentation](../reference/sleeping-king-studios/tools/assertions).
 
 ### `#assert`
 

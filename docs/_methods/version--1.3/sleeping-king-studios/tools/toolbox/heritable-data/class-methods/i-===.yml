@@ -1,0 +1,15 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::HeritableData::ClassMethods#===
+parent_path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods
+signature: "===(object)"
+slug: "==="
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i-===
+returns:
+- description: |-
+    if the object is an instance of the data class, or if the
+    object is an instance of a Data class that inherits members and
+    methods from self.
+  type:
+  - name: 'true'
+version: '1.3'

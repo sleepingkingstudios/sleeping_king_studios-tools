@@ -10,6 +10,8 @@ breadcrumbs:
 
 The `Messages` tool is used for defining and generating human-readable messages.
 
+For a full list of available methods, see the [Reference documentation](../reference/sleeping-king-studios/tools/messages).
+
 ## Contents
 
 - [Generating Messages](#generating-messages)
@@ -247,7 +249,7 @@ toolbelt.messages.message(:going_to_space, scope: 'spec.test_cases')
 
 ## Initializing Messages
 
-The recommended way to register messages for your application or project is using a [project initializer]({{site.baseurl}}/initializer).
+The recommended way to register messages for your application or project is using a [project initializer](../initializer).
 
 ```ruby
 module Space

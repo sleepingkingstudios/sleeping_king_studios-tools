@@ -29,7 +29,7 @@ aoife.traits
 #=> [:charismatic, :musical, :sorcerous]
 ```
 
-The class reference for `SleepingKingStudios::Tools::Toolbox::Subclass` can be found in [Reference]({{site.baseurl}}/reference/sleeping-king-studios/tools/toolbox/subclass).
+The class reference for `SleepingKingStudios::Tools::Toolbox::Subclass` can be found in [Reference](./reference/sleeping-king-studios/tools/toolbox/subclass).
 
 ## Contents
 
