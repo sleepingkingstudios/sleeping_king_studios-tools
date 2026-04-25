@@ -1,0 +1,13 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::HeritableData::HeritableMethods#parent_class
+parent_path: sleeping-king-studios/tools/toolbox/heritable-data/heritable-methods
+signature: parent_class
+slug: parent-class
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/heritable-data/heritable-methods/i-parent-class
+returns:
+- description: the parent data class.
+  type:
+  - name: Class
+  - name: nil
+version: '1.3'
