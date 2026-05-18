@@ -32,8 +32,19 @@ module SleepingKingStudios::Tools
     #   Generates a message from the given key, scope, and parameters.
     #
     #   Internally, finds a messages strategy matching the combined key and
-    #   scope and calls that strategy. If a strategy is not found, instead
-    #   returns a generic failure message.
+    #   scope and calls that strategy.
+    #
+    #   If a strategy is not found, or if the strategy does not define a message
+    #   for the key, you can provide a default value.
+    #
+    #   - If the default value is a Proc, it will be called with the fully
+    #     scoped key, as a positional argument as well as any additional
+    #     keywords passed to #call. The value returned by the Proc will be
+    #     returned by #call.
+    #   - If the default value is any other Object (including nil), the default
+    #     value will be returned by #call.
+    #   - If a default value is not provided, a missing message warning will be
+    #     generated and returned.
     #
     #   @param key [String, Symbol] the key used to resolve the message.
     #   @param default [Object] the default value to return if there is no

@@ -17,6 +17,7 @@ For a full list of available methods, see the [Reference documentation](../refer
 - [Generating Messages](#generating-messages)
   - [Missing Messages](#missing-messages)
   - [Parameterized Messages](#parameterized-messages)
+  - [Default Values](#default-values)
 - [Registering Messages](#registering-messages)
   - [Message Strategies](#message-strategies)
     - [File Strategies](#file-strategies)
@@ -91,6 +92,37 @@ tools = SleepingKingStudios::Tools::Toolbelt.instance
 
 tools.messages.message('sleeping_king_studios.tools.assertions.instance_of')
 #=> "Message missing parameters: sleeping_king_studios.tools.assertions.instance_of key<expected> not found"
+```
+
+### Default Values
+
+You can also provide a default value or `Proc` in case the requested message is not defined.
+
+If you pass an object as the `default:` keyword, that default value will be returned if the requested message is not defined.
+
+```ruby
+tools = SleepingKingStudios::Tools::Toolbelt.instance
+
+tools.messages.message(
+  'example.messages.undefined_message',
+  default: 'message not found'
+)
+#=> "message not found"
+```
+
+If you pass a `Proc` as the `default:` keyword, the proc will be called with the scoped message key and any additional parameters passed to `#get`.
+
+```ruby
+tools = SleepingKingStudios::Tools::Toolbelt.instance
+
+tools.messages.message(
+  'example.messages.undefined_message',
+  default: lambda do |key, locale: 'en', **|
+    "message not found with key #{key} and locale #{locale}"
+  end,
+  locale:  'es'
+)
+#=> "message not found with key example.messages.undefined_message and locale es"
 ```
 
 ## Registering Messages
