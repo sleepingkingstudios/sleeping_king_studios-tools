@@ -39,6 +39,8 @@ RSpec.describe SleepingKingStudios::Tools::Messages do
         .and_any_keywords
     end
 
+    it { expect(messages).to have_aliased_method(:message).as(:get) }
+
     describe 'with key: nil' do
       let(:key) { nil }
       let(:error_message) do
@@ -91,12 +93,66 @@ RSpec.describe SleepingKingStudios::Tools::Messages do
       let(:key) { 'cosmos' }
 
       it { expect(generate_message).to be == missing_template_message }
+
+      describe 'with default: nil' do
+        let(:options) { super().merge(default: nil) }
+
+        it { expect(generate_message).to be nil }
+      end
+
+      describe 'with default: Proc' do
+        let(:default) do
+          lambda do |key, locale: 'en', **|
+            "default message for key #{key} in locale #{locale}"
+          end
+        end
+        let(:options)  { super().merge(default:, locale: 'es') }
+        let(:expected) do
+          "default message for key #{scoped_key} in locale es"
+        end
+
+        it { expect(generate_message).to be == expected }
+      end
+
+      describe 'with default: value' do
+        let(:default) { 'default message' }
+        let(:options) { super().merge(default:) }
+
+        it { expect(generate_message).to be == 'default message' }
+      end
     end
 
     describe 'with key: a Symbol that does not match a strategy' do
       let(:key) { :cosmos }
 
       it { expect(generate_message).to be == missing_template_message }
+
+      describe 'with default: nil' do
+        let(:options) { super().merge(default: nil) }
+
+        it { expect(generate_message).to be nil }
+      end
+
+      describe 'with default: Proc' do
+        let(:default) do
+          lambda do |key, locale: 'en', **|
+            "default message for key #{key} in locale #{locale}"
+          end
+        end
+        let(:options)  { super().merge(default:, locale: 'es') }
+        let(:expected) do
+          "default message for key #{scoped_key} in locale es"
+        end
+
+        it { expect(generate_message).to be == expected }
+      end
+
+      describe 'with default: value' do
+        let(:default) { 'default message' }
+        let(:options) { super().merge(default:) }
+
+        it { expect(generate_message).to be == 'default message' }
+      end
     end
 
     context 'when the registry defines many strategies' do
@@ -135,24 +191,132 @@ RSpec.describe SleepingKingStudios::Tools::Messages do
         let(:key) { 'cosmos' }
 
         it { expect(generate_message).to be == missing_template_message }
+
+        describe 'with default: nil' do
+          let(:options) { super().merge(default: nil) }
+
+          it { expect(generate_message).to be nil }
+        end
+
+        describe 'with default: Proc' do
+          let(:default) do
+            lambda do |key, locale: 'en', **|
+              "default message for key #{key} in locale #{locale}"
+            end
+          end
+          let(:options)  { super().merge(default:, locale: 'es') }
+          let(:expected) do
+            "default message for key #{scoped_key} in locale es"
+          end
+
+          it { expect(generate_message).to be == expected }
+        end
+
+        describe 'with default: value' do
+          let(:default) { 'default message' }
+          let(:options) { super().merge(default:) }
+
+          it { expect(generate_message).to be == 'default message' }
+        end
       end
 
       describe 'with key: a Symbol that does not match a strategy' do
         let(:key) { :cosmos }
 
         it { expect(generate_message).to be == missing_template_message }
+
+        describe 'with default: nil' do
+          let(:options) { super().merge(default: nil) }
+
+          it { expect(generate_message).to be nil }
+        end
+
+        describe 'with default: Proc' do
+          let(:default) do
+            lambda do |key, locale: 'en', **|
+              "default message for key #{key} in locale #{locale}"
+            end
+          end
+          let(:options)  { super().merge(default:, locale: 'es') }
+          let(:expected) do
+            "default message for key #{scoped_key} in locale es"
+          end
+
+          it { expect(generate_message).to be == expected }
+        end
+
+        describe 'with default: value' do
+          let(:default) { 'default message' }
+          let(:options) { super().merge(default:) }
+
+          it { expect(generate_message).to be == 'default message' }
+        end
       end
 
       describe 'with key: a String that does not match a template' do
         let(:key) { 'space.errors.not_going_to_space' }
 
         it { expect(generate_message).to be == missing_template_message }
+
+        describe 'with default: nil' do
+          let(:options) { super().merge(default: nil) }
+
+          it { expect(generate_message).to be nil }
+        end
+
+        describe 'with default: Proc' do
+          let(:default) do
+            lambda do |key, locale: 'en', **|
+              "default message for key #{key} in locale #{locale}"
+            end
+          end
+          let(:options)  { super().merge(default:, locale: 'es') }
+          let(:expected) do
+            "default message for key #{scoped_key} in locale es"
+          end
+
+          it { expect(generate_message).to be == expected }
+        end
+
+        describe 'with default: value' do
+          let(:default) { 'default message' }
+          let(:options) { super().merge(default:) }
+
+          it { expect(generate_message).to be == 'default message' }
+        end
       end
 
       describe 'with key: a Symbol that does not match a template' do
         let(:key) { :'space.errors.not_going_to_space' }
 
         it { expect(generate_message).to be == missing_template_message }
+
+        describe 'with default: nil' do
+          let(:options) { super().merge(default: nil) }
+
+          it { expect(generate_message).to be nil }
+        end
+
+        describe 'with default: Proc' do
+          let(:default) do
+            lambda do |key, locale: 'en', **|
+              "default message for key #{key} in locale #{locale}"
+            end
+          end
+          let(:options)  { super().merge(default:, locale: 'es') }
+          let(:expected) do
+            "default message for key #{scoped_key} in locale es"
+          end
+
+          it { expect(generate_message).to be == expected }
+        end
+
+        describe 'with default: value' do
+          let(:default) { 'default message' }
+          let(:options) { super().merge(default:) }
+
+          it { expect(generate_message).to be == 'default message' }
+        end
       end
 
       describe 'with key: a String that matches a template' do
@@ -160,6 +324,18 @@ RSpec.describe SleepingKingStudios::Tools::Messages do
         let(:expected) { 'rocket is not ready to launch' }
 
         it { expect(generate_message).to be == expected }
+
+        describe 'with default: nil' do
+          let(:options) { super().merge(default: nil) }
+
+          it { expect(generate_message).to be == expected }
+        end
+
+        describe 'with default: value' do
+          let(:options) { super().merge(default: 'default message') }
+
+          it { expect(generate_message).to be == expected }
+        end
 
         describe 'with options: value' do
           let(:options)  { super().merge(ready: true) }
@@ -190,6 +366,18 @@ RSpec.describe SleepingKingStudios::Tools::Messages do
         let(:expected) { 'rocket is not ready to launch' }
 
         it { expect(generate_message).to be == expected }
+
+        describe 'with default: nil' do
+          let(:options) { super().merge(default: nil) }
+
+          it { expect(generate_message).to be == expected }
+        end
+
+        describe 'with default: value' do
+          let(:options) { super().merge(default: 'default message') }
+
+          it { expect(generate_message).to be == expected }
+        end
 
         describe 'with options: value' do
           let(:options)  { super().merge(ready: true) }

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.0
+
+### Tools
+
+#### Messages
+
+Added a `default:` keyword to `Messages#get`.
+
 ## 1.3.0
 
 ### Tools
