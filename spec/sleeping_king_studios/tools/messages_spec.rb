@@ -39,6 +39,8 @@ RSpec.describe SleepingKingStudios::Tools::Messages do
         .and_any_keywords
     end
 
+    it { expect(messages).to have_aliased_method(:message).as(:get) }
+
     describe 'with key: nil' do
       let(:key) { nil }
       let(:error_message) do

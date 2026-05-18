@@ -110,7 +110,7 @@ tools.messages.message(
 #=> "message not found"
 ```
 
-If you pass a `Proc` as the `default:` keyword, the proc will be called with the scoped message key and any additional parameters passed to `#get`.
+If you pass a `Proc` as the `default:` keyword, the proc will be called with the scoped message key and any additional parameters passed to `#message`.
 
 ```ruby
 tools = SleepingKingStudios::Tools::Toolbelt.instance

@@ -64,6 +64,7 @@ module SleepingKingStudios::Tools
 
       strategy.call(key, default:, parameters:, scope:, **)
     end
+    alias get message
 
     private
 
