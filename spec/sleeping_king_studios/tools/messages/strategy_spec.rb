@@ -16,6 +16,33 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
         end
 
         it { expect(call_strategy).to be == missing_template_message }
+
+        describe 'with default: nil' do
+          let(:options) { super().merge(default: nil) }
+
+          it { expect(call_strategy).to be nil }
+        end
+
+        describe 'with default: Proc' do
+          let(:default) do
+            lambda do |key, locale: 'en', **|
+              "default message for key #{key} in locale #{locale}"
+            end
+          end
+          let(:options)  { super().merge(default:, locale: 'es') }
+          let(:expected) do
+            "default message for key #{scoped_key} in locale es"
+          end
+
+          it { expect(call_strategy).to be == expected }
+        end
+
+        describe 'with default: value' do
+          let(:default) { 'default message' }
+          let(:options) { super().merge(default:) }
+
+          it { expect(call_strategy).to be == 'default message' }
+        end
       end
     end
 
@@ -24,6 +51,18 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
 
       context 'when the key matches a template' do
         it { expect(call_strategy).to be == expected }
+
+        describe 'with default: nil' do
+          let(:options) { super().merge(default: nil) }
+
+          it { expect(call_strategy).to be == expected }
+        end
+
+        describe 'with default: value' do
+          let(:options) { super().merge(default: 'default message') }
+
+          it { expect(call_strategy).to be == expected }
+        end
       end
     end
 

@@ -5,10 +5,27 @@ require 'sleeping_king_studios/tools/messages'
 module SleepingKingStudios::Tools
   # Abstract class for converting parameterized keys to user-readable messages.
   class Messages::Strategy
+    UNDEFINED = SleepingKingStudios::Tools::UNDEFINED
+    private_constant :UNDEFINED
+
     # @overload call(key, parameters: {}, scope: nil, **options)
     #   Generates a formatted string for the given key, parameters, and options.
     #
+    #   If the strategy does not define a message for the key, you can provide a
+    #   default value.
+    #
+    #   - If the default value is a Proc, it will be called with the fully
+    #     scoped key, as a positional argument as well as any additional
+    #     keywords passed to #call. The value returned by the Proc will be
+    #     returned by #call.
+    #   - If the default value is any other Object (including nil), the default
+    #     value will be returned by #call.
+    #   - If a default value is not provided, a missing message warning will be
+    #     generated and returned.
+    #
     #   @param key [String, Symbol] the key used to resolve the message.
+    #   @param default [Object] the default value to return if the strategy does
+    #     not define a message for the key.
     #   @param parameters [Hash] the parameters used to generate the message,
     #     such as values for a template string.
     #   @param scope [String] the namespace for the key. Combined with the given
@@ -18,16 +35,24 @@ module SleepingKingStudios::Tools
     #
     #   @return [String] the generated template string, or a generic error
     #     string if a message is not defined for the given key and parameters.
-    def call(key, parameters: {}, scope: nil, **)
+    def call(key, default: UNDEFINED, parameters: {}, scope: nil, **)
       scoped_key = join_scope(key:, scope:)
       template   = template_for(scoped_key, **)
 
-      return missing_message(scoped_key, **) unless template
+      return apply_default(scoped_key, default, **) unless template
 
       generate(template, parameters:, scoped_key:, **)
     end
 
     private
+
+    def apply_default(key, default, **)
+      return missing_message(key, **) if default == UNDEFINED
+
+      return default unless default.is_a?(Proc)
+
+      default.call(key, **)
+    end
 
     def generate(template, scoped_key: nil, parameters: {}, **) # rubocop:disable Metrics/MethodLength
       raise ArgumentError, "template can't be blank" if template.nil?
