@@ -54,7 +54,13 @@ module SleepingKingStudios::Tools
       default.call(key, **)
     end
 
-    def generate(template, scoped_key: nil, parameters: {}, **) # rubocop:disable Metrics/MethodLength
+    def generate( # rubocop:disable Metrics/MethodLength
+      template,
+      parameters:         {},
+      reraise_exceptions: false,
+      scoped_key:         nil,
+      **
+    )
       raise ArgumentError, "template can't be blank" if template.nil?
 
       case template
@@ -66,6 +72,8 @@ module SleepingKingStudios::Tools
         raise ArgumentError, "invalid template #{template.inspect}"
       end
     rescue KeyError => exception
+      raise if reraise_exceptions
+
       missing_parameters_message(scoped_key, exception:, **)
     end
 

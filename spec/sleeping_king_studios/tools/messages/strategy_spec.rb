@@ -81,7 +81,7 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
       expect(strategy)
         .to respond_to(:call)
         .with(1).argument
-        .and_keywords(:parameters, :scope)
+        .and_keywords(:default, :parameters, :reraise_exceptions, :scope)
         .and_any_keywords
     end
 
@@ -227,6 +227,20 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
         end
 
         it { expect(call_strategy).to be == expected }
+
+        describe 'with reraise_exceptions: true' do
+          let(:options) do
+            super().merge(reraise_exceptions: true)
+          end
+          let(:error_message) do
+            'key<name> not found'
+          end
+
+          it 'should raise an exception' do
+            expect { call_strategy }
+              .to raise_error KeyError, error_message
+          end
+        end
       end
 
       describe 'with key: a scoped value' do
@@ -395,6 +409,20 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
         end
 
         it { expect(generate_string).to be == missing_parameters_message }
+
+        describe 'with reraise_exceptions: true' do
+          let(:options) do
+            super().merge(reraise_exceptions: true)
+          end
+          let(:error_message) do
+            'key<name> not found'
+          end
+
+          it 'should raise an exception' do
+            expect { generate_string }
+              .to raise_error KeyError, error_message
+          end
+        end
       end
 
       describe 'with matching parameters' do
