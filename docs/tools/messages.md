@@ -94,6 +94,15 @@ tools.messages.message('sleeping_king_studios.tools.assertions.instance_of')
 #=> "Message missing parameters: sleeping_king_studios.tools.assertions.instance_of key<expected> not found"
 ```
 
+You can force an exception to be raised for missing parameters by passing the `:reraise_exceptions` flag:
+
+```ruby
+tools = SleepingKingStudios::Tools::Toolbelt.instance
+
+tools.messages.message('sleeping_king_studios.tools.assertions.instance_of', reraise_exceptions: true)
+#=> raises a KeyError with message "key<expected> not found"
+```
+
 ### Default Values
 
 You can also provide a default value or `Proc` in case the requested message is not defined.

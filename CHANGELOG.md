@@ -6,7 +6,9 @@
 
 #### Messages
 
-Added a `default:` keyword to `Messages#get`.
+Added `:default` keyword to `Messages::Strategy#get`.
+
+Added `:reraise_exceptions` option to `Messages::Strategy#get`.
 
 ## 1.3.0
 

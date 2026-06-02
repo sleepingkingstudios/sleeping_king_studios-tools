@@ -15,8 +15,6 @@ SleepingKingStudios::Tools is tested against MRI Ruby 3.2 through 4.0.
 
 ### Documentation
 
-Method and class documentation is available courtesy of RubyDoc.
-
 Documentation is generated using [YARD](https://yardoc.org/), and can be generated locally using the `yard` gem.
 
 ### License
