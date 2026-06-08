@@ -12,6 +12,14 @@ instance_methods:
   path: sleeping-king-studios/tools/messages/strategy/i-call
   slug: call
   inherited: false
+- name: fetch
+  path: sleeping-king-studios/tools/messages/strategy/i-fetch
+  slug: fetch
+  inherited: false
+- name: get
+  path: sleeping-king-studios/tools/messages/strategy/i-get
+  slug: get
+  inherited: false
 data_path: sleeping-king-studios/tools/messages/strategy
 constructor: false
 direct_subclasses:

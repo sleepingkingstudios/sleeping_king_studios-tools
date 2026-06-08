@@ -37,12 +37,78 @@ module SleepingKingStudios::Tools
     #     string if a message is not defined for the given key and parameters.
     def call(key, default: UNDEFINED, parameters: {}, scope: nil, **)
       scoped_key = join_scope(key:, scope:)
-      template   = template_for(scoped_key, **)
-
-      return apply_default(scoped_key, default, **) unless template
+      template   = fetch(key, scope:, **) do
+        return apply_default(scoped_key, default, **)
+      end
 
       generate(template, parameters:, scoped_key:, **)
     end
+
+    # @overload fetch(key, default = nil, scope: nil, **options)
+    #   Retrieves the messages template with the given scope and options.
+    #
+    #   If there is no template matching the given key, scope, and options,
+    #   returns the default value or raises a KeyError if no default value is
+    #   provided.
+    #
+    #   @param key [String, Symbol] the key used to resolve the message.
+    #   @param default [Object] the default value to return if the strategy does
+    #     not define a message for the key.
+    #   @param scope [String] the namespace for the key. Combined with the given
+    #     key to generate the scoped key value.
+    #   @param options [Hash] additional options for resolving or generating the
+    #     message.
+    #
+    #   @return [Object] the stored template for the requested key, or the
+    #     provided default value.
+    #
+    #   @raises [KeyError] if there is no matching template and no default value
+    #     is provided.
+    #
+    # @overload fetch(key, scope: nil, **options, &default)
+    #   If there is no template matching the given key, scope, and options,
+    #   the block is called with the scoped key and the value returned by the
+    #   block is returned by #fetch.
+    #
+    #   @param key [String, Symbol] the key used to resolve the message.
+    #   @param scope [String] the namespace for the key. Combined with the given
+    #     key to generate the scoped key value.
+    #   @param options [Hash] additional options for resolving or generating the
+    #     message.
+    #
+    #   @yieldparam [String] scoped_key the fully scoped key for the requested
+    #     template, combining the given key and the given scope, if any.
+    #   @yieldparam options [Hash] additional options for resolving the message.
+    #
+    #   @yieldreturn [Object] the default value for the given scoped key.
+    #
+    #   @return [Object] the stored template for the requested key, or the value
+    #     returned by the provided default block.
+    def fetch(key, default = UNDEFINED, scope: nil, **, &block)
+      scoped_key = join_scope(key:, scope:)
+      template   = template_for(scoped_key, **)
+
+      return template if template
+
+      return block.call(scoped_key, **) if block_given?
+
+      return default unless default == UNDEFINED
+
+      raise KeyError, "template not found: #{scoped_key.inspect}"
+    end
+
+    # @overload get(key, scope: nil, **options)
+    #   Retrieves the messages template with the given scope and options.
+    #
+    #   @param key [String, Symbol] the key used to resolve the message.
+    #   @param scope [String] the namespace for the key. Combined with the given
+    #     key to generate the scoped key value.
+    #   @param options [Hash] additional options for resolving or generating the
+    #     message.
+    #
+    #   @return [Object] the stored template for the requested key, or nil if
+    #     there is no matching template.
+    def get(key, scope: nil, **) = fetch(key, nil, scope:, **)
 
     private
 

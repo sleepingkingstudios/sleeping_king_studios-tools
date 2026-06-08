@@ -29,7 +29,7 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
               "default message for key #{key} in locale #{locale}"
             end
           end
-          let(:options)  { super().merge(default:, locale: 'es') }
+          let(:options) { super().merge(default:, locale: 'es') }
           let(:expected) do
             "default message for key #{scoped_key} in locale es"
           end
@@ -286,10 +286,238 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
         include_deferred 'should return the matching message'
 
         describe 'with a scoped key' do
-          let(:key) { 'launch_sites.unlocked' }
+          let(:key)   { 'launch_sites.unlocked' }
           let(:scope) { 'messages' }
 
           include_deferred 'should return the matching message'
+        end
+      end
+    end
+  end
+
+  describe '#fetch' do
+    deferred_examples 'should handle an invalid key' do
+      context 'when the key does not match a template' do
+        let(:error_message) do
+          "template not found: #{scoped_key.inspect}"
+        end
+
+        it 'should raise an exception' do
+          expect { call_strategy }.to raise_error(KeyError, error_message)
+        end
+
+        describe 'with default: Proc' do
+          let(:block) do
+            lambda do |key, locale: 'en', **|
+              "default message for key #{key} in locale #{locale}"
+            end
+          end
+          let(:options) { super().merge(locale: 'es') }
+          let(:expected) do
+            "default message for key #{scoped_key} in locale es"
+          end
+
+          it { expect(call_strategy).to be == expected }
+        end
+
+        describe 'with default: value' do
+          let(:default)   { 'default message' }
+          let(:arguments) { [*super(), default] }
+
+          it { expect(call_strategy).to be == 'default message' }
+        end
+      end
+    end
+
+    deferred_examples 'should return the matching template' do
+      context 'when the key matches a template' do
+        it { expect(call_strategy).to be == expected }
+
+        describe 'with default: Proc' do
+          let(:block) do
+            lambda do |key, locale: 'en', **|
+              "default message for key #{key} in locale #{locale}"
+            end
+          end
+          let(:options) { super().merge(locale: 'es') }
+
+          it { expect(call_strategy).to be == expected }
+        end
+
+        describe 'with default: value' do
+          let(:default)   { 'default message' }
+          let(:arguments) { [*super(), default] }
+
+          it { expect(call_strategy).to be == expected }
+        end
+      end
+    end
+
+    let(:key)        { 'base_key' }
+    let(:arguments)  { [] }
+    let(:options)    { {} }
+    let(:block)      { nil }
+    let(:scoped_key) { [options[:scope], key].compact.join('.') }
+
+    define_method :call_strategy do
+      strategy.fetch(key, *arguments, **options, &block)
+    end
+
+    it 'should define the method' do
+      expect(strategy)
+        .to respond_to(:fetch)
+        .with(1..2).arguments
+        .and_keywords(:scope)
+        .and_any_keywords
+    end
+
+    describe 'with key: nil' do
+      let(:key) { nil }
+      let(:error_message) do
+        "key can't be blank"
+      end
+
+      it 'should raise an exception' do
+        expect { call_strategy }
+          .to raise_error ArgumentError, error_message
+      end
+    end
+
+    describe 'with key: an Object' do
+      let(:key) { Object.new.freeze }
+      let(:error_message) do
+        'key is not a String or a Symbol'
+      end
+
+      it 'should raise an exception' do
+        expect { call_strategy }
+          .to raise_error ArgumentError, error_message
+      end
+    end
+
+    describe 'with key: an empty String' do
+      let(:key) { '' }
+      let(:error_message) do
+        "key can't be blank"
+      end
+
+      it 'should raise an exception' do
+        expect { call_strategy }
+          .to raise_error ArgumentError, error_message
+      end
+    end
+
+    describe 'with key: an empty Symbol' do
+      let(:key) { :'' }
+      let(:error_message) do
+        "key can't be blank"
+      end
+
+      it 'should raise an exception' do
+        expect { call_strategy }
+          .to raise_error ArgumentError, error_message
+      end
+    end
+
+    describe 'with key: a String' do
+      include_deferred 'should handle an invalid key'
+    end
+
+    describe 'with key: a Symbol' do
+      let(:key) { super().to_sym }
+
+      include_deferred 'should handle an invalid key'
+    end
+
+    describe 'with key: a scoped value' do
+      let(:key) { "errors.messages.#{super()}" }
+
+      include_deferred 'should handle an invalid key'
+    end
+
+    describe 'with options: value' do
+      let(:options) { super().merge(ready: true) }
+
+      include_deferred 'should handle an invalid key'
+    end
+
+    describe 'with scope: value' do
+      let(:options) { super().merge(scope: 'custom.scope') }
+
+      include_deferred 'should handle an invalid key'
+
+      describe 'with key: a scoped value' do
+        let(:key) { "errors.messages.#{super()}" }
+
+        include_deferred 'should handle an invalid key'
+      end
+    end
+
+    context 'with a strategy subclass' do
+      subject(:strategy) { Spec::Strategy.new(strategy_templates) }
+
+      let(:strategy_templates) do
+        templates = {}
+        templates['module_name'] = 'Console Space Program'
+        templates['messages.launch_sites.unlocked'] =
+          'launch site is now open for launch'
+        templates['messages.rockets.launch_status'] =
+          lambda do |parameters: {}, ready: false, **|
+            str = +'rocket'
+            str << ' ' << parameters[:name] if parameters.key?(:name)
+            str << (ready ? ' is' : ' is not')
+            str << ' ready to launch'
+            str.freeze
+          end
+
+        templates
+      end
+      let(:key)      { 'module_name' }
+      let(:expected) { strategy_templates[scoped_key] }
+
+      example_class 'Spec::Strategy', described_class do |klass|
+        klass.define_method :initialize do |templates|
+          @templates = templates
+        end
+
+        klass.attr_reader :templates
+
+        klass.define_method :template_for do |scoped_key, **|
+          templates[scoped_key.to_s]
+        end
+      end
+
+      include_deferred 'should return the matching template'
+
+      context 'when the template requires parameters' do
+        let(:strategy_templates) do
+          super().merge(
+            'messages.rockets.fuel_status' => '%<name> is fully fueled'
+          )
+        end
+        let(:key) { 'messages.rockets.fuel_status' }
+
+        include_deferred 'should return the matching template'
+      end
+
+      describe 'with key: a scoped value' do
+        let(:key) { 'messages.rockets.launch_status' }
+
+        include_deferred 'should return the matching template'
+      end
+
+      describe 'with scope: value' do
+        let(:key)     { 'unlocked' }
+        let(:scope)   { 'messages.launch_sites' }
+        let(:options) { super().merge(scope:) }
+
+        include_deferred 'should return the matching template'
+
+        describe 'with a scoped key' do
+          let(:key)   { 'launch_sites.unlocked' }
+          let(:scope) { 'messages' }
+
+          include_deferred 'should return the matching template'
         end
       end
     end
@@ -442,6 +670,187 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
           let(:options) { { ready: true } }
 
           it { expect(generate_string).to be == expected }
+        end
+      end
+    end
+  end
+
+  describe '#get' do
+    deferred_examples 'should handle an invalid key' do
+      context 'when the key does not match a template' do
+        it { expect(call_strategy).to be nil }
+      end
+    end
+
+    deferred_examples 'should return the matching template' do
+      context 'when the key matches a template' do
+        it { expect(call_strategy).to be == expected }
+      end
+    end
+
+    let(:key)        { 'base_key' }
+    let(:options)    { {} }
+    let(:scoped_key) { [options[:scope], key].compact.join('.') }
+
+    define_method :call_strategy do
+      strategy.get(key, **options)
+    end
+
+    it 'should define the method' do
+      expect(strategy)
+        .to respond_to(:get)
+        .with(1).argument
+        .and_keywords(:scope)
+        .and_any_keywords
+    end
+
+    describe 'with key: nil' do
+      let(:key) { nil }
+      let(:error_message) do
+        "key can't be blank"
+      end
+
+      it 'should raise an exception' do
+        expect { call_strategy }
+          .to raise_error ArgumentError, error_message
+      end
+    end
+
+    describe 'with key: an Object' do
+      let(:key) { Object.new.freeze }
+      let(:error_message) do
+        'key is not a String or a Symbol'
+      end
+
+      it 'should raise an exception' do
+        expect { call_strategy }
+          .to raise_error ArgumentError, error_message
+      end
+    end
+
+    describe 'with key: an empty String' do
+      let(:key) { '' }
+      let(:error_message) do
+        "key can't be blank"
+      end
+
+      it 'should raise an exception' do
+        expect { call_strategy }
+          .to raise_error ArgumentError, error_message
+      end
+    end
+
+    describe 'with key: an empty Symbol' do
+      let(:key) { :'' }
+      let(:error_message) do
+        "key can't be blank"
+      end
+
+      it 'should raise an exception' do
+        expect { call_strategy }
+          .to raise_error ArgumentError, error_message
+      end
+    end
+
+    describe 'with key: a String' do
+      include_deferred 'should handle an invalid key'
+    end
+
+    describe 'with key: a Symbol' do
+      let(:key) { super().to_sym }
+
+      include_deferred 'should handle an invalid key'
+    end
+
+    describe 'with key: a scoped value' do
+      let(:key) { "errors.messages.#{super()}" }
+
+      include_deferred 'should handle an invalid key'
+    end
+
+    describe 'with options: value' do
+      let(:options) { super().merge(ready: true) }
+
+      include_deferred 'should handle an invalid key'
+    end
+
+    describe 'with scope: value' do
+      let(:options) { super().merge(scope: 'custom.scope') }
+
+      include_deferred 'should handle an invalid key'
+
+      describe 'with key: a scoped value' do
+        let(:key) { "errors.messages.#{super()}" }
+
+        include_deferred 'should handle an invalid key'
+      end
+    end
+
+    context 'with a strategy subclass' do
+      subject(:strategy) { Spec::Strategy.new(strategy_templates) }
+
+      let(:strategy_templates) do
+        templates = {}
+        templates['module_name'] = 'Console Space Program'
+        templates['messages.launch_sites.unlocked'] =
+          'launch site is now open for launch'
+        templates['messages.rockets.launch_status'] =
+          lambda do |parameters: {}, ready: false, **|
+            str = +'rocket'
+            str << ' ' << parameters[:name] if parameters.key?(:name)
+            str << (ready ? ' is' : ' is not')
+            str << ' ready to launch'
+            str.freeze
+          end
+
+        templates
+      end
+      let(:key)      { 'module_name' }
+      let(:expected) { strategy_templates[scoped_key] }
+
+      example_class 'Spec::Strategy', described_class do |klass|
+        klass.define_method :initialize do |templates|
+          @templates = templates
+        end
+
+        klass.attr_reader :templates
+
+        klass.define_method :template_for do |scoped_key, **|
+          templates[scoped_key.to_s]
+        end
+      end
+
+      include_deferred 'should return the matching template'
+
+      context 'when the template requires parameters' do
+        let(:strategy_templates) do
+          super().merge(
+            'messages.rockets.fuel_status' => '%<name> is fully fueled'
+          )
+        end
+        let(:key) { 'messages.rockets.fuel_status' }
+
+        include_deferred 'should return the matching template'
+      end
+
+      describe 'with key: a scoped value' do
+        let(:key) { 'messages.rockets.launch_status' }
+
+        include_deferred 'should return the matching template'
+      end
+
+      describe 'with scope: value' do
+        let(:key)     { 'unlocked' }
+        let(:scope)   { 'messages.launch_sites' }
+        let(:options) { super().merge(scope:) }
+
+        include_deferred 'should return the matching template'
+
+        describe 'with a scoped key' do
+          let(:key)   { 'launch_sites.unlocked' }
+          let(:scope) { 'messages' }
+
+          include_deferred 'should return the matching template'
         end
       end
     end

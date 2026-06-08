@@ -1,0 +1,104 @@
+---
+name: SleepingKingStudios::Tools::Messages::Strategy#fetch
+parent_path: sleeping-king-studios/tools/messages/strategy
+signature: 'fetch(key, default = UNDEFINED, scope: nil, **, &block)'
+slug: fetch
+constructor: false
+data_path: sleeping-king-studios/tools/messages/strategy/i-fetch
+overloads:
+- name: SleepingKingStudios::Tools::Messages::Strategy#fetch
+  parent_path: sleeping-king-studios/tools/messages/strategy
+  signature: 'fetch(key, default = nil, scope: nil, **options)'
+  slug: fetch
+  constructor: false
+  description: |-
+    If there is no template matching the given key, scope, and options,
+    returns the default value or raises a KeyError if no default value is
+    provided.
+  params:
+  - description: the key used to resolve the message.
+    name: key
+    type:
+    - name: String
+    - name: Symbol
+  - description: |-
+      the default value to return if the strategy does
+      not define a message for the key.
+    name: default
+    type:
+    - name: Object
+    default: nil
+  - description: |-
+      the namespace for the key. Combined with the given
+      key to generate the scoped key value.
+    name: scope
+    type:
+    - name: String
+    default: nil
+  - description: |-
+      additional options for resolving or generating the
+      message.
+    name: options
+    type:
+    - name: Hash
+  returns:
+  - description: |-
+      the stored template for the requested key, or the
+      provided default value.
+    type:
+    - name: Object
+  short_description: Retrieves the messages template with the given scope and options.
+- name: SleepingKingStudios::Tools::Messages::Strategy#fetch
+  parent_path: sleeping-king-studios/tools/messages/strategy
+  signature: 'fetch(key, scope: nil, **options, &default)'
+  slug: fetch
+  constructor: false
+  params:
+  - description: the key used to resolve the message.
+    name: key
+    type:
+    - name: String
+    - name: Symbol
+  - description: |-
+      the namespace for the key. Combined with the given
+      key to generate the scoped key value.
+    name: scope
+    type:
+    - name: String
+    default: nil
+  - description: |-
+      additional options for resolving or generating the
+      message.
+    name: options
+    type:
+    - name: Hash
+  returns:
+  - description: |-
+      the stored template for the requested key, or the value
+      returned by the provided default block.
+    type:
+    - name: Object
+  short_description: |-
+    If there is no template matching the given key, scope, and options,
+    the block is called with the scoped key and the value returned by the
+    block is returned by #fetch.
+  yield_params:
+  - description: |-
+      the fully scoped key for the requested
+      template, combining the given key and the given scope, if any.
+    name: scoped_key
+    type:
+    - name: String
+  - description: additional options for resolving the message.
+    name: options
+    type:
+    - name: Hash
+  yield_returns:
+  - description: the default value for the given scoped key.
+    type:
+    - name: Object
+raises:
+- description: ''
+  type:
+  - name: KeyError
+version: "*"

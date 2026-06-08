@@ -26,6 +26,8 @@ For a full list of available methods, see the [Reference documentation](../refer
     - [Global Registry](#global-registry)
     - [Custom Registries](#custom-registries)
 - [Initializing Messages](#initializing-messages)
+- [Registered Messages](#registered-messages)
+  - [Message Templates](#message-templates)
 
 ## Generating Messages
 
@@ -58,6 +60,8 @@ tools.messages.message(key, scope:)
 
 This can be useful when generating multiple human-readable messages with the same base scope.
 
+[Back to Top](#)
+
 ### Missing Messages
 
 If a requested message is not defined, `#message` returns an error string with the scoped key:
@@ -70,6 +74,8 @@ tools.messages.message('sleeping_king_studios.tools.assertions.undefined_message
 ```
 
 To define your own message definitions, see [Registering Messages](#registering-messages), below.
+
+[Back to Top](#)
 
 ### Parameterized Messages
 
@@ -103,6 +109,8 @@ tools.messages.message('sleeping_king_studios.tools.assertions.instance_of', rer
 #=> raises a KeyError with message "key<expected> not found"
 ```
 
+[Back to Top](#)
+
 ### Default Values
 
 You can also provide a default value or `Proc` in case the requested message is not defined.
@@ -134,12 +142,16 @@ tools.messages.message(
 #=> "message not found with key example.messages.undefined_message and locale es"
 ```
 
+[Back to Top](#)
+
 ## Registering Messages
 
 Registering messages for use in the `#messages` tool takes two steps.
 
 - First, define a [Messages strategy](#message-strategies), which maps keys for a given scope to a message definition.
 - Second, add the strategy to the [Messages registry](#message-registries), which exposes that strategy to the tool.
+
+[Back to Top](#)
 
 ### Message Strategies
 
@@ -151,6 +163,8 @@ Each message strategy must define a `#call` method that takes a `key` argument a
 - A [HashStrategy](#hash-strategies) takes message definitions as a pre-defined `Hash`.
 
 You can also define a custom strategy class. This allows you to retrieve messages from an external tool, or specify additional filters for matching the message definition (such as a `locale:` keyword).
+
+[Back to Top](#)
 
 #### File Strategies
 
@@ -194,6 +208,8 @@ You can also register a file strategy using the following shorthand:
 ```ruby
 registry.register(scope: 'space', file: file_name)
 ```
+
+[Back to Top](#)
 
 #### Hash Strategies
 
@@ -244,6 +260,8 @@ You can also register a hash strategy using the following shorthand:
 registry.register(scope: 'space', hash: definitions)
 ```
 
+[Back to Top](#)
+
 ### Message Registries
 
 Once your messages have been defined using a [Messages strategy](#message-strategies), the strategy must be added to a registry. By default, the `Messages` tool uses a shared global registry.
@@ -262,6 +280,8 @@ When `#message` is called with a `scope:` or a scoped key starting with `'space.
 
 Registed strategies can be nested, in which case the registry will use the most specific strategy matching the message scope. For example, one strategy might be registered with scope `'space'`, and another strategy with scope `'space.planets'`. A message with scope `'space.stars'` would be resolved using the `'space'` strategy, but a message with scope `'space.planets.names'` would be resolved using the `'space.planets'` strategy.
 
+[Back to Top](#)
+
 #### Global Registry
 
 The global registry provides a single entry point for defining and accessing message definitions across an application and its dependencies. Using the global registry has several advantages:
@@ -270,6 +290,8 @@ The global registry provides a single entry point for defining and accessing mes
 - The global registry is designed to be thread-safe, ensuring there is a single registry even in a multi-threaded environment.
 
 The default `Toolbelt.instance` is already configured to use the global registry.
+
+[Back to Top](#)
 
 #### Custom Registries
 
@@ -287,6 +309,8 @@ toolbelt = SleepingKingStudios::Tools::Toolbelt.new(messages_registry: registry)
 toolbelt.messages.message(:going_to_space, scope: 'spec.test_cases')
 #=> "Is the rocket going to space?"
 ```
+
+[Back to Top](#)
 
 ## Initializing Messages
 
@@ -307,5 +331,48 @@ end
 ```
 
 Once the initializer is defined, update the entry point for your project to call the initializer.
+
+[Back to Top](#)
+
+## Registered Messages
+
+In addition to retrieving messages from `tools.messages`, you can also generate messages directly from a registry. This allows defining multiple registries for different scopes or purposes, or using dependency injection to define different registries for development, test, and production environments.
+
+```ruby
+# Access the registry instance.
+registry = SleepingKingStudios::Tools::Messages::Registry.global
+
+strategy = registry.get('example.message_key')
+message  = strategy&.call('example.message_key', default: nil)
+```
+
+First, we retrieve the strategy that defines messages for the requested key. If there is no matching strategy, `registry.get` will return `nil`.
+
+Second, if we have a matching strategy, we then ask the strategy to generate the message using `strategy.call`. We also pass `default: nil` to ensure that `message` will be `nil` when either the strategy or the message template is not defined. (When called via `tools.messages`, this is automatically handled to generate an error message).
+
+[Back to Top](#)
+
+### Message Templates
+
+For some use cases, you may need to access the raw message templates rather than the formatted values. For example, you may have custom message formatting logic, or you may store messages in a custom format, such as a Hash with optional properties. The `Strategy#get` and `Strategy#fetch` methods allow you to do just that.
+
+```ruby
+# Returns nil if the strategy does not define the message.
+strategy.get('example.message_key')
+
+# Returns 'Missing template "example.message_key"' if the strategy does not
+# define the message.
+strategy.fetch('example.message_key', 'Missing template "example.message_key"')
+
+# Returns 'Missing template "example.message_key"' if the strategy does not
+# define the message.
+strategy.fetch('example.message_key') do |scoped_key, **options|
+  message = 'Missing template "example.message_key"'
+  message += " with options #{options.inspect}" unless options.empty?
+  message
+end
+```
+
+[Back to Top](#)
 
 {% include breadcrumbs.md %}

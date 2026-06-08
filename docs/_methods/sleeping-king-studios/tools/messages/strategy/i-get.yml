@@ -1,0 +1,34 @@
+---
+name: SleepingKingStudios::Tools::Messages::Strategy#get
+parent_path: sleeping-king-studios/tools/messages/strategy
+signature: 'get(key, scope: nil, **options)'
+slug: get
+constructor: false
+data_path: sleeping-king-studios/tools/messages/strategy/i-get
+params:
+- description: the key used to resolve the message.
+  name: key
+  type:
+  - name: String
+  - name: Symbol
+- description: |-
+    the namespace for the key. Combined with the given
+    key to generate the scoped key value.
+  name: scope
+  type:
+  - name: String
+  default: nil
+- description: |-
+    additional options for resolving or generating the
+    message.
+  name: options
+  type:
+  - name: Hash
+returns:
+- description: |-
+    the stored template for the requested key, or nil if
+    there is no matching template.
+  type:
+  - name: Object
+short_description: Retrieves the messages template with the given scope and options.
+version: "*"
