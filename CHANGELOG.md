@@ -6,9 +6,11 @@
 
 #### Messages
 
-Added `:default` keyword to `Messages::Strategy#get`.
+Updated `Messages::Strategy`:
 
-Added `:reraise_exceptions` option to `Messages::Strategy#get`.
+- Implemented `Messages::Strategy#get`, `#fetch` methods to query raw message templates.
+- Added `:default` keyword to `Messages::Strategy#call`.
+- Added `:reraise_exceptions` option to `Messages::Strategy#call`.
 
 ## 1.3.0
 

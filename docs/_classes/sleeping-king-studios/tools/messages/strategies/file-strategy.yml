@@ -28,6 +28,14 @@ instance_methods:
   path: sleeping-king-studios/tools/messages/strategy/i-call
   slug: call
   inherited: true
+- name: fetch
+  path: sleeping-king-studios/tools/messages/strategy/i-fetch
+  slug: fetch
+  inherited: true
+- name: get
+  path: sleeping-king-studios/tools/messages/strategy/i-get
+  slug: get
+  inherited: true
 - name: initialize
   path: sleeping-king-studios/tools/messages/strategies/file-strategy/i-initialize
   slug: initialize
