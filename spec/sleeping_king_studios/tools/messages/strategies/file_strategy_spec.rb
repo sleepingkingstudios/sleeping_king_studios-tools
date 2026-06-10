@@ -5,9 +5,10 @@ require 'yaml'
 require 'sleeping_king_studios/tools/messages/strategies/file_strategy'
 
 RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::FileStrategy do
-  subject(:strategy) { described_class.new(file_name) }
+  subject(:strategy) { described_class.new(file_name, **constructor_options) }
 
-  let(:file_name) { 'spec/support/fixtures/empty.yml' }
+  let(:file_name)           { 'spec/support/fixtures/empty.yml' }
+  let(:constructor_options) { {} }
 
   describe '::FileError' do
     include_examples 'should define constant',
@@ -16,6 +17,13 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::FileStrategy do
   end
 
   describe '.new' do
+    it 'should define the constructor' do
+      expect(described_class)
+        .to be_constructible
+        .with(1).argument
+        .and_keywords(:flatten_templates)
+    end
+
     describe 'with file_name: nil' do
       let(:error_message) { "file name can't be blank" }
 
@@ -263,20 +271,10 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::FileStrategy do
 
       include_deferred 'should return the matching message'
 
-      describe 'with scope: value' do
-        let(:key)      { 'failure' }
-        let(:scope)    { 'messages.errors' }
-        let(:options)  { super().merge(scope:) }
-        let(:expected) { 'not going to space' }
+      describe 'with a key pointing to a scope' do
+        let(:key) { 'messages' }
 
-        include_deferred 'should return the matching message'
-
-        describe 'with a scoped key' do
-          let(:key) { 'errors.failure' }
-          let(:scope) { 'messages' }
-
-          include_deferred 'should return the matching message'
-        end
+        include_deferred 'should handle a non-matching key'
       end
 
       describe 'with a scoped key' do
@@ -302,11 +300,334 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::FileStrategy do
           end
         end
       end
+
+      describe 'with scope: value' do
+        let(:key)      { 'failure' }
+        let(:scope)    { 'messages.errors' }
+        let(:options)  { super().merge(scope:) }
+        let(:expected) { 'not going to space' }
+
+        include_deferred 'should return the matching message'
+
+        describe 'with a scoped key' do
+          let(:key) { 'errors.failure' }
+          let(:scope) { 'messages' }
+
+          include_deferred 'should return the matching message'
+        end
+      end
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+
+        include_deferred 'should return the matching message'
+
+        describe 'with a key pointing to a scope' do
+          let(:key) { 'messages' }
+          let(:error_message) do
+            "invalid template #{strategy.templates[scoped_key].inspect}"
+          end
+
+          it 'should raise an exception' do
+            expect { call_strategy }.to raise_error ArgumentError, error_message
+          end
+        end
+      end
+    end
+  end
+
+  describe '#fetch' do
+    deferred_examples 'should handle a non-matching key' do
+      context 'when the key does not match a template' do
+        let(:key) do
+          original = super()
+          invalid  = original.to_s.sub(/\w+\z/, 'invalid_key')
+
+          original.is_a?(Symbol) ? invalid.to_sym : invalid
+        end
+        let(:error_message) do
+          "template not found: #{scoped_key.inspect}"
+        end
+
+        it 'should raise an exception' do
+          expect { call_strategy }.to raise_error(KeyError, error_message)
+        end
+
+        describe 'with default: Proc' do
+          let(:block) do
+            lambda do |key, locale: 'en', **|
+              "default message for key #{key} in locale #{locale}"
+            end
+          end
+          let(:options) { super().merge(locale: 'es') }
+          let(:expected) do
+            "default message for key #{scoped_key} in locale es"
+          end
+
+          it { expect(call_strategy).to be == expected }
+        end
+
+        describe 'with default: value' do
+          let(:default)   { 'default message' }
+          let(:arguments) { [*super(), default] }
+
+          it { expect(call_strategy).to be == 'default message' }
+        end
+      end
+    end
+
+    deferred_examples 'should return the matching template' do
+      include_deferred 'should handle a non-matching key'
+
+      context 'when the key matches a template' do
+        let(:expected) { templates[scoped_key] }
+
+        it { expect(call_strategy).to be == expected }
+      end
+    end
+
+    let(:key)        { 'base_key' }
+    let(:arguments)  { [] }
+    let(:options)    { {} }
+    let(:block)      { nil }
+    let(:scoped_key) { [options[:scope], key].compact.join('.') }
+
+    define_method :call_strategy do
+      strategy.fetch(key, *arguments, **options, &block)
+    end
+
+    it 'should define the method' do
+      expect(strategy)
+        .to respond_to(:call)
+        .with(1).argument
+        .and_keywords(:scope)
+        .and_any_keywords
+    end
+
+    describe 'with key: a String' do
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with key: a Symbol' do
+      let(:key) { super().to_sym }
+
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with key: a scoped value' do
+      let(:key) { "errors.messages.#{super()}" }
+
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with options: value' do
+      let(:options) { super().merge(ready: true) }
+
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with scope: value' do
+      let(:options) { super().merge(scope: 'custom.scope') }
+
+      include_deferred 'should handle a non-matching key'
+
+      describe 'with key: a scoped value' do
+        let(:key) { "errors.messages.#{super()}" }
+
+        include_deferred 'should handle a non-matching key'
+      end
+    end
+
+    context 'when initialized with templates: value' do
+      let(:file_name) { 'spec/support/fixtures/messages.yml' }
+      let(:templates) { strategy.templates }
+
+      let(:key) { 'module_name' }
+
+      include_deferred 'should return the matching template'
+
+      describe 'with a key pointing to a scope' do
+        let(:key) { 'messages' }
+
+        include_deferred 'should handle a non-matching key'
+      end
+
+      describe 'with a scoped key' do
+        let(:key) { 'messages.rockets.launch_status' }
+
+        include_deferred 'should return the matching template'
+
+        describe 'with options: value' do
+          let(:options) { super().merge(ready: true) }
+
+          include_deferred 'should return the matching template'
+        end
+      end
+
+      describe 'with scope: value' do
+        let(:key)     { 'failure' }
+        let(:scope)   { 'messages.errors' }
+        let(:options) { super().merge(scope:) }
+
+        include_deferred 'should return the matching template'
+
+        describe 'with a scoped key' do
+          let(:key)   { 'errors.failure' }
+          let(:scope) { 'messages' }
+
+          include_deferred 'should return the matching template'
+        end
+      end
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+        let(:expected)            { templates.dig(*scoped_key.split('.')) }
+
+        include_deferred 'should return the matching template'
+
+        describe 'with a key pointing to a scope' do
+          let(:key) { 'messages' }
+
+          include_deferred 'should return the matching template'
+        end
+      end
     end
   end
 
   describe '#file_name' do
     include_examples 'should define reader', :file_name, -> { file_name }
+  end
+
+  describe '#get' do
+    deferred_examples 'should handle a non-matching key' do
+      context 'when the key does not match a template' do
+        let(:key) do
+          original = super()
+          invalid  = original.to_s.sub(/\w+\z/, 'invalid_key')
+
+          original.is_a?(Symbol) ? invalid.to_sym : invalid
+        end
+
+        it { expect(call_strategy).to be nil }
+      end
+    end
+
+    deferred_examples 'should return the matching template' do
+      include_deferred 'should handle a non-matching key'
+
+      context 'when the key matches a template' do
+        let(:expected) { templates[scoped_key] }
+
+        it { expect(call_strategy).to be == expected }
+      end
+    end
+
+    let(:key)        { 'base_key' }
+    let(:arguments)  { [] }
+    let(:options)    { {} }
+    let(:block)      { nil }
+    let(:scoped_key) { [options[:scope], key].compact.join('.') }
+
+    define_method :call_strategy do
+      strategy.get(key, *arguments, **options, &block)
+    end
+
+    it 'should define the method' do
+      expect(strategy)
+        .to respond_to(:call)
+        .with(1).argument
+        .and_keywords(:scope)
+        .and_any_keywords
+    end
+
+    describe 'with key: a String' do
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with key: a Symbol' do
+      let(:key) { super().to_sym }
+
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with key: a scoped value' do
+      let(:key) { "errors.messages.#{super()}" }
+
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with options: value' do
+      let(:options) { super().merge(ready: true) }
+
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with scope: value' do
+      let(:options) { super().merge(scope: 'custom.scope') }
+
+      include_deferred 'should handle a non-matching key'
+
+      describe 'with key: a scoped value' do
+        let(:key) { "errors.messages.#{super()}" }
+
+        include_deferred 'should handle a non-matching key'
+      end
+    end
+
+    context 'when initialized with templates: value' do
+      let(:file_name) { 'spec/support/fixtures/messages.yml' }
+      let(:templates) { strategy.templates }
+
+      let(:key) { 'module_name' }
+
+      include_deferred 'should return the matching template'
+
+      describe 'with a key pointing to a scope' do
+        let(:key) { 'messages' }
+
+        include_deferred 'should handle a non-matching key'
+      end
+
+      describe 'with a scoped key' do
+        let(:key) { 'messages.rockets.launch_status' }
+
+        include_deferred 'should return the matching template'
+
+        describe 'with options: value' do
+          let(:options) { super().merge(ready: true) }
+
+          include_deferred 'should return the matching template'
+        end
+      end
+
+      describe 'with scope: value' do
+        let(:key)     { 'failure' }
+        let(:scope)   { 'messages.errors' }
+        let(:options) { super().merge(scope:) }
+
+        include_deferred 'should return the matching template'
+
+        describe 'with a scoped key' do
+          let(:key)   { 'errors.failure' }
+          let(:scope) { 'messages' }
+
+          include_deferred 'should return the matching template'
+        end
+      end
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+        let(:expected)            { templates.dig(*scoped_key.split('.')) }
+
+        include_deferred 'should return the matching template'
+
+        describe 'with a key pointing to a scope' do
+          let(:key) { 'messages' }
+
+          include_deferred 'should return the matching template'
+        end
+      end
+    end
   end
 
   describe '#templates' do
@@ -323,6 +644,25 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::FileStrategy do
       let(:file_name) { Pathname.new('spec/support/fixtures/messages.yml') }
 
       it { expect(strategy.templates).to be == expected }
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+        let(:expected) do
+          {
+            'module_name' => 'Console Space Program',
+            'messages'    => {
+              'errors'  => {
+                'failure' => 'not going to space'
+              },
+              'rockets' => {
+                'launch_status' => 'rocket %<name>s is ready to launch'
+              }
+            }
+          }
+        end
+
+        it { expect(strategy.templates).to be == expected }
+      end
     end
 
     context 'when the file is an empty JSON file' do
@@ -336,6 +676,25 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::FileStrategy do
       let(:file_name) { 'spec/support/fixtures/messages.json' }
 
       it { expect(strategy.templates).to be == expected }
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+        let(:expected) do
+          {
+            'module_name' => 'Console Space Program',
+            'messages'    => {
+              'errors'  => {
+                'failure' => 'not going to space'
+              },
+              'rockets' => {
+                'launch_status' => 'rocket %<name>s is ready to launch'
+              }
+            }
+          }
+        end
+
+        it { expect(strategy.templates).to be == expected }
+      end
     end
 
     context 'when the file is an empty YAML file' do
@@ -349,12 +708,50 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::FileStrategy do
       let(:file_name) { 'spec/support/fixtures/messages.yml' }
 
       include_examples 'should define reader', :templates, -> { expected }
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+        let(:expected) do
+          {
+            'module_name' => 'Console Space Program',
+            'messages'    => {
+              'errors'  => {
+                'failure' => 'not going to space'
+              },
+              'rockets' => {
+                'launch_status' => 'rocket %<name>s is ready to launch'
+              }
+            }
+          }
+        end
+
+        it { expect(strategy.templates).to be == expected }
+      end
     end
 
     context 'when the file is a YAML file with a .yaml suffix' do
       let(:file_name) { 'spec/support/fixtures/messages.yaml' }
 
       it { expect(strategy.templates).to be == expected }
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+        let(:expected) do
+          {
+            'module_name' => 'Console Space Program',
+            'messages'    => {
+              'errors'  => {
+                'failure' => 'not going to space'
+              },
+              'rockets' => {
+                'launch_status' => 'rocket %<name>s is ready to launch'
+              }
+            }
+          }
+        end
+
+        it { expect(strategy.templates).to be == expected }
+      end
     end
   end
 end

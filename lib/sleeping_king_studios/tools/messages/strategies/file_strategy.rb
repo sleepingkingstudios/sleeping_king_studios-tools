@@ -5,20 +5,29 @@ require 'sleeping_king_studios/tools/messages/strategies/hash_strategy'
 
 module SleepingKingStudios::Tools::Messages::Strategies
   # Messaging strategy that loads message templates from the given file.
+  #
+  # Internally, the parsed templates are flattened - a nested Hash of
+  # { foo: { bar: { baz: 'template' } } } is stored as a flat Hash with
+  # { 'foo.bar.baz' => 'template' }. This makes lookup of scoped keys more
+  # efficient but prevents retrieving non-leaf nodes (such as "foo" or "foo.bar"
+  # in the above Hash). If you need to retrieve Hash values, initialize the
+  # strategy with flatten_templates: false.
   class FileStrategy < HashStrategy
     # Exception raised when reading the templates file.
     class FileError < StandardError; end
 
     # @param file_name [String] the full path to the file with the templates
     #   data.
-    def initialize(file_name)
+    # @param flatten_templates [true, false] if true, the templates are
+    #   flattened internally. Defaults to true.
+    def initialize(file_name, flatten_templates: true)
       validate_file_name(file_name)
 
       @file_name = file_name
       raw_data   = read_file(file_name)
       templates  = parse_templates(raw_data)
 
-      super(templates)
+      super(templates, flatten_templates:)
     end
 
     # @return [String] the full path to the file with the templates data.

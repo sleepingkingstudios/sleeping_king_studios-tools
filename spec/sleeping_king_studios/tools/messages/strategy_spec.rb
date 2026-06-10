@@ -336,7 +336,9 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
         describe 'with default: Proc' do
           let(:block) do
             lambda do |key, locale: 'en', **|
+              # :nocov:
               "default message for key #{key} in locale #{locale}"
+              # :nocov:
             end
           end
           let(:options) { super().merge(locale: 'es') }
@@ -463,11 +465,13 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
           'launch site is now open for launch'
         templates['messages.rockets.launch_status'] =
           lambda do |parameters: {}, ready: false, **|
+            # :nocov:
             str = +'rocket'
             str << ' ' << parameters[:name] if parameters.key?(:name)
             str << (ready ? ' is' : ' is not')
             str << ' ready to launch'
             str.freeze
+            # :nocov:
           end
 
         templates
@@ -796,11 +800,13 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
           'launch site is now open for launch'
         templates['messages.rockets.launch_status'] =
           lambda do |parameters: {}, ready: false, **|
+            # :nocov:
             str = +'rocket'
             str << ' ' << parameters[:name] if parameters.key?(:name)
             str << (ready ? ' is' : ' is not')
             str << ' ready to launch'
             str.freeze
+            # :nocov:
           end
 
         templates

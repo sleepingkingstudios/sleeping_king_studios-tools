@@ -209,6 +209,18 @@ You can also register a file strategy using the following shorthand:
 registry.register(scope: 'space', file: file_name)
 ```
 
+By default, a `FileStrategy` will flatten the parsed templates for efficient lookup - a nested `Hash` of `{ foo: { bar: { baz: 'template' } } }` is stored as a flat `Hash` with contents `{ 'foo.bar.baz' => 'template' }`. This makes lookup of scoped keys more efficient but prevents retrieving non-leaf nodes (such as `"foo"` or `"foo.bar"` in the above `Hash`). If you need to retrieve `Hash` values, initialize the strategy with `flatten_templates: false`.
+
+```ruby
+file_name = 'config/messages.yml'
+strategy  =
+  SleepingKingStudios::Tools::Messages::Strategies::FileStrategy
+  .new(file_name, flatten_templates: false)
+
+strategy.get('space.messages.errors')
+#=> { 'failure' => 'not going to space' }
+```
+
 [Back to Top](#)
 
 #### Hash Strategies
@@ -258,6 +270,17 @@ You can also register a hash strategy using the following shorthand:
 
 ```ruby
 registry.register(scope: 'space', hash: definitions)
+```
+
+By default, a `HashStrategy` will flatten the parsed templates for efficient lookup - a nested `Hash` of `{ foo: { bar: { baz: 'template' } } }` is stored as a flat `Hash` with contents `{ 'foo.bar.baz' => 'template' }`. This makes lookup of scoped keys more efficient but prevents retrieving non-leaf nodes (such as `"foo"` or `"foo.bar"` in the above `Hash`). If you need to retrieve `Hash` values, initialize the strategy with `flatten_templates: false`.
+
+```ruby
+strategy  =
+  SleepingKingStudios::Tools::Messages::Strategies::FileStrategy
+  .new(definitions, flatten_templates: false)
+
+strategy.get('space.messages.errors')
+#=> { 'failure' => 'not going to space' }
 ```
 
 [Back to Top](#)

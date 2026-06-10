@@ -3,9 +3,10 @@
 require 'sleeping_king_studios/tools/messages/strategies/hash_strategy'
 
 RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
-  subject(:strategy) { described_class.new(templates) }
+  subject(:strategy) { described_class.new(templates, **constructor_options) }
 
-  let(:templates) { {} }
+  let(:templates)           { {} }
+  let(:constructor_options) { {} }
   let(:launch_status) do
     lambda do |parameters: {}, ready: false, **|
       str = +'rocket'
@@ -16,6 +17,10 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
     end
   end
 
+  define_method :tools do
+    SleepingKingStudios::Tools::Toolbelt.instance
+  end
+
   describe '::ParseError' do
     include_examples 'should define constant',
       :ParseError,
@@ -23,7 +28,12 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
   end
 
   describe '.new' do
-    it { expect(described_class).to be_constructible.with(1).argument }
+    it 'should define the constructor' do
+      expect(described_class)
+        .to be_constructible
+        .with(1).argument
+        .and_keywords(:flatten_templates)
+    end
 
     describe 'with nil' do
       let(:error_message) do
@@ -274,16 +284,28 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
 
     context 'when initialized with templates: value' do
       let(:templates) do
-        templates = {}
-        templates['module_name'] = 'Console Space Program'
-        templates['messages.errors.failure'] = 'not going to space'
-        templates['messages.rockets.launch_status'] = launch_status
-        templates
+        {
+          'messages'    => {
+            'errors'  => {
+              'failure' => 'not going to space'
+            },
+            'rockets' => {
+              'launch_status' => launch_status
+            }
+          },
+          'module_name' => 'Console Space Program'
+        }
       end
       let(:key)      { 'module_name' }
       let(:expected) { 'Console Space Program' }
 
       include_deferred 'should return the matching message'
+
+      describe 'with a key pointing to a scope' do
+        let(:key) { 'messages' }
+
+        include_deferred 'should handle a non-matching key'
+      end
 
       describe 'with a scoped key' do
         let(:key)      { 'messages.rockets.launch_status' }
@@ -328,10 +350,333 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
         include_deferred 'should return the matching message'
 
         describe 'with a scoped key' do
-          let(:key) { 'errors.failure' }
+          let(:key)   { 'errors.failure' }
           let(:scope) { 'messages' }
 
           include_deferred 'should return the matching message'
+        end
+      end
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+
+        include_deferred 'should return the matching message'
+
+        describe 'with a key pointing to a scope' do
+          let(:key) { 'messages' }
+          let(:error_message) do
+            "invalid template #{templates[scoped_key].inspect}"
+          end
+
+          it 'should raise an exception' do
+            expect { call_strategy }.to raise_error ArgumentError, error_message
+          end
+        end
+      end
+    end
+  end
+
+  describe '#fetch' do
+    deferred_examples 'should handle a non-matching key' do
+      context 'when the key does not match a template' do
+        let(:key) do
+          original = super()
+          invalid  = original.to_s.sub(/\w+\z/, 'invalid_key')
+
+          original.is_a?(Symbol) ? invalid.to_sym : invalid
+        end
+        let(:error_message) do
+          "template not found: #{scoped_key.inspect}"
+        end
+
+        it 'should raise an exception' do
+          expect { call_strategy }.to raise_error(KeyError, error_message)
+        end
+
+        describe 'with default: Proc' do
+          let(:block) do
+            lambda do |key, locale: 'en', **|
+              "default message for key #{key} in locale #{locale}"
+            end
+          end
+          let(:options) { super().merge(locale: 'es') }
+          let(:expected) do
+            "default message for key #{scoped_key} in locale es"
+          end
+
+          it { expect(call_strategy).to be == expected }
+        end
+
+        describe 'with default: value' do
+          let(:default)   { 'default message' }
+          let(:arguments) { [*super(), default] }
+
+          it { expect(call_strategy).to be == 'default message' }
+        end
+      end
+    end
+
+    deferred_examples 'should return the matching template' do
+      include_deferred 'should handle a non-matching key'
+
+      context 'when the key matches a template' do
+        let(:expected) { templates.dig(*scoped_key.split('.')) }
+
+        it { expect(call_strategy).to be == expected }
+      end
+    end
+
+    let(:key)        { 'base_key' }
+    let(:arguments)  { [] }
+    let(:options)    { {} }
+    let(:block)      { nil }
+    let(:scoped_key) { [options[:scope], key].compact.join('.') }
+
+    define_method :call_strategy do
+      strategy.fetch(key, *arguments, **options, &block)
+    end
+
+    it 'should define the method' do
+      expect(strategy)
+        .to respond_to(:call)
+        .with(1).argument
+        .and_keywords(:scope)
+        .and_any_keywords
+    end
+
+    describe 'with key: a String' do
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with key: a Symbol' do
+      let(:key) { super().to_sym }
+
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with key: a scoped value' do
+      let(:key) { "errors.messages.#{super()}" }
+
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with options: value' do
+      let(:options) { super().merge(ready: true) }
+
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with scope: value' do
+      let(:options) { super().merge(scope: 'custom.scope') }
+
+      include_deferred 'should handle a non-matching key'
+
+      describe 'with key: a scoped value' do
+        let(:key) { "errors.messages.#{super()}" }
+
+        include_deferred 'should handle a non-matching key'
+      end
+    end
+
+    context 'when initialized with templates: value' do
+      let(:templates) do
+        {
+          'messages'    => {
+            'errors'  => {
+              'failure' => 'not going to space'
+            },
+            'rockets' => {
+              'launch_status' => launch_status
+            }
+          },
+          'module_name' => 'Console Space Program'
+        }
+      end
+      let(:key) { 'module_name' }
+
+      include_deferred 'should return the matching template'
+
+      describe 'with a key pointing to a scope' do
+        let(:key) { 'messages' }
+
+        include_deferred 'should handle a non-matching key'
+      end
+
+      describe 'with a scoped key' do
+        let(:key) { 'messages.rockets.launch_status' }
+
+        include_deferred 'should return the matching template'
+
+        describe 'with options: value' do
+          let(:options) { super().merge(ready: true) }
+
+          include_deferred 'should return the matching template'
+        end
+      end
+
+      describe 'with scope: value' do
+        let(:key)     { 'failure' }
+        let(:scope)   { 'messages.errors' }
+        let(:options) { super().merge(scope:) }
+
+        include_deferred 'should return the matching template'
+
+        describe 'with a scoped key' do
+          let(:key)   { 'errors.failure' }
+          let(:scope) { 'messages' }
+
+          include_deferred 'should return the matching template'
+        end
+      end
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+
+        include_deferred 'should return the matching template'
+
+        describe 'with a key pointing to a scope' do
+          let(:key) { 'messages' }
+
+          include_deferred 'should return the matching template'
+        end
+      end
+    end
+  end
+
+  describe '#get' do
+    deferred_examples 'should handle a non-matching key' do
+      context 'when the key does not match a template' do
+        let(:key) do
+          original = super()
+          invalid  = original.to_s.sub(/\w+\z/, 'invalid_key')
+
+          original.is_a?(Symbol) ? invalid.to_sym : invalid
+        end
+
+        it { expect(call_strategy).to be nil }
+      end
+    end
+
+    deferred_examples 'should return the matching template' do
+      include_deferred 'should handle a non-matching key'
+
+      context 'when the key matches a template' do
+        let(:expected) { templates.dig(*scoped_key.split('.')) }
+
+        it { expect(call_strategy).to be == expected }
+      end
+    end
+
+    let(:key)        { 'base_key' }
+    let(:options)    { {} }
+    let(:scoped_key) { [options[:scope], key].compact.join('.') }
+
+    define_method :call_strategy do
+      strategy.get(key, **options)
+    end
+
+    it 'should define the method' do
+      expect(strategy)
+        .to respond_to(:call)
+        .with(1).argument
+        .and_keywords(:scope)
+        .and_any_keywords
+    end
+
+    describe 'with key: a String' do
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with key: a Symbol' do
+      let(:key) { super().to_sym }
+
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with key: a scoped value' do
+      let(:key) { "errors.messages.#{super()}" }
+
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with options: value' do
+      let(:options) { super().merge(ready: true) }
+
+      include_deferred 'should handle a non-matching key'
+    end
+
+    describe 'with scope: value' do
+      let(:options) { super().merge(scope: 'custom.scope') }
+
+      include_deferred 'should handle a non-matching key'
+
+      describe 'with key: a scoped value' do
+        let(:key) { "errors.messages.#{super()}" }
+
+        include_deferred 'should handle a non-matching key'
+      end
+    end
+
+    context 'when initialized with templates: value' do
+      let(:templates) do
+        {
+          'messages'    => {
+            'errors'  => {
+              'failure' => 'not going to space'
+            },
+            'rockets' => {
+              'launch_status' => launch_status
+            }
+          },
+          'module_name' => 'Console Space Program'
+        }
+      end
+      let(:key) { 'module_name' }
+
+      include_deferred 'should return the matching template'
+
+      describe 'with a key pointing to a scope' do
+        let(:key) { 'messages' }
+
+        include_deferred 'should handle a non-matching key'
+      end
+
+      describe 'with a scoped key' do
+        let(:key) { 'messages.rockets.launch_status' }
+
+        include_deferred 'should return the matching template'
+
+        describe 'with options: value' do
+          let(:options) { super().merge(ready: true) }
+
+          include_deferred 'should return the matching template'
+        end
+      end
+
+      describe 'with scope: value' do
+        let(:key)     { 'failure' }
+        let(:scope)   { 'messages.errors' }
+        let(:options) { super().merge(scope:) }
+
+        include_deferred 'should return the matching template'
+
+        describe 'with a scoped key' do
+          let(:key)   { 'errors.failure' }
+          let(:scope) { 'messages' }
+
+          include_deferred 'should return the matching template'
+        end
+      end
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+
+        include_deferred 'should return the matching template'
+
+        describe 'with a key pointing to a scope' do
+          let(:key) { 'messages' }
+
+          include_deferred 'should return the matching template'
         end
       end
     end
@@ -346,6 +691,12 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
       it { expect(strategy.templates).to be == {} }
 
       it { expect(strategy.templates).to be_frozen }
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+
+        it { expect(strategy.templates).to be == {} }
+      end
     end
 
     context 'when initialized with templates: a Hash with String keys' do
@@ -360,6 +711,12 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
       it { expect(strategy.templates).to be == templates }
 
       it { expect(strategy.templates).to be_frozen }
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+
+        it { expect(strategy.templates).to be == templates }
+      end
     end
 
     context 'when initialized with templates: a Hash with Symbol keys' do
@@ -377,11 +734,17 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
       it { expect(strategy.templates).to be == expected }
 
       it { expect(strategy.templates).to be_frozen }
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+
+        it { expect(strategy.templates).to be == expected }
+      end
     end
 
     context 'when initialized with templates: a Hash with nested String keys' do
       let(:templates) do
-        templates = {
+        {
           'messages'    => {
             'errors'  => {
               'failure' => 'not going to space'
@@ -392,7 +755,6 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
           },
           'module_name' => 'Console Space Program'
         }
-        templates
       end
       let(:expected) do
         templates = {}
@@ -405,11 +767,21 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
       it { expect(strategy.templates).to be == expected }
 
       it { expect(strategy.templates).to be_frozen }
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+
+        it { expect(strategy.templates).to be == templates }
+
+        it { expect(strategy.templates).to be_frozen }
+
+        it { expect(strategy.templates['messages']).to be_frozen }
+      end
     end
 
     context 'when initialized with templates: a Hash with nested Symbol keys' do
       let(:templates) do
-        templates = {
+        {
           messages:    {
             errors:  {
               failure: 'not going to space'
@@ -420,7 +792,6 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
           },
           module_name: 'Console Space Program'
         }
-        templates
       end
       let(:expected) do
         templates = {}
@@ -433,6 +804,19 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
       it { expect(strategy.templates).to be == expected }
 
       it { expect(strategy.templates).to be_frozen }
+
+      context 'when initialized with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+        let(:expected) do
+          tools.hash_tools.convert_keys_to_strings(templates)
+        end
+
+        it { expect(strategy.templates).to be == expected }
+
+        it { expect(strategy.templates).to be_frozen }
+
+        it { expect(strategy.templates['messages']).to be_frozen }
+      end
     end
 
     context 'when initialized with templates: a Hash with nil values' do

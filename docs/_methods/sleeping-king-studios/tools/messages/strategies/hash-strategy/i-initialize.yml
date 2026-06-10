@@ -1,7 +1,7 @@
 ---
 name: SleepingKingStudios::Tools::Messages::Strategies::HashStrategy#initialize
 parent_path: sleeping-king-studios/tools/messages/strategies/hash-strategy
-signature: initialize(templates)
+signature: 'initialize(templates, flatten_templates: true)'
 slug: initialize
 constructor: true
 data_path: sleeping-king-studios/tools/messages/strategies/hash-strategy/i-initialize
@@ -10,6 +10,14 @@ params:
   name: templates
   type:
   - name: Hash
+- description: |-
+    if true, the templates are
+    flattened internally. Defaults to true.
+  name: flatten_templates
+  type:
+  - name: 'true'
+  - name: 'false'
+  default: 'true'
 returns:
 - description: a new instance of HashStrategy
   type:

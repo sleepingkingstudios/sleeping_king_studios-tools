@@ -42,6 +42,13 @@ instance_methods:
   inherited: false
   constructor: true
 data_path: sleeping-king-studios/tools/messages/strategies/file-strategy
+description: |-
+  Internally, the parsed templates are flattened - a nested Hash of
+  { foo: { bar: { baz: 'template' } } } is stored as a flat Hash with
+  { 'foo.bar.baz' => 'template' }. This makes lookup of scoped keys more
+  efficient but prevents retrieving non-leaf nodes (such as "foo" or "foo.bar"
+  in the above Hash). If you need to retrieve Hash values, initialize the
+  strategy with flatten_templates: false.
 constructor: true
 inherited_classes:
 - name: SleepingKingStudios::Tools::Messages::Strategies::HashStrategy
