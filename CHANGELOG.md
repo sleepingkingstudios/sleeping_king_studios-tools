@@ -12,6 +12,10 @@ Updated `Messages::Strategy`:
 - Added `:default` keyword to `Messages::Strategy#call`.
 - Added `:reraise_exceptions` option to `Messages::Strategy#call`.
 
+Updated `Messages::HashStrategy`, `FileStrategy`:
+
+- Added `:flatten_templates` keyword to `HashStrategy#initialize`: set to `false` to allow querying for `Hash` values using the `#get` or `#fetch` methods.
+
 ## 1.3.0
 
 ### Tools

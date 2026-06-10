@@ -1,7 +1,7 @@
 ---
 name: SleepingKingStudios::Tools::Messages::Strategies::FileStrategy#initialize
 parent_path: sleeping-king-studios/tools/messages/strategies/file-strategy
-signature: initialize(file_name)
+signature: 'initialize(file_name, flatten_templates: true)'
 slug: initialize
 constructor: true
 data_path: sleeping-king-studios/tools/messages/strategies/file-strategy/i-initialize
@@ -12,6 +12,14 @@ params:
   name: file_name
   type:
   - name: String
+- description: |-
+    if true, the templates are
+    flattened internally. Defaults to true.
+  name: flatten_templates
+  type:
+  - name: 'true'
+  - name: 'false'
+  default: 'true'
 returns:
 - description: a new instance of FileStrategy
   type:
