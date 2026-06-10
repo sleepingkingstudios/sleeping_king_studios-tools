@@ -4,19 +4,29 @@ require 'sleeping_king_studios/tools/messages/strategies'
 
 module SleepingKingStudios::Tools::Messages::Strategies
   # Messaging strategy that refers to an internal Hash of templates.
+  #
+  # Internally, the templates Hash is flattened - a nested Hash of
+  # { foo: { bar: { baz: 'template' } } } is stored as a flat Hash with
+  # { 'foo.bar.baz' => 'template' }. This makes lookup of scoped keys more
+  # efficient but prevents retrieving non-leaf nodes (such as "foo" or "foo.bar"
+  # in the above Hash). If you need to retrieve Hash values, initialize the
+  # strategy with flatten_templates: false.
   class HashStrategy < SleepingKingStudios::Tools::Messages::Strategy
     # Exception raised when parsing the templates input.
     class ParseError < StandardError; end
 
     # @param templates [Hash] the templates used to generate messages.
-    def initialize(templates)
+    # @param flatten_templates [true, false] if true, the templates are
+    #   flattened internally. Defaults to true.
+    def initialize(templates, flatten_templates: true)
       super()
 
       unless templates.is_a?(Hash)
         raise ArgumentError, 'templates is not an instance of Hash'
       end
 
-      @templates = flatten_templates(templates).freeze
+      @flatten_templates = flatten_templates
+      @templates         = self.flatten_templates(templates).freeze
     end
 
     # @return [Hash] the templates used to generate messages.
@@ -24,7 +34,19 @@ module SleepingKingStudios::Tools::Messages::Strategies
 
     private
 
-    def flatten_templates(hsh, scope: nil, templates: {})
+    def convert_keys_to_strings(hsh)
+      hsh
+        .to_h do |key, value|
+          value = convert_keys_to_strings(value) if value.is_a?(Hash)
+
+          [key.to_s, value]
+        end
+        .freeze
+    end
+
+    def flatten_templates(hsh, scope: nil, templates: {}) # rubocop:disable Metrics/CyclomaticComplexity
+      return convert_keys_to_strings(hsh) unless flatten_templates?
+
       hsh.each do |(key, value)|
         validate_template_key(key, scope:)
         validate_template_value(key, value, scope:)
@@ -41,8 +63,12 @@ module SleepingKingStudios::Tools::Messages::Strategies
       templates
     end
 
+    def flatten_templates? = @flatten_templates
+
     def template_for(scoped_key, **)
-      templates[scoped_key]
+      return templates[scoped_key] if flatten_templates?
+
+      templates.dig(*scoped_key.split('.'))
     end
 
     def validate_template_key(key, scope:)
