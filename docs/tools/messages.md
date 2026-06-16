@@ -209,6 +209,10 @@ You can also register a file strategy using the following shorthand:
 registry.register(scope: 'space', file: file_name)
 ```
 
+[Back to Top](#)
+
+##### Template Parsing
+
 By default, a `FileStrategy` will flatten the parsed templates for efficient lookup - a nested `Hash` of `{ foo: { bar: { baz: 'template' } } }` is stored as a flat `Hash` with contents `{ 'foo.bar.baz' => 'template' }`. This makes lookup of scoped keys more efficient but prevents retrieving non-leaf nodes (such as `"foo"` or `"foo.bar"` in the above `Hash`). If you need to retrieve `Hash` values, initialize the strategy with `flatten_templates: false`.
 
 ```ruby
@@ -219,6 +223,38 @@ strategy  =
 
 strategy.get('space.messages.errors')
 #=> { 'failure' => 'not going to space' }
+```
+
+[Back to Top](#)
+
+##### Template Validation
+
+By default, a `FileStrategy` will allow parsing a template that maps to `String` values only - any other value type will raise a `ParseError` when the file is processed. You can skip this validation by initializing the strategy with `validate_values: false`, allowing you to load a file with templates of any value parseable from the serialized file.
+
+```ruby
+strategy =
+  SleepingKingStudios::Tools::Messages::Strategies::FileStrategy
+  .new(file_name, validate_values: false)
+
+strategy.get('config.cheats.enabled')
+#=> true
+```
+
+Alternatively, you can pass a `Proc` to `validate_values` to define a custom validation schema for the strategy. When loading the file, the `Proc` will be called with each template value. If the `Proc` returns an error message, the strategy will raise a `ParseError` with the given message. If the `Proc` returns `nil`, then that value is a valid template for the strategy.
+
+```ruby
+validate_values = lambda do |value|
+  next true if value == true || value == false || value == nil
+  next true if value.is_a?(String) || value.is_a?(Numeric)
+
+  'value must be nil, false, true, a number, or a string'
+end
+strategy =
+  SleepingKingStudios::Tools::Messages::Strategies::FileStrategy
+  .new(file_name, validate_values:)
+
+strategy.get('config.units.max_life')
+#=> 9999
 ```
 
 [Back to Top](#)
@@ -272,6 +308,10 @@ You can also register a hash strategy using the following shorthand:
 registry.register(scope: 'space', hash: definitions)
 ```
 
+[Back to Top](#)
+
+##### Template Parsing
+
 By default, a `HashStrategy` will flatten the parsed templates for efficient lookup - a nested `Hash` of `{ foo: { bar: { baz: 'template' } } }` is stored as a flat `Hash` with contents `{ 'foo.bar.baz' => 'template' }`. This makes lookup of scoped keys more efficient but prevents retrieving non-leaf nodes (such as `"foo"` or `"foo.bar"` in the above `Hash`). If you need to retrieve `Hash` values, initialize the strategy with `flatten_templates: false`.
 
 ```ruby
@@ -281,6 +321,48 @@ strategy  =
 
 strategy.get('space.messages.errors')
 #=> { 'failure' => 'not going to space' }
+```
+
+[Back to Top](#)
+
+##### Template Validation
+
+By default, a `HashStrategy` will allow parsing a template that maps to `Proc` or `String` values only - any other value type will raise a `ParseError` when the file is processed. You can skip this validation by initializing the strategy with `validate_values: false`, allowing you to load a file with templates of any value parseable from the serialized file.
+
+```ruby
+definitions = {
+  'config' => {
+    'cheats' => {
+      'enabled' => true
+    },
+    'units' => {
+      'max_life' => 9_999
+    }
+  }
+}
+strategy =
+  SleepingKingStudios::Tools::Messages::Strategies::HashStrategy
+  .new(definitions, validate_values: false)
+
+strategy.get('config.cheats.enabled')
+#=> true
+```
+
+Alternatively, you can pass a `Proc` to `validate_values` to define a custom validation schema for the strategy. When loading the file, the `Proc` will be called with each template value. If the `Proc` returns an error message, the strategy will raise a `ParseError` with the given message. If the `Proc` returns `nil`, then that value is a valid template for the strategy.
+
+```ruby
+validate_values = lambda do |value|
+  next true if value == true || value == false || value == nil
+  next true if value.is_a?(String) || value.is_a?(Numeric)
+
+  'value must be nil, false, true, a number, or a string'
+end
+strategy =
+  SleepingKingStudios::Tools::Messages::Strategies::HashStrategy
+  .new(definitions, validate_values:)
+
+strategy.get('config.units.max_life')
+#=> 9999
 ```
 
 [Back to Top](#)

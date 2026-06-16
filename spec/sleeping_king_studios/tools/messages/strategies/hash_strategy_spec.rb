@@ -28,11 +28,15 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
   end
 
   describe '.new' do
+    let(:invalid_value_message) do
+      'value is not a String or a Proc'
+    end
+
     it 'should define the constructor' do
       expect(described_class)
         .to be_constructible
         .with(1).argument
-        .and_keywords(:flatten_templates)
+        .and_keywords(:flatten_templates, :validate_values)
     end
 
     describe 'with nil' do
@@ -92,6 +96,15 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
         expect { described_class.new(templates) }
           .to raise_error described_class::ParseError, error_message
       end
+
+      describe 'with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+
+        it 'should raise an exception' do
+          expect { described_class.new(templates, **constructor_options) }
+            .to raise_error described_class::ParseError, error_message
+        end
+      end
     end
 
     describe 'with a Hash with empty String key' do
@@ -109,6 +122,15 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
       it 'should raise an exception' do
         expect { described_class.new(templates) }
           .to raise_error described_class::ParseError, error_message
+      end
+
+      describe 'with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+
+        it 'should raise an exception' do
+          expect { described_class.new(templates, **constructor_options) }
+            .to raise_error described_class::ParseError, error_message
+        end
       end
     end
 
@@ -128,9 +150,18 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
         expect { described_class.new(templates) }
           .to raise_error described_class::ParseError, error_message
       end
+
+      describe 'with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+
+        it 'should raise an exception' do
+          expect { described_class.new(templates, **constructor_options) }
+            .to raise_error described_class::ParseError, error_message
+        end
+      end
     end
 
-    describe 'with a Hash with Object value' do
+    describe 'with a Hash with an Object value' do
       let(:invalid_value) { Object.new.freeze }
       let(:templates) do
         {
@@ -139,8 +170,36 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
         }
       end
       let(:error_message) do
-        'invalid value in templates.rockets - expected Hash, Proc, or ' \
-          "String, got #{invalid_value.inspect}"
+        "invalid value in templates.rockets - #{invalid_value_message}, got " \
+          "#{invalid_value.inspect}"
+      end
+
+      it 'should raise an exception' do
+        expect { described_class.new(templates) }
+          .to raise_error described_class::ParseError, error_message
+      end
+
+      describe 'with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+
+        it 'should raise an exception' do
+          expect { described_class.new(templates, **constructor_options) }
+            .to raise_error described_class::ParseError, error_message
+        end
+      end
+    end
+
+    describe 'with a Hash with a boolean value' do
+      let(:invalid_value) { false }
+      let(:templates) do
+        {
+          'module_name' => 'Console Space Program',
+          'rockets'     => invalid_value
+        }
+      end
+      let(:error_message) do
+        "invalid value in templates.rockets - #{invalid_value_message}, got " \
+          "#{invalid_value.inspect}"
       end
 
       it 'should raise an exception' do
@@ -169,6 +228,15 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
         expect { described_class.new(templates) }
           .to raise_error described_class::ParseError, error_message
       end
+
+      describe 'with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+
+        it 'should raise an exception' do
+          expect { described_class.new(templates, **constructor_options) }
+            .to raise_error described_class::ParseError, error_message
+        end
+      end
     end
 
     describe 'with a Hash with nested invalid value' do
@@ -184,13 +252,119 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::HashStrategy do
         }
       end
       let(:error_message) do
-        'invalid value in templates.rockets.errors.invalid_key - expected ' \
-          "Hash, Proc, or String, got #{invalid_value.inspect}"
+        'invalid value in templates.rockets.errors.invalid_key - ' \
+          "#{invalid_value_message}, got #{invalid_value.inspect}"
       end
 
       it 'should raise an exception' do
         expect { described_class.new(templates) }
           .to raise_error described_class::ParseError, error_message
+      end
+
+      describe 'with flatten_templates: false' do
+        let(:constructor_options) { super().merge(flatten_templates: false) }
+
+        it 'should raise an exception' do
+          expect { described_class.new(templates, **constructor_options) }
+            .to raise_error described_class::ParseError, error_message
+        end
+      end
+    end
+
+    describe 'with validate_values: false' do
+      let(:constructor_options) { super().merge(validate_values: false) }
+
+      describe 'with a Hash with an Object value' do
+        let(:invalid_value) { Object.new.freeze }
+        let(:templates) do
+          {
+            'module_name' => 'Console Space Program',
+            'rockets'     => invalid_value
+          }
+        end
+
+        it 'should initialize the strategy' do
+          strategy = described_class.new(templates, **constructor_options)
+
+          expect(strategy.get('rockets')).to be == templates['rockets']
+        end
+
+        describe 'with flatten_templates: false' do
+          let(:constructor_options) { super().merge(flatten_templates: false) }
+
+          it 'should initialize the strategy' do
+            strategy = described_class.new(templates, **constructor_options)
+
+            expect(strategy.get('rockets')).to be == templates['rockets']
+          end
+        end
+      end
+    end
+
+    describe 'with validate_values: a Proc' do
+      let(:invalid_value_message) do
+        'value must be true or false'
+      end
+      let(:validate_values) do
+        lambda do |value|
+          next if value == true || value == false # rubocop:disable Style/MultipleComparison
+
+          invalid_value_message
+        end
+      end
+      let(:constructor_options) { super().merge(validate_values:) }
+
+      describe 'with a Hash with boolean values' do
+        let(:templates) do
+          {
+            'planets' => true,
+            'rockets' => false
+          }
+        end
+
+        it 'should initialize the strategy' do
+          strategy = described_class.new(templates, **constructor_options)
+
+          expect(strategy.get('rockets')).to be false
+        end
+
+        describe 'with flatten_templates: false' do
+          let(:constructor_options) { super().merge(flatten_templates: false) }
+
+          it 'should initialize the strategy' do
+            strategy = described_class.new(templates, **constructor_options)
+
+            expect(strategy.get('rockets')).to be false
+          end
+        end
+      end
+
+      describe 'with a Hash with a String value' do
+        let(:invalid_value) { 'Console Space Program' }
+        let(:templates) do
+          {
+            'module_name' => invalid_value,
+            'rockets'     => false
+          }
+        end
+        let(:error_message) do
+          'invalid value in templates.module_name - ' \
+            "#{invalid_value_message}, got #{invalid_value.inspect}"
+        end
+
+        it 'should raise an exception' do
+          expect { described_class.new(templates, **constructor_options) }
+            .to raise_error described_class::ParseError, error_message
+        end
+
+        describe 'with flatten_templates: false' do
+          let(:constructor_options) { super().merge(flatten_templates: false) }
+
+          it 'should raise an exception' do
+            expect { described_class.new(templates, **constructor_options) }
+              .to raise_error described_class::ParseError, error_message
+          end
+        end
       end
     end
   end

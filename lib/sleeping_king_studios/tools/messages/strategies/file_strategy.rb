@@ -16,18 +16,25 @@ module SleepingKingStudios::Tools::Messages::Strategies
     # Exception raised when reading the templates file.
     class FileError < StandardError; end
 
-    # @param file_name [String] the full path to the file with the templates
-    #   data.
-    # @param flatten_templates [true, false] if true, the templates are
-    #   flattened internally. Defaults to true.
-    def initialize(file_name, flatten_templates: true)
+    # @overload initialize(file_name, **options)
+    #   @param file_name [String] the full path to the file with the templates
+    #     data.
+    #   @param options [Hash] additional options for the strategy.
+    #
+    #   @option options flatten_templates [true, false] if true, the templates
+    #     are flattened internally. Defaults to true.
+    #   @option options validate_values [Proc, true, false] if false, skips
+    #     validation of template values. If given a Proc, calls the Proc with
+    #     each template value; the value fails validation if the Proc returns
+    #     an error message. Defaults to true.
+    def initialize(file_name, flatten_templates: true, validate_values: true)
       validate_file_name(file_name)
 
       @file_name = file_name
       raw_data   = read_file(file_name)
       templates  = parse_templates(raw_data)
 
-      super(templates, flatten_templates:)
+      super(templates, flatten_templates:, validate_values:)
     end
 
     # @return [String] the full path to the file with the templates data.
@@ -76,6 +83,8 @@ module SleepingKingStudios::Tools::Messages::Strategies
           "unable to read templates file at #{file_name} - #{exception.message}"
       end
     end
+
+    def template_value_error_message = 'value is not a String'
 
     def validate_file_name(file_name)
       raise ArgumentError, "file name can't be blank" if file_name.nil?

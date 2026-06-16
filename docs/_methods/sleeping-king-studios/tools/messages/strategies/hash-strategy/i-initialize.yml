@@ -1,23 +1,45 @@
 ---
 name: SleepingKingStudios::Tools::Messages::Strategies::HashStrategy#initialize
 parent_path: sleeping-king-studios/tools/messages/strategies/hash-strategy
-signature: 'initialize(templates, flatten_templates: true)'
+signature: 'initialize(templates, flatten_templates: true, validate_values: true)'
 slug: initialize
 constructor: true
 data_path: sleeping-king-studios/tools/messages/strategies/hash-strategy/i-initialize
-params:
-- description: the templates used to generate messages.
-  name: templates
-  type:
-  - name: Hash
-- description: |-
-    if true, the templates are
-    flattened internally. Defaults to true.
-  name: flatten_templates
-  type:
-  - name: 'true'
-  - name: 'false'
-  default: 'true'
+overloads:
+- name: SleepingKingStudios::Tools::Messages::Strategies::HashStrategy#initialize
+  parent_path: sleeping-king-studios/tools/messages/strategies/hash-strategy
+  signature: initialize(templates, **options)
+  slug: initialize
+  constructor: true
+  options:
+  - name: options
+    opts:
+    - description: |-
+        if true, the templates
+        are flattened internally. Defaults to true.
+      name: flatten_templates
+      type:
+      - name: 'true'
+      - name: 'false'
+    - description: |-
+        if false, skips
+        validation of template values. If given a Proc, calls the Proc with
+        each template value; the value fails validation if the Proc returns
+        an error message. Defaults to true.
+      name: validate_values
+      type:
+      - name: Proc
+      - name: 'true'
+      - name: 'false'
+  params:
+  - description: the templates used to generate messages.
+    name: templates
+    type:
+    - name: Hash
+  - description: additional options for the strategy.
+    name: options
+    type:
+    - name: Hash
 returns:
 - description: a new instance of HashStrategy
   type:

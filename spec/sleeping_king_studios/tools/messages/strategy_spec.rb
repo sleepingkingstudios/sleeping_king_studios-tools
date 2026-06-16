@@ -493,6 +493,24 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategy do
 
       include_deferred 'should return the matching template'
 
+      context 'when the template is nil' do
+        let(:key) { 'pending_value' }
+        let(:strategy_templates) do
+          super().merge('pending_value' => nil)
+        end
+
+        include_deferred 'should handle an invalid key'
+      end
+
+      context 'when the template is false' do
+        let(:key) { 'boolean_value' }
+        let(:strategy_templates) do
+          super().merge('boolean_value' => false)
+        end
+
+        include_deferred 'should return the matching template'
+      end
+
       context 'when the template requires parameters' do
         let(:strategy_templates) do
           super().merge(

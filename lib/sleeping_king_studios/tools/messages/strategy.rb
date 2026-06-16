@@ -88,7 +88,7 @@ module SleepingKingStudios::Tools
       scoped_key = join_scope(key:, scope:)
       template   = template_for(scoped_key, **)
 
-      return template if template
+      return template unless template.nil?
 
       return block.call(scoped_key, **) if block_given?
 
