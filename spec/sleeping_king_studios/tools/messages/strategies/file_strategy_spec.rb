@@ -17,11 +17,15 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::FileStrategy do
   end
 
   describe '.new' do
+    let(:invalid_value_message) do
+      'value is not a String or a Proc'
+    end
+
     it 'should define the constructor' do
       expect(described_class)
         .to be_constructible
         .with(1).argument
-        .and_keywords(:flatten_templates)
+        .and_keywords(:flatten_templates, :validate_values)
     end
 
     describe 'with file_name: nil' do
@@ -153,8 +157,8 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::FileStrategy do
     context 'when the file is a JSON file with invalid contents' do
       let(:file_name) { 'spec/support/fixtures/invalid.json' }
       let(:error_message) do
-        'invalid value in templates.messages.errors - expected Hash, Proc, ' \
-          'or String, got ["not going to space", nil]'
+        'invalid value in templates.messages.errors - ' \
+          "#{invalid_value_message}, got [\"not going to space\", nil]"
       end
 
       it 'should raise an exception' do
@@ -166,13 +170,116 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::FileStrategy do
     context 'when the file is a YAML file with invalid contents' do
       let(:file_name) { 'spec/support/fixtures/invalid.yml' }
       let(:error_message) do
-        'invalid value in templates.messages.errors - expected Hash, Proc, ' \
-          'or String, got ["not going to space", nil]'
+        'invalid value in templates.messages.errors - ' \
+          "#{invalid_value_message}, got [\"not going to space\", nil]"
       end
 
       it 'should raise an exception' do
         expect { described_class.new(file_name) }
           .to raise_error described_class::ParseError, error_message
+      end
+    end
+
+    describe 'with validate_values: false' do
+      context 'when the file is a JSON file with invalid contents' do
+        let(:file_name) { 'spec/support/fixtures/invalid.json' }
+
+        it 'should initialize the strategy' do
+          strategy = described_class.new(file_name, validate_values: false)
+
+          expect(strategy.get('messages.errors'))
+            .to be == ['not going to space', nil]
+        end
+      end
+
+      context 'when the file is a JSON file with valid contents' do
+        let(:file_name) { 'spec/support/fixtures/messages.json' }
+
+        it 'should initialize the strategy' do
+          strategy = described_class.new(file_name, validate_values: false)
+
+          expect(strategy.get('module_name')).to be == 'Console Space Program'
+        end
+      end
+
+      context 'when the file is a YAML file with invalid contents' do
+        let(:file_name) { 'spec/support/fixtures/invalid.yml' }
+
+        it 'should initialize the strategy' do
+          strategy = described_class.new(file_name, validate_values: false)
+
+          expect(strategy.get('messages.errors'))
+            .to be == ['not going to space', nil]
+        end
+      end
+
+      context 'when the file is a YAML file with valid contents' do
+        let(:file_name) { 'spec/support/fixtures/messages.yaml' }
+
+        it 'should initialize the strategy' do
+          strategy = described_class.new(file_name, validate_values: false)
+
+          expect(strategy.get('module_name')).to be == 'Console Space Program'
+        end
+      end
+    end
+
+    describe 'with validate_values: a Proc' do
+      let(:invalid_value_message) do
+        'value must be true or false'
+      end
+      let(:validate_values) do
+        lambda do |value|
+          next if value == true || value == false # rubocop:disable Style/MultipleComparison
+
+          invalid_value_message
+        end
+      end
+
+      context 'when the file is a JSON file with boolean contents' do
+        let(:file_name) { 'spec/support/fixtures/booleans.json' }
+
+        it 'should initialize the strategy' do
+          strategy = described_class.new(file_name, validate_values:)
+
+          expect(strategy.get('config.disabled')).to be false
+        end
+      end
+
+      context 'when the file is a JSON file with invalid contents' do
+        let(:file_name) { 'spec/support/fixtures/messages.json' }
+        let(:error_message) do
+          'invalid value in templates.messages.errors.failure - ' \
+            "#{invalid_value_message}, got \"not going to space\""
+        end
+
+        it 'should raise an exception' do
+          expect { described_class.new(file_name, validate_values:) }
+            .to raise_error described_class::ParseError, error_message
+        end
+      end
+
+      context 'when the file is a YAML file with boolean contents' do
+        let(:file_name) { 'spec/support/fixtures/booleans.yml' }
+
+        it 'should initialize the strategy' do
+          strategy = described_class.new(file_name, validate_values:)
+
+          expect(strategy.get('config.disabled')).to be false
+        end
+      end
+
+      context 'when the file is a YAML file with invalid contents' do
+        let(:file_name) { 'spec/support/fixtures/messages.yml' }
+        let(:error_message) do
+          'invalid value in templates.messages.errors.failure - ' \
+            "#{invalid_value_message}, got \"not going to space\""
+        end
+
+        it 'should raise an exception' do
+          expect { described_class.new(file_name, validate_values:) }
+            .to raise_error described_class::ParseError, error_message
+        end
       end
     end
   end
