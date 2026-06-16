@@ -100,8 +100,10 @@ module SleepingKingStudios::Tools::Messages::Strategies
 
       return if VALID_TEMPLATE_VALUES.any? { |klass| value.is_a?(klass) }
 
-      'value is not a String or a Proc'
+      template_value_error_message
     end
+
+    def template_value_error_message = 'value is not a String or a Proc'
 
     def validate_template_key(key, scope:)
       return if (key.is_a?(String) || key.is_a?(Symbol)) && !key.empty?

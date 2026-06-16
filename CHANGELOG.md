@@ -11,10 +11,12 @@ Updated `Messages::Strategy`:
 - Implemented `Messages::Strategy#get`, `#fetch` methods to query raw message templates.
 - Added `:default` keyword to `Messages::Strategy#call`.
 - Added `:reraise_exceptions` option to `Messages::Strategy#call`.
+- Added internal support for `false` values when resolving templates.
 
 Updated `Messages::HashStrategy`, `FileStrategy`:
 
 - Added `:flatten_templates` keyword to `HashStrategy#initialize`: set to `false` to allow querying for `Hash` values using the `#get` or `#fetch` methods.
+- Added `:validate_values` keyword to `HashStrategy#initialize`: set to `false` to disable validation, or pass a `Proc` to customize the validation (a value will fail the validation if the Proc returns an error message when called with the value).
 
 ## 1.3.0
 

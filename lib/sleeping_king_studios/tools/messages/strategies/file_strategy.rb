@@ -84,6 +84,8 @@ module SleepingKingStudios::Tools::Messages::Strategies
       end
     end
 
+    def template_value_error_message = 'value is not a String'
+
     def validate_file_name(file_name)
       raise ArgumentError, "file name can't be blank" if file_name.nil?
 

@@ -18,7 +18,7 @@ RSpec.describe SleepingKingStudios::Tools::Messages::Strategies::FileStrategy do
 
   describe '.new' do
     let(:invalid_value_message) do
-      'value is not a String or a Proc'
+      'value is not a String'
     end
 
     it 'should define the constructor' do
