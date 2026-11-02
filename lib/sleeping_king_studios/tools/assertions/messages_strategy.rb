@@ -48,7 +48,12 @@ module SleepingKingStudios::Tools
           'must not be nil',
         # @note: This value will be changed in a future version.
         'presence' =>
-          "can't be blank"
+          "can't be blank",
+        'parameters' => {
+          'too_many_required_arguments' =>
+            'too many required arguments - expected %<expected>i, but has ' \
+            '%<actual>i required arguments'
+        }
       }.freeze
 
     def initialize
