@@ -279,7 +279,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
     end
   end
 
-  # rubocop:disable Style/CaseEquality
+  # rubocop:disable-next Style/CaseEquality
   describe '.===' do
     describe 'with nil' do
       it { expect(described_class === nil).to be false } # rubocop:disable Style/NilComparison
@@ -339,7 +339,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
       end
     end
   end
-  # rubocop:enable Style/CaseEquality
 
   describe '.>' do
     describe 'with nil' do
@@ -564,7 +563,8 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
         let(:subclass) { Spec::EnglishEvent }
         let(:methods) do
           lambda do
-            def admin? = super ? 'yes' : 'no' # rubocop:disable Naming/PredicateMethod
+            # rubocop:disable-next Naming/PredicateMethod
+            def admin? = super ? 'yes' : 'no'
           end
         end
 
