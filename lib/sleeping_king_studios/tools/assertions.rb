@@ -46,6 +46,9 @@ module SleepingKingStudios::Tools
 
     # Asserts that the value is either nil or empty.
     #
+    # A value is blank if it is nil, or if the value responds to #empty? and the
+    # #empty? method returns true.
+    #
     # @param value [Object] the value to assert on.
     # @param as [String] the name of the asserted value.
     # @param error_class [Class] the exception class to raise on a failure.
@@ -74,8 +77,7 @@ module SleepingKingStudios::Tools
       error_class: AssertionError,
       message:     nil
     )
-      return if value.nil?
-      return if value.respond_to?(:empty?) && value.empty?
+      return if blank?(value)
 
       message ||= error_message_for('blank', as:)
 
@@ -553,6 +555,34 @@ module SleepingKingStudios::Tools
       message ||= error_message_for('presence', as:)
 
       handle_error(error_class:, message:)
+    end
+
+    # Checks if the value is either nil or empty.
+    #
+    # A value is blank if it is nil, or if the value responds to #empty? and the
+    # #empty? method returns true.
+    #
+    # @param value [Object] the value to assert on.
+    #
+    # @return [true, false] true if the value is nil or empty, otherwise returns
+    #   false.
+    #
+    # @example
+    #   Assertions.blank?(nil)
+    #   #=> true
+    #
+    #   Assertions.blank?(Object.new)
+    #   #=> false
+    #
+    #   Assertions.blank?([])
+    #   #=> true
+    #
+    #   Assertions.blank?([1, 2, 3])
+    #   #=> false
+    def blank?(value)
+      return true if value.nil?
+
+      value.respond_to?(:empty?) && value.empty?
     end
 
     # Generates an error message for a failed validation.

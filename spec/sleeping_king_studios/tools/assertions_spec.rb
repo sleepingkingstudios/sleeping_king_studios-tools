@@ -130,6 +130,32 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
   end
 
+  describe '#blank?' do
+    it { expect(assertions).to respond_to(:blank?).with(1).argument }
+
+    describe 'with nil' do
+      it { expect(assertions.blank?(nil)).to be true }
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      it { expect(assertions.blank?(value)).to be false }
+    end
+
+    describe 'with an empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+      it { expect(assertions.blank?(value)).to be true }
+    end
+
+    describe 'with a non-empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+      it { expect(assertions.blank?(value)).to be false }
+    end
+  end
+
   describe '#error_message_for' do
     let(:key)     { nil }
     let(:options) { {} }
