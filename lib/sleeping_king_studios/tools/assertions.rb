@@ -635,6 +635,34 @@ module SleepingKingStudios::Tools
       toolbelt.messages.message(key, as:, parameters:, scope:)
     end
 
+    # Asserts that the value is a non-empty String or Symbol.
+    #
+    # @param value [Object] the value to assert on.
+    #
+    # @return [true, false] true if the value is a non-empty String or Symbol,
+    #   otherwise returns false.
+    #
+    # @example
+    #   assertions.name?(nil)
+    #   #=> false
+    #
+    #   assertions.name?(Object.new)
+    #   #=> false
+    #
+    #   assertions.name?('')
+    #   #=> false
+    #
+    #   assertions.name?('foo')
+    #   #=> true
+    #
+    #   assertions.name?(:bar)
+    #   #=> true
+    def name?(value)
+      return false unless value.is_a?(String) || value.is_a?(Symbol)
+
+      !value.empty?
+    end
+
     # Asserts that the block returns a truthy value.
     #
     # @param message [String] the exception message to raise on a failure.

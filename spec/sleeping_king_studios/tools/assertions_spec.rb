@@ -328,6 +328,42 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
   end
 
+  describe '#name?' do
+    describe 'with nil' do
+      it { expect(assertions.name?(nil)).to be false }
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      it { expect(assertions.name?(value)).to be false }
+    end
+
+    describe 'with an empty String' do
+      let(:value) { '' }
+
+      it { expect(assertions.name?(value)).to be false }
+    end
+
+    describe 'with an empty Symbol' do
+      let(:value) { :'' }
+
+      it { expect(assertions.name?(value)).to be false }
+    end
+
+    describe 'with a String' do
+      let(:value) { 'string' }
+
+      it { expect(assertions.name?(value)).to be true }
+    end
+
+    describe 'with a Symbol' do
+      let(:value) { :symbol }
+
+      it { expect(assertions.name?(value)).to be true }
+    end
+  end
+
   describe '#toolbelt' do
     let(:expected) { SleepingKingStudios::Tools::Toolbelt.global }
 
