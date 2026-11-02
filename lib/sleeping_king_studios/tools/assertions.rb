@@ -585,6 +585,29 @@ module SleepingKingStudios::Tools
       value.respond_to?(:empty?) && value.empty?
     end
 
+    # Checks if value is either true or false.
+    #
+    # @param value [Object] the value to assert on.
+    #
+    # @return [true, false] true if the value is either true or false, otherwise
+    #   returns false.
+    #
+    # @example
+    #   Assertions.boolean?(nil)
+    #   #=> false
+    #
+    #   Assertions.boolean?(Object.new)
+    #   #=> false
+    #
+    #   Assertions.boolean?(false)
+    #   #=> true
+    #
+    #   Assertions.boolean?(true)
+    #   #=> true
+    def boolean?(value)
+      true == value || false == value # rubocop:disable Style/MultipleComparison, Style/YodaCondition
+    end
+
     # Generates an error message for a failed validation.
     #
     # @param key [String] the message key.

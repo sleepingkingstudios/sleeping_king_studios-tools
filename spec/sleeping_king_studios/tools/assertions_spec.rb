@@ -156,6 +156,32 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
   end
 
+  describe '#boolean?' do
+    it { expect(assertions).to respond_to(:boolean?).with(1).argument }
+
+    describe 'with nil' do
+      it { expect(assertions.boolean?(nil)).to be false }
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      it { expect(assertions.boolean?(value)).to be false }
+    end
+
+    describe 'with false' do
+      let(:value) { false }
+
+      it { expect(assertions.boolean?(value)).to be true }
+    end
+
+    describe 'with true' do
+      let(:value) { true }
+
+      it { expect(assertions.boolean?(value)).to be true }
+    end
+  end
+
   describe '#error_message_for' do
     let(:key)     { nil }
     let(:options) { {} }
