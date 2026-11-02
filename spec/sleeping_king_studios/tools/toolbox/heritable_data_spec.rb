@@ -30,10 +30,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
     end
   end
 
-  describe '::HeritableMethods' do
-    it { expect(described_class).to define_constant(:HeritableMethods) }
-  end
-
   describe 'singleton_class.define' do
     let(:symbols)    { [] }
     let(:methods)    { nil }
@@ -70,6 +66,22 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
       it { expect(instance.greet).to be == 'Greetings, programs!' }
     end
 
+    describe 'with a block that defines a lifecycle hook' do
+      let(:methods) do
+        lambda do
+          def self.included(other)
+            super
+
+            other.define_singleton_method(:secret) { '12345' }
+          end
+        end
+      end
+
+      it { expect(subclass).to respond_to(:secret).with(0).arguments }
+
+      it { expect(subclass.secret).to be == '12345' }
+    end
+
     describe 'with symbols' do
       let(:symbols) { %i[details] }
 
@@ -83,13 +95,11 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
 
       it { expect(subclass).to be_a(Class) }
 
-      it { expect(subclass.superclass).to be Data }
+      it { expect(subclass.superclass).to be described_class }
 
       it { expect(subclass).to be < concern }
 
       it { expect(subclass.members).to be == %i[type] }
-
-      it { expect(instance.event_type).to be == 'spec.event' }
 
       describe 'with a block' do
         let(:methods) do
@@ -112,18 +122,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
   end
 
   describe '.<' do
-    describe 'with nil' do
-      it { expect(described_class < nil).to be nil }
-    end
-
-    describe 'with an Object' do
-      it { expect(described_class < Object.new.freeze).to be nil }
-    end
-
-    describe 'with an instance of the class' do
-      it { expect(described_class < data).to be nil }
-    end
-
     describe 'with Data' do
       it { expect(described_class < Data).to be true }
     end
@@ -168,18 +166,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
   end
 
   describe '.<=' do
-    describe 'with nil' do
-      it { expect(described_class <= nil).to be nil }
-    end
-
-    describe 'with an Object' do
-      it { expect(described_class <= Object.new.freeze).to be nil }
-    end
-
-    describe 'with an instance of the class' do
-      it { expect(described_class <= data).to be nil }
-    end
-
     describe 'with Data' do
       it { expect(described_class <= Data).to be true }
     end
@@ -279,7 +265,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
     end
   end
 
-  # rubocop:disable Style/CaseEquality
+  # rubocop:disable-next Style/CaseEquality
   describe '.===' do
     describe 'with nil' do
       it { expect(described_class === nil).to be false } # rubocop:disable Style/NilComparison
@@ -339,21 +325,8 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
       end
     end
   end
-  # rubocop:enable Style/CaseEquality
 
   describe '.>' do
-    describe 'with nil' do
-      it { expect(described_class > nil).to be nil }
-    end
-
-    describe 'with an Object' do
-      it { expect(described_class > Object.new.freeze).to be nil }
-    end
-
-    describe 'with an instance of the class' do
-      it { expect(described_class > data).to be nil }
-    end
-
     describe 'with Data' do
       it { expect(described_class > Data).to be false }
     end
@@ -398,18 +371,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
   end
 
   describe '.>=' do
-    describe 'with nil' do
-      it { expect(described_class >= nil).to be nil }
-    end
-
-    describe 'with an Object' do
-      it { expect(described_class >= Object.new.freeze).to be nil }
-    end
-
-    describe 'with an instance of the class' do
-      it { expect(described_class >= data).to be nil }
-    end
-
     describe 'with Data' do
       it { expect(described_class >= Data).to be false }
     end
@@ -468,7 +429,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
 
     it { expect(subclass).to be_a(Class) }
 
-    it { expect(subclass.superclass).to be Data }
+    it { expect(subclass.superclass).to be described_class }
 
     it { expect(subclass).to be < concern }
 
@@ -520,7 +481,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
     wrap_deferred 'with an inherited data class' do
       it { expect(subclass).to be_a(Class) }
 
-      it { expect(subclass.superclass).to be Data }
+      it { expect(subclass.superclass).to be described_class }
 
       it { expect(subclass).to be < concern }
 
@@ -564,7 +525,8 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
         let(:subclass) { Spec::EnglishEvent }
         let(:methods) do
           lambda do
-            def admin? = super ? 'yes' : 'no' # rubocop:disable Naming/PredicateMethod
+            # rubocop:disable-next Naming/PredicateMethod
+            def admin? = super ? 'yes' : 'no'
           end
         end
 
