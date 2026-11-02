@@ -560,7 +560,7 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
     end
   end
 
-  # rubocop:disable RSpec/NestedGroups
+  # rubocop:disable-next RSpec/NestedGroups
   describe '#fetch' do
     it 'should define the class method' do
       expect(described_class)
@@ -1196,7 +1196,6 @@ RSpec.describe SleepingKingStudios::Tools::HashTools do
       end
     end
   end
-  # rubocop:enable RSpec/NestedGroups
 
   describe '#generate_binding' do
     it { expect(hash_tools).to respond_to(:generate_binding).with(1).argument }
