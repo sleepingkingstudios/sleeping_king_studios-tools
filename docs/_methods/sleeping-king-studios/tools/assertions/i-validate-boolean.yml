@@ -9,16 +9,16 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.validate_boolean(nil)
+      assertions.validate_boolean(nil)
       #=> raises an ArgumentError with message 'value must be true or false'
 
-      Assertions.validate_boolean(Object.new)
+      assertions.validate_boolean(Object.new)
       #=> raises an ArgumentError with message 'value must be true or false'
 
-      Assertions.validate_boolean(false)
+      assertions.validate_boolean(false)
       #=> does not raise an exception
 
-      Assertions.validate_boolean(true)
+      assertions.validate_boolean(true)
       #=> does not raise an exception
 params:
 - description: the value to assert on.

@@ -31,10 +31,10 @@ module SleepingKingStudios::Tools
     # @raise [AssertionError] if the block does not return a truthy value.
     #
     # @example
-    #   Assertions.assert { true == false }
+    #   assertions.assert { true == false }
     #   #=> raises an AssertionError with message 'block returned a falsy value'
     #
-    #   Assertions.assert { true == true }
+    #   assertions.assert { true == true }
     #   #=> does not raise an exception
     def assert(error_class: AssertionError, message: nil, &block)
       return if block.call
@@ -60,16 +60,16 @@ module SleepingKingStudios::Tools
     #   to #empty? or value.empty returns false.
     #
     # @example
-    #   Assertions.assert_blank(nil)
+    #   assertions.assert_blank(nil)
     #   #=> does not raise an exception
     #
-    #   Assertions.assert_blank(Object.new)
+    #   assertions.assert_blank(Object.new)
     #   #=> raises an AssertionError with message 'value must be nil or empty'
     #
-    #   Assertions.assert_blank([])
+    #   assertions.assert_blank([])
     #   #=> does not raise an exception
     #
-    #   Assertions.assert_blank([1, 2, 3])
+    #   assertions.assert_blank([1, 2, 3])
     #   #=> raises an AssertionError with message 'value must be nil or empty'
     def assert_blank(
       value,
@@ -97,16 +97,16 @@ module SleepingKingStudios::Tools
     # @raise [AssertionError] if the value is not true or false.
     #
     # @example
-    #   Assertions.assert_boolean(nil)
+    #   assertions.assert_boolean(nil)
     #   #=> raises an AssertionError with message 'value must be true or false'
     #
-    #   Assertions.assert_boolean(Object.new)
+    #   assertions.assert_boolean(Object.new)
     #   #=> raises an AssertionError with message 'value must be true or false'
     #
-    #   Assertions.assert_boolean(false)
+    #   assertions.assert_boolean(false)
     #   #=> does not raise an exception
     #
-    #   Assertions.assert_boolean(true)
+    #   assertions.assert_boolean(true)
     #   #=> does not raise an exception
     def assert_boolean(
       value,
@@ -137,10 +137,10 @@ module SleepingKingStudios::Tools
     # @raise [AssertionError] if the value is not a Class.
     #
     # @example
-    #   Assertions.assert_class(Object.new)
+    #   assertions.assert_class(Object.new)
     #   #=> raises an AssertionError with message 'value is not a class'
     #
-    #   Assertions.assert_class(String)
+    #   assertions.assert_class(String)
     #   #=> does not raise an exception
     def assert_class(
       value,
@@ -171,10 +171,10 @@ module SleepingKingStudios::Tools
     # @raise [AssertionError] if the value is one of the expected values.
     #
     # @example
-    #   Assertions.assert_exclusion('get', expected: %w[get post put])
+    #   assertions.assert_exclusion('get', expected: %w[get post put])
     #   #=> raises an AssertionError with message 'value is is one of "get", "post", "put"'
     #
-    #   Assertions.assert_exclusion('delete', expected: %w[get post put])
+    #   assertions.assert_exclusion('delete', expected: %w[get post put])
     #   #=> does not raise an exception
     def assert_exclusion(
       value,
@@ -207,7 +207,7 @@ module SleepingKingStudios::Tools
     # @raise [AssertionError] if any of the assertions fail.
     #
     # @example
-    #   Assertions.assert_group do |group|
+    #   assertions.assert_group do |group|
     #     group.assert_name(nil, as: 'label')
     #     group.assert_instance_of(0.0, expected: Integer, as: 'quantity')
     #   end
@@ -242,10 +242,10 @@ module SleepingKingStudios::Tools
     # @raise [AssertionError] if the value is not one of the expected values.
     #
     # @example
-    #   Assertions.assert_inclusion('get', expected: %w[get post put])
+    #   assertions.assert_inclusion('get', expected: %w[get post put])
     #   #=> does not raise an exception
     #
-    #   Assertions.assert_inclusion('delete', expected: %w[get post put])
+    #   assertions.assert_inclusion('delete', expected: %w[get post put])
     #   #=> raises an AssertionError with message 'value is is one of "get", "post", "put"'
     def assert_inclusion( # rubocop:disable Metrics/ParameterLists
       value,
@@ -284,13 +284,13 @@ module SleepingKingStudios::Tools
     #   have the given ancestor.
     #
     # @example
-    #   Assertions.assert_inherits_from(:foo, expected: StandardError)
+    #   assertions.assert_inherits_from(:foo, expected: StandardError)
     #   #=> raises an AssertionError with message 'value is not a Class or Module'
     #
-    #   Assertions.assert_inherits_from(RuntimeError, expected: StandardError)
+    #   assertions.assert_inherits_from(RuntimeError, expected: StandardError)
     #   #=> does not raise an exception
     #
-    #   Assertions.assert_inherits_from(Array, expected: Enumerable)
+    #   assertions.assert_inherits_from(Array, expected: Enumerable)
     #   #=> does not raise an exception
     def assert_inherits_from( # rubocop:disable Metrics/ParameterLists
       value,
@@ -334,10 +334,10 @@ module SleepingKingStudios::Tools
     #   class.
     #
     # @example
-    #   Assertions.assert_instance_of(:foo, expected: String)
+    #   assertions.assert_instance_of(:foo, expected: String)
     #   #=> raises an AssertionError with message 'value is not an instance of String'
     #
-    #   Assertions.assert_instance_of('foo', expected: String)
+    #   assertions.assert_instance_of('foo', expected: String)
     #   #=> does not raise an exception
     def assert_instance_of( # rubocop:disable Metrics/ParameterLists
       value,
@@ -373,10 +373,10 @@ module SleepingKingStudios::Tools
     # @raise [AssertionError] if the value does not match the expected object.
     #
     # @example
-    #   Assertions.assert_matches('bar', expected: /foo/)
+    #   assertions.assert_matches('bar', expected: /foo/)
     #   #=> raises an AssertionError with message 'value does not match the pattern /foo/'
     #
-    #   Assertions.assert_matches('foo', expected: /foo/)
+    #   assertions.assert_matches('foo', expected: /foo/)
     #   #=> does not raise an exception
     def assert_matches( # rubocop:disable Metrics/ParameterLists
       value,
@@ -408,19 +408,19 @@ module SleepingKingStudios::Tools
     #   the value is empty.
     #
     # @example
-    #   Assertions.assert_name(nil)
+    #   assertions.assert_name(nil)
     #   #=> raises an AssertionError with message "value can't be blank"
     #
-    #   Assertions.assert_name(Object.new)
+    #   assertions.assert_name(Object.new)
     #   #=> raises an AssertionError with message 'value is not a String or a Symbol'
     #
-    #   Assertions.assert_name('')
+    #   assertions.assert_name('')
     #   #=> raises an AssertionError with message "value can't be blank"
     #
-    #   Assertions.assert_name('foo')
+    #   assertions.assert_name('foo')
     #   #=> does not raise an exception
     #
-    #   Assertions.assert_name(:bar)
+    #   assertions.assert_name(:bar)
     #   #=> does not raise an exception
     def assert_name( # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
       value,
@@ -462,10 +462,10 @@ module SleepingKingStudios::Tools
     # @raise [AssertionError] if the value is not nil.
     #
     # @example
-    #   Assertions.assert_nil(nil)
+    #   assertions.assert_nil(nil)
     #   #=> does not raise an exception
     #
-    #   Assertions.assert_nil(Object.new)
+    #   assertions.assert_nil(Object.new)
     #   #=> raises an AssertionError with message 'value must be nil'
     def assert_nil(
       value,
@@ -492,10 +492,10 @@ module SleepingKingStudios::Tools
     # @raise [AssertionError] if the value is nil.
     #
     # @example
-    #   Assertions.assert_not_nil(nil)
+    #   assertions.assert_not_nil(nil)
     #   #=> raises an AssertionError with message 'value must not be nil'
     #
-    #   Assertions.assert_not_nil(Object.new)
+    #   assertions.assert_not_nil(Object.new)
     #   #=> does not raise an exception
     def assert_not_nil(
       value,
@@ -527,16 +527,16 @@ module SleepingKingStudios::Tools
     #   #empty? and value.empty is true.
     #
     # @example
-    #   Assertions.assert_presence(nil)
+    #   assertions.assert_presence(nil)
     #   #=> raises an AssertionError with message "can't be blank"
     #
-    #   Assertions.assert_presence(Object.new)
+    #   assertions.assert_presence(Object.new)
     #   #=> does not raise an exception
     #
-    #   Assertions.assert_presence([])
+    #   assertions.assert_presence([])
     #   #=> raises an AssertionError with message "can't be blank"
     #
-    #   Assertions.assert_presence([1, 2, 3])
+    #   assertions.assert_presence([1, 2, 3])
     #   #=> does not raise an exception
     def assert_presence(
       value,
@@ -571,16 +571,16 @@ module SleepingKingStudios::Tools
     #   false.
     #
     # @example
-    #   Assertions.blank?(nil)
+    #   assertions.blank?(nil)
     #   #=> true
     #
-    #   Assertions.blank?(Object.new)
+    #   assertions.blank?(Object.new)
     #   #=> false
     #
-    #   Assertions.blank?([])
+    #   assertions.blank?([])
     #   #=> true
     #
-    #   Assertions.blank?([1, 2, 3])
+    #   assertions.blank?([1, 2, 3])
     #   #=> false
     def blank?(value)
       return true if value.nil?
@@ -596,16 +596,16 @@ module SleepingKingStudios::Tools
     #   returns false.
     #
     # @example
-    #   Assertions.boolean?(nil)
+    #   assertions.boolean?(nil)
     #   #=> false
     #
-    #   Assertions.boolean?(Object.new)
+    #   assertions.boolean?(Object.new)
     #   #=> false
     #
-    #   Assertions.boolean?(false)
+    #   assertions.boolean?(false)
     #   #=> true
     #
-    #   Assertions.boolean?(true)
+    #   assertions.boolean?(true)
     #   #=> true
     def boolean?(value)
       true == value || false == value # rubocop:disable Style/MultipleComparison, Style/YodaCondition
@@ -677,17 +677,17 @@ module SleepingKingStudios::Tools
     #   returns false.
     #
     # @example
-    #   Assertions.assert_presence(nil)
-    #   #=> raises an AssertionError with message "can't be blank"
+    #   assertions.present?(nil)
+    #   #=> false
     #
-    #   Assertions.assert_presence(Object.new)
-    #   #=> does not raise an exception
+    #   assertions.present?(Object.new)
+    #   #=> true
     #
-    #   Assertions.assert_presence([])
-    #   #=> raises an AssertionError with message "can't be blank"
+    #   assertions.present?([])
+    #   #=> false
     #
-    #   Assertions.assert_presence([1, 2, 3])
-    #   #=> does not raise an exception
+    #   assertions.present?([1, 2, 3])
+    #   #=> true
     def present?(value)
       return false if value.nil?
 
@@ -706,10 +706,10 @@ module SleepingKingStudios::Tools
     # @raise [ArgumentError] if the block does not return a truthy value.
     #
     # @example
-    #   Assertions.validate { true == false }
+    #   assertions.validate { true == false }
     #   #=> raises an ArgumentError with message 'block returned a falsy value'
     #
-    #   Assertions.validate { true == true }
+    #   assertions.validate { true == true }
     #   #=> does not raise an exception
     def validate(message: nil, &)
       assert(
@@ -731,16 +731,16 @@ module SleepingKingStudios::Tools
     #   to #empty? or value.empty returns false.
     #
     # @example
-    #   Assertions.validate_blank(nil)
+    #   assertions.validate_blank(nil)
     #   #=> does not raise an exception
     #
-    #   Assertions.validate_blank(Object.new)
+    #   assertions.validate_blank(Object.new)
     #   #=> raises an ArgumentError with message 'value must be nil or empty'
     #
-    #   Assertions.validate_blank([])
+    #   assertions.validate_blank([])
     #   #=> does not raise an exception
     #
-    #   Assertions.validate_blank([1, 2, 3])
+    #   assertions.validate_blank([1, 2, 3])
     #   #=> raises an ArgumentError with message 'value must be nil or empty'
     def validate_blank(value, as: 'value', message: nil)
       assert_blank(
@@ -763,16 +763,16 @@ module SleepingKingStudios::Tools
     # @raise [ArgumentError] if the value is not true or false.
     #
     # @example
-    #   Assertions.validate_boolean(nil)
+    #   assertions.validate_boolean(nil)
     #   #=> raises an ArgumentError with message 'value must be true or false'
     #
-    #   Assertions.validate_boolean(Object.new)
+    #   assertions.validate_boolean(Object.new)
     #   #=> raises an ArgumentError with message 'value must be true or false'
     #
-    #   Assertions.validate_boolean(false)
+    #   assertions.validate_boolean(false)
     #   #=> does not raise an exception
     #
-    #   Assertions.validate_boolean(true)
+    #   assertions.validate_boolean(true)
     #   #=> does not raise an exception
     def validate_boolean(value, as: 'value', message: nil, optional: false)
       assert_boolean(
@@ -796,10 +796,10 @@ module SleepingKingStudios::Tools
     # @raise [ArgumentError] if the value is not a Class.
     #
     # @example
-    #   Assertions.validate_class(Object.new)
+    #   assertions.validate_class(Object.new)
     #   #=> raises an ArgumentError with message 'value is not a class'
     #
-    #   Assertions.validate_class(String)
+    #   assertions.validate_class(String)
     #   #=> does not raise an exception
     def validate_class(value, as: 'value', message: nil, optional: false)
       assert_class(
@@ -823,10 +823,10 @@ module SleepingKingStudios::Tools
     # @raise [ArgumentError] if the value is one of the expected values.
     #
     # @example
-    #   Assertions.validate_exclusion('get', expected: %w[get post put])
+    #   assertions.validate_exclusion('get', expected: %w[get post put])
     #   #=> raises an ArgumentError with message 'value is is one of "get", "post", "put"'
     #
-    #   Assertions.validate_exclusion('delete', expected: %w[get post put])
+    #   assertions.validate_exclusion('delete', expected: %w[get post put])
     #   #=> does not raise an exception
     def validate_exclusion(
       value,
@@ -855,7 +855,7 @@ module SleepingKingStudios::Tools
     # @raise [ArgumentError] if any of the validations fail.
     #
     # @example
-    #   Assertions.validate_group do |group|
+    #   assertions.validate_group do |group|
     #     group.validate_name(nil, as: 'label')
     #     group.validate_instance_of(0.0, expected: Integer, as: 'quantity')
     #   end
@@ -882,10 +882,10 @@ module SleepingKingStudios::Tools
     # @raise [ArgumentError] if the value is not one of the expected values.
     #
     # @example
-    #   Assertions.validate_inclusion('get', expected: %w[get post put])
+    #   assertions.validate_inclusion('get', expected: %w[get post put])
     #   #=> does not raise an exception
     #
-    #   Assertions.validate_inclusion('delete', expected: %w[get post put])
+    #   assertions.validate_inclusion('delete', expected: %w[get post put])
     #   #=> raises an ArgumentError with message 'value is is one of "get", "post", "put"'
     def validate_inclusion(
       value,
@@ -919,13 +919,13 @@ module SleepingKingStudios::Tools
     #   have the given ancestor.
     #
     # @example
-    #   Assertions.validate_inherits_from(:foo, expected: StandardError)
+    #   assertions.validate_inherits_from(:foo, expected: StandardError)
     #   #=> raises an ArgumentError with message 'value is not a Class or Module'
     #
-    #   Assertions.validate_inherits_from(RuntimeError, expected: StandardError)
+    #   assertions.validate_inherits_from(RuntimeError, expected: StandardError)
     #   #=> does not raise an exception
     #
-    #   Assertions.validate_inherits_from(Array, expected: Enumerable)
+    #   assertions.validate_inherits_from(Array, expected: Enumerable)
     #   #=> does not raise an exception
     def validate_inherits_from(
       value,
@@ -959,10 +959,10 @@ module SleepingKingStudios::Tools
     #   class or module.
     #
     # @example
-    #   Assertions.validate_instance_of(:foo, expected: String)
+    #   assertions.validate_instance_of(:foo, expected: String)
     #   #=> raises an AssertionError with message 'value is not an instance of String'
     #
-    #   Assertions.validate_instance_of('foo', expected: String)
+    #   assertions.validate_instance_of('foo', expected: String)
     #   #=> does not raise an exception
     def validate_instance_of(
       value,
@@ -994,10 +994,10 @@ module SleepingKingStudios::Tools
     # @raise [ArgumentError] if the value does not match the expected object.
     #
     # @example
-    #   Assertions.validate_matches('bar', expected: /foo/)
+    #   assertions.validate_matches('bar', expected: /foo/)
     #   #=> raises an ArgumentError with message 'value does not match the pattern /foo/'
     #
-    #   Assertions.validate_matches('foo', expected: /foo/)
+    #   assertions.validate_matches('foo', expected: /foo/)
     #   #=> does not raise an exception
     def validate_matches(
       value,
@@ -1029,19 +1029,19 @@ module SleepingKingStudios::Tools
     #   value is empty.
     #
     # @example
-    #   Assertions.validate_name(nil)
+    #   assertions.validate_name(nil)
     #   #=> raises an ArgumentError with message "value can't be blank"
     #
-    #   Assertions.validate_name(Object.new)
+    #   assertions.validate_name(Object.new)
     #   #=> raises an AssertionError with message 'value is not a String or a Symbol'
     #
-    #   Assertions.validate_name('')
+    #   assertions.validate_name('')
     #   #=> raises an ArgumentError with message "value can't be blank"
     #
-    #   Assertions.validate_name('foo')
+    #   assertions.validate_name('foo')
     #   #=> does not raise an exception
     #
-    #   Assertions.validate_name(:bar)
+    #   assertions.validate_name(:bar)
     #   #=> does not raise an exception
     def validate_name(
       value,
@@ -1069,10 +1069,10 @@ module SleepingKingStudios::Tools
     # @raise [ArgumentError] if the value is not nil.
     #
     # @example
-    #   Assertions.validate_nil(nil)
+    #   assertions.validate_nil(nil)
     #   #=> does not raise an exception
     #
-    #   Assertions.validate_nil(Object.new)
+    #   assertions.validate_nil(Object.new)
     #   #=> raises an ArgumentError with message 'value must be nil'
     def validate_nil(
       value,
@@ -1098,10 +1098,10 @@ module SleepingKingStudios::Tools
     # @raise [ArgumentError] if the value is nil.
     #
     # @example
-    #   Assertions.validate_not_nil(nil)
+    #   assertions.validate_not_nil(nil)
     #   #=> raises an ArgumentError with message 'value must not be nil'
     #
-    #   Assertions.validate_not_nil(Object.new)
+    #   assertions.validate_not_nil(Object.new)
     #   #=> does not raise an exception
     def validate_not_nil(
       value,
@@ -1129,16 +1129,16 @@ module SleepingKingStudios::Tools
     #   #empty? and value.empty is true.
     #
     # @example
-    #   Assertions.validate_presence(nil)
+    #   assertions.validate_presence(nil)
     #   #=> raises an ArgumentError with message "can't be blank"
     #
-    #   Assertions.validate_presence(Object.new)
+    #   assertions.validate_presence(Object.new)
     #   #=> does not raise an exception
     #
-    #   Assertions.validate_presence([])
+    #   assertions.validate_presence([])
     #   #=> raises an ArgumentError with message "can't be blank"
     #
-    #   Assertions.validate_presence([1, 2, 3])
+    #   assertions.validate_presence([1, 2, 3])
     #   #=> does not raise an exception
     def validate_presence(value, as: 'value', message: nil, optional: false)
       assert_presence(

@@ -9,10 +9,10 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.validate { true == false }
+      assertions.validate { true == false }
       #=> raises an ArgumentError with message 'block returned a falsy value'
 
-      Assertions.validate { true == true }
+      assertions.validate { true == true }
       #=> does not raise an exception
 params:
 - description: the exception message to raise on a failure.

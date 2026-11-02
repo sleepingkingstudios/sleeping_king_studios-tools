@@ -9,5 +9,4 @@ returns:
 - description: a new instance of MessagesStrategy
   type:
   - name: MessagesStrategy
-short_description: rubocop:enable Layout/HashAlignment
 version: "*"

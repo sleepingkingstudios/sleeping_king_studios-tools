@@ -4,6 +4,15 @@
 
 ### Tools
 
+#### Assertions
+
+Implemented predicate methods:
+
+- `#blank?(value)` checks if the value is `nil` or `#empty?`.
+- `#boolean?(value)` checks if the value is `true` or `false`.
+- `#name?(value)` checks if the value is a non-empty `String` or `Symbol`.
+- `#present?(value)` checks if the value is not `nil` and not `#empty?`.
+
 #### Messages
 
 Updated `Messages::Strategy`:

@@ -9,10 +9,10 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.validate_nil(nil)
+      assertions.validate_nil(nil)
       #=> does not raise an exception
 
-      Assertions.validate_nil(Object.new)
+      assertions.validate_nil(Object.new)
       #=> raises an ArgumentError with message 'value must be nil'
 params:
 - description: the value to assert on.

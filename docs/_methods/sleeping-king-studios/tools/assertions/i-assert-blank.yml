@@ -6,20 +6,23 @@ signature: 'assert_blank(value, as: ''value'', error_class: AssertionError, mess
 slug: assert-blank
 constructor: false
 data_path: sleeping-king-studios/tools/assertions/i-assert-blank
+description: |-
+  A value is blank if it is nil, or if the value responds to #empty? and the
+  #empty? method returns true.
 metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.assert_blank(nil)
+      assertions.assert_blank(nil)
       #=> does not raise an exception
 
-      Assertions.assert_blank(Object.new)
+      assertions.assert_blank(Object.new)
       #=> raises an AssertionError with message 'value must be nil or empty'
 
-      Assertions.assert_blank([])
+      assertions.assert_blank([])
       #=> does not raise an exception
 
-      Assertions.assert_blank([1, 2, 3])
+      assertions.assert_blank([1, 2, 3])
       #=> raises an AssertionError with message 'value must be nil or empty'
 params:
 - description: the value to assert on.

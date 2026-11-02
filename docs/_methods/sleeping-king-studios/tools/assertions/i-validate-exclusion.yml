@@ -9,10 +9,10 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.validate_exclusion('get', expected: %w[get post put])
+      assertions.validate_exclusion('get', expected: %w[get post put])
       #=> raises an ArgumentError with message 'value is is one of "get", "post", "put"'
 
-      Assertions.validate_exclusion('delete', expected: %w[get post put])
+      assertions.validate_exclusion('delete', expected: %w[get post put])
       #=> does not raise an exception
 params:
 - description: the value to assert on.

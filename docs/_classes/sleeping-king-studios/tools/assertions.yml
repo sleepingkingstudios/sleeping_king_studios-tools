@@ -79,6 +79,14 @@ instance_methods:
   path: sleeping-king-studios/tools/assertions/i-assert-presence
   slug: assert-presence
   inherited: false
+- name: blank?
+  path: sleeping-king-studios/tools/assertions/i-blank?
+  slug: blank?
+  inherited: false
+- name: boolean?
+  path: sleeping-king-studios/tools/assertions/i-boolean?
+  slug: boolean?
+  inherited: false
 - name: error_message_for
   path: sleeping-king-studios/tools/assertions/i-error-message-for
   slug: error-message-for
@@ -88,6 +96,14 @@ instance_methods:
   slug: initialize
   inherited: true
   constructor: true
+- name: name?
+  path: sleeping-king-studios/tools/assertions/i-name?
+  slug: name?
+  inherited: false
+- name: present?
+  path: sleeping-king-studios/tools/assertions/i-present?
+  slug: present?
+  inherited: false
 - name: toolbelt
   path: sleeping-king-studios/tools/base/i-toolbelt
   slug: toolbelt

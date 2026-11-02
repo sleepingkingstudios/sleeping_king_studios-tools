@@ -9,16 +9,16 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.validate_presence(nil)
+      assertions.validate_presence(nil)
       #=> raises an ArgumentError with message "can't be blank"
 
-      Assertions.validate_presence(Object.new)
+      assertions.validate_presence(Object.new)
       #=> does not raise an exception
 
-      Assertions.validate_presence([])
+      assertions.validate_presence([])
       #=> raises an ArgumentError with message "can't be blank"
 
-      Assertions.validate_presence([1, 2, 3])
+      assertions.validate_presence([1, 2, 3])
       #=> does not raise an exception
 params:
 - description: the value to assert on.

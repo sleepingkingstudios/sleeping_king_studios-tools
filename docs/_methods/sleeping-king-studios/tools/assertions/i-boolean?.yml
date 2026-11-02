@@ -1,0 +1,36 @@
+---
+name: SleepingKingStudios::Tools::Assertions#boolean?
+parent_path: sleeping-king-studios/tools/assertions
+signature: boolean?(value)
+slug: boolean?
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-boolean?
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      assertions.boolean?(nil)
+      #=> false
+
+      assertions.boolean?(Object.new)
+      #=> false
+
+      assertions.boolean?(false)
+      #=> true
+
+      assertions.boolean?(true)
+      #=> true
+params:
+- description: the value to assert on.
+  name: value
+  type:
+  - name: Object
+returns:
+- description: |-
+    true if the value is either true or false, otherwise
+    returns false.
+  type:
+  - name: 'true'
+  - name: 'false'
+short_description: Checks if value is either true or false.
+version: "*"

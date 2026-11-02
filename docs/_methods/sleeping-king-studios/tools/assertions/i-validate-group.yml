@@ -9,7 +9,7 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.validate_group do |group|
+      assertions.validate_group do |group|
         group.validate_name(nil, as: 'label')
         group.validate_instance_of(0.0, expected: Integer, as: 'quantity')
       end

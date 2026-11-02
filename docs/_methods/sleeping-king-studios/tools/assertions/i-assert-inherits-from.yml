@@ -12,13 +12,13 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.assert_inherits_from(:foo, expected: StandardError)
+      assertions.assert_inherits_from(:foo, expected: StandardError)
       #=> raises an AssertionError with message 'value is not a Class or Module'
 
-      Assertions.assert_inherits_from(RuntimeError, expected: StandardError)
+      assertions.assert_inherits_from(RuntimeError, expected: StandardError)
       #=> does not raise an exception
 
-      Assertions.assert_inherits_from(Array, expected: Enumerable)
+      assertions.assert_inherits_from(Array, expected: Enumerable)
       #=> does not raise an exception
 params:
 - description: the value to assert on.

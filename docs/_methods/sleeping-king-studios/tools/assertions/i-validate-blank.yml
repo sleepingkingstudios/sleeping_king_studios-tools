@@ -9,16 +9,16 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.validate_blank(nil)
+      assertions.validate_blank(nil)
       #=> does not raise an exception
 
-      Assertions.validate_blank(Object.new)
+      assertions.validate_blank(Object.new)
       #=> raises an ArgumentError with message 'value must be nil or empty'
 
-      Assertions.validate_blank([])
+      assertions.validate_blank([])
       #=> does not raise an exception
 
-      Assertions.validate_blank([1, 2, 3])
+      assertions.validate_blank([1, 2, 3])
       #=> raises an ArgumentError with message 'value must be nil or empty'
 params:
 - description: the value to assert on.

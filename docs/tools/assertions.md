@@ -33,6 +33,11 @@ For a list of available assertions, see [Defined Assertions](#defined-assertions
   - [#assert_nil](#assert_nil)
   - [#assert_not_nil](#assert_not_nil)
   - [#assert_presence](#assert_presence)
+- [Predicate Methods](#predicate-methods)
+  - [#blank?](#blank)
+  - [#boolean?](#boolean)
+  - [#name?](#name)
+  - [#present?](#present)
 
 ## Using Assertions
 
@@ -125,20 +130,48 @@ Validating method parameters helps to avoid bugs farther down the line.
 `Assertions` defines the following methods, as well as their `#validate_` equivalents.
 
 - [#assert](#assert)
+  <br>
+  Asserts that the block returns `true`.
 - [#assert_blank](#assert_blank)
+  <br>
+  Asserts that the value is `nil` or `#empty`?
 - [#assert_boolean](#assert_boolean)
+  <br>
+  Asserts that the value is `true` or `false`.
 - [#assert_class](#assert_class)
+  <br>
+  Asserts that the value is an instance of `Class`.
 - [#assert_exclusion](#assert_exclusion)
+  <br>
+  Asserts that the value is not in the expected list.
 - [#assert_inclusion](#assert_inclusion)
+  <br>
+  Asserts that the value is in the expected list.
 - [#assert_inherits_from](#assert_inherits_from)
+  <br>
+  Asserts that the value inherits from the expected `Class` or `Module`.
 - [#assert_instance_of](#assert_instance_of)
+  <br>
+  Asserts that the value is an instance of the expected type.
 - [#assert_matches](#assert_matches)
+  <br>
+  Asserts that the value matches the expected value using `#===`.
 - [#assert_name](#assert_name)
+  <br>
+  Asserts that the value is a non-empty `String` or `Symbol`.
 - [#assert_nil](#assert_nil)
+  <br>
+  Asserts that the value is `nil`.
 - [#assert_not_nil](#assert_not_nil)
+  <br>
+  Asserts that the value is not `nil`.
 - [#assert_presence](#assert_presence)
+  <br>
+  Asserts that the value is not `nil` and not `#empty?`.
 
 For a full list of methods, see the [Reference documentation](../reference/sleeping-king-studios/tools/assertions).
+
+[Back to Top](#)
 
 ### `#assert`
 
@@ -402,5 +435,107 @@ tools.assertions.assert_presence(%w[ichi ni san])
 ```
 
 [Back to Defined Assertions](#defined-assertions) \| [Back to Top](#)
+
+## Predicate Methods
+
+`Assertions` also defines a few helper methods for performing basic data checks. Each of these methods takes a `value` and returns either `true` or `false`.
+
+- [#blank?](#blank)
+  <br>
+  Checks if the value is `nil` or `#empty?`.
+- [#boolean?](#boolean)
+  <br>
+  Checks if the value is `true` or `false`.
+- [#name?](#name)
+  <br>
+  Checks if the value is a non-empty `String` or `Symbol`.
+- [#present?](#present)
+  <br>
+  Checks if the value is not `nil` and not `#empty?`.
+
+[Back to Top](#)
+
+### `#blank?`
+
+Checks if the value is `nil`, or responds to `#empty?` and `value.empty?` is `true`.
+
+```ruby
+tools.assertions.blank?(nil)
+#=> true
+#
+tools.assertions.blank?(Object.new)
+#=> false
+#
+tools.assertions.blank?([])
+#=> true
+#
+tools.assertions.blank?([1, 2, 3])
+#=> false
+```
+
+[Back to Predicate Methods](#predicate-methods) \| [Back to Top](#)
+
+### `#boolean?`
+
+Checks if the value is `true` or `false`.
+
+```ruby
+tools.assertions.boolean?(nil)
+#=> false
+
+tools.assertions.boolean?(Object.new)
+#=> false
+
+tools.assertions.boolean?(false)
+#=> true
+
+tools.assertions.boolean?(true)
+#=> true
+```
+
+[Back to Predicate Methods](#predicate-methods) \| [Back to Top](#)
+
+### `#name?`
+
+Checks if the value is a non-empty `String` or `Symbol`.
+
+```ruby
+tools.assertions.name?(nil)
+#=> false
+
+tools.assertions.name?(Object.new)
+#=> false
+
+tools.assertions.name?('')
+#=> false
+
+tools.assertions.name?('foo')
+#=> true
+
+tools.assertions.name?(:bar)
+#=> true
+```
+
+[Back to Predicate Methods](#predicate-methods) \| [Back to Top](#)
+
+### `#present?`
+
+Checks if the value is not `nil`, and if the value responds to `#empty?`, is not empty.
+
+```ruby
+tools.assertions.present?(nil)
+#=> false
+
+tools.assertions.present?(Object.new)
+#=> true
+
+tools.assertions.present?([])
+#=> false
+
+tools.assertions.present?([1, 2, 3])
+#=> true
+```
+
+[Back to Predicate Methods](#predicate-methods) \| [Back to Top](#)
 
 {% include breadcrumbs.md %}
