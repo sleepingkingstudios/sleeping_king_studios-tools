@@ -106,12 +106,11 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         let(:object_string) { format(custom_format, object, version) }
 
         before(:example) do
-          # rubocop:disable RSpec/SubjectStub
+          # rubocop:disable-next RSpec/SubjectStub
           allow(core_tools).to receive(:deprecate).and_wrap_original \
           do |original, *args, format: nil, **kwargs|
             original.call(*args, format:, **kwargs) if format
           end
-          # rubocop:enable RSpec/SubjectStub
         end
 
         it 'should raise an error' do
@@ -213,12 +212,11 @@ RSpec.describe SleepingKingStudios::Tools::CoreTools do
         let(:object_string) { format(custom_format, object, version) }
 
         before(:example) do
-          # rubocop:disable RSpec/SubjectStub
+          # rubocop:disable-next RSpec/SubjectStub
           allow(core_tools).to receive(:deprecate).and_wrap_original \
           do |original, *args, format: nil, **kwargs|
             original.call(*args, format:, **kwargs) if format
           end
-          # rubocop:enable RSpec/SubjectStub
         end
 
         it 'should print a deprecation warning' do

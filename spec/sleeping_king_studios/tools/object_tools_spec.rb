@@ -27,9 +27,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     end
 
     let(:receiver) do
-      # rubocop:disable RSpec/VerifiedDoubles
-      double('base object', object_tools_method: nil)
-      # rubocop:enable RSpec/VerifiedDoubles
+      double('base object', object_tools_method: nil) # rubocop:disable RSpec/VerifiedDoubles
     end
 
     before(:example) do
@@ -626,7 +624,7 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
     end
   end
 
-  # rubocop:disable Style/SingleArgumentDig
+  # rubocop:disable-next Style/SingleArgumentDig
   describe '#dig' do
     it 'should define the method' do
       expect(object_tools)
@@ -826,7 +824,6 @@ RSpec.describe SleepingKingStudios::Tools::ObjectTools do
       end
     end
   end
-  # rubocop:enable Style/SingleArgumentDig
 
   describe '#eigenclass' do
     let(:object)   { Object.new }

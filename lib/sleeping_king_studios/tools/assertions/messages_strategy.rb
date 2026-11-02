@@ -8,7 +8,6 @@ module SleepingKingStudios::Tools
   # Defines its own internal message templates, and automatically handles value
   # name option (:as option) when generating messages.
   class Assertions::MessagesStrategy < SleepingKingStudios::Tools::Messages::Strategies::HashStrategy
-    # rubocop:disable Layout/HashAlignment
     ERROR_MESSAGES =
       {
         'blank' =>
@@ -51,7 +50,6 @@ module SleepingKingStudios::Tools
         'presence' =>
           "can't be blank"
       }.freeze
-    # rubocop:enable Layout/HashAlignment
 
     def initialize
       templates =
