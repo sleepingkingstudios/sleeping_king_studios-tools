@@ -8,15 +8,15 @@ gem 'byebug', '~> 11.1'
 gem 'readline' # Required for byebug in Ruby 4.0.
 
 group :development, :test do
+  gem 'cuprum-cli', '~> 0.2'
   gem 'irb', '~> 1.16'
   gem 'rake', '~> 13.2'
   gem 'rspec', '~> 3.13'
-  gem 'rspec-sleeping_king_studios', '~> 2.8.4'
+  gem 'rspec-sleeping_king_studios', '~> 2.8.5'
   gem 'rubocop', '~> 1.92'
   gem 'rubocop-rake', '~> 0.7', '>= 0.7.1'
   gem 'rubocop-rspec', '~> 3.10'
   gem 'simplecov', '~> 0.22'
-  gem 'sleeping_king_studios-tasks', '~> 0.4', '>= 0.4.1'
   gem 'thor', '~> 1.4'
 end
 

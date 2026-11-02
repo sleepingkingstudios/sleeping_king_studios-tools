@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 
-require 'sleeping_king_studios/tasks'
+require 'cuprum/cli'
 
-SleepingKingStudios::Tasks.configure do |config|
-  config.file do |file|
-    file.template_paths =
-      [
-        '../sleeping_king_studios-templates/lib',
-        file.class.default_template_path
-      ]
-  end
-end
+Cuprum::Cli.initializer.call
 
-load 'sleeping_king_studios/docs/tasks.rb'
-load 'sleeping_king_studios/tasks/ci/tasks.thor'
-load 'sleeping_king_studios/tasks/file/tasks.thor'
+require 'cuprum/cli/integrations/thor/registry'
+
+registry = Cuprum::Cli::Integrations::Thor::Registry.new
+
+# CI Commands
+registry.register Cuprum::Cli::Commands::Ci::RSpecCommand
+registry.register Cuprum::Cli::Commands::Ci::RSpecEachCommand
+
+# File Commands
+registry.register Cuprum::Cli::Commands::File::NewCommand
