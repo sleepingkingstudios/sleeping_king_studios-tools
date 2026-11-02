@@ -1,0 +1,39 @@
+---
+name: SleepingKingStudios::Tools::Assertions#name?
+parent_path: sleeping-king-studios/tools/assertions
+signature: name?(value)
+slug: name?
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-name?
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      assertions.name?(nil)
+      #=> false
+
+      assertions.name?(Object.new)
+      #=> false
+
+      assertions.name?('')
+      #=> false
+
+      assertions.name?('foo')
+      #=> true
+
+      assertions.name?(:bar)
+      #=> true
+params:
+- description: the value to assert on.
+  name: value
+  type:
+  - name: Object
+returns:
+- description: |-
+    true if the value is a non-empty String or Symbol,
+    otherwise returns false.
+  type:
+  - name: 'true'
+  - name: 'false'
+short_description: Asserts that the value is a non-empty String or Symbol.
+version: "*"

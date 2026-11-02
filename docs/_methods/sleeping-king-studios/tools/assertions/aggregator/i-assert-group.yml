@@ -11,7 +11,7 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.assert_group do |group|
+      assertions.assert_group do |group|
         group.assert_name(nil, as: 'label')
         group.assert_instance_of(0.0, expected: Integer, as: 'quantity')
       end

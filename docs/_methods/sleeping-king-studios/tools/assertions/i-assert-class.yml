@@ -10,10 +10,10 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.assert_class(Object.new)
+      assertions.assert_class(Object.new)
       #=> raises an AssertionError with message 'value is not a class'
 
-      Assertions.assert_class(String)
+      assertions.assert_class(String)
       #=> does not raise an exception
 params:
 - description: the value to assert on.

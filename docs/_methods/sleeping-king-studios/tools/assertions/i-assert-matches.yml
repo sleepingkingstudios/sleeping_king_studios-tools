@@ -10,10 +10,10 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.assert_matches('bar', expected: /foo/)
+      assertions.assert_matches('bar', expected: /foo/)
       #=> raises an AssertionError with message 'value does not match the pattern /foo/'
 
-      Assertions.assert_matches('foo', expected: /foo/)
+      assertions.assert_matches('foo', expected: /foo/)
       #=> does not raise an exception
 params:
 - description: the value to assert on.

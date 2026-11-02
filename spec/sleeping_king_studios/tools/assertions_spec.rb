@@ -130,6 +130,58 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
     end
   end
 
+  describe '#blank?' do
+    it { expect(assertions).to respond_to(:blank?).with(1).argument }
+
+    describe 'with nil' do
+      it { expect(assertions.blank?(nil)).to be true }
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      it { expect(assertions.blank?(value)).to be false }
+    end
+
+    describe 'with an empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+      it { expect(assertions.blank?(value)).to be true }
+    end
+
+    describe 'with a non-empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+      it { expect(assertions.blank?(value)).to be false }
+    end
+  end
+
+  describe '#boolean?' do
+    it { expect(assertions).to respond_to(:boolean?).with(1).argument }
+
+    describe 'with nil' do
+      it { expect(assertions.boolean?(nil)).to be false }
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      it { expect(assertions.boolean?(value)).to be false }
+    end
+
+    describe 'with false' do
+      let(:value) { false }
+
+      it { expect(assertions.boolean?(value)).to be true }
+    end
+
+    describe 'with true' do
+      let(:value) { true }
+
+      it { expect(assertions.boolean?(value)).to be true }
+    end
+  end
+
   describe '#error_message_for' do
     let(:key)     { nil }
     let(:options) { {} }
@@ -273,6 +325,70 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
 
         it { expect(error_message).to be == expected }
       end
+    end
+  end
+
+  describe '#name?' do
+    it { expect(assertions).to respond_to(:name?).with(1).argument }
+
+    describe 'with nil' do
+      it { expect(assertions.name?(nil)).to be false }
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      it { expect(assertions.name?(value)).to be false }
+    end
+
+    describe 'with an empty String' do
+      let(:value) { '' }
+
+      it { expect(assertions.name?(value)).to be false }
+    end
+
+    describe 'with an empty Symbol' do
+      let(:value) { :'' }
+
+      it { expect(assertions.name?(value)).to be false }
+    end
+
+    describe 'with a String' do
+      let(:value) { 'string' }
+
+      it { expect(assertions.name?(value)).to be true }
+    end
+
+    describe 'with a Symbol' do
+      let(:value) { :symbol }
+
+      it { expect(assertions.name?(value)).to be true }
+    end
+  end
+
+  describe '#present?' do
+    it { expect(assertions).to respond_to(:present?).with(1).argument }
+
+    describe 'with nil' do
+      it { expect(assertions.present?(nil)).to be false }
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      it { expect(assertions.present?(value)).to be true }
+    end
+
+    describe 'with an empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+      it { expect(assertions.present?(value)).to be false }
+    end
+
+    describe 'with a non-empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+      it { expect(assertions.present?(value)).to be true }
     end
   end
 

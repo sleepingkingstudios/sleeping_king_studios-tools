@@ -10,10 +10,10 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.validate_instance_of(:foo, expected: String)
+      assertions.validate_instance_of(:foo, expected: String)
       #=> raises an AssertionError with message 'value is not an instance of String'
 
-      Assertions.validate_instance_of('foo', expected: String)
+      assertions.validate_instance_of('foo', expected: String)
       #=> does not raise an exception
 params:
 - description: the value to assert on.

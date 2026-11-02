@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+load 'sleeping_king_studios/docs/tasks.rb'
+
 require 'cuprum/cli'
 
 Cuprum::Cli.initializer.call

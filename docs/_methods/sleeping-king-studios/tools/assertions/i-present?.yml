@@ -1,0 +1,39 @@
+---
+name: SleepingKingStudios::Tools::Assertions#present?
+parent_path: sleeping-king-studios/tools/assertions
+signature: present?(value)
+slug: present?
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-present?
+description: |-
+  A value is present if it is not nil, and if the value responds to #empty?
+  then the #empty? method must returns false.
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      assertions.assert_presence(nil)
+      #=> raises an AssertionError with message "can't be blank"
+
+      assertions.assert_presence(Object.new)
+      #=> does not raise an exception
+
+      assertions.assert_presence([])
+      #=> raises an AssertionError with message "can't be blank"
+
+      assertions.assert_presence([1, 2, 3])
+      #=> does not raise an exception
+params:
+- description: the value to assert on.
+  name: value
+  type:
+  - name: Object
+returns:
+- description: |-
+    true if the value is nil and not empty, otherwise
+    returns false.
+  type:
+  - name: 'true'
+  - name: 'false'
+short_description: Checks if the value is not nil and not empty.
+version: "*"

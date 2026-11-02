@@ -76,6 +76,14 @@ instance_methods:
   path: sleeping-king-studios/tools/assertions/i-assert-presence
   slug: assert-presence
   inherited: true
+- name: blank?
+  path: sleeping-king-studios/tools/assertions/i-blank?
+  slug: blank?
+  inherited: true
+- name: boolean?
+  path: sleeping-king-studios/tools/assertions/i-boolean?
+  slug: boolean?
+  inherited: true
 - name: clear
   path: sleeping-king-studios/tools/assertions/aggregator/i-clear
   slug: clear
@@ -105,6 +113,14 @@ instance_methods:
   slug: initialize
   inherited: false
   constructor: true
+- name: name?
+  path: sleeping-king-studios/tools/assertions/i-name?
+  slug: name?
+  inherited: true
+- name: present?
+  path: sleeping-king-studios/tools/assertions/i-present?
+  slug: present?
+  inherited: true
 - name: size
   path: sleeping-king-studios/tools/assertions/aggregator/i-size
   slug: size

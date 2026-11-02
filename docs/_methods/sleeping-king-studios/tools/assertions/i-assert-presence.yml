@@ -6,20 +6,23 @@ signature: 'assert_presence(value, as: ''value'', error_class: AssertionError, m
 slug: assert-presence
 constructor: false
 data_path: sleeping-king-studios/tools/assertions/i-assert-presence
+description: |-
+  A value is present if it is not nil, and if the value responds to #empty?
+  then the #empty? method must returns false.
 metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.assert_presence(nil)
+      assertions.assert_presence(nil)
       #=> raises an AssertionError with message "can't be blank"
 
-      Assertions.assert_presence(Object.new)
+      assertions.assert_presence(Object.new)
       #=> does not raise an exception
 
-      Assertions.assert_presence([])
+      assertions.assert_presence([])
       #=> raises an AssertionError with message "can't be blank"
 
-      Assertions.assert_presence([1, 2, 3])
+      assertions.assert_presence([1, 2, 3])
       #=> does not raise an exception
 params:
 - description: the value to assert on.

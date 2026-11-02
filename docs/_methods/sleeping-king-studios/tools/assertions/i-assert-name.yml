@@ -10,19 +10,19 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.assert_name(nil)
+      assertions.assert_name(nil)
       #=> raises an AssertionError with message "value can't be blank"
 
-      Assertions.assert_name(Object.new)
+      assertions.assert_name(Object.new)
       #=> raises an AssertionError with message 'value is not a String or a Symbol'
 
-      Assertions.assert_name('')
+      assertions.assert_name('')
       #=> raises an AssertionError with message "value can't be blank"
 
-      Assertions.assert_name('foo')
+      assertions.assert_name('foo')
       #=> does not raise an exception
 
-      Assertions.assert_name(:bar)
+      assertions.assert_name(:bar)
       #=> does not raise an exception
 params:
 - description: the value to assert on.

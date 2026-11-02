@@ -9,10 +9,10 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.validate_class(Object.new)
+      assertions.validate_class(Object.new)
       #=> raises an ArgumentError with message 'value is not a class'
 
-      Assertions.validate_class(String)
+      assertions.validate_class(String)
       #=> does not raise an exception
 params:
 - description: the value to assert on.

@@ -10,16 +10,16 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.assert_boolean(nil)
+      assertions.assert_boolean(nil)
       #=> raises an AssertionError with message 'value must be true or false'
 
-      Assertions.assert_boolean(Object.new)
+      assertions.assert_boolean(Object.new)
       #=> raises an AssertionError with message 'value must be true or false'
 
-      Assertions.assert_boolean(false)
+      assertions.assert_boolean(false)
       #=> does not raise an exception
 
-      Assertions.assert_boolean(true)
+      assertions.assert_boolean(true)
       #=> does not raise an exception
 params:
 - description: the value to assert on.

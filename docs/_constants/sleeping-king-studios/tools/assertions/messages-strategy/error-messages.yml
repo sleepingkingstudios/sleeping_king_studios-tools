@@ -2,7 +2,7 @@
 name: SleepingKingStudios::Tools::Assertions::MessagesStrategy::ERROR_MESSAGES
 parent_path: sleeping-king-studios/tools/assertions/messages-strategy
 slug: error-messages
-short_description: rubocop:disable Layout/HashAlignment
+short_description: ''
 value: |-
   {
     'blank' =>

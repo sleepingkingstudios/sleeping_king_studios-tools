@@ -10,10 +10,10 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.assert_nil(nil)
+      assertions.assert_nil(nil)
       #=> does not raise an exception
 
-      Assertions.assert_nil(Object.new)
+      assertions.assert_nil(Object.new)
       #=> raises an AssertionError with message 'value must be nil'
 params:
 - description: the value to assert on.

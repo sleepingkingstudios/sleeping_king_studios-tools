@@ -10,10 +10,10 @@ metadata:
   examples:
   - name: ''
     text: |-
-      Assertions.assert_inclusion('get', expected: %w[get post put])
+      assertions.assert_inclusion('get', expected: %w[get post put])
       #=> does not raise an exception
 
-      Assertions.assert_inclusion('delete', expected: %w[get post put])
+      assertions.assert_inclusion('delete', expected: %w[get post put])
       #=> raises an AssertionError with message 'value is is one of "get", "post", "put"'
 params:
 - description: the value to assert on.
