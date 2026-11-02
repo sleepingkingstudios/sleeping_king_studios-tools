@@ -512,6 +512,9 @@ module SleepingKingStudios::Tools
 
     # Asserts that the value is not nil and not empty.
     #
+    # A value is present if it is not nil, and if the value responds to #empty?
+    # then the #empty? method must returns false.
+    #
     # @param value [Object] the value to assert on.
     # @param as [String] the name of the asserted value.
     # @param error_class [Class] the exception class to raise on a failure.
@@ -661,6 +664,34 @@ module SleepingKingStudios::Tools
       return false unless value.is_a?(String) || value.is_a?(Symbol)
 
       !value.empty?
+    end
+
+    # Checks if the value is not nil and not empty.
+    #
+    # A value is present if it is not nil, and if the value responds to #empty?
+    # then the #empty? method must returns false.
+    #
+    # @param value [Object] the value to assert on.
+    #
+    # @return [true, false] true if the value is nil and not empty, otherwise
+    #   returns false.
+    #
+    # @example
+    #   Assertions.assert_presence(nil)
+    #   #=> raises an AssertionError with message "can't be blank"
+    #
+    #   Assertions.assert_presence(Object.new)
+    #   #=> does not raise an exception
+    #
+    #   Assertions.assert_presence([])
+    #   #=> raises an AssertionError with message "can't be blank"
+    #
+    #   Assertions.assert_presence([1, 2, 3])
+    #   #=> does not raise an exception
+    def present?(value)
+      return false if value.nil?
+
+      !(value.respond_to?(:empty?) && value.empty?)
     end
 
     # Asserts that the block returns a truthy value.

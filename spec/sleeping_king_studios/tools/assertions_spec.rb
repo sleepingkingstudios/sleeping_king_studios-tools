@@ -329,6 +329,8 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
   end
 
   describe '#name?' do
+    it { expect(assertions).to respond_to(:name?).with(1).argument }
+
     describe 'with nil' do
       it { expect(assertions.name?(nil)).to be false }
     end
@@ -361,6 +363,32 @@ RSpec.describe SleepingKingStudios::Tools::Assertions do
       let(:value) { :symbol }
 
       it { expect(assertions.name?(value)).to be true }
+    end
+  end
+
+  describe '#present?' do
+    it { expect(assertions).to respond_to(:present?).with(1).argument }
+
+    describe 'with nil' do
+      it { expect(assertions.present?(nil)).to be false }
+    end
+
+    describe 'with an Object' do
+      let(:value) { Object.new.freeze }
+
+      it { expect(assertions.present?(value)).to be true }
+    end
+
+    describe 'with an empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(true) }
+
+      it { expect(assertions.present?(value)).to be false }
+    end
+
+    describe 'with a non-empty value' do
+      let(:value) { Struct.new(:empty) { def empty? = empty }.new(false) }
+
+      it { expect(assertions.present?(value)).to be true }
     end
   end
 
