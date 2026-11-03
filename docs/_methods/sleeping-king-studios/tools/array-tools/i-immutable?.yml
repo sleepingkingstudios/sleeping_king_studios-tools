@@ -50,3 +50,4 @@ returns:
   - name: Boolean
 short_description: Checks if the array and its contents are immutable.
 version: "*"
+checksum: 6dU+A3rk023QBTiH10ppFw==

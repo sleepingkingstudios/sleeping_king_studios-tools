@@ -28,3 +28,4 @@ returns:
   - name: Boolean
 short_description: Returns true if the object is an Integer.
 version: "*"
+checksum: CBRii5BXbNVCBCu+nvNlag==

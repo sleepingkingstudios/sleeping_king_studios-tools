@@ -56,3 +56,4 @@ returns:
   - name: void
 short_description: Asserts that the value is a non-empty String or Symbol.
 version: "*"
+checksum: pbCmvnb5ZmQWeUI27x4DOw==

@@ -16,3 +16,4 @@ returns:
   - name: String
 short_description: Transforms the word to a plural, lowercase form.
 version: "*"
+checksum: "+w3ONwpvZgt0Qwfh5o8O1g=="

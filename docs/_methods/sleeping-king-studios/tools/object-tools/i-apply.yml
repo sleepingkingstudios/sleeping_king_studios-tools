@@ -54,3 +54,4 @@ returns:
   - name: Object
 short_description: Calls a Proc or lambda on the given receiver with the given parameters.
 version: "*"
+checksum: 7vxtE3TZcOWHgVrYP+ubtw==

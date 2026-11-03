@@ -1,0 +1,26 @@
+---
+name: SleepingKingStudios::Tools::Toolbox::HeritableData::ClassMethods#with
+parent_path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods
+signature: with(def define(*symbols, &block)
+slug: with
+constructor: false
+data_path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i-with
+description: |-
+  The defined data class will include HeritableData, and will be able to
+  define it's own Data types using this method.
+params:
+- description: |-
+    additional Data members to define. Any
+    members listed here will be appended to the members defined on the
+    parent Data class.
+  name: symbols
+  type:
+  - name: Array
+    items:
+    - name: Symbol
+short_description: Defines a new Data class including the members/methods of this
+  class.
+yields:
+- description: additional methods to define on the new Data class.
+version: "*"
+checksum: jzSvY6L6Mj3kF32acXDDtg==

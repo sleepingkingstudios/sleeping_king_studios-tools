@@ -14,3 +14,4 @@ params:
   - name: Array
 short_description: Expands each file pattern and requires each file.
 version: "*"
+checksum: j+3qYwEKxULs88xG32v9QQ==

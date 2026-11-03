@@ -33,3 +33,4 @@ returns:
   - name: Boolean
 short_description: Determines whether or not the given word is in singular form.
 version: "*"
+checksum: ZF7S7G4Qrj3v9TfzEXBawg==

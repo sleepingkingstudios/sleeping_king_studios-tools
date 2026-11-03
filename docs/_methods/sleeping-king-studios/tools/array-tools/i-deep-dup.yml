@@ -47,3 +47,4 @@ returns:
   - name: Array
 short_description: Creates a deep copy of the array and its contents.
 version: "*"
+checksum: KBWNe3zghbY6JqouCGpWPQ==

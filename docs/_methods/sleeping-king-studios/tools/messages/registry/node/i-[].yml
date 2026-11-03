@@ -20,3 +20,4 @@ returns:
   - name: nil
 short_description: Retrieves the child node with the requested sub-path, if any.
 version: "*"
+checksum: v7SQg+z1CVvblFbWmEnQ8g==

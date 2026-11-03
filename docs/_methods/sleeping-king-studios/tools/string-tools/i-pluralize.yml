@@ -31,3 +31,4 @@ returns:
   - name: String
 short_description: Takes a word in singular form and returns the plural form.
 version: "*"
+checksum: at46DDNrSZfV5iJiP9/iDA==

@@ -15,3 +15,4 @@ short_description: |-
   Returns a singleton instance of the messages registry, instantiating
   the instance if needed.
 version: "*"
+checksum: my7j7ATiOcq0UKTSqVYGWA==

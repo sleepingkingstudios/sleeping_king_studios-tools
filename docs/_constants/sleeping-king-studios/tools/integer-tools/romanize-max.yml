@@ -6,3 +6,4 @@ short_description: Maximum integer value that can be converted to a roman numera
 value: '4999'
 data_path: sleeping-king-studios/tools/integer-tools/romanize-max
 version: "*"
+checksum: "/wBrNK9B5gj1tMvVNBmDQQ=="

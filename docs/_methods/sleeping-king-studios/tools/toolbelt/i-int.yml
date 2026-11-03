@@ -1,0 +1,16 @@
+---
+name: SleepingKingStudios::Tools::Toolbelt#int
+parent_path: sleeping-king-studios/tools/toolbelt
+signature: integer_tools
+slug: int
+constructor: false
+data_path: sleeping-king-studios/tools/toolbelt/i-int
+returns:
+- description: |-
+    tools for working with
+    integers.
+  type:
+  - name: SleepingKingStudios::Tools::IntegerTools
+    path: sleeping-king-studios/tools/integer-tools
+version: "*"
+checksum: AM46H6Wmrr/EYNvwLdHSjQ==

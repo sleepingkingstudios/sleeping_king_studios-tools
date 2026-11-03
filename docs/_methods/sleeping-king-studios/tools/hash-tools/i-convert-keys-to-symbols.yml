@@ -37,3 +37,4 @@ returns:
   - name: Hash
 short_description: Returns a deep copy of the hash with the keys converted to symbols.
 version: "*"
+checksum: 4yjDQlys/0+Bjd2omgrwyg==

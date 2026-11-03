@@ -28,3 +28,4 @@ returns:
   - name: Boolean
 short_description: Checks if the array or any of its contents are mutable.
 version: "*"
+checksum: DWqzGoxYt3+JJnMtF4jvUg==

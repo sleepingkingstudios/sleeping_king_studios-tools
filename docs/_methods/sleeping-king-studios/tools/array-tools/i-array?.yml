@@ -32,3 +32,4 @@ returns:
   - name: Boolean
 short_description: Returns true if the object is or appears to be an Array.
 version: "*"
+checksum: uo//awLcL99/ZDQ4yIl5bg==

@@ -47,3 +47,4 @@ returns:
   - name: void
 short_description: Asserts that the value is either nil or empty.
 version: "*"
+checksum: wFIVX61xM+9SN/g73pUJZA==

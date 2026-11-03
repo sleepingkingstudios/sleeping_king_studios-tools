@@ -18,3 +18,4 @@ returns:
 short_description: Freezes the constant map and recursively freezes every constant
   value.
 version: "*"
+checksum: ccswLf3sPOPrY6TAZrdB+A==

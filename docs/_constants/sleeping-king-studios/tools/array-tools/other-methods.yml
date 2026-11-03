@@ -6,3 +6,4 @@ short_description: Methods that an Array-like object should *not* implement.
 value: "%i[each_key each_pair].freeze"
 data_path: sleeping-king-studios/tools/array-tools/other-methods
 version: "*"
+checksum: Trvvsx2cFVM6z54rD4BLMg==

@@ -25,3 +25,4 @@ returns:
   - name: nil
 short_description: Returns the strategy matching the given scope or key.
 version: "*"
+checksum: mlMw8zNtTozfZoWSwZGKrA==

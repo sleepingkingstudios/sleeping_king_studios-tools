@@ -37,3 +37,4 @@ returns:
 short_description: Represents an integer between 1 and 4999 (inclusive) as a Roman
   numeral.
 version: "*"
+checksum: 9iPJCGwRAd2pRUm2eXZ1uw==

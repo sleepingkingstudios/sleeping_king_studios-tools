@@ -38,3 +38,4 @@ returns:
   - name: String
 short_description: Generates a standard Semver version string.
 version: "*"
+checksum: jL82ZdLRegLYq6gSk2i2wQ==

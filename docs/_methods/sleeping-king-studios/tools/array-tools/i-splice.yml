@@ -66,3 +66,4 @@ returns:
     - name: Object
 short_description: Replaces a range of items in the array with the given items.
 version: "*"
+checksum: BKSxNEwdKGfAPodjt2oOnw==

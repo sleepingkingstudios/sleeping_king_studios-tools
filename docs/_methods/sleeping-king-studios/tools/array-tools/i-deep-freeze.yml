@@ -36,3 +36,4 @@ returns:
   - name: Array
 short_description: Freezes the array and performs a deep freeze on each array item.
 version: "*"
+checksum: avn/4hT4qqXxW9gr6X1oLg==

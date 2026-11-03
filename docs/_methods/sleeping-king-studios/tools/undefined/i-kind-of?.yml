@@ -1,0 +1,21 @@
+---
+name: SleepingKingStudios::Tools::Undefined#kind_of?
+parent_path: sleeping-king-studios/tools/undefined
+signature: kind_of?(def is_a?(mod)
+slug: kind-of?
+constructor: false
+data_path: sleeping-king-studios/tools/undefined/i-kind-of?
+params:
+- description: the class or module to compare.
+  name: mod
+  type:
+  - name: Module
+returns:
+- description: |-
+    true if the given class is an ancestor of the
+    object.
+  type:
+  - name: 'true'
+  - name: 'false'
+version: "*"
+checksum: 5QjjzY+zyr1MH34z2Ru/LQ==

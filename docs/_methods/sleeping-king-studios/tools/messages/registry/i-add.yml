@@ -1,0 +1,50 @@
+---
+name: SleepingKingStudios::Tools::Messages::Registry#add
+parent_path: sleeping-king-studios/tools/messages/registry
+signature: 'add(def register(scope:, force: false, **)'
+slug: add
+constructor: false
+data_path: sleeping-king-studios/tools/messages/registry/i-add
+overloads:
+- name: SleepingKingStudios::Tools::Messages::Registry#add
+  parent_path: sleeping-king-studios/tools/messages/registry
+  signature: 'register(scope:, strategy:, force: false)'
+  slug: add
+  constructor: false
+  params:
+  - description: the scope for the strategy.
+    name: scope
+    type:
+    - name: String
+  - description: |-
+      the
+      strategy to register.
+    name: strategy
+    type:
+    - name: SleepingKingStudios::Tools::Messages::Strategy
+      path: sleeping-king-studios/tools/messages/strategy
+  - description: |-
+      if true, overrides an existing strategy with
+      the given scope. Defaults to false.
+    name: force
+    type:
+    - name: 'true'
+    - name: 'false'
+    default: 'false'
+  returns:
+  - description: the registry.
+    type:
+    - name: self
+  short_description: Adds a strategy to the registry with the given scope.
+- name: SleepingKingStudios::Tools::Messages::Registry#add
+  parent_path: sleeping-king-studios/tools/messages/registry
+  signature: 'register(scope:, hash:, force: false)'
+  slug: add
+  constructor: false
+- name: SleepingKingStudios::Tools::Messages::Registry#add
+  parent_path: sleeping-king-studios/tools/messages/registry
+  signature: 'register(scope:, file:, force: false)'
+  slug: add
+  constructor: false
+version: "*"
+checksum: 5M+5s0zMiwaSKjUj0GUkUA==

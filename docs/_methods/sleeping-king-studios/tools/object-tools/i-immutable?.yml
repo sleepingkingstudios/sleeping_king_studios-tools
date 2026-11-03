@@ -66,3 +66,4 @@ returns:
   - name: Boolean
 short_description: Checks if the object is immutable.
 version: "*"
+checksum: wZfxp/OC0ON68Zx8f2mnxg==

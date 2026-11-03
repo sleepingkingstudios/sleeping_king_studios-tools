@@ -19,3 +19,4 @@ returns:
   - name: 'false'
 short_description: Checks if the given module is itself a Mixin.
 version: "*"
+checksum: IcYmQEESGrWWpzhkB6IDyw==

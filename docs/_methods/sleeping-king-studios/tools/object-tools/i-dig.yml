@@ -50,3 +50,4 @@ returns:
   - name: nil
 short_description: Accesses deeply nested properties on an object.
 version: "*"
+checksum: i0i/evg2mGS9pF0Ev0ZImA==

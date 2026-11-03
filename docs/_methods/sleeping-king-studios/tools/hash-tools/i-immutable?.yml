@@ -44,3 +44,4 @@ returns:
   - name: Boolean
 short_description: Returns true if the hash is immutable.
 version: "*"
+checksum: "+oBzdUcp53fHxa4uAVe2sw=="

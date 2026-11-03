@@ -17,3 +17,4 @@ returns:
   - name: Binding
 short_description: Generates an empty Binding object with an Object as the receiver.
 version: "*"
+checksum: n3paksH9xyASGAhqYDhJ/A==

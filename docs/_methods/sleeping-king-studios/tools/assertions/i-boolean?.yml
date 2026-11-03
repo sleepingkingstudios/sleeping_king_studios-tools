@@ -34,3 +34,4 @@ returns:
   - name: 'false'
 short_description: Checks if value is either true or false.
 version: "*"
+checksum: WcTnj9S4IB+Tktmac2vqcQ==

@@ -46,3 +46,4 @@ returns:
   - name: String
 short_description: Generates an error message for a failed validation.
 version: "*"
+checksum: c/8PcMKsVGmdHOp72Svb9g==

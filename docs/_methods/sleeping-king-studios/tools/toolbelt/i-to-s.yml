@@ -1,0 +1,13 @@
+---
+name: SleepingKingStudios::Tools::Toolbelt#to_s
+parent_path: sleeping-king-studios/tools/toolbelt
+signature: inspect
+slug: to-s
+constructor: false
+data_path: sleeping-king-studios/tools/toolbelt/i-to-s
+returns:
+- description: a human-readable representation of the object.
+  type:
+  - name: String
+version: "*"
+checksum: qSiK8kg45uSng8KDybBQZQ==

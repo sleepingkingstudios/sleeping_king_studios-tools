@@ -60,3 +60,4 @@ returns:
   - name: void
 short_description: Asserts that the value is a class or module with the given ancestor.
 version: "*"
+checksum: h0qEPKK7JeK3SKjePgtg9Q==

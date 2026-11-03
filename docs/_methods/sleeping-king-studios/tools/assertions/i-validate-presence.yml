@@ -53,3 +53,4 @@ returns:
   - name: void
 short_description: Asserts that the value is not nil and not empty.
 version: "*"
+checksum: pf4r3kHEayILqhsveLSFeA==

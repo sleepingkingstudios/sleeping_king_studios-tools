@@ -44,3 +44,4 @@ returns:
   - name: Integer
 short_description: Returns the number of digits in the given integer and base.
 version: "*"
+checksum: rPgbw0rQmAgIdCsdIK2tOA==
