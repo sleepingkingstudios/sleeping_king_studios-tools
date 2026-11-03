@@ -3,7 +3,7 @@ name: SleepingKingStudios::Tools::Version::BUILD
 parent_path: sleeping-king-studios/tools/version
 slug: build
 short_description: Build metadata.
-value: nil
+value: '0'
 data_path: sleeping-king-studios/tools/version/build
 version: "*"
-checksum: DiChHl0aVUmC6ECRaD1bNA==
+checksum: kHJa2Mhm4F8GB2LtLugRTw==

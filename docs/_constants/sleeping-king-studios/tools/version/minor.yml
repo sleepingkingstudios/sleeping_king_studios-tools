@@ -3,7 +3,7 @@ name: SleepingKingStudios::Tools::Version::MINOR
 parent_path: sleeping-king-studios/tools/version
 slug: minor
 short_description: Minor version.
-value: '3'
+value: '4'
 data_path: sleeping-king-studios/tools/version/minor
 version: "*"
-checksum: KlSY2rb+5ytbsUmn9rzHdg==
+checksum: zC0kOd83uB1RfKcuE/SyeQ==

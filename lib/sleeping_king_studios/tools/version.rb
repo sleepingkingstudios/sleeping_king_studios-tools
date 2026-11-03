@@ -9,13 +9,13 @@ module SleepingKingStudios
       # Major version.
       MAJOR = 1
       # Minor version.
-      MINOR = 3
+      MINOR = 4
       # Patch version.
       PATCH = 0
       # Prerelease version.
-      PRERELEASE = nil
+      PRERELEASE = :rc
       # Build metadata.
-      BUILD = nil
+      BUILD = 0
 
       class << self
         # Generates the gem version string from the Version constants.
