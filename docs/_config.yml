@@ -1,4 +1,6 @@
 ---
+plugins:
+  - sleeping_king_studios/docs/jekyll/plugins/required
 collections:
   classes:
     output: false
@@ -10,21 +12,30 @@ collections:
     output: false
   namespaces:
     output: false
+  versions:
+    output: false
 defaults:
 - scope:
     path: ''
     type: 'pages'
   values:
     encoding: 'utf-8'
-    layout: 'default'
+    layout: 'page'
     title: 'SleepingKingStudios::Tools'
-description: |
-  A library of utility services and concerns.
 exclude:
   - /vendor
-github:
-  repository_url: https://github.com/sleepingkingstudios/sleeping_king_studios-docs
 markdown: kramdown
-repository: sleepingkingstudios/sleeping_king_studios-tools
+
+# Project Configuration
+project_metadata:
+  description:    A library of utility services and concerns.
+  name:           SleepingKingStudios::Tools
+  repository_url: https://github.com/sleepingkingstudios/sleeping_king_studios-tools
+
+# Theme Configuration
 theme: jekyll-theme-dinky
-title: Tools
+description: |
+  A library of utility services and concerns.
+github:
+  repository_url: https://github.com/sleepingkingstudios/sleeping_king_studios-tools
+title: 'Tools'

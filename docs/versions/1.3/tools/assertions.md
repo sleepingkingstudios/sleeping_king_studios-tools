@@ -406,5 +406,3 @@ tools.assertions.assert_presence(%w[ichi ni san])
 ```
 
 [Back to Defined Assertions](#defined-assertions) \| [Back to Top](#)
-
-{% include breadcrumbs.md %}

@@ -1,7 +1,7 @@
 ---
 breadcrumbs:
   - name: Documentation
-    path: './'
+    path: '/'
 ---
 
 # Mixins
@@ -132,5 +132,3 @@ GadgetFactory.new.widget?('doohickey')
 In our above example, our `.widget_types` class method is extended onto `GadgetFactory`, not the intermediate mixin `WidgetBuilding`.
 
 > *Warning:* This feature can cause unexpected behavior. When you need to extend class methods *onto a `Mixin` module*, use a traditional `.included` hook instead of another `Mixin`.
-
-{% include breadcrumbs.md %}

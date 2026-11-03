@@ -10,5 +10,3 @@ version: '*'
 # SleepingKingStudios::Tools Reference
 
 {% include reference/namespace.md label=false namespace=root_namespace %}
-
-{% include breadcrumbs.md %}

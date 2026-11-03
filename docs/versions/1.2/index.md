@@ -20,5 +20,3 @@ This is the documentation for Version 1.2 of SleepingKingStudios::Tools.
 ## Reference
 
 For a full list of defined classes and objects, see [Reference](./reference).
-
-{% include breadcrumbs.md %}

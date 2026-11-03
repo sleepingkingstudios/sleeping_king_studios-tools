@@ -129,5 +129,3 @@ SpaceGreeter.new { puts 'Greetings, programs!' }.greet
 ```
 
 In the above example, the `SpaceGreeter` will print `"Greetings, starfighter!"` to STDOUT unless another block is passed to the constructor.
-
-{% include breadcrumbs.md %}

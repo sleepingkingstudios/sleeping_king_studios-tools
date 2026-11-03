@@ -1,9 +1,9 @@
 ---
 breadcrumbs:
   - name: Documentation
-    path: '../'
+    path: '/'
   - name: Tools
-    path: './'
+    path: '/tools'
 ---
 
 # Messages
@@ -479,5 +479,3 @@ end
 ```
 
 [Back to Top](#)
-
-{% include breadcrumbs.md %}

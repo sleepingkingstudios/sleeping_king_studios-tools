@@ -7,10 +7,7 @@ A library of utility services and concerns to expand the functionality of core c
 
 ## Documentation
 
-This is the documentation for the [current development build](https://github.com/sleepingkingstudios/sleeping_king_studios-tools) of SleepingKingStudios::Tools.
-
-- For the most recent release, see [Version 1.3]({{site.baseurl}}/versions/1.3).
-- For previous releases, see the [Versions]({{site.baseurl}}/versions) page.
+{% include pages/index-versions.md %}
 
 ## Getting Started
 
@@ -67,7 +64,7 @@ It also provides a set of utility classes:
 - **[Constant Map](./constant-maps)**
   <br>
   Provides an enumerable interface for defining a group of constants.
-- **[HeritableData](./heritable-data)**
+- **[Heritable Data](./heritable-data)**
   <br>
   Define `Data` subclasses with inheritable members and methods.
 - **[Initializer](./initializer)**

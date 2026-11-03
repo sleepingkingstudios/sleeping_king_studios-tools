@@ -82,5 +82,3 @@ Each `ConstantMap` defines the following `Hash` methods:
 - `#values`
 
 The data can also be accessed as a read-only `Hash` using `#to_h`.
-
-{% include breadcrumbs.md %}

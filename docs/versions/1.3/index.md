@@ -86,5 +86,3 @@ It also provides a set of utility classes:
   Define subclasses with partially applied constructor parameters.
 
 For a full list of defined classes and objects, see [Reference](./reference).
-
-{% include breadcrumbs.md %}
