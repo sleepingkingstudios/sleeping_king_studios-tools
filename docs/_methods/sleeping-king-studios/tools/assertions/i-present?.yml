@@ -37,3 +37,4 @@ returns:
   - name: 'false'
 short_description: Checks if the value is not nil and not empty.
 version: "*"
+checksum: iDDlfTA0aQca6h6yyJXPKw==

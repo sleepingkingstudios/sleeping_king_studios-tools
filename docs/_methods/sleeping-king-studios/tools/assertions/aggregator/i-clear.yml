@@ -17,3 +17,4 @@ returns:
   - name: Array
 short_description: Removes all items from the failure messages.
 version: "*"
+checksum: W+CQjM2/JwVFSK2fNEytCA==

@@ -62,7 +62,7 @@ module SleepingKingStudios::Tools
     #   @return [Object] the stored template for the requested key, or the
     #     provided default value.
     #
-    #   @raises [KeyError] if there is no matching template and no default value
+    #   @raise [KeyError] if there is no matching template and no default value
     #     is provided.
     #
     # @overload fetch(key, scope: nil, **options, &default)

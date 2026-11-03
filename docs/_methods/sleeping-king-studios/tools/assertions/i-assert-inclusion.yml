@@ -57,3 +57,4 @@ returns:
   - name: void
 short_description: Asserts that the value is one of the given values.
 version: "*"
+checksum: kv0OTQzQ78jfn3ad/uYfpQ==

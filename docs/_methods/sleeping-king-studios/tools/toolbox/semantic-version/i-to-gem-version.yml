@@ -37,3 +37,4 @@ returns:
   - name: String
 short_description: Generates a RubyGems-compatible version string.
 version: "*"
+checksum: "/cQZ/S2wrBMuy0v76NhIbw=="

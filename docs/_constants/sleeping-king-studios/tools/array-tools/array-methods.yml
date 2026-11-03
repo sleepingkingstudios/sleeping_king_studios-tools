@@ -6,3 +6,4 @@ short_description: Expected methods that an Array-like object should implement.
 value: "%i[[] count each].freeze"
 data_path: sleeping-king-studios/tools/array-tools/array-methods
 version: "*"
+checksum: Cm59OdmDrB/Z32S+vaRh4w==

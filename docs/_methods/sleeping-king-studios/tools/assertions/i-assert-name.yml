@@ -62,3 +62,4 @@ returns:
   - name: void
 short_description: Asserts that the value is a non-empty String or Symbol.
 version: "*"
+checksum: LvfHV5A/oTKGGJmH0ExGHA==

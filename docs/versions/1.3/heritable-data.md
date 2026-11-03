@@ -210,5 +210,3 @@ In the above example, we redefine the `included` hook to also extend the `Events
 One potential pitfall to be aware of: a `Data.define` block doesn't create a new Ruby *namespace*, meaning that constants defined inside the block will actually be defined on the parent namespace. That means that defining `ClassMethods` inside of the `define` block won't work correctly unless done using the `const_set` method (in which case, watch out for block precedence). Defining the module ahead of time (as we do in the above example) is the safest approach.
 
 [Back To Top](#)
-
-{% include breadcrumbs.md %}

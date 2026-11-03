@@ -16,3 +16,4 @@ returns:
 yields:
 - description: the block to execute when the initializer is called.
 version: "*"
+checksum: Hrlt2bms51mw+R51LSm52Q==

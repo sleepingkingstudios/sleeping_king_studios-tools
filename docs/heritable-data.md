@@ -1,7 +1,7 @@
 ---
 breadcrumbs:
   - name: Documentation
-    path: './'
+    path: '/'
 ---
 
 # HeritableData
@@ -236,5 +236,3 @@ end
 Because we use a traditional class declaration, `YARD` can detect that `UserEvent` is a subclass of `Event` and inherits its attributes and methods.
 
 [Back To Top](#)
-
-{% include breadcrumbs.md %}

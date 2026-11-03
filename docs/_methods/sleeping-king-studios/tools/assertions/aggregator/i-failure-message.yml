@@ -27,3 +27,4 @@ returns:
   - name: String
 short_description: Generates a combined failure message from the configured messages.
 version: "*"
+checksum: "+F04lvOyYfbsWf2jdc7cBA=="

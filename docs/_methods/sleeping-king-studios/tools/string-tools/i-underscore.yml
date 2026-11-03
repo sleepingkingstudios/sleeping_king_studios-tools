@@ -31,3 +31,4 @@ returns:
 short_description: Converts a mixed-case string to a lowercase, underscore separated
   string.
 version: "*"
+checksum: A3Ng2NwTMdm1uW2KB1UFbQ==

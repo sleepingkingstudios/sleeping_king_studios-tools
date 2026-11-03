@@ -6,3 +6,4 @@ short_description: Prerelease version.
 value: nil
 data_path: sleeping-king-studios/tools/version/prerelease
 version: "*"
+checksum: AJdbJq4VAnjsKQJKUxhKyw==

@@ -32,3 +32,4 @@ returns:
   - name: Object
 short_description: Retrieves the messages template with the given scope and options.
 version: "*"
+checksum: f3Loo6flKbaLhWORfV7m8g==

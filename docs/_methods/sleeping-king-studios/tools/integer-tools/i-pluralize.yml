@@ -40,3 +40,4 @@ returns:
 short_description: Returns the singular or the plural value, depending on the provided
   count.
 version: "*"
+checksum: 7TdSgay8w+0fYVVOrvNoFw==

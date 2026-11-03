@@ -41,3 +41,4 @@ returns:
     - name: String
 short_description: Decomposes the given integer into its digits in the given base.
 version: "*"
+checksum: yK/DfWzAFl2APxkCMSnq2w==

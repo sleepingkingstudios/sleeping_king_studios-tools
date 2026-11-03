@@ -270,5 +270,3 @@ end
 ```
 
 Once the initializer is defined, update the entry point for your project to call the initializer.
-
-{% include breadcrumbs.md %}

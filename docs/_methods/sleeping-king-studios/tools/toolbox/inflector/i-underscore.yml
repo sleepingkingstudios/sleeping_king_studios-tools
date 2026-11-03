@@ -16,3 +16,4 @@ returns:
   - name: String
 short_description: Transforms the word to a lowercase, underscore-separated form.
 version: "*"
+checksum: kvPGOMDe2xA30ffnrBuhQA==

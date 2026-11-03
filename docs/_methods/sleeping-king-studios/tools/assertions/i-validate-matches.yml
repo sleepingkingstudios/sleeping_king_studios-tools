@@ -50,3 +50,4 @@ returns:
   - name: void
 short_description: 'Asserts that the value matches the expected object using #===.'
 version: "*"
+checksum: Zr3U3fWh5TX2QoPD3PecsA==

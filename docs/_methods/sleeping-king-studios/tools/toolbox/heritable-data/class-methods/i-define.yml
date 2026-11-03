@@ -25,3 +25,4 @@ short_description: Defines a new Data class including the members/methods of thi
 yields:
 - description: additional methods to define on the new Data class.
 version: "*"
+checksum: tv1dX/WARUBDTq0VcX3o2w==

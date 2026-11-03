@@ -51,3 +51,4 @@ returns:
   - name: void
 short_description: Asserts that the value is either true or false.
 version: "*"
+checksum: Nw6EB9rKUUFE2RceTwXuBQ==

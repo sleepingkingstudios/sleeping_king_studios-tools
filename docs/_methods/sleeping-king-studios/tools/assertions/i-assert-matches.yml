@@ -55,3 +55,4 @@ returns:
   - name: void
 short_description: 'Asserts that the value matches the expected object using #===.'
 version: "*"
+checksum: IjUv4tUVHdp4uojWO1HR5A==

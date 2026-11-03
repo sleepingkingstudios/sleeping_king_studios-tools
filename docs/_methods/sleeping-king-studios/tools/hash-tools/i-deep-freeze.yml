@@ -32,3 +32,4 @@ returns:
 short_description: Freezes the hash and performs a deep freeze on each hash key and
   value.
 version: "*"
+checksum: "/NlpSuI4UIHPGiAKZKlQfw=="

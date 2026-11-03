@@ -6,3 +6,4 @@ short_description: Expected methods that a Hash-like object should implement.
 value: "%i[[] count each each_key each_pair].freeze"
 data_path: sleeping-king-studios/tools/hash-tools/hash-methods
 version: "*"
+checksum: zsreOs0EEWxZH0AR3wYG8g==

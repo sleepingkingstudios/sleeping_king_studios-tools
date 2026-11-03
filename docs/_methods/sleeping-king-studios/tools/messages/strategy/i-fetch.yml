@@ -41,6 +41,12 @@ overloads:
     name: options
     type:
     - name: Hash
+  raises:
+  - description: |-
+      if there is no matching template and no default value
+      is provided.
+    type:
+    - name: KeyError
   returns:
   - description: |-
       the stored template for the requested key, or the
@@ -102,3 +108,4 @@ raises:
   type:
   - name: KeyError
 version: "*"
+checksum: "/QFJePFpXGq5BG6cWYJXXQ=="

@@ -1,0 +1,61 @@
+---
+name: SleepingKingStudios::Tools::Assertions#validate_subclass
+parent_path: sleeping-king-studios/tools/assertions
+signature: 'validate_subclass(def validate_inherits_from( value, expected:, as: ''value'',
+  message: nil, strict: false)'
+slug: validate-subclass
+constructor: false
+data_path: sleeping-king-studios/tools/assertions/i-validate-subclass
+metadata:
+  examples:
+  - name: ''
+    text: |-
+      assertions.validate_inherits_from(:foo, expected: StandardError)
+      #=> raises an ArgumentError with message 'value is not a Class or Module'
+
+      assertions.validate_inherits_from(RuntimeError, expected: StandardError)
+      #=> does not raise an exception
+
+      assertions.validate_inherits_from(Array, expected: Enumerable)
+      #=> does not raise an exception
+params:
+- description: the value to assert on.
+  name: value
+  type:
+  - name: Object
+- description: the name of the asserted value.
+  name: as
+  type:
+  - name: String
+  default: "'value'"
+- description: the expected ancestor.
+  name: expected
+  type:
+  - name: Class
+  - name: Module
+- description: the exception message to raise on a failure.
+  name: message
+  type:
+  - name: String
+  default: nil
+- description: |-
+    if true, fails if the given and expected
+    values are the same class or module.
+  name: strict
+  type:
+  - name: 'true'
+  - name: 'false'
+  default: 'false'
+raises:
+- description: |-
+    if the value is not a class or module or does not
+    have the given ancestor.
+  type:
+  - name: ArgumentError
+returns:
+- description: ''
+  type:
+  - name: void
+short_description: Asserts that the value is a class or module with the given ancestor.
+version: "*"
+checksum: LVXAgjT23cuOZW+hVzcjlQ==

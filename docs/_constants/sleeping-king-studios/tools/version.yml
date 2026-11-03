@@ -6,3 +6,4 @@ short_description: The current version of the gem.
 value: Version.to_gem_version
 data_path: sleeping-king-studios/tools/version
 version: "*"
+checksum: j6v2pD/28Z52sARxODR5zQ==

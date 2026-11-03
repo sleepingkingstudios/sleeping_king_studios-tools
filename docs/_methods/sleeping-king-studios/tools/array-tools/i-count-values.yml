@@ -92,3 +92,4 @@ overloads:
     - name: Object
 short_description: Counts the number of times each item or result appears in the object.
 version: "*"
+checksum: imwZFu3blEoB31mKSscc3A==

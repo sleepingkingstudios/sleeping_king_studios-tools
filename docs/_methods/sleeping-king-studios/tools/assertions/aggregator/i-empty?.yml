@@ -20,3 +20,4 @@ returns:
   - name: 'false'
 short_description: Checks if there are any failure messages.
 version: "*"
+checksum: k0FkvIY5RU8YYQ3rStKaBA==

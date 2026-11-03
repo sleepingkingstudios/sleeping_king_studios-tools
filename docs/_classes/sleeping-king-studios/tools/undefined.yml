@@ -39,3 +39,4 @@ metadata:
       parameter_passed?(nil) #=> true
 constructor: false
 version: "*"
+checksum: nM9GTTfoT6I64pk2MhPCIw==

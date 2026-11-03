@@ -55,3 +55,4 @@ metadata:
       WidgetFactory.widget_types
       #=> ['gadget', 'doohickey', 'thingamabob']
 version: "*"
+checksum: sSmc93k6RKlAQSbYOq3M5A==

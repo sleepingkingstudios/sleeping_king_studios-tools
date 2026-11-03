@@ -37,3 +37,4 @@ returns:
   - name: 'false'
 short_description: Asserts that the value is a non-empty String or Symbol.
 version: "*"
+checksum: 8tPaEeWyUdJEj9m07wpisA==

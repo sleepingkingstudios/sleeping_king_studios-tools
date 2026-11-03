@@ -57,3 +57,4 @@ params:
   - name: Hash
 short_description: Generates a message from the given key, scope, and parameters.
 version: "*"
+checksum: fMRa+4MJXBHkTsPOiG34Pw==

@@ -20,3 +20,4 @@ returns:
   - name: Class
 short_description: Returns the object's eigenclass.
 version: "*"
+checksum: "+6miwuLcHI5oVNsqpcJyMg=="

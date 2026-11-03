@@ -42,3 +42,4 @@ returns:
 short_description: 'As #send, but returns nil if the object does not respond to the
   method.'
 version: "*"
+checksum: Y4ThOGamVB/yvn9/T6vGew==

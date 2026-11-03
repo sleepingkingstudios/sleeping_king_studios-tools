@@ -49,3 +49,4 @@ returns:
   - name: void
 short_description: Asserts that the value is not one of the given values.
 version: "*"
+checksum: uTlMCNst+S5A4SOZu8W/7A==

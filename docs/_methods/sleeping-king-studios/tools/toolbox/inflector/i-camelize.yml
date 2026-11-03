@@ -23,3 +23,4 @@ returns:
   - name: String
 short_description: Converts a lowercase, underscore-separated string to CamelCase.
 version: "*"
+checksum: hCDeW1fCslSMAvvX1AkUkA==

@@ -26,3 +26,4 @@ returns:
   - name: Boolean
 short_description: Returns true if the hash or any of its contents are mutable.
 version: "*"
+checksum: iCE4dRc0pf8ENUq3IDdg6A==

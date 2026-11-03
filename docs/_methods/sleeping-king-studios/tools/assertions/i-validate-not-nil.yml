@@ -39,3 +39,4 @@ returns:
   - name: void
 short_description: Asserts that the value is not nil.
 version: "*"
+checksum: AKw1sNw6ws97ASC6GT3FYA==

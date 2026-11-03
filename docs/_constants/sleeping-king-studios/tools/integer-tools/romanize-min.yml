@@ -6,3 +6,4 @@ short_description: Minimum integer value that can be converted to a roman numera
 value: '1'
 data_path: sleeping-king-studios/tools/integer-tools/romanize-min
 version: "*"
+checksum: vL6Om0J/dlyWgLkOJtXflA==

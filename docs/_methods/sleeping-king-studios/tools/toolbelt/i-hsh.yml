@@ -1,0 +1,16 @@
+---
+name: SleepingKingStudios::Tools::Toolbelt#hsh
+parent_path: sleeping-king-studios/tools/toolbelt
+signature: hash_tools
+slug: hsh
+constructor: false
+data_path: sleeping-king-studios/tools/toolbelt/i-hsh
+returns:
+- description: |-
+    tools for working with
+    hash-like enumerable objects.
+  type:
+  - name: SleepingKingStudios::Tools::HashTools
+    path: sleeping-king-studios/tools/hash-tools
+version: "*"
+checksum: j392sV8nybLALin/nyt9fQ==

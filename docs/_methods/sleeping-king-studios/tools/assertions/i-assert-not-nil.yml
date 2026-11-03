@@ -45,3 +45,4 @@ returns:
   - name: void
 short_description: Asserts that the value is not nil.
 version: "*"
+checksum: VnJxLnnPwfWpvZNSH/qI9g==

@@ -37,3 +37,4 @@ returns:
   - name: String
 short_description: Creates a string representation of the object and specified properties.
 version: "*"
+checksum: OJDbfz64BdrzLapoFjvqag==

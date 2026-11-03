@@ -1,0 +1,21 @@
+---
+name: SleepingKingStudios::Tools::ObjectTools#metaclass
+parent_path: sleeping-king-studios/tools/object-tools
+signature: metaclass(def eigenclass(obj)
+slug: metaclass
+constructor: false
+data_path: sleeping-king-studios/tools/object-tools/i-metaclass
+metadata:
+  deprecated: v1.3.0 Use Object#singleton_class instead.
+params:
+- description: the object for which an eigenclass is required.
+  name: obj
+  type:
+  - name: Object
+returns:
+- description: the object's singleton class.
+  type:
+  - name: Class
+short_description: Returns the object's eigenclass.
+version: "*"
+checksum: PuyfW6nUAUXD9MFtkO9eJg==

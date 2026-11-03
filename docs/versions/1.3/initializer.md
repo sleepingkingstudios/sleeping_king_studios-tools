@@ -101,5 +101,3 @@ RSpec.configure do
   # Test configuration here.
 end
 ```
-
-{% include breadcrumbs.md %}

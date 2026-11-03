@@ -25,3 +25,4 @@ short_description: Defines a new heritable Data class.
 yields:
 - description: additional methods to define on the new Data class.
 version: "*"
+checksum: j4vwvRcxUpGseg3LbhfUIw==

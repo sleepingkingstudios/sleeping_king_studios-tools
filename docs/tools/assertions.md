@@ -1,9 +1,9 @@
 ---
 breadcrumbs:
   - name: Documentation
-    path: '../'
+    path: '/'
   - name: Tools
-    path: './'
+    path: '/tools'
 ---
 
 # Assertions
@@ -537,5 +537,3 @@ tools.assertions.present?([1, 2, 3])
 ```
 
 [Back to Predicate Methods](#predicate-methods) \| [Back to Top](#)
-
-{% include breadcrumbs.md %}

@@ -6,3 +6,4 @@ short_description: Minor version.
 value: '3'
 data_path: sleeping-king-studios/tools/version/minor
 version: "*"
+checksum: KlSY2rb+5ytbsUmn9rzHdg==

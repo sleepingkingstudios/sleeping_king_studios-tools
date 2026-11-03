@@ -1,7 +1,7 @@
 ---
 breadcrumbs:
   - name: Documentation
-    path: '../'
+    path: '/'
 ---
 
 # Tools
@@ -323,5 +323,3 @@ Tools for working with `String`s.
 For a full list of methods, see [Reference](../reference/sleeping-king-studios/tools/string-tools).
 
 [Back to Defined Tools](#defined-tools) \| [Back to Top](#)
-
-{% include breadcrumbs.md %}

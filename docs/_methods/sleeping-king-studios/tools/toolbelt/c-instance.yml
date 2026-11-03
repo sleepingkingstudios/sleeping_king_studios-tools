@@ -1,15 +1,16 @@
 ---
 name: SleepingKingStudios::Tools::Toolbelt.instance
 parent_path: sleeping-king-studios/tools/toolbelt
-signature: instance
+signature: instance(def global()
 slug: instance
 constructor: false
 data_path: sleeping-king-studios/tools/toolbelt/c-instance
 returns:
-- description: |-
-    a memoized instance of the
-    toolbelt class.
+- description: the messages registry singleton.
   type:
-  - name: SleepingKingStudios::Tools::Toolbelt
-    path: sleeping-king-studios/tools/toolbelt
+  - name: Registry
+short_description: |-
+  Returns a singleton instance of the messages registry, instantiating
+  the instance if needed.
 version: "*"
+checksum: VDI5t15K8s9qx0Jy9DX6Hg==
