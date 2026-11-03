@@ -40,6 +40,7 @@ The class reference for `SleepingKingStudios::Tools::Toolbox::HeritableData` can
 - [Subclassing Heritable Data](#subclassing-heritable-data)
 - [Reflection And Comparison](#reflection-and-comparison)
 - [Defining Class Methods](#defining-class-methods)
+- [Documenting Data Classes](#documenting-data-classes)
 
 ## Defining Heritable Data
 
@@ -76,7 +77,7 @@ UserEvent = Event.define(:user) do
 end
 
 UserEvent.superclass
-#=> Data
+#=> Event
 UserEvent.members
 #=> [:type, :user]
 
@@ -88,7 +89,7 @@ event.admin?
 #=> false
 ```
 
-By calling `Event.define()`, we define a new `Data` subclass that also includes the properties and methods defined for `Event`. Our `UserEvent` class includes the `:type` property from `Event` as well as the newly added `:user` property. It also includes the `#event_type` helper method from `Event`.
+By calling `Event.define()`, we define a new `Event` subclass. In addition to the properties and methods defined for `Event`, our `UserEvent` class includes the newly added `:user` property and the `#admin?` method.
 
 We can continue defining subclasses on `UserEvent` as well by calling `UserEvent.define`:
 
@@ -96,7 +97,7 @@ We can continue defining subclasses on `UserEvent` as well by calling `UserEvent
 LoginEvent = UserEvent.define(:timestamp)
 
 LoginEvent.superclass
-#=> Data
+#=> UserEvent
 LoginEvent.members
 #=> [:type, :user, :timestamp]
 ```
@@ -107,9 +108,7 @@ Our `LoginEvent` includes the `:type` property from `Event`, the `:user` propert
 
 ## Reflection And Comparison
 
-`Data` subclasses defined using `HeritableData.define` will always have `Data` as their superclass. However, `HeritableData` extends Ruby methods used for reflecting on and comparing objects to simulate the defined class hierarchy.
-
-This means you can use `#is_a?` to check a data object's ancestors, compare data class inheritance using `.<=>` and its siblings, and you can use data objects in `case` statements that compare the object to its parent `Data` classes.
+`Data` subclasses defined using `HeritableData.define` use proper Ruby inheritance. This means you can compare data classes just like any other Ruby class hierarchy, and you can use methods like `#is_a?` and the case comparison operator `#===` to check whether an object is an instance of a `Data` subclass or any of its ancestors.
 
 ```ruby
 Event = SleepingKingStudios::Tools::Toolbox::HeritableData.define(:type) do
@@ -171,39 +170,70 @@ message
 
 ## Defining Class Methods
 
-The easiest way to define class methods is by redefining the `included` hook:
+The block passed to `HeritableData.define` is a class body, just like `Data.define`. This means you can `include` Modules or define class methods directly in the block, and it works the same way as any other class declaration.
 
 ```ruby
-module Events
-  module ClassMethods
+PriorityEvent = SleepingKingStudios::Tools::Toolbox::HeritableData.define(:type, :priority) do
+  include Comparable
+
+  class << self
     def metadata = { name: }
   end
-end
 
-Event = SleepingKingStudios::Tools::Toolbox::HeritableData.define(:type) do
-  class << self
-    private
-
-    def included(other)
-      super
-
-      other.extend(Events::ClassMethods)
-    end
+  def <=>(other)
+    priority <=> other.priority
   end
 end
 
-UserEvent = Event.define(:user)
+PriorityEvent.metadata
+#=> { name: 'PriorityEvent' }
 
-Event.metadata
-#=> { name: 'Event' }
+dust_event    = PriorityEvent.new(type: 'dust_console',  priority: 1)
+coolant_event = PriorityEvent.new(type: 'check_coolant', priority: 10)
 
-UserEvent.metadata
-#=> { name: 'UserEvent' }
+dust_event < coolant_event
+#=> true
 ```
 
-In the above example, we redefine the `included` hook to also extend the `Events::ClassMethods` onto `Event` and each `Event` subclass.
+[Back To Top](#)
 
-One potential pitfall to be aware of: a `Data.define` block doesn't create a new Ruby *namespace*, meaning that constants defined inside the block will actually be defined on the parent namespace. That means that defining `ClassMethods` inside of the `define` block won't work correctly unless done using the `const_set` method (in which case, watch out for block precedence). Defining the module ahead of time (as we do in the above example) is the safest approach.
+## Documenting Data Classes
+
+`Data` classes are not well supported in <a href="https://yardoc.org/" target="_blank">YARD</a>. The recommended approach for a codebase documented using `YARD` is to define the class in two steps:
+
+```ruby
+Event = SleepingKingStudios::Tools::Toolbox::HeritableData.define(:type)
+
+# A domain event with specified type.
+#
+# @!attribute [r] type
+#   @return [String] the event type.
+class Event < Data
+  # An alternative method for accessing the event type.
+  def event_type = type
+end
+```
+
+In the above example, we use `HeritableData.define` to define the `Event` class and its members, in this case `:type`.
+
+We then use a `class Event` statement to declare the `Event` class in a way that is recognizable by `YARD`. Because the class members are set in the `define` call, `YARD` cannot automatically generate method documentation for them. Therefore, we use the `@!attribute` directive to document the class members (remember, a `Data` object's members are always read-only).
+
+Similarly, we can use the same process to document a `Data` subclass:
+
+```ruby
+UserEvent = Event.define(:user)
+
+# An event performed by a specific user.
+#
+# @!attribute [r] user
+#   @return [User] the user who performed the event.
+class UserEvent < Event
+  # @return [true, false] true if the user is an admin, otherwise false.
+  def admin? = user&.[:role] == 'admin'
+end
+```
+
+Because we use a traditional class declaration, `YARD` can detect that `UserEvent` is a subclass of `Event` and inherits its attributes and methods.
 
 [Back To Top](#)
 

@@ -7,30 +7,6 @@ files:
 parent_path: sleeping-king-studios/tools/toolbox/heritable-data
 short_description: Methods prepended onto the singleton class when including HeritableData.
 instance_methods:
-- name: "<"
-  path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i-<
-  slug: "<"
-  inherited: false
-- name: "<="
-  path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i-<=
-  slug: "<="
-  inherited: false
-- name: "<=>"
-  path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i-<=>
-  slug: "<=>"
-  inherited: false
-- name: "==="
-  path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i-===
-  slug: "==="
-  inherited: false
-- name: ">"
-  path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i->
-  slug: ">"
-  inherited: false
-- name: ">="
-  path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i->=
-  slug: ">="
-  inherited: false
 - name: define
   path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i-define
   slug: define

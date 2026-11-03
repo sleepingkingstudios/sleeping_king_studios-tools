@@ -30,8 +30,8 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
     end
   end
 
-  describe '::HeritableMethods' do
-    it { expect(described_class).to define_constant(:HeritableMethods) }
+  define_method :tools do
+    SleepingKingStudios::Tools::Toolbelt.instance
   end
 
   describe 'singleton_class.define' do
@@ -60,7 +60,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
 
     describe 'with a block' do
       let(:methods) do
-        lambda do
+        proc do
           def greet = 'Greetings, programs!'
         end
       end
@@ -68,6 +68,63 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
       it { expect(instance).to respond_to(:greet).with(0).arguments }
 
       it { expect(instance.greet).to be == 'Greetings, programs!' }
+    end
+
+    describe 'with a block from a lambda with arity zero' do
+      let(:methods) do
+        lambda do
+          def greet = 'Greetings, programs!'
+        end
+      end
+
+      before(:example) do
+        allow(tools.core_tools).to receive(:deprecate)
+      end
+
+      it { expect(instance).to respond_to(:greet).with(0).arguments }
+
+      it { expect(instance.greet).to be == 'Greetings, programs!' }
+
+      it 'should print a deprecation warning' do
+        message =
+          'Data.define with a lambda of arity zero is not supported. This ' \
+          'will raise an ArgumentError starting in version 2.0.'
+
+        concern.define(*symbols, **options, &methods)
+
+        expect(tools.core_tools).to have_received(:deprecate).with(message)
+      end
+    end
+
+    describe 'with a block that defines a lifecycle hook' do
+      let(:methods) do
+        proc do
+          def self.included(other)
+            super
+
+            other.define_singleton_method(:secret) { '12345' }
+          end
+        end
+      end
+
+      before(:example) do
+        allow(tools.core_tools).to receive(:deprecate)
+      end
+
+      it { expect(subclass).to respond_to(:secret).with(0).arguments }
+
+      it { expect(subclass.secret).to be == '12345' }
+
+      it 'should print a deprecation warning' do # rubocop:disable RSpec/ExampleLength
+        message =
+          'Defining class methods or including modules using an `included` ' \
+          'hook is deprecated. Define the methods or include the modules ' \
+          'directly in the block.'
+
+        concern.define(*symbols, **options, &methods)
+
+        expect(tools.core_tools).to have_received(:deprecate).with(message)
+      end
     end
 
     describe 'with symbols' do
@@ -81,19 +138,31 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
       let(:options)      { { parent_class: } }
       let(:attributes)   { super().merge(type: 'spec.event') }
 
+      before(:example) do
+        allow(tools.core_tools).to receive(:deprecate)
+      end
+
       it { expect(subclass).to be_a(Class) }
 
-      it { expect(subclass.superclass).to be Data }
+      it { expect(subclass.superclass).to be described_class }
 
       it { expect(subclass).to be < concern }
 
       it { expect(subclass.members).to be == %i[type] }
 
-      it { expect(instance.event_type).to be == 'spec.event' }
+      it 'should print a deprecation warning' do
+        message =
+          'HeritableData.define with a parent class is deprecated and will ' \
+          'be removed starting in version 2.0.'
+
+        concern.define(*symbols, **options, &methods)
+
+        expect(tools.core_tools).to have_received(:deprecate).with(message)
+      end
 
       describe 'with a block' do
         let(:methods) do
-          lambda do
+          proc do
             def greet = 'Greetings, programs!'
           end
         end
@@ -112,18 +181,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
   end
 
   describe '.<' do
-    describe 'with nil' do
-      it { expect(described_class < nil).to be nil }
-    end
-
-    describe 'with an Object' do
-      it { expect(described_class < Object.new.freeze).to be nil }
-    end
-
-    describe 'with an instance of the class' do
-      it { expect(described_class < data).to be nil }
-    end
-
     describe 'with Data' do
       it { expect(described_class < Data).to be true }
     end
@@ -168,18 +225,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
   end
 
   describe '.<=' do
-    describe 'with nil' do
-      it { expect(described_class <= nil).to be nil }
-    end
-
-    describe 'with an Object' do
-      it { expect(described_class <= Object.new.freeze).to be nil }
-    end
-
-    describe 'with an instance of the class' do
-      it { expect(described_class <= data).to be nil }
-    end
-
     describe 'with Data' do
       it { expect(described_class <= Data).to be true }
     end
@@ -341,18 +386,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
   end
 
   describe '.>' do
-    describe 'with nil' do
-      it { expect(described_class > nil).to be nil }
-    end
-
-    describe 'with an Object' do
-      it { expect(described_class > Object.new.freeze).to be nil }
-    end
-
-    describe 'with an instance of the class' do
-      it { expect(described_class > data).to be nil }
-    end
-
     describe 'with Data' do
       it { expect(described_class > Data).to be false }
     end
@@ -397,18 +430,6 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
   end
 
   describe '.>=' do
-    describe 'with nil' do
-      it { expect(described_class >= nil).to be nil }
-    end
-
-    describe 'with an Object' do
-      it { expect(described_class >= Object.new.freeze).to be nil }
-    end
-
-    describe 'with an instance of the class' do
-      it { expect(described_class >= data).to be nil }
-    end
-
     describe 'with Data' do
       it { expect(described_class >= Data).to be false }
     end
@@ -467,7 +488,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
 
     it { expect(subclass).to be_a(Class) }
 
-    it { expect(subclass.superclass).to be Data }
+    it { expect(subclass.superclass).to be described_class }
 
     it { expect(subclass).to be < concern }
 
@@ -477,7 +498,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
 
     describe 'with a block' do
       let(:methods) do
-        lambda do
+        proc do
           def loud_type = type.upcase
         end
       end
@@ -487,9 +508,35 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
       it { expect(instance.loud_type).to be == 'SPEC.EVENT' }
     end
 
-    describe 'with a block that defines a lifecycle hook' do
+    describe 'with a block from a lambda with arity zero' do
       let(:methods) do
         lambda do
+          def loud_type = type.upcase
+        end
+      end
+
+      before(:example) do
+        allow(tools.core_tools).to receive(:deprecate)
+      end
+
+      it { expect(instance).to respond_to(:loud_type).with(0).arguments }
+
+      it { expect(instance.loud_type).to be == 'SPEC.EVENT' }
+
+      it 'should print a deprecation warning' do
+        message =
+          'Data.define with a lambda of arity zero is not supported. This ' \
+          'will raise an ArgumentError starting in version 2.0.'
+
+        described_class.define(*symbols, &methods)
+
+        expect(tools.core_tools).to have_received(:deprecate).with(message)
+      end
+    end
+
+    describe 'with a block that defines a lifecycle hook' do
+      let(:methods) do
+        proc do
           def self.included(other)
             super
 
@@ -498,9 +545,24 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
         end
       end
 
+      before(:example) do
+        allow(tools.core_tools).to receive(:deprecate)
+      end
+
       it { expect(subclass).to respond_to(:secret).with(0).arguments }
 
       it { expect(subclass.secret).to be == '12345' }
+
+      it 'should print a deprecation warning' do # rubocop:disable RSpec/ExampleLength
+        message =
+          'Defining class methods or including modules using an `included` ' \
+          'hook is deprecated. Define the methods or include the modules ' \
+          'directly in the block.'
+
+        described_class.define(*symbols, &methods)
+
+        expect(tools.core_tools).to have_received(:deprecate).with(message)
+      end
 
       describe 'with a subclass of the data class' do
         let(:described_class) { super().define(&methods) }
@@ -519,7 +581,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
     wrap_deferred 'with an inherited data class' do
       it { expect(subclass).to be_a(Class) }
 
-      it { expect(subclass.superclass).to be Data }
+      it { expect(subclass.superclass).to be described_class }
 
       it { expect(subclass).to be < concern }
 
@@ -533,7 +595,7 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
 
       describe 'with a block' do
         let(:methods) do
-          lambda do
+          proc do
             def loud_type = type.upcase
           end
         end
@@ -543,9 +605,35 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
         it { expect(instance.loud_type).to be == 'SPEC.EVENT' }
       end
 
-      describe 'with a block that defines a lifecycle hook' do
+      describe 'with a block with arity zero' do
         let(:methods) do
           lambda do
+            def loud_type = type.upcase
+          end
+        end
+
+        before(:example) do
+          allow(tools.core_tools).to receive(:deprecate)
+        end
+
+        it { expect(instance).to respond_to(:loud_type).with(0).arguments }
+
+        it { expect(instance.loud_type).to be == 'SPEC.EVENT' }
+
+        it 'should print a deprecation warning' do
+          message =
+            'Data.define with a lambda of arity zero is not supported. This ' \
+            'will raise an ArgumentError starting in version 2.0.'
+
+          described_class.define(*symbols, &methods)
+
+          expect(tools.core_tools).to have_received(:deprecate).with(message)
+        end
+      end
+
+      describe 'with a block that defines a lifecycle hook' do
+        let(:methods) do
+          proc do
             def self.included(other)
               super
 
@@ -554,15 +642,30 @@ RSpec.describe SleepingKingStudios::Tools::Toolbox::HeritableData do
           end
         end
 
+        before(:example) do
+          allow(tools.core_tools).to receive(:deprecate)
+        end
+
         it { expect(subclass).to respond_to(:secret).with(0).arguments }
 
         it { expect(subclass.secret).to be == '12345' }
+
+        it 'should print a deprecation warning' do # rubocop:disable RSpec/ExampleLength
+          message =
+            'Defining class methods or including modules using an `included` ' \
+            'hook is deprecated. Define the methods or include the modules ' \
+            'directly in the block.'
+
+          described_class.define(*symbols, &methods)
+
+          expect(tools.core_tools).to have_received(:deprecate).with(message)
+        end
       end
 
       describe 'with a block that overrides a defined method' do
         let(:subclass) { Spec::EnglishEvent }
         let(:methods) do
-          lambda do
+          proc do
             # rubocop:disable-next Naming/PredicateMethod
             def admin? = super ? 'yes' : 'no'
           end

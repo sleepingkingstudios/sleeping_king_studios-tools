@@ -2,6 +2,19 @@
 
 ## 1.4.0
 
+### Heritable Data
+
+Refactored `HeritableData` internals.
+
+- Nested `HeritableData` classes now inherit properly, defining a correct chain of `ancestors`.
+- Some approaches to defining a heritable Data class are now deprecated and will print a warning:
+  - Defining class methods or including modules indirectly using the `included` lifecycle hook. Define class methods and include modules directly in the block. Starting on version 2.0, the `included` hook **will not be called**.
+  - Calling `HeritableData.define` (or `.define` on a generated subclass) with a `lambda` that does not accept any parameters. Starting on version 2.0, this will raise an `ArgumentError`.
+
+> Special thanks to `@havenwood` from the Ruby Discord on the solution here.
+
+> **Note:** This change will cause a regression in the specific case where code expects the **parent class** of the generated `HeritableData` class to be `Data`. This is no longer true for nested Data subclasses.
+
 ### Tools
 
 #### Assertions

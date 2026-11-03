@@ -1,8 +1,10 @@
 ---
 name: SleepingKingStudios::Tools::Toolbox::HeritableData.define
 parent_path: sleeping-king-studios/tools/toolbox/heritable-data
-signature: 'define(*symbols, parent_class: nil, &)'
+signature: 'define(*symbols, parent_class: nil, &block)'
 slug: define
+aliases:
+- with
 constructor: false
 data_path: sleeping-king-studios/tools/toolbox/heritable-data/c-define
 params:
