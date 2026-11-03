@@ -1,8 +1,10 @@
 ---
 name: SleepingKingStudios::Tools::Toolbox::HeritableData::ClassMethods#define
 parent_path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods
-signature: define(*symbols, &)
+signature: define(*symbols, &block)
 slug: define
+aliases:
+- with
 constructor: false
 data_path: sleeping-king-studios/tools/toolbox/heritable-data/class-methods/i-define
 description: |-

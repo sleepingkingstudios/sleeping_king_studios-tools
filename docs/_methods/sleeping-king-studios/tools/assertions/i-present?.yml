@@ -12,17 +12,17 @@ metadata:
   examples:
   - name: ''
     text: |-
-      assertions.assert_presence(nil)
-      #=> raises an AssertionError with message "can't be blank"
+      assertions.present?(nil)
+      #=> false
 
-      assertions.assert_presence(Object.new)
-      #=> does not raise an exception
+      assertions.present?(Object.new)
+      #=> true
 
-      assertions.assert_presence([])
-      #=> raises an AssertionError with message "can't be blank"
+      assertions.present?([])
+      #=> false
 
-      assertions.assert_presence([1, 2, 3])
-      #=> does not raise an exception
+      assertions.present?([1, 2, 3])
+      #=> true
 params:
 - description: the value to assert on.
   name: value
