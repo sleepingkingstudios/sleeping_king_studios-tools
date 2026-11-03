@@ -8,6 +8,7 @@ module SleepingKingStudios::Tools
   # Defines its own internal message templates, and automatically handles value
   # name option (:as option) when generating messages.
   class Assertions::MessagesStrategy < SleepingKingStudios::Tools::Messages::Strategies::HashStrategy
+    # Message fragments used to generate error messages for failed assertions.
     ERROR_MESSAGES =
       {
         'blank' =>
