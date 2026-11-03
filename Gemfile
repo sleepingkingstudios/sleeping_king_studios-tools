@@ -29,7 +29,7 @@ group :docs do
   # Use Kramdown to parse GFM-dialect Markdown.
   gem 'kramdown-parser-gfm', '~> 1.1'
 
-  gem 'sleeping_king_studios-docs', '~> 0.2.1'
+  gem 'sleeping_king_studios-docs', '~> 0.3'
 
   # Use Webrick as local content server.
   gem 'webrick', '~> 1.8'
